@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       },
       title: 'Wedding App',
       theme: ThemeData(
-        primarySwatch: Color(#d86a77).toSt,
+
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: NavigatorDemo(),
