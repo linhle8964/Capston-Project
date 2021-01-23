@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wedding_app/demo_page.dart';
+import 'package:wedding_app/screens/navigator/navigator.dart';
 import 'package:wedding_app/utils/hex_color.dart';
 void main() {
   runApp(MyApp());
@@ -21,10 +22,10 @@ class MyApp extends StatelessWidget {
       },
       title: 'Wedding App',
       theme: ThemeData(
-        primarySwatch: Color(#d86a77).toSt,
+        //primarySwatch: Color(#d86a77).toSt,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: Navi,
+      home: NavigatorDemo(),
     );
   }
 }
