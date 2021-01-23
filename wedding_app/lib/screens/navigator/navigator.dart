@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wedding_app/demo_page.dart';
+import 'package:wedding_app/screens/Budget/budget_page.dart';
 import 'package:wedding_app/screens/login/login.dart';
 
 class NavigatorDemo extends StatefulWidget {
@@ -12,7 +13,7 @@ class _NavigatorDemoState extends State<NavigatorDemo> {
   final List<Widget> _children = [
     DemoPage(string: "1",),
     DemoPage(string: "2",),
-    DemoPage(string: "3",),
+    BudgetList(),
     LoginPage(),
   ];
   void onTabTapped(int index) {
