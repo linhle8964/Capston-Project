@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 
 
 void main() {
-  runApp(MyApp());
+  runApp(LoginPage());
 }
 
-class MyApp extends StatefulWidget {
+class LoginPage extends StatefulWidget {
   // This widget is the root of your application.
   @override
-  _MyAppState createState() => _MyAppState();
+  _LoginPageState createState() => _LoginPageState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _LoginPageState extends State<LoginPage> {
   bool _showPass = false;
   TextEditingController _emailController = new TextEditingController();
   TextEditingController _passController = new TextEditingController();

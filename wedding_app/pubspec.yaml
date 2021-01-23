@@ -33,19 +33,20 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  firebase_core: ^0.7.0
+  # bloc dependencies
   flutter_bloc: ^6.1.1
   bloc: ^6.1.1
   bloc_test: ^7.1.0
   fluttertoast: ^7.1.6
   intl: ^0.16.1
 
-    # Add the dependency for the FlutterFire plugin for Google Analytics
-  firebase_analytics: ^7.0.1
-  cloud_firestore: ^0.16.0
     # Add the dependencies for any other Firebase products you want to use in your app
     # For example, to use Firebase Authentication and Cloud Firestore
   firebase_auth: ^0.20.0+1
+    # Add the dependency for the FlutterFire plugin for Google Analytics
+  firebase_analytics: ^7.0.1
+  cloud_firestore: ^0.16.0
+
   rxdart: ^0.25.0
   equatable: ^1.2.5
 
