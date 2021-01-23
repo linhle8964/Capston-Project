@@ -2,10 +2,10 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:wedding_app/curve_shape.dart';
+import 'package:wedding_app/screens/Budget/curveshape.dart';
 
-import 'package:wedding_app/model/category.dart';
-import 'package:wedding_app/model/item.dart';
+import 'package:wedding_app/screens/Budget/model/category.dart';
+import 'package:wedding_app/screens/Budget/model/item.dart';
 
 class BudgetList extends StatefulWidget {
   @override
