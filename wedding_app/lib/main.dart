@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wedding_app/demo_page.dart';
-import 'package:wedding_app/navigator.dart';
+import 'file:///C:/Users/ADMIN/Documents/Git/Capston-Project/wedding_app/lib/screens/navigator/navigator.dart';
 
 void main() {
   runApp(MyApp());
