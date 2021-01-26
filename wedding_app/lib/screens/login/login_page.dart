@@ -1,11 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-
-void main() {
-  runApp(LoginPage());
-}
-
 class LoginPage extends StatefulWidget {
   // This widget is the root of your application.
   @override
@@ -16,10 +11,10 @@ class _LoginPageState extends State<LoginPage> {
   bool _showPass = false;
   TextEditingController _emailController = new TextEditingController();
   TextEditingController _passController = new TextEditingController();
-  var _emailError="E-mail không hợp lệ";
-  var _passErr="Mật khẩu phải trên 6 kí tự";
-  var _emailInvalid=false;
-  var _passInvalid=false;
+  var _emailError = "E-mail không hợp lệ";
+  var _passErr = "Mật khẩu phải trên 6 kí tự";
+  var _emailInvalid = false;
+  var _passInvalid = false;
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -35,7 +30,8 @@ class _LoginPageState extends State<LoginPage> {
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 0, 30),
             child: Container(
-              child: FlutterLogo(),
+              child:
+                  Image(image: AssetImage('assets/app_icon/favicon-32x32.png')),
               width: 70,
               height: 70,
               padding: EdgeInsets.all(15),
@@ -60,7 +56,7 @@ class _LoginPageState extends State<LoginPage> {
                 controller: _emailController,
                 decoration: InputDecoration(
                     labelText: 'E-mail',
-                    errorText: _emailInvalid ? _emailError: null,
+                    errorText: _emailInvalid ? _emailError : null,
                     labelStyle: TextStyle(color: Colors.grey, fontSize: 15)),
               )),
           Padding(
@@ -74,7 +70,7 @@ class _LoginPageState extends State<LoginPage> {
                   obscureText: !_showPass,
                   decoration: InputDecoration(
                       labelText: 'Mật khẩu',
-                      errorText: _passInvalid ? _passErr: null,
+                      errorText: _passInvalid ? _passErr : null,
                       labelStyle: TextStyle(color: Colors.grey, fontSize: 15)),
                 ),
                 GestureDetector(
@@ -112,7 +108,9 @@ class _LoginPageState extends State<LoginPage> {
               height: 30,
               child: RaisedButton(
                 color: Colors.blue,
-                onPressed: onSignInClick,
+                onPressed: () {
+                  Navigator.pushNamed(context, '/register');
+                },
                 child: Text(
                   'Đăng Kí ',
                   style: TextStyle(color: Colors.white, fontSize: 16),
@@ -120,13 +118,11 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
           ),
-
           Padding(
               padding: const EdgeInsets.fromLTRB(40, 10, 30, 0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-
                   RaisedButton(
                     onPressed: onLogInFacebookClick,
                     color: Colors.blue,
@@ -149,7 +145,6 @@ class _LoginPageState extends State<LoginPage> {
                   )
                 ],
               )),
-
           Padding(
             padding: const EdgeInsets.fromLTRB(90, 0, 0, 10),
             child: Container(
@@ -173,36 +168,35 @@ class _LoginPageState extends State<LoginPage> {
 
   void onSignInClick() {
     setState(() {
-      if(_emailController.text.length <6 || !_emailController.text.contains("@")){
-        _emailInvalid=true;
-      }else{
-        _emailInvalid=false;
+      if (_emailController.text.length < 6 ||
+          !_emailController.text.contains("@")) {
+        _emailInvalid = true;
+      } else {
+        _emailInvalid = false;
       }
-      if(_passController.text.length <6 ){
-        _passInvalid=true;
-      }else{
-        _passInvalid=false;
+      if (_passController.text.length < 6) {
+        _passInvalid = true;
+      } else {
+        _passInvalid = false;
       }
-      if(_emailInvalid==false && _passInvalid==false){
-
-      }
+      if (_emailInvalid == false && _passInvalid == false) {}
     });
   }
+
   void onLogInClick() {
     setState(() {
-      if(_emailController.text.length <6 || !_emailController.text.contains("@")){
-        _emailInvalid=true;
-      }else{
-        _emailInvalid=false;
+      if (_emailController.text.length < 6 ||
+          !_emailController.text.contains("@")) {
+        _emailInvalid = true;
+      } else {
+        _emailInvalid = false;
       }
-      if(_passController.text.length <6 ){
-        _passInvalid=true;
-      }else{
-        _passInvalid=false;
+      if (_passController.text.length < 6) {
+        _passInvalid = true;
+      } else {
+        _passInvalid = false;
       }
-      if(_emailInvalid==false && _passInvalid==false){
-
-      }
+      if (_emailInvalid == false && _passInvalid == false) {}
     });
   }
 
@@ -211,6 +205,7 @@ class _LoginPageState extends State<LoginPage> {
       _showPass = !_showPass;
     });
   }
-  void onLogInFacebookClick(){}
-  void onLogInGmailClick(){}
+
+  void onLogInFacebookClick() {}
+  void onLogInGmailClick() {}
 }

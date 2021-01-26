@@ -1,8 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:wedding_app/demo_page.dart';
+import 'package:wedding_app/bloc/authentication/bloc.dart';
+import 'package:wedding_app/bloc/login/bloc.dart';
+import 'package:wedding_app/bloc/register/bloc.dart';
+import 'package:wedding_app/bloc/simple_bloc_observer.dart';
+import 'package:wedding_app/firebase_repository/user_firebase_repository.dart';
+import 'package:wedding_app/screens/login/login_page.dart';
 import 'package:wedding_app/screens/navigator/navigator.dart';
-import 'package:wedding_app/utils/hex_color.dart';
-void main() {
+import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:wedding_app/screens/register/register_page.dart';
+import 'package:wedding_app/screens/splash_page.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  Bloc.observer = SimpleBlocObserver();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -10,22 +23,55 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      routes: {
-        // When navigating to the "/" route, build the FirstScreen widget.
-        '/first': (context) => DemoPage(),
-        // When navigating to the "/second" route, build the SecondScreen widget.
-        '/second': (context) => DemoPage(),
-        '/third': (context) => DemoPage(),
-        '/fourth': (context) => DemoPage(),
-        '/fifth': (context) => DemoPage(),
-      },
-      title: 'Wedding App',
-      theme: ThemeData(
-        primarySwatch: Colors.red,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<AuthenticationBloc>(create: (context) {
+          return AuthenticationBloc(
+            userRepository: FirebaseUserRepository(),
+          )..add(AppStarted());
+        }),
+      ],
+      child: MaterialApp(
+        initialRoute: '/',
+        routes: {
+          '/register': (context) {
+            return BlocProvider(
+              create: (BuildContext context) =>
+                  RegisterBloc(userRepository: FirebaseUserRepository()),
+              child: RegisterPage(),
+            );
+          },
+          // When navigating to the "/" route, build the FirstScreen widget.
+          '/': (context) {
+            return BlocBuilder<AuthenticationBloc, AuthenticationState>(
+                builder: (context, state) {
+              if (state is Authenticated) {
+                return NavigatorDemo();
+              } else if (state is Unauthenticated) {
+                return MultiBlocProvider(
+                  providers: [
+                    BlocProvider<LoginBloc>(
+                      create: (context) => LoginBloc(
+                        userRepository: FirebaseUserRepository(),
+                      ),
+                    ),
+                  ],
+                  child: LoginPage(),
+                );
+              } else if (state is Uninitialized) {
+                return SplashPage();
+              }
+
+              return CircularProgressIndicator();
+            });
+          }
+        },
+        title: 'Wedding App',
+        theme: ThemeData(
+          primarySwatch: Colors.red,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
       ),
-      home: NavigatorDemo(),
     );
   }
 }
