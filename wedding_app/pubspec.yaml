@@ -37,6 +37,8 @@ dev_dependencies:
   flutter_bloc: ^6.1.1
   bloc: ^6.1.1
   bloc_test: ^7.1.0
+
+  #
   fluttertoast: ^7.1.6
   intl: ^0.16.1
 
