@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wedding_app/demo_page.dart';
 import 'package:wedding_app/screens/Budget/budget_page.dart';
+import 'package:wedding_app/screens/add_budget/addbudget.dart';
 import 'package:wedding_app/screens/create_wedding/create_wedding_page.dart';
 import 'package:wedding_app/screens/login/login.dart';
 
@@ -12,7 +13,7 @@ class NavigatorDemo extends StatefulWidget {
 class _NavigatorDemoState extends State<NavigatorDemo> {
   int _selectedIndex = 0;
   final List<Widget> _children = [
-    DemoPage(string: "1",),
+    AddBudget(),
     CreateWeddingPage(),
     BudgetList(),
     LoginPage(),
