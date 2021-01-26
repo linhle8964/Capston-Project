@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wedding_app/demo_page.dart';
+import 'package:wedding_app/screens/Budget/budget_page.dart';
+import 'package:wedding_app/screens/create_wedding/create_wedding_page.dart';
 import 'package:wedding_app/screens/login/login.dart';
 
 class NavigatorDemo extends StatefulWidget {
@@ -11,8 +13,8 @@ class _NavigatorDemoState extends State<NavigatorDemo> {
   int _selectedIndex = 0;
   final List<Widget> _children = [
     DemoPage(string: "1",),
-    DemoPage(string: "2",),
-    DemoPage(string: "3",),
+    CreateWeddingPage(),
+    BudgetList(),
     LoginPage(),
   ];
   void onTabTapped(int index) {
@@ -32,8 +34,11 @@ class _NavigatorDemoState extends State<NavigatorDemo> {
           BottomNavigationBarItem(icon: Icon(Icons.people), label: "Guest"),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Color(0xFF334192),
-        unselectedItemColor: Colors.grey,
+        selectedItemColor: Colors.red,
+        unselectedItemColor: Colors.grey.shade600,
+        selectedLabelStyle: TextStyle(fontWeight: FontWeight.w600),
+        unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w600),
+        type: BottomNavigationBarType.fixed,
         onTap: onTabTapped
       ),
     );
