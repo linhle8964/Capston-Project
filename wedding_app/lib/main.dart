@@ -15,8 +15,7 @@ import 'package:wedding_app/screens/splash_page.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Bloc.observer = SimpleBlocObserver();
-  await Firebase.initializeApp();
-  runApp(MyApp());
+  await Firebase.initializeApp().whenComplete(() => runApp(MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -24,54 +23,53 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-      providers: [
-        BlocProvider<AuthenticationBloc>(create: (context) {
-          return AuthenticationBloc(
-            userRepository: FirebaseUserRepository(),
-          )..add(AppStarted());
-        }),
-      ],
-      child: MaterialApp(
-        initialRoute: '/',
-        routes: {
-          '/register': (context) {
-            return BlocProvider(
-              create: (BuildContext context) =>
-                  RegisterBloc(userRepository: FirebaseUserRepository()),
-              child: RegisterPage(),
-            );
-          },
-          // When navigating to the "/" route, build the FirstScreen widget.
-          '/': (context) {
-            return BlocBuilder<AuthenticationBloc, AuthenticationState>(
-                builder: (context, state) {
-              if (state is Authenticated) {
-                return NavigatorDemo();
-              } else if (state is Unauthenticated) {
-                return MultiBlocProvider(
-                  providers: [
-                    BlocProvider<LoginBloc>(
-                      create: (context) => LoginBloc(
-                        userRepository: FirebaseUserRepository(),
+        providers: [
+          BlocProvider<AuthenticationBloc>(create: (context) {
+            return AuthenticationBloc(
+              userRepository: FirebaseUserRepository(),
+            )..add(AppStarted());
+          }),
+        ],
+        child: MaterialApp(
+          initialRoute: '/',
+          routes: {
+            '/register': (context) {
+              return BlocProvider(
+                create: (BuildContext context) =>
+                    RegisterBloc(userRepository: FirebaseUserRepository()),
+                child: RegisterPage(),
+              );
+            },
+            // When navigating to the "/" route, build the FirstScreen widget.
+            '/': (context) {
+              return BlocBuilder<AuthenticationBloc, AuthenticationState>(
+                  builder: (context, state) {
+                if (state is Authenticated) {
+                  return NavigatorPage();
+                } else if (state is Unauthenticated) {
+                  return MultiBlocProvider(
+                    providers: [
+                      BlocProvider<LoginBloc>(
+                        create: (context) => LoginBloc(
+                          userRepository: FirebaseUserRepository(),
+                        ),
                       ),
-                    ),
-                  ],
-                  child: LoginPage(),
-                );
-              } else if (state is Uninitialized) {
-                return SplashPage();
-              }
+                    ],
+                    child: LoginPage(),
+                  );
+                } else if (state is Uninitialized) {
+                  return SplashPage();
+                }
 
-              return CircularProgressIndicator();
-            });
-          }
-        },
-        title: 'Wedding App',
-        theme: ThemeData(
-          primarySwatch: Colors.red,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
-      ),
-    );
+                return CircularProgressIndicator();
+              });
+            }
+          },
+          title: 'Wedding App',
+          theme: ThemeData(
+            primarySwatch: Colors.red,
+            visualDensity: VisualDensity.adaptivePlatformDensity,
+          ),
+        ));
   }
 }

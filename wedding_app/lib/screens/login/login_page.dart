@@ -191,7 +191,7 @@ class _LoginPageState extends State<LoginPage> {
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(8))),
                             child: Text(
-                              'Gmail ',
+                              'Google ',
                               style:
                                   TextStyle(color: Colors.white, fontSize: 16),
                             ),

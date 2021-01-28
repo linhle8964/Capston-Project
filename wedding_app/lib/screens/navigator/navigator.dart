@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:wedding_app/demo_page.dart';
-import 'package:wedding_app/screens/Budget/budget_page.dart';
-import 'package:wedding_app/screens/create_wedding/create_wedding_page.dart';
-import 'package:wedding_app/screens/login/login_page.dart';
+import 'package:wedding_app/screens/personal_info/personal_info.dart';
+import 'package:wedding_app/screens/setting/setting.dart';
+import 'package:wedding_app/screens/wedding_date/wedding_date.dart';
 
-class NavigatorDemo extends StatefulWidget {
+class NavigatorPage extends StatefulWidget {
   @override
-  _NavigatorDemoState createState() => _NavigatorDemoState();
+  _NavigatorPageState createState() => _NavigatorPageState();
 }
 
-class _NavigatorDemoState extends State<NavigatorDemo> {
+class _NavigatorPageState extends State<NavigatorPage> {
   int _selectedIndex = 0;
   final List<Widget> _children = [
     DemoPage(),
-    CreateWeddingPage(),
-    BudgetList(),
-    LoginPage(),
+    SettingPage(),
+    PersonalInfoPage(),
+    WeddingDatePage(),
   ];
   void onTabTapped(int index) {
     setState(() {
