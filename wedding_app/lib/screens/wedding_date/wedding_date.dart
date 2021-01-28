@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
 void main() {
-  runApp(WeddingDate());
+  runApp(WeddingDatePage());
 }
 
-class WeddingDate extends StatelessWidget {
+class WeddingDatePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

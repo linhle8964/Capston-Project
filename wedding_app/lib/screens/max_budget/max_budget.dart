@@ -4,15 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
 void main() {
-  runApp(MaxBudget());
+  runApp(MaxBudgetPage());
 }
 
-class MaxBudget extends StatefulWidget {
+class MaxBudgetPage extends StatefulWidget {
   @override
-  _MaxBudgetState createState() => _MaxBudgetState();
+  _MaxBudgetPageState createState() => _MaxBudgetPageState();
 }
 
-class _MaxBudgetState extends State<MaxBudget> {
+class _MaxBudgetPageState extends State<MaxBudgetPage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
