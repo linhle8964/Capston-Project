@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wedding_app/bloc/register/bloc.dart';
-import 'package:wedding_app/firebase_repository/user_firebase_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wedding_app/bloc/authentication/bloc.dart';
 
@@ -34,6 +33,7 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       body: BlocListener(
           cubit: _registerBloc,
           listener: (BuildContext context, RegisterState state) {
@@ -113,7 +113,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             controller: _emailController,
                             decoration: InputDecoration(
                                 labelText: 'E-mail',
-                                errorText: state.isEmailValid
+                                errorText: !state.isEmailValid
                                     ? "Email không hợp lệ "
                                     : null,
                                 labelStyle: TextStyle(

@@ -33,6 +33,9 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+    # Add Sign in method for google and facebook
+  google_sign_in: ^4.5.9
+  flutter_facebook_login: ^3.0.0
   # bloc dependencies
   flutter_bloc: ^6.1.1
   bloc: ^6.1.1
@@ -48,9 +51,6 @@ dev_dependencies:
     # Add the dependency for the FlutterFire plugin for Google Analytics
   firebase_analytics: ^7.0.1
   cloud_firestore: ^0.16.0
-    # Add Sign in method for google and facebook
-  google_sign_in: ^4.5.9
-  flutter_facebook_login: ^3.0.0
 
   rxdart: ^0.25.0
   equatable: ^1.2.5

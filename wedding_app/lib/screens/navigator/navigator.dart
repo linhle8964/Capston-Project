@@ -12,9 +12,7 @@ class NavigatorDemo extends StatefulWidget {
 class _NavigatorDemoState extends State<NavigatorDemo> {
   int _selectedIndex = 0;
   final List<Widget> _children = [
-    DemoPage(
-      string: "1",
-    ),
+    DemoPage(),
     CreateWeddingPage(),
     BudgetList(),
     LoginPage(),
