@@ -1,6 +1,3 @@
-
-
-
 import 'package:flutter/material.dart';
 import 'package:wedding_app/screens/Budget/curveshape.dart';
 
@@ -19,15 +16,15 @@ class _BudgetListState extends State<BudgetList> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final List<Item> Items = [];
-    final it=Item("HoneyMoon",10000.1);
-    final it1=Item("Dinner",10000.1);
-    final it2=Item("Water",10000.1);
+    final it = Item("HoneyMoon", 10000);
+    final it1 = Item("Dinner", 10000);
+    final it2 = Item("Water", 10000);
     Items.add(it);
     Items.add(it1);
     Items.add(it2);
-    final List<category> Categorys= [];
-    final cate=category("Entertainment and music",Items);
-    final cate2=category("other",Items);
+    final List<category> Categorys = [];
+    final cate = category("Entertainment and music", Items);
+    final cate2 = category("other", Items);
     Categorys.add(cate);
     Categorys.add(cate2);
     return Scaffold(
@@ -38,39 +35,39 @@ class _BudgetListState extends State<BudgetList> {
         title: Center(
           child: !isSearching
               ? Text(
-            'BUDGETS',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          )
+                  'BUDGETS',
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                )
               : TextField(
-            onChanged: (value) {},
-            style: TextStyle(color: Colors.white),
-            decoration: InputDecoration(
-                icon: Icon(
-                  Icons.search,
-                  color: Colors.white,
+                  onChanged: (value) {},
+                  style: TextStyle(color: Colors.white),
+                  decoration: InputDecoration(
+                      icon: Icon(
+                        Icons.search,
+                        color: Colors.white,
+                      ),
+                      hintText: "Search Item",
+                      hintStyle: TextStyle(color: Colors.black)),
                 ),
-                hintText: "Search Item",
-                hintStyle: TextStyle(color: Colors.black)),
-          ),
         ),
         actions: <Widget>[
           isSearching
               ? IconButton(
-            icon: Icon(Icons.cancel),
-            onPressed: () {
-              setState(() {
-                this.isSearching = false;
-              });
-            },
-          )
+                  icon: Icon(Icons.cancel),
+                  onPressed: () {
+                    setState(() {
+                      this.isSearching = false;
+                    });
+                  },
+                )
               : IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {
-              setState(() {
-                this.isSearching = true;
-              });
-            },
-          )
+                  icon: Icon(Icons.search),
+                  onPressed: () {
+                    setState(() {
+                      this.isSearching = true;
+                    });
+                  },
+                )
         ],
       ),
       body: Stack(
@@ -107,7 +104,14 @@ class _BudgetListState extends State<BudgetList> {
                   children: <Widget>[
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[Text("Estimate"), Text("10000")],
+                      children: <Widget>[
+                        Icon(
+                          Icons.account_balance,
+                          color: Colors.deepPurple,
+                          size: 45,
+                        ),
+                        Text("10000")
+                      ],
                     ),
                     Container(
                       height: 100,
@@ -118,11 +122,11 @@ class _BudgetListState extends State<BudgetList> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Icon(
-                          Icons.bluetooth,
+                          Icons.account_balance_wallet,
                           color: Colors.deepPurple,
                           size: 45,
                         ),
-                        Text("BEACON")
+                        Text("Total")
                       ],
                     )
                   ],
@@ -131,7 +135,7 @@ class _BudgetListState extends State<BudgetList> {
             ),
           ),
           Positioned(
-            top: 160,
+            top: 180,
             left: 15,
             right: 15,
             bottom: 15,
@@ -140,41 +144,54 @@ class _BudgetListState extends State<BudgetList> {
                   itemCount: Categorys.length,
                   itemBuilder: (context, index) {
                     final item = Categorys[index];
-                    double sum=0;
-                    for(int i=0;i<item.items.length;i++){
-                      sum+=item.items[i].cost;
+                    double sum = 0;
+                    for (int i = 0; i < item.items.length; i++) {
+                      sum += item.items[i].cost;
                     }
                     return Column(
-                      children:<Widget> [
+                      children: <Widget>[
                         Container(
-                          child:ListTile(
-                            title:Text(item.header),
-                            subtitle: Text(sum.toString()),
-                          ) ,
+                          child: ListTile(
+                            title: Text(
+                                item.header + " | " + sum.toString() + " ₫"),
+                          ),
                         ),
                         ListView.builder(
                             shrinkWrap: true,
-                            itemCount:item.items.length,
-                            itemBuilder: (context,i){
-                              final low=item.items[i];
+                            itemCount: item.items.length,
+                            itemBuilder: (context, i) {
+                              final low = item.items[i];
                               return Card(
-                                child: ListTile(
-                                  title: Text(low.itemName),
+                                  child: Container(
+                                height: 60,
+                                padding: EdgeInsets.only(left: 15, right: 15),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      child: Text(low.itemName,
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold)
+                                      ),
+                                    ),
+                                    Flexible(
+                                        fit: FlexFit.tight, child: SizedBox()),
+                                    Text(
+                                      low.cost.toString() + "₫",
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold),
+                                    )
+                                  ],
                                 ),
-                              );
-                            }
-
-
-
-                        )
+                              ));
+                            })
                         // Card(
                         //   child:ListTile(
                         //     title:Text(item.items[index].itemName),
                         //     subtitle: Text(item.items[index].cost.toString()),
                         //   ),
                         // )
-
-
                       ],
                     );
                   }),
