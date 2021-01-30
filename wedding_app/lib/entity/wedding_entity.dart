@@ -24,7 +24,6 @@ class WeddingEntity extends Equatable {
       this.modifiedDate);
 
   @override
-  // TODO: implement props
   List<Object> get props => [
         id,
         brideName,
@@ -70,7 +69,7 @@ class WeddingEntity extends Equatable {
     );
   }
 
-  static WeddingEntity fromSnapshot(DocumentSnapshot snapshot){
+  static WeddingEntity fromSnapshot(DocumentSnapshot snapshot) {
     return WeddingEntity(
       snapshot.id,
       snapshot.get("bride_name"),
@@ -84,8 +83,8 @@ class WeddingEntity extends Equatable {
     );
   }
 
-  Map<String, Object> toDocument(){
-    return{
+  Map<String, Object> toDocument() {
+    return {
       "bride_name": brideName,
       "groom_name": groomName,
       "wedding_date": weddingDate,

@@ -122,34 +122,49 @@ class _LoginPageState extends State<LoginPage> {
           ),
 
           Padding(
-              padding: const EdgeInsets.fromLTRB(40, 10, 30, 0),
+              padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-
-                  RaisedButton(
+                  FlatButton(
+                    padding: EdgeInsets.all(0.0),
                     onPressed: onLogInFacebookClick,
                     color: Colors.blue,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(8))),
-                    child: Text(
-                      'Facebook ',
-                      style: TextStyle(color: Colors.white, fontSize: 16),
-                    ),
+                    child: Row(
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Image.asset('asset/fp_icon_325x325.png',height: 20.0),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text('Facebook',style: TextStyle(color: Colors.white, fontSize: 16),),
+                        )
+                      ],
+                    )
                   ),
-                  RaisedButton(
+                  FlatButton(
                     onPressed: onLogInGmailClick,
-                    color: Colors.red,
+                    color: Colors.blue,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(8))),
-                    child: Text(
-                      'Gmail ',
-                      style: TextStyle(color: Colors.white, fontSize: 16),
-                    ),
+                    child: Row(
+                      children: <Widget>[
+                        Padding(
+                          padding: const EdgeInsets.all(0.0),
+                          child: Image.asset('asset/google_icon.jpg',height: 20.0),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text('Google',style: TextStyle(color: Colors.white, fontSize: 16),),
+                        )
+                      ],
+                    )
                   )
                 ],
               )),
-
           Padding(
             padding: const EdgeInsets.fromLTRB(90, 0, 0, 10),
             child: Container(

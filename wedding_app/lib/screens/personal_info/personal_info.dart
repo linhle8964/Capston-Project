@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(PersonalInfo());
+  runApp(PersonalInfoPage());
 }
 
-class PersonalInfo extends StatefulWidget {
+class PersonalInfoPage extends StatefulWidget {
   @override
-  _PersonalInfoState createState() => _PersonalInfoState();
+  _PersonalInfoPageState createState() => _PersonalInfoPageState();
 }
 
-class _PersonalInfoState extends State<PersonalInfo> {
+class _PersonalInfoPageState extends State<PersonalInfoPage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
