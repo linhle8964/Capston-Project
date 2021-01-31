@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:wedding_app/bloc/authentication/bloc.dart';
-import 'package:wedding_app/bloc/login/bloc.dart';
-import 'package:wedding_app/bloc/register/bloc.dart';
-import 'package:wedding_app/bloc/simple_bloc_observer.dart';
-import 'package:wedding_app/firebase_repository/user_firebase_repository.dart';
-import 'package:wedding_app/screens/login/login_page.dart';
+import 'package:wedding_app/screens/login/login.dart';
 import 'package:wedding_app/screens/navigator/navigator.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:wedding_app/screens/register/register_page.dart';
 import 'package:wedding_app/screens/splash_page.dart';
+
+import 'bloc/authentication/authentication_bloc.dart';
+import 'bloc/authentication/authentication_event.dart';
+import 'bloc/authentication/authentication_state.dart';
+import 'bloc/login/login_bloc.dart';
+import 'bloc/register/register_bloc.dart';
+import 'bloc/simple_bloc_observer.dart';
+import 'firebase_repository/user_firebase_repository.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
