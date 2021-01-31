@@ -35,6 +35,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         body: BlocListener(
       cubit: _loginBloc,
       listener: (context, state) {
@@ -85,7 +86,7 @@ class _LoginPageState extends State<LoginPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 30),
+                    padding: const EdgeInsets.fromLTRB(0, 70, 0, 30),
                     child: Container(
                       child: Image(
                           image:
@@ -168,33 +169,48 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   Padding(
-                      padding: const EdgeInsets.fromLTRB(40, 10, 30, 0),
+                      padding: const EdgeInsets.fromLTRB(20, 10, 20, 20),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          RaisedButton(
-                            onPressed: onLogInFacebookClick,
-                            color: Colors.blue,
-                            shape: RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(8))),
-                            child: Text(
-                              'Facebook ',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 16),
-                            ),
+                          FlatButton(
+                              padding: EdgeInsets.all(0.0),
+                              onPressed: onLogInFacebookClick,
+                              color: Colors.blue,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.all(Radius.circular(8))),
+                              child: Row(
+                                children: <Widget>[
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Image(
+                                        image:
+                                        AssetImage('assets/fp_icon_325x325.png'),height: 20.0,),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text('Facebook',style: TextStyle(color: Colors.white, fontSize: 16),),
+                                  )
+                                ],
+                              )
                           ),
-                          RaisedButton(
-                            onPressed: onLogInGoogleClick,
-                            color: Colors.red,
-                            shape: RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(8))),
-                            child: Text(
-                              'Google ',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 16),
-                            ),
+                          FlatButton(
+                              onPressed: onLogInGoogleClick,
+                              color: Colors.blue,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.all(Radius.circular(8))),
+                              child: Row(
+                                children: <Widget>[
+                                  Padding(
+                                    padding: const EdgeInsets.all(0.0),
+                                    child: Image.asset('assets/google_icon.jpg',height: 20.0),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text('Google',style: TextStyle(color: Colors.white, fontSize: 16),),
+                                  )
+                                ],
+                              )
                           )
                         ],
                       )),
@@ -221,7 +237,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                    padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
                     child: Container(
                       height: 20,
                       width: double.infinity,

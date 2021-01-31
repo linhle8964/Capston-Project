@@ -24,6 +24,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return MaterialApp(
         home: Scaffold(
+            resizeToAvoidBottomInset: false,
             body: Container(
       padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
       constraints: BoxConstraints.expand(),

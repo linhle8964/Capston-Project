@@ -33,7 +33,7 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: true,
+      resizeToAvoidBottomInset: false,
       body: BlocListener(
           cubit: _registerBloc,
           listener: (BuildContext context, RegisterState state) {
