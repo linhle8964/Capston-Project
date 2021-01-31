@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:wedding_app/demo_page.dart';
+import 'package:wedding_app/screens/budget/budget_page.dart';
 import 'package:wedding_app/screens/checklist/checklist_page.dart';
 import 'package:wedding_app/screens/checklist/edit_task.dart';
 import 'package:wedding_app/screens/create_wedding/create_wedding_page.dart';
+import 'package:wedding_app/screens/max_budget/max_budget.dart';
 import 'package:wedding_app/screens/personal_info/personal_info.dart';
 import 'package:wedding_app/screens/setting/setting.dart';
 import 'package:wedding_app/screens/wedding_date/wedding_date.dart';
@@ -16,9 +18,9 @@ class _NavigatorPageState extends State<NavigatorPage> {
   int _selectedIndex = 0;
   final List<Widget> _children = [
     DemoPage(),
-    SettingPage(),
-    PersonalInfoPage(),
-    CreateWeddingPage(),
+    ChecklistPage(),
+    MaxBudgetPage(),
+    BudgetList(),
   ];
   void onTabTapped(int index) {
     setState(() {

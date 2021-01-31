@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:wedding_app/screens/login/login.dart';
+import 'package:wedding_app/screens/login/login_page.dart';
 import 'package:wedding_app/screens/navigator/navigator.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:wedding_app/screens/register/register_page.dart';
 import 'package:wedding_app/screens/splash_page.dart';
+import 'package:wedding_app/widgets/loading_indicator.dart';
 
 import 'bloc/authentication/authentication_bloc.dart';
 import 'bloc/authentication/authentication_event.dart';
@@ -64,7 +65,7 @@ class MyApp extends StatelessWidget {
                   return SplashPage();
                 }
 
-                return CircularProgressIndicator();
+                return LoadingIndicator();
               });
             }
           },
