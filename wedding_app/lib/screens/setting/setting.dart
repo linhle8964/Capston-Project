@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
 void main() {
-  runApp(Setting());
+  runApp(SettingPage());
 }
 
-class Setting extends StatefulWidget {
+class SettingPage extends StatefulWidget {
   @override
-  _SettingState createState() => _SettingState();
+  _SettingPageState createState() => _SettingPageState();
 }
 
-class _SettingState extends State<Setting> {
+class _SettingPageState extends State<SettingPage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
