@@ -19,9 +19,9 @@ class _BudgetListState extends State<BudgetList> {
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final List<Item> Items = [];
-    final it=Item("HoneyMoon",10000.1);
-    final it1=Item("Dinner",10000.1);
-    final it2=Item("Water",10000.1);
+    final it=Item("HoneyMoon",10000);
+    final it1=Item("Dinner",10000);
+    final it2=Item("Water",10000);
     Items.add(it);
     Items.add(it1);
     Items.add(it2);

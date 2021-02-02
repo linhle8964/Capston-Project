@@ -6,9 +6,18 @@ class AddBudget extends StatefulWidget {
 }
 
 class _AddBudgetState extends State<AddBudget> {
+  bool _visible = true;
+  String _dropdownValue = 'One';
+  @override
+  void initState() {
+    super.initState();
+    _visible = false;
+    _dropdownValue = 'One';
+  }
   @override
   Widget build(BuildContext context) {
-    String _dropdownValue = 'One';
+
+
     List _values = ['One', 'Two', 'Free', 'Four'];
     int maxLines = 3;
     return Scaffold(
@@ -88,10 +97,31 @@ class _AddBudgetState extends State<AddBudget> {
                         ),
                         hintText: 'How much have you paid for this')),
               ),
+              Visibility(
+                  visible: _visible,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 20, right: 20, top: 20),
+                    child: TextField(
+                        decoration: new InputDecoration(
+                            focusedBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.blue, width: 2.0),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: Colors.black, width: 2.0),
+                            ),
+                            hintText: 'How much have you paid for this')),
+                  )),
               Container(
                 padding: EdgeInsets.only(left: 3, right: 225),
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    setState(() {
+                      _visible = !_visible;
+                      print(_visible);
+                    });
+                  },
                   child: RichText(
                     text: TextSpan(children: [
                       WidgetSpan(
@@ -112,6 +142,7 @@ class _AddBudgetState extends State<AddBudget> {
                       border: Border.all(color: Colors.black, width: 2)),
                   child: DropdownButton(
                     value: _dropdownValue,
+
                     icon: Icon(Icons.arrow_downward),
                     iconSize: 24,
                     elevation: 16,
@@ -120,16 +151,19 @@ class _AddBudgetState extends State<AddBudget> {
                     onChanged: (value) {
                       setState(() {
                         _dropdownValue = value;
+                        print(value);
                       });
                     },
                     items: _values.map((value) {
                       return DropdownMenuItem<String>(
                         value: value,
+
                         child: Text(value),
                       );
                     }).toList(),
                   ),
                 ),
+
               ),
               Container(
                 height: 200,
@@ -159,15 +193,12 @@ class _AddBudgetState extends State<AddBudget> {
                     child: const Text('Exit', style: TextStyle(fontSize: 20)),
                   )),
                   Container(
-                    child: RaisedButton(
-                        onPressed: () {},
-                        textColor: Colors.white,
-
-                        color: Colors.lightBlue,
-                          child: const Text('Save',
-                              style: TextStyle(fontSize: 20)),
-                        )),
-
+                      child: RaisedButton(
+                    onPressed: () {},
+                    textColor: Colors.white,
+                    color: Colors.lightBlue,
+                    child: const Text('Save', style: TextStyle(fontSize: 20)),
+                  )),
                 ],
               )
             ],
