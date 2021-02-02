@@ -74,6 +74,7 @@ flutter:
   assets:
     - assets/
     - assets/app_icon/
+    - assets/cardTemplate/
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
