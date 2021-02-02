@@ -4,12 +4,12 @@
 
 class Item{
   String __itemName;
-  double  _cost;
+  int  _cost;
   Item(this.__itemName,this._cost);
 
-  double get cost => _cost;
+  int get cost => _cost;
 
-  set cost(double value) {
+  set cost(int value) {
     _cost = value;
   }
 

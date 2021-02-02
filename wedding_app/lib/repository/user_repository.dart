@@ -1,0 +1,17 @@
+import 'package:firebase_auth/firebase_auth.dart';
+
+abstract class UserRepository {
+  Future<bool> isAuthenticated();
+
+  Future<void> authenticate();
+
+  Future<String> getUserId();
+
+  Future<User> signInWithGoogle();
+
+  Future<User> signInWithCredentials(String email, String password);
+
+  Future<User> signUp({String email, String password});
+
+  Future<void> signOut();
+}

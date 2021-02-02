@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/material/input_decorator.dart';
 import 'package:intl/intl.dart';
 import "package:flutter/services.dart";
-import 'package:wedding_app/bloc/wedding/wedding_bloc.dart';
 import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:wedding_app/bloc/wedding/wedding_bloc.dart';
+
 
 class CreateWeddingPage extends StatefulWidget {
   @override
@@ -24,7 +25,35 @@ class _CreateWeddingPageState extends State<CreateWeddingPage> {
 
   static const _locale = 'en';
   String _formatNumber(String s) => NumberFormat.decimalPattern(_locale).format(int.parse(s));
+  String _selectedDate = 'Chọn ngày: ';
+  String _selectedTime = 'Chọn giờ: ';
 
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime d = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate != 'Chọn ngày: '?
+        new DateFormat("dd-MM-yyyy").parse(_selectedDate):DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime(DateTime.now().year+3),
+    );
+    if (d != null)
+      setState(() {
+        _selectedDate = new DateFormat('dd-MM-yyyy').format(d);
+      });
+  }
+
+  Future<void> _selectTime(BuildContext context) async {
+    final TimeOfDay time = await showTimePicker(
+      context: context,
+      initialTime:
+      TimeOfDay.fromDateTime(_selectedTime != 'Chọn giờ: '?
+      new DateFormat("hh:mm").parse(_selectedTime): DateTime.now()),
+    );
+    if (time != null)
+      setState(() {
+        _selectedTime = time.toString().substring(10, 15);
+      });
+  }
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -51,7 +80,7 @@ class _CreateWeddingPageState extends State<CreateWeddingPage> {
         body: SingleChildScrollView(
           child:
           Container(
-            padding: EdgeInsets.all(7.0),
+            padding: EdgeInsets.all(20.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -174,60 +203,33 @@ class _CreateWeddingPageState extends State<CreateWeddingPage> {
 
                 SizedBox(height: 10,),
                 Row(
-                  children: [
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: <Widget>[
                     Text(
-                      "NGÀY:",
+                      _selectedDate,
                       style: new TextStyle(
-                        fontSize: 15.0,
+                        fontSize: 18.0,
                       ),
                     ),
-                    Expanded(
-                      child: Container(
-                        height: 70,
-                        margin: EdgeInsets.only(left: 5.0, top: 5.0, bottom: 5.0),
-                        child: CupertinoTheme(
-                          data: CupertinoThemeData(
-                            textTheme: CupertinoTextThemeData(
-                              dateTimePickerTextStyle: TextStyle(
-                                fontSize: 13,
-                              ),
-                            ),
-                          ),
-                          child: CupertinoDatePicker(
-                            mode: CupertinoDatePickerMode.date,
-                            initialDateTime: DateTime.now(),
-                            onDateTimeChanged: (DateTime newDateTime) {
-                              // Do something
-                            },
-                          ),
-                        ),
+                    IconButton(
+                      icon: Icon(Icons.calendar_today),
+                      tooltip: 'Tap to open date picker',
+                      onPressed: () {
+                        _selectDate(context);
+                      },
+                    ),
+                    Text(
+                      _selectedTime,
+                      style: new TextStyle(
+                        fontSize: 18.0,
                       ),
                     ),
-                    Container(
-                      margin: EdgeInsets.only(left: 2.0, right: 0.0),
-                      child: Text(
-                        "THỜI GIAN:",
-                        style: new TextStyle(
-                          fontSize: 15.0,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      height: 70,
-                      margin: EdgeInsets.only(left: 10.0, top: 0.0, bottom: 5.0),
-                      child: new TimePickerSpinner(
-                        is24HourMode: true,
-                        alignment: Alignment.centerLeft,
-                        normalTextStyle: TextStyle(fontSize: 12, color: Colors.black),
-                        highlightedTextStyle:
-                        TextStyle(fontSize: 15, color: Colors.black),
-                        spacing: 0,
-                        itemHeight: 25,
-                        isForce2Digits: true,
-                        onTimeChange: (time) {
-                          setState(() {});
-                        },
-                      ),
+                    IconButton(
+                      icon: Icon(Icons.access_time_outlined),
+                      tooltip: 'Tap to open time picker',
+                      onPressed: () {
+                        _selectTime(context);
+                      },
                     ),
                   ],
                 ),
