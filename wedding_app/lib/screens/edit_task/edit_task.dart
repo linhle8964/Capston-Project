@@ -182,6 +182,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
                     children: [
                       Expanded(
                         child: RaisedButton(
+                          padding: EdgeInsets.only(left:0.0, right: 40.0),
                           color: Colors.red,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -192,9 +193,13 @@ class _EditTaskPageState extends State<EditTaskPage> {
                                 iconSize: 30,
                                 onPressed: () {},
                               ),
-                              Text(
-                                'CANCEL',
-                                 style: TextStyle(fontSize: 20, color: Colors.white),
+                              Expanded(
+                                child: Center(
+                                  child: Text(
+                                    'CANCEL',
+                                     style: TextStyle(fontSize: 20, color: Colors.white),
+                                  ),
+                                ),
                               ),
                             ],
                           ),
@@ -204,13 +209,18 @@ class _EditTaskPageState extends State<EditTaskPage> {
                       SizedBox(width: 5.0,),
                       Expanded(
                         child: RaisedButton(
+                          padding: EdgeInsets.only(right: 0.0, left: 40.0),
                           color: Colors.blue,
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              Text(
-                                'SAVE',
-                                style: TextStyle(fontSize: 20, color: Colors.white),
+                              Expanded(
+                                child: Center(
+                                  child: Text(
+                                    'SAVE',
+                                    style: TextStyle(fontSize: 20, color: Colors.white),
+                                  ),
+                                ),
                               ),
                               IconButton(
                                 icon: Icon(Icons.arrow_forward_ios_outlined),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wedding_app/demo_page.dart';
+import 'package:wedding_app/screens/checklist/checklist_page.dart';
 import 'package:wedding_app/screens/edit_task/edit_task.dart';
 import 'package:wedding_app/screens/personal_info/personal_info.dart';
 import 'package:wedding_app/screens/setting/setting.dart';
