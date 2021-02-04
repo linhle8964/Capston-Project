@@ -38,6 +38,7 @@ class _RegisterPageState extends State<RegisterPage> {
           cubit: _registerBloc,
           listener: (BuildContext context, RegisterState state) {
             if (state.isSubmitting) {
+              FocusScope.of(context).unfocus();
               Scaffold.of(context)
                 ..hideCurrentSnackBar()
                 ..showSnackBar(
@@ -53,10 +54,12 @@ class _RegisterPageState extends State<RegisterPage> {
                 );
             }
             if (state.isSuccess) {
+              FocusScope.of(context).unfocus();
               BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
               Navigator.of(context).pop();
             }
             if (state.isFailure) {
+              FocusScope.of(context).unfocus();
               Scaffold.of(context)
                 ..hideCurrentSnackBar()
                 ..showSnackBar(
