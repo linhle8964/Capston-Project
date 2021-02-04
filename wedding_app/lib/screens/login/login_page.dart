@@ -40,6 +40,7 @@ class _LoginPageState extends State<LoginPage> {
           cubit: _loginBloc,
           listener: (context, state) {
             if (state.isSubmitting) {
+              FocusScope.of(context).unfocus();
               Scaffold.of(context)
                 ..hideCurrentSnackBar()
                 ..showSnackBar(
@@ -55,9 +56,11 @@ class _LoginPageState extends State<LoginPage> {
                 );
             }
             if (state.isSuccess) {
+              FocusScope.of(context).unfocus();
               BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
             }
             if (state.isFailure) {
+              FocusScope.of(context).unfocus();
               Scaffold.of(context)
                 ..hideCurrentSnackBar()
                 ..showSnackBar(
