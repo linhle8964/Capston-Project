@@ -33,7 +33,7 @@ class WeddingEntity extends Equatable {
         image,
         dateCreated,
         address,
-        modifiedDate
+        modifiedDate,
       ];
 
   Map<String, Object> toJson() {
@@ -46,7 +46,7 @@ class WeddingEntity extends Equatable {
       "image": image,
       "date_created": dateCreated,
       "address": address,
-      "modified_date": modifiedDate
+      "modified_date": modifiedDate,
     };
   }
 
@@ -92,7 +92,7 @@ class WeddingEntity extends Equatable {
       "image": image,
       "date_created": dateCreated,
       "address": address,
-      "modified_date": modifiedDate
+      "modified_date": modifiedDate,
     };
   }
 }

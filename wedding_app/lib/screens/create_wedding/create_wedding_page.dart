@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/material/input_decorator.dart';
 import 'package:intl/intl.dart';
 import "package:flutter/services.dart";
-import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:wedding_app/bloc/wedding/wedding_bloc.dart';
-
+import 'package:wedding_app/bloc/create_wedding/create_wedding_bloc.dart';
+import 'package:wedding_app/bloc/wedding/bloc.dart';
+import 'package:wedding_app/model/wedding.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CreateWeddingPage extends StatefulWidget {
   @override
@@ -24,17 +24,19 @@ class _CreateWeddingPageState extends State<CreateWeddingPage> {
   TextEditingController budgetController = new TextEditingController();
 
   static const _locale = 'en';
-  String _formatNumber(String s) => NumberFormat.decimalPattern(_locale).format(int.parse(s));
+  String _formatNumber(String s) =>
+      NumberFormat.decimalPattern(_locale).format(int.parse(s));
   String _selectedDate = 'Chọn ngày: ';
   String _selectedTime = 'Chọn giờ: ';
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime d = await showDatePicker(
       context: context,
-      initialDate: _selectedDate != 'Chọn ngày: '?
-        new DateFormat("dd-MM-yyyy").parse(_selectedDate):DateTime.now(),
+      initialDate: _selectedDate != 'Chọn ngày: '
+          ? new DateFormat("dd-MM-yyyy").parse(_selectedDate)
+          : DateTime.now(),
       firstDate: DateTime.now(),
-      lastDate: DateTime(DateTime.now().year+3),
+      lastDate: DateTime(DateTime.now().year + 3),
     );
     if (d != null)
       setState(() {
@@ -45,15 +47,16 @@ class _CreateWeddingPageState extends State<CreateWeddingPage> {
   Future<void> _selectTime(BuildContext context) async {
     final TimeOfDay time = await showTimePicker(
       context: context,
-      initialTime:
-      TimeOfDay.fromDateTime(_selectedTime != 'Chọn giờ: '?
-      new DateFormat("hh:mm").parse(_selectedTime): DateTime.now()),
+      initialTime: TimeOfDay.fromDateTime(_selectedTime != 'Chọn giờ: '
+          ? new DateFormat("hh:mm").parse(_selectedTime)
+          : DateTime.now()),
     );
     if (time != null)
       setState(() {
         _selectedTime = time.toString().substring(10, 15);
       });
   }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -73,13 +76,14 @@ class _CreateWeddingPageState extends State<CreateWeddingPage> {
                 size: 40,
                 color: Colors.blue,
               ),
-              onPressed: (){_save();},
+              onPressed: () {
+                _save();
+              },
             ),
           ],
         ),
         body: SingleChildScrollView(
-          child:
-          Container(
+          child: Container(
             padding: EdgeInsets.all(20.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -90,7 +94,9 @@ class _CreateWeddingPageState extends State<CreateWeddingPage> {
                     fontSize: 18.0,
                   ),
                 ),
-                SizedBox(height: 10,),
+                SizedBox(
+                  height: 10,
+                ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -100,7 +106,9 @@ class _CreateWeddingPageState extends State<CreateWeddingPage> {
                       minRadius: 15.0,
                       backgroundImage: AssetImage('assets/puppy.jpg'),
                     ),
-                    SizedBox(width: 30.0,),
+                    SizedBox(
+                      width: 30.0,
+                    ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -123,85 +131,99 @@ class _CreateWeddingPageState extends State<CreateWeddingPage> {
                     ),
                   ],
                 ),
-                SizedBox(height: 10,),
+                SizedBox(
+                  height: 10,
+                ),
                 StreamBuilder(
                   stream: bloc.nameStream,
-                  builder: (context,snapshot) =>TextField(
+                  builder: (context, snapshot) => TextField(
                     controller: nameController,
                     decoration: new InputDecoration(
                       border: new OutlineInputBorder(
                         borderSide: new BorderSide(color: Colors.black),
                       ),
                       hintText: 'TÊN CỦA BẠN',
-                      errorText: snapshot.hasError? snapshot.error: null,
+                      errorText: snapshot.hasError ? snapshot.error : null,
                     ),
                   ),
                 ),
-
-                SizedBox(height: 10,),
+                SizedBox(
+                  height: 10,
+                ),
                 RadioButtonHorizontal(),
-                SizedBox(height: 10,),
+                SizedBox(
+                  height: 10,
+                ),
                 Text(
                   "NỬA KIA CỦA BẠN",
                   style: new TextStyle(
                     fontSize: 18.0,
                   ),
                 ),
-                SizedBox(height: 10,),
+                SizedBox(
+                  height: 10,
+                ),
                 StreamBuilder(
                   stream: bloc.partnerNameStream,
-                  builder: (context,snapshot) =>TextField(
+                  builder: (context, snapshot) => TextField(
                     controller: parterNameController,
                     decoration: new InputDecoration(
                       border: new OutlineInputBorder(
                         borderSide: new BorderSide(color: Colors.black),
                       ),
-                      errorText: snapshot.hasError? snapshot.error: null,
+                      errorText: snapshot.hasError ? snapshot.error : null,
                       hintText: 'TÊN ĐẰNG ẤY',
                     ),
                   ),
                 ),
-
-                SizedBox(height: 10,),
+                SizedBox(
+                  height: 10,
+                ),
                 RadioButtonHorizontal(),
-                SizedBox(height: 10,),
+                SizedBox(
+                  height: 10,
+                ),
                 StreamBuilder(
                   stream: bloc.emailStream,
-                  builder: (context,snapshot) =>TextField(
+                  builder: (context, snapshot) => TextField(
                     controller: partnerEmailController,
                     decoration: new InputDecoration(
                       border: new OutlineInputBorder(
                         borderSide: new BorderSide(color: Colors.black),
                       ),
-                      errorText: snapshot.hasError? snapshot.error: null,
+                      errorText: snapshot.hasError ? snapshot.error : null,
                       hintText: "EMAIL CỦA ĐẰNG ẤY",
                     ),
                   ),
                 ),
-
-                SizedBox(height: 10,),
+                SizedBox(
+                  height: 10,
+                ),
                 Text(
                   "ĐÁM CƯỚI",
                   style: new TextStyle(
                     fontSize: 18.0,
                   ),
                 ),
-                SizedBox(height: 10,),
+                SizedBox(
+                  height: 10,
+                ),
                 StreamBuilder(
                   stream: bloc.weddingNameStream,
-                  builder: (context,snapshot) =>TextField(
+                  builder: (context, snapshot) => TextField(
                     controller: weddingNameController,
                     decoration: new InputDecoration(
                       border: new OutlineInputBorder(
                         borderSide: new BorderSide(color: Colors.black),
                       ),
-                      errorText: snapshot.hasError? snapshot.error: null,
+                      errorText: snapshot.hasError ? snapshot.error : null,
                       hintText: 'TÊM ĐÁM CƯỚI',
                     ),
                   ),
                 ),
-
-                SizedBox(height: 10,),
+                SizedBox(
+                  height: 10,
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
@@ -233,21 +255,25 @@ class _CreateWeddingPageState extends State<CreateWeddingPage> {
                     ),
                   ],
                 ),
-                SizedBox(height: 10,),
+                SizedBox(
+                  height: 10,
+                ),
                 StreamBuilder(
                   stream: bloc.addressStream,
-                  builder: (context,snapshot) =>TextField(
+                  builder: (context, snapshot) => TextField(
                     controller: addressController,
                     decoration: new InputDecoration(
                       border: new OutlineInputBorder(
                         borderSide: new BorderSide(color: Colors.black),
                       ),
-                      errorText: snapshot.hasError? snapshot.error: null,
+                      errorText: snapshot.hasError ? snapshot.error : null,
                       hintText: 'ĐỊA CHỈ',
                     ),
                   ),
                 ),
-                SizedBox(height: 10,),
+                SizedBox(
+                  height: 10,
+                ),
                 TextField(
                   controller: budgetController,
                   decoration: new InputDecoration(
@@ -278,10 +304,11 @@ class _CreateWeddingPageState extends State<CreateWeddingPage> {
 
   void _save() {
     setState(() {
-      if(bloc.isNameValid(nameController.text, 5) && bloc.isPartnerNameValid(parterNameController.text, 5)
-          && bloc.isEmailValid(partnerEmailController.text)
-          && bloc.isWeddingNameValid(weddingNameController.text, 5)
-          && bloc.isAddressValid(addressController.text, 5)){
+      if (bloc.isNameValid(nameController.text, 5) &&
+          bloc.isPartnerNameValid(parterNameController.text, 5) &&
+          bloc.isEmailValid(partnerEmailController.text) &&
+          bloc.isWeddingNameValid(weddingNameController.text, 5) &&
+          bloc.isAddressValid(addressController.text, 5)) {
         Fluttertoast.showToast(
             msg: "OKELA",
             toastLength: Toast.LENGTH_SHORT,
@@ -289,8 +316,10 @@ class _CreateWeddingPageState extends State<CreateWeddingPage> {
             timeInSecForIosWeb: 1,
             backgroundColor: Colors.black,
             textColor: Colors.white,
-            fontSize: 16.0
-        );
+            fontSize: 16.0);
+        Wedding wedding = new Wedding(nameController.text,
+            parterNameController.text, null, "default", addressController.text);
+        BlocProvider.of<WeddingBloc>(context).add(CreateWedding(wedding, ""));
       }
     });
   }

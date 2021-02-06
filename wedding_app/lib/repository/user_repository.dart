@@ -5,7 +5,7 @@ abstract class UserRepository {
 
   Future<void> authenticate();
 
-  Future<String> getUserId();
+  Future<User> getUser();
 
   Future<User> signInWithGoogle();
 

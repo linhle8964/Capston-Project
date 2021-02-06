@@ -1,75 +1,69 @@
-
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:wedding_app/utils/validations.dart';
+import 'package:bloc/bloc.dart';
+import 'package:wedding_app/model/user_wedding.dart';
+import 'package:wedding_app/repository/user_wedding_repository.dart';
+import 'package:wedding_app/repository/wedding_repository.dart';
+import 'bloc.dart';
+import 'package:meta/meta.dart';
 
-class CreateWeddingBloc{
-  StreamController _nameController = new StreamController();
-  StreamController _partnerNameController = new StreamController();
-  StreamController _weddingNameController = new StreamController();
-  StreamController _addressController = new StreamController();
-  StreamController _emailController = new StreamController();
+class WeddingBloc extends Bloc<WeddingEvent, WeddingState> {
+  final WeddingRepository _weddingRepository;
+  final UserWeddingRepository _userWeddingRepository;
+  StreamSubscription _streamSubscription;
 
-  Stream get nameStream => _nameController.stream;
-  Stream get partnerNameStream => _partnerNameController.stream;
-  Stream get weddingNameStream => _weddingNameController.stream;
-  Stream get addressStream => _addressController.stream;
-  Stream get emailStream => _emailController.stream;
+  WeddingBloc(
+      {@required WeddingRepository weddingRepository,
+      @required UserWeddingRepository userWeddingRepository})
+      : assert(weddingRepository != null),
+        assert(userWeddingRepository != null),
+        _userWeddingRepository = userWeddingRepository,
+        _weddingRepository = weddingRepository,
+        super(WeddingLoading());
 
-
-  bool isNameValid(String text,int length){
-    if(!Validation.isStringValid(text, length)){
-      _nameController.sink.addError("hãy nhập ít nhất $length kí tự");
-      return false;
+  @override
+  Stream<WeddingState> mapEventToState(WeddingEvent event) async* {
+    if (event is CreateWedding) {
+      yield* _mapCreateWeddingToState(event);
+    } else if (event is UpdateWedding) {
+      yield* _mapUpdateWeddingToState(event);
+    } else if (event is DeleteWedding) {
+      yield* _mapDeleteWeddingToState(event);
+    } else if (event is LoadWeddings) {
+      yield* _mapLoadWeddingsToState(event);
+    } else if (event is WeddingUpdated) {
+      yield* _mapWeddingUpdatedToState(event);
     }
-    _nameController.sink.add("OK");
-    return true;
   }
 
-  bool isPartnerNameValid(String text,int length){
-    if(!Validation.isStringValid(text, length)){
-      _partnerNameController.sink.addError("hãy nhập ít nhất $length kí tự");
-      return false;
-    }
-    _partnerNameController.sink.add("OK");
-    return true;
+  Stream<WeddingState> _mapLoadWeddingsToState(LoadWeddings event) async* {
+    _streamSubscription?.cancel();
+    _streamSubscription = _weddingRepository.getAllWedding().listen(
+          (weddings) => add(WeddingUpdated(weddings)),
+        );
   }
 
-  bool isWeddingNameValid(String text,int length){
-    if(!Validation.isStringValid(text, length)){
-      _weddingNameController.sink.addError("hãy nhập ít nhất $length kí tự");
-      return false;
-    }
-    _weddingNameController.sink.add("OK");
-    return true;
+  Stream<WeddingState> _mapCreateWeddingToState(CreateWedding event) async* {
+    UserWedding userWedding =
+        await _userWeddingRepository.getUserWedding(event.userId);
+    _weddingRepository.createWedding(event.wedding, userWedding);
   }
 
-  bool isAddressValid(String text,int length){
-    if(!Validation.isStringValid(text, length)){
-      _addressController.sink.addError("hãy nhập ít nhất $length kí tự");
-      return false;
-    }
-    _addressController.sink.add("OK");
-    return true;
+  Stream<WeddingState> _mapUpdateWeddingToState(UpdateWedding event) async* {
+    _weddingRepository.updateWedding(event.wedding);
   }
 
-  bool isEmailValid(String email){
-    if(!Validation.isEmailValid(email)){
-      _emailController.sink.addError("email không chính xác");
-      return false;
-    }
-    _emailController.sink.add("OK");
-    return true;
+  Stream<WeddingState> _mapDeleteWeddingToState(DeleteWedding event) async* {
+    _weddingRepository.deleteWedding(event.wedding);
   }
 
-  void dispose(){
-    _nameController.close();
-    _partnerNameController.close();
-    _weddingNameController.close();
-    _addressController.close();
-    _emailController.close();
+  Stream<WeddingState> _mapWeddingUpdatedToState(WeddingUpdated event) async* {
+    yield WeddingLoaded(event.weddings);
   }
 
+  @override
+  Future<void> close() {
+    _streamSubscription?.cancel();
+    return super.close();
+  }
 }

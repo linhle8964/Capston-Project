@@ -1,15 +1,22 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:wedding_app/bloc/authentication/bloc.dart';
+import 'package:wedding_app/model/user_wedding.dart';
 import 'package:wedding_app/repository/user_repository.dart';
+import 'package:wedding_app/repository/user_wedding_repository.dart';
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
   final UserRepository _userRepository;
+  final UserWeddingRepository _userWeddingRepository;
 
-  AuthenticationBloc({@required UserRepository userRepository})
+  AuthenticationBloc(
+      {@required UserRepository userRepository,
+      @required UserWeddingRepository userWeddingRepository})
       : assert(userRepository != null),
+        assert(userWeddingRepository != null),
         _userRepository = userRepository,
+        _userWeddingRepository = userWeddingRepository,
         super(Uninitialized());
 
   @override
@@ -28,8 +35,14 @@ class AuthenticationBloc
     try {
       final isAuthenticated = await _userRepository.isAuthenticated();
       if (isAuthenticated) {
-        final userId = await _userRepository.getUserId();
-        yield Authenticated(userId);
+        final user = await _userRepository.getUser();
+        final UserWedding userWedding =
+            await _userWeddingRepository.getUserWedding(user.uid);
+        if (userWedding == null) {
+          yield Unauthenticated();
+        } else {
+          yield Authenticated(user);
+        }
       } else {
         yield Unauthenticated();
       }
@@ -39,7 +52,15 @@ class AuthenticationBloc
   }
 
   Stream<AuthenticationState> _mapLoggedInToState() async* {
-    yield Authenticated(await _userRepository.getUserId());
+    final user = await _userRepository.getUser();
+    final UserWedding userWedding =
+        await _userWeddingRepository.getUserWedding(user.uid);
+
+    if (userWedding == null) {
+      yield WeddingNull();
+    } else {
+      yield Authenticated(user);
+    }
   }
 
   Stream<AuthenticationState> _mapLoggedOutToState() async* {

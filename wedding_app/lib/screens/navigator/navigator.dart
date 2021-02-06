@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wedding_app/demo_page.dart';
+import 'package:wedding_app/screens/create_wedding/create_wedding_page.dart';
 import 'package:wedding_app/screens/edit_task/edit_task.dart';
 import 'package:wedding_app/screens/personal_info/personal_info.dart';
 import 'package:wedding_app/screens/setting/setting.dart';
@@ -14,7 +15,7 @@ class _NavigatorPageState extends State<NavigatorPage> {
   final List<Widget> _children = [
     DemoPage(),
     SettingPage(),
-    PersonalInfoPage(),
+    CreateWeddingPage(),
     EditTaskPage(),
   ];
   void onTabTapped(int index) {
