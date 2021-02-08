@@ -35,4 +35,14 @@ class FirebaseUserWeddingRepository extends UserWeddingRepository {
     }
     return UserWedding.fromEntity(UserWeddingEntity.fromSnapshot(snapshot));
   }
+
+  @override
+  Future<List<UserWedding>> getAllUserByWedding(String weddingId) async {
+    QuerySnapshot querySnapshot = await userWeddingCollection
+        .where("wedding_id", isEqualTo: weddingId)
+        .get();
+    return querySnapshot.docs.map((snapshot) {
+      return UserWedding.fromEntity(UserWeddingEntity.fromSnapshot(snapshot));
+    }).toList();
+  }
 }

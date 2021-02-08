@@ -1,70 +1,54 @@
-import 'dart:async';
-
 import 'package:wedding_app/utils/validations.dart';
+import 'package:rxdart/rxdart.dart';
+import 'bloc.dart';
+import 'dart:async';
+import 'package:bloc/bloc.dart';
 
-class CreateWeddingBloc {
-  StreamController _nameController = new StreamController();
-  StreamController _partnerNameController = new StreamController();
-  StreamController _weddingNameController = new StreamController();
-  StreamController _addressController = new StreamController();
-  StreamController _emailController = new StreamController();
+class CreateWeddingBloc extends Bloc<CreateWeddingEvent, CreateWeddingState> {
+  CreateWeddingBloc() : super(CreateWeddingState.empty());
 
-  Stream get nameStream => _nameController.stream;
-  Stream get partnerNameStream => _partnerNameController.stream;
-  Stream get weddingNameStream => _weddingNameController.stream;
-  Stream get addressStream => _addressController.stream;
-  Stream get emailStream => _emailController.stream;
-
-  bool isNameValid(String text, int length) {
-    if (!Validation.isStringValid(text, length)) {
-      _nameController.sink.addError("hãy nhập ít nhất $length kí tự");
-      return false;
-    }
-    _nameController.sink.add("OK");
-    return true;
+  @override
+  Stream<Transition<CreateWeddingEvent, CreateWeddingState>> transformEvents(
+      Stream<CreateWeddingEvent> events, transitionFn) {
+    final observableStream = events;
+    final nonDebounceStream = observableStream.where((event) {
+      return (event is! BrideNameChanged &&
+          event is! GroomNameChanged &&
+          event is! AddressChanged);
+    });
+    final debounceStream = observableStream.where((event) {
+      return (event is BrideNameChanged ||
+          event is GroomNameChanged ||
+          event is! AddressChanged);
+    }).debounceTime(Duration(milliseconds: 300));
+    return super.transformEvents(
+        nonDebounceStream.mergeWith([debounceStream]), transitionFn);
   }
 
-  bool isPartnerNameValid(String text, int length) {
-    if (!Validation.isStringValid(text, length)) {
-      _partnerNameController.sink.addError("hãy nhập ít nhất $length kí tự");
-      return false;
+  @override
+  Stream<CreateWeddingState> mapEventToState(CreateWeddingEvent event) async* {
+    if (event is GroomNameChanged) {
+      yield* _mapGroomNameChangedToState(event.groomName);
+    } else if (event is BrideNameChanged) {
+      yield* _mapBrideNameChangedToState(event.brideName);
+    } else if (event is AddressChanged) {
+      yield* _mapAddressChangedToState(event.address);
     }
-    _partnerNameController.sink.add("OK");
-    return true;
   }
 
-  bool isWeddingNameValid(String text, int length) {
-    if (!Validation.isStringValid(text, length)) {
-      _weddingNameController.sink.addError("hãy nhập ít nhất $length kí tự");
-      return false;
-    }
-    _weddingNameController.sink.add("OK");
-    return true;
+  Stream<CreateWeddingState> _mapBrideNameChangedToState(
+      String brideName) async* {
+    yield state.update(
+        isBrideNameValid: Validation.isStringValid(brideName, 6));
   }
 
-  bool isAddressValid(String text, int length) {
-    if (!Validation.isStringValid(text, length)) {
-      _addressController.sink.addError("hãy nhập ít nhất $length kí tự");
-      return false;
-    }
-    _addressController.sink.add("OK");
-    return true;
+  Stream<CreateWeddingState> _mapGroomNameChangedToState(
+      String groomName) async* {
+    yield state.update(
+        isGroomNameValid: Validation.isStringValid(groomName, 6));
   }
 
-  bool isEmailValid(String email) {
-    if (!Validation.isEmailValid(email)) {
-      _emailController.sink.addError("email không chính xác");
-      return false;
-    }
-    _emailController.sink.add("OK");
-    return true;
-  }
-
-  void dispose() {
-    _nameController.close();
-    _partnerNameController.close();
-    _weddingNameController.close();
-    _addressController.close();
-    _emailController.close();
+  Stream<CreateWeddingState> _mapAddressChangedToState(String address) async* {
+    yield state.update(isAddressValid: Validation.isStringValid(address, 6));
   }
 }

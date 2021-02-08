@@ -26,4 +26,16 @@ class Authenticated extends AuthenticationState {
 
 class Unauthenticated extends AuthenticationState {}
 
-class WeddingNull extends AuthenticationState {}
+class WeddingNull extends AuthenticationState {
+  final User user;
+
+  const WeddingNull(this.user);
+
+  @override
+  List<Object> get props => [user];
+
+  @override
+  String toString() {
+    return "Wedding Null: { user: $user}";
+  }
+}

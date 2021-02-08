@@ -11,11 +11,12 @@ class FirebaseWeddingRepository extends WeddingRepository {
       FirebaseFirestore.instance.collection("user_wedding");
 
   @override
-  Future<void> createWedding(Wedding wedding, UserWedding userWedding) {
+  Future<void> createWedding(Wedding wedding, String userId) {
+    DocumentReference reference = weddingCollection.doc();
     userWeddingCollection
-        .doc(userWedding.userId)
-        .set(new UserWedding(wedding.id, "creator").toEntity().toDocument());
-    return weddingCollection.add(wedding.toEntity().toDocument());
+        .doc(userId)
+        .set(new UserWedding(reference.id, "creator").toEntity().toDocument());
+    return reference.set(wedding.toEntity().toDocument());
   }
 
   @override
@@ -32,7 +33,11 @@ class FirebaseWeddingRepository extends WeddingRepository {
   }
 
   @override
-  Future<void> deleteWedding(Wedding wedding) {
+  Future<void> deleteWedding(
+      Wedding wedding, List<UserWedding> listUserWedding) {
+    for (UserWedding uw in listUserWedding) {
+      userWeddingCollection.doc(uw.userId).delete();
+    }
     return weddingCollection.doc(wedding.id).delete();
   }
 
@@ -43,5 +48,11 @@ class FirebaseWeddingRepository extends WeddingRepository {
           .map((doc) => Wedding.fromEntity(WeddingEntity.fromSnapshot(doc)))
           .toList();
     });
+  }
+
+  @override
+  Future<Wedding> getWeddingById(String weddingId) async {
+    DocumentSnapshot snapshot = await weddingCollection.doc(weddingId).get();
+    return Wedding.fromEntity(WeddingEntity.fromSnapshot(snapshot));
   }
 }

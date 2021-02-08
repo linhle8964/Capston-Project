@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
-void main() {
-  runApp(SettingPage());
-}
-
 class SettingPage extends StatefulWidget {
   @override
   _SettingPageState createState() => _SettingPageState();
@@ -351,5 +347,5 @@ class _SettingPageState extends State<SettingPage> {
 }
 
 void OnPersonInfoClick() {}
-void onLogOutClick(){}
-void onDeleteWeddingClick(){}
+void onLogOutClick() {}
+void onDeleteWeddingClick() {}

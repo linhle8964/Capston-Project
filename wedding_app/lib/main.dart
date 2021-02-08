@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:wedding_app/bloc/create_wedding/bloc.dart';
 import 'package:wedding_app/firebase_repository/user_wedding_firebase_repository.dart';
+import 'package:wedding_app/firebase_repository/wedding_firebase_repository.dart';
 import 'package:wedding_app/screens/create_wedding/create_wedding_page.dart';
 import 'package:wedding_app/screens/login/login_page.dart';
 import 'package:wedding_app/screens/navigator/navigator.dart';
@@ -13,6 +15,7 @@ import 'package:wedding_app/widgets/loading_indicator.dart';
 import 'bloc/authentication/bloc.dart';
 import 'bloc/login/bloc.dart';
 import 'bloc/register/bloc.dart';
+import 'bloc/wedding/bloc.dart';
 import 'bloc/simple_bloc_observer.dart';
 import 'firebase_repository/user_firebase_repository.dart';
 
@@ -52,28 +55,34 @@ class MyApp extends StatelessWidget {
                 if (state is Authenticated) {
                   return NavigatorPage();
                 } else if (state is Unauthenticated) {
-                  return MultiBlocProvider(
-                    providers: [
-                      BlocProvider<LoginBloc>(
-                        create: (context) => LoginBloc(
-                          userRepository: FirebaseUserRepository(),
-                        ),
-                      ),
-                    ],
+                  return BlocProvider<LoginBloc>(
+                    create: (context) => LoginBloc(
+                      userRepository: FirebaseUserRepository(),
+                    ),
                     child: LoginPage(),
                   );
                 } else if (state is Uninitialized) {
                   return SplashPage();
                 } else if (state is WeddingNull) {
-                  return CreateWeddingPage();
+                  return MultiBlocProvider(
+                    providers: [
+                      BlocProvider<WeddingBloc>(
+                        create: (context) => WeddingBloc(
+                          weddingRepository: FirebaseWeddingRepository(),
+                          userWeddingRepository:
+                              FirebaseUserWeddingRepository(),
+                        ),
+                      ),
+                      BlocProvider<CreateWeddingBloc>(
+                        create: (context) => CreateWeddingBloc(),
+                      ),
+                    ],
+                    child: CreateWeddingPage(user: state.user),
+                  );
                 }
-
                 return LoadingIndicator();
               });
             },
-            "/createWedding": (context) {
-              return CreateWeddingPage();
-            }
           },
           title: 'Wedding App',
           theme: ThemeData(

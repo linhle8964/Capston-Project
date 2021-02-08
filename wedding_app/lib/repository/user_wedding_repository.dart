@@ -5,4 +5,5 @@ abstract class UserWeddingRepository {
   Future<void> removeUserFromWedding(String email, UserWedding userWedding);
   Stream<UserWedding> getWeddingByUser(String userId);
   Future<UserWedding> getUserWedding(String userid);
+  Future<List<UserWedding>> getAllUserByWedding(String weddingId);
 }

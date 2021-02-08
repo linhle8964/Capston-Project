@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wedding_app/bloc/authentication/bloc.dart';
+import 'package:wedding_app/bloc/wedding/bloc.dart';
 import 'package:wedding_app/utils/hex_color.dart';
 import 'package:wedding_app/widgets/loading_indicator.dart';
 
@@ -34,7 +35,24 @@ class _DemoPageState extends State<DemoPage> {
             if (state is Uninitialized) {
               return LoadingIndicator();
             } else if (state is Authenticated) {
-              return Text(state.user.uid);
+              BlocProvider.of<WeddingBloc>(context)
+                  .add(LoadWeddingByUser(state.user.uid));
+              return BlocBuilder(
+                cubit: BlocProvider.of<WeddingBloc>(context),
+                builder: (context, state) {
+                  if (state is WeddingLoaded) {
+                    return Column(
+                      children: [
+                        Text(state.wedding.groomName),
+                        Text(state.wedding.id),
+                      ],
+                    );
+                  } else if (state is Loading) {
+                    return LoadingIndicator();
+                  } else if (state is Failed) {}
+                  return LoadingIndicator();
+                },
+              );
             }
             return LoadingIndicator();
           },

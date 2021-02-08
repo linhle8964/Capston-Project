@@ -57,7 +57,7 @@ class AuthenticationBloc
         await _userWeddingRepository.getUserWedding(user.uid);
 
     if (userWedding == null) {
-      yield WeddingNull();
+      yield WeddingNull(user);
     } else {
       yield Authenticated(user);
     }

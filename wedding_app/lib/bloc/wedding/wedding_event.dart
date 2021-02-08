@@ -1,5 +1,6 @@
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
+import 'package:wedding_app/model/user_wedding.dart';
 import 'package:wedding_app/model/wedding.dart';
 
 @immutable
@@ -11,13 +12,13 @@ abstract class WeddingEvent extends Equatable {
 
 class LoadWeddings extends WeddingEvent {}
 
-class LoadWeddingById extends WeddingEvent {
-  final String id;
+class LoadWeddingByUser extends WeddingEvent {
+  final String userId;
 
-  const LoadWeddingById(this.id);
+  const LoadWeddingByUser(this.userId);
 
   @override
-  List<Object> get props => [id];
+  List<Object> get props => [userId];
 }
 
 class CreateWedding extends WeddingEvent {
@@ -47,8 +48,9 @@ class UpdateWedding extends WeddingEvent {
 
 class DeleteWedding extends WeddingEvent {
   final Wedding wedding;
+  final List<UserWedding> listUserWedding;
 
-  const DeleteWedding(this.wedding);
+  const DeleteWedding(this.wedding, this.listUserWedding);
 
   @override
   List<Object> get props => [wedding];
@@ -58,10 +60,10 @@ class DeleteWedding extends WeddingEvent {
 }
 
 class WeddingUpdated extends WeddingEvent {
-  final List<Wedding> weddings;
+  final Wedding wedding;
 
-  const WeddingUpdated(this.weddings);
+  const WeddingUpdated(this.wedding);
 
   @override
-  List<Object> get props => [weddings];
+  List<Object> get props => [wedding];
 }

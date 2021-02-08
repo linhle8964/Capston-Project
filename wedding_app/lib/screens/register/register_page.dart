@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:wedding_app/bloc/register/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wedding_app/bloc/authentication/bloc.dart';
+import 'package:wedding_app/utils/show_snackbar.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -39,19 +40,7 @@ class _RegisterPageState extends State<RegisterPage> {
           listener: (BuildContext context, RegisterState state) {
             if (state.isSubmitting) {
               FocusScope.of(context).unfocus();
-              Scaffold.of(context)
-                ..hideCurrentSnackBar()
-                ..showSnackBar(
-                  SnackBar(
-                    content: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Đang xử lí dữ liệu...'),
-                        CircularProgressIndicator(),
-                      ],
-                    ),
-                  ),
-                );
+              showSnackbar(context, "Đang xử lý dữ liệu", false);
             }
             if (state.isSuccess) {
               FocusScope.of(context).unfocus();
@@ -60,20 +49,7 @@ class _RegisterPageState extends State<RegisterPage> {
             }
             if (state.isFailure) {
               FocusScope.of(context).unfocus();
-              Scaffold.of(context)
-                ..hideCurrentSnackBar()
-                ..showSnackBar(
-                  SnackBar(
-                    content: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Có lỗi xảy ra'),
-                        Icon(Icons.error),
-                      ],
-                    ),
-                    backgroundColor: Colors.red,
-                  ),
-                );
+              showSnackbar(context, "Có lỗi xảy ra", true);
             }
           },
           child: BlocBuilder(
