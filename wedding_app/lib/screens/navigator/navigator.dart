@@ -34,8 +34,9 @@ class _NavigatorPageState extends State<NavigatorPage> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (BuildContext context) => WeddingBloc(
-          weddingRepository: FirebaseWeddingRepository(),
-          userWeddingRepository: FirebaseUserWeddingRepository()),
+        userWeddingRepository: FirebaseUserWeddingRepository(),
+        weddingRepository: FirebaseWeddingRepository(),
+      ),
       child: Scaffold(
         body: _children[_selectedIndex],
         bottomNavigationBar: BottomNavigationBar(

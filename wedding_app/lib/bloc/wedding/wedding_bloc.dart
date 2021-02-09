@@ -47,7 +47,7 @@ class WeddingBloc extends Bloc<WeddingEvent, WeddingState> {
   Stream<WeddingState> _mapCreateWeddingToState(CreateWedding event) async* {
     yield Loading("Đang xử lý dữ liệu");
     try {
-      await _weddingRepository.createWedding(event.wedding, event.userId);
+      await _weddingRepository.createWedding(event.wedding, event.user);
       yield Success("Tạo thành công");
     } catch (_) {
       yield Failed("Có lỗi xảy ra");
@@ -57,7 +57,7 @@ class WeddingBloc extends Bloc<WeddingEvent, WeddingState> {
   Stream<WeddingState> _mapLoadWeddingByUserToState(
       LoadWeddingByUser event) async* {
     UserWedding userWedding =
-        await _userWeddingRepository.getUserWedding(event.userId);
+        await _userWeddingRepository.getUserWeddingByUser(event.user);
     if (userWedding.userId != null) {
       _streamSubscription?.cancel();
       _streamSubscription = _weddingRepository

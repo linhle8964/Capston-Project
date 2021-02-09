@@ -297,13 +297,19 @@ class _CreateWeddingPageState extends State<CreateWeddingPage> {
   void _save(CreateWeddingState state) {
     if (isSubmitButtonEnabled(state)) {
       String weddingDateStr = _selectedDate.trim() + " " + _selectedTime.trim();
-      Wedding wedding = new Wedding(groomNameController.text,
-          brideNameController.text, null, "default", addressController.text,
+      print(weddingDateStr);
+      var parsedDate = new DateFormat("dd-MM-yyyy hh:mm").parse(weddingDateStr);
+      Wedding wedding = new Wedding(
+          groomNameController.text,
+          brideNameController.text,
+          parsedDate,
+          "default",
+          addressController.text,
           dateCreated: DateTime.now(),
           budget: double.parse(budgetController.text.replaceAll(",", "")),
           modifiedDate: DateTime.now());
       BlocProvider.of<WeddingBloc>(context)
-          .add(CreateWedding(wedding, widget.user.uid));
+          .add(CreateWedding(wedding, widget.user));
     } else {
       showSnackbar(context, "Hãy điền đầy đủ thông tin", true);
     }

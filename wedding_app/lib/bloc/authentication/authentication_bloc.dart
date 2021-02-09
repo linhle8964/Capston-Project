@@ -37,8 +37,8 @@ class AuthenticationBloc
       if (isAuthenticated) {
         final user = await _userRepository.getUser();
         final UserWedding userWedding =
-            await _userWeddingRepository.getUserWedding(user.uid);
-        if (userWedding == null) {
+            await _userWeddingRepository.getUserWeddingByUser(user);
+        if (userWedding.weddingId == null) {
           yield Unauthenticated();
         } else {
           yield Authenticated(user);
@@ -54,9 +54,8 @@ class AuthenticationBloc
   Stream<AuthenticationState> _mapLoggedInToState() async* {
     final user = await _userRepository.getUser();
     final UserWedding userWedding =
-        await _userWeddingRepository.getUserWedding(user.uid);
-
-    if (userWedding == null) {
+        await _userWeddingRepository.getUserWeddingByUser(user);
+    if (userWedding.weddingId == null) {
       yield WeddingNull(user);
     } else {
       yield Authenticated(user);

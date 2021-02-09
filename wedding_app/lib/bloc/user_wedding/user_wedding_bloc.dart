@@ -22,7 +22,7 @@ class UserWeddingBloc extends Bloc<UserWeddingEvent, UserWeddingState> {
   Stream<UserWeddingState> _mapLoadWeddingByUserToState(
       LoadWeddingByUser event) async* {
     UserWedding userWedding =
-        await _userWeddingRepository.getUserWedding(event.userId);
+        await _userWeddingRepository.getUserWeddingByUser(event.user);
     if (userWedding == null) {
       yield UserWeddingNull();
     } else {

@@ -43,8 +43,9 @@ class MyApp extends StatelessWidget {
           routes: {
             '/register': (context) {
               return BlocProvider(
-                create: (BuildContext context) =>
-                    RegisterBloc(userRepository: FirebaseUserRepository()),
+                create: (BuildContext context) => RegisterBloc(
+                    userRepository: FirebaseUserRepository(),
+                    userWeddingRepository: FirebaseUserWeddingRepository()),
                 child: RegisterPage(),
               );
             },

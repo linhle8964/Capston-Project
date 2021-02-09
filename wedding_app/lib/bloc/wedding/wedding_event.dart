@@ -2,6 +2,7 @@ import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 import 'package:wedding_app/model/user_wedding.dart';
 import 'package:wedding_app/model/wedding.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 @immutable
 abstract class WeddingEvent extends Equatable {
@@ -13,19 +14,19 @@ abstract class WeddingEvent extends Equatable {
 class LoadWeddings extends WeddingEvent {}
 
 class LoadWeddingByUser extends WeddingEvent {
-  final String userId;
+  final User user;
 
-  const LoadWeddingByUser(this.userId);
+  const LoadWeddingByUser(this.user);
 
   @override
-  List<Object> get props => [userId];
+  List<Object> get props => [user];
 }
 
 class CreateWedding extends WeddingEvent {
   final Wedding wedding;
-  final String userId;
+  final User user;
 
-  const CreateWedding(this.wedding, this.userId);
+  const CreateWedding(this.wedding, this.user);
 
   @override
   List<Object> get props => [wedding];

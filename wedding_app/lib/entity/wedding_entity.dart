@@ -74,12 +74,18 @@ class WeddingEntity extends Equatable {
       snapshot.id,
       snapshot.get("bride_name"),
       snapshot.get("groom_name"),
-      (snapshot.get("wedding_date") as Timestamp).toDate(),
+      snapshot.get("wedding_date") == null
+          ? null
+          : (snapshot.get("wedding_date") as Timestamp).toDate(),
       snapshot.get("budget"),
       snapshot.get("image"),
-      (snapshot.get("date_created") as Timestamp).toDate(),
+      snapshot.get("date_created") == null
+          ? null
+          : (snapshot.get("date_created") as Timestamp).toDate(),
       snapshot.get("address"),
-      (snapshot.get("modified_date") as Timestamp).toDate(),
+      snapshot.get("modified_date") == null
+          ? null
+          : (snapshot.get("modified_date") as Timestamp).toDate(),
     );
   }
 

@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 abstract class UserWeddingEvent extends Equatable {
   const UserWeddingEvent();
@@ -7,10 +8,10 @@ abstract class UserWeddingEvent extends Equatable {
 }
 
 class LoadWeddingByUser extends UserWeddingEvent {
-  final String userId;
+  final User user;
 
-  LoadWeddingByUser(this.userId);
+  LoadWeddingByUser(this.user);
 
   @override
-  List<Object> get props => [userId];
+  List<Object> get props => [user];
 }

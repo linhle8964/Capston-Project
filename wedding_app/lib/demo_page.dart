@@ -36,7 +36,7 @@ class _DemoPageState extends State<DemoPage> {
               return LoadingIndicator();
             } else if (state is Authenticated) {
               BlocProvider.of<WeddingBloc>(context)
-                  .add(LoadWeddingByUser(state.user.uid));
+                  .add(LoadWeddingByUser(state.user));
               return BlocBuilder(
                 cubit: BlocProvider.of<WeddingBloc>(context),
                 builder: (context, state) {
