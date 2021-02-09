@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wedding_app/bloc/login/bloc.dart';
 import 'package:wedding_app/bloc/authentication/bloc.dart';
+import 'package:wedding_app/utils/show_snackbar.dart';
 
 class LoginPage extends StatefulWidget {
   // This widget is the root of your application.
@@ -41,19 +42,7 @@ class _LoginPageState extends State<LoginPage> {
           listener: (context, state) {
             if (state.isSubmitting) {
               FocusScope.of(context).unfocus();
-              Scaffold.of(context)
-                ..hideCurrentSnackBar()
-                ..showSnackBar(
-                  SnackBar(
-                    content: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Đang xử lí dữ liệu...'),
-                        CircularProgressIndicator(),
-                      ],
-                    ),
-                  ),
-                );
+              showSnackbar(context, "Đang xử lý dữ liệu ...", false);
             }
             if (state.isSuccess) {
               FocusScope.of(context).unfocus();
@@ -61,20 +50,7 @@ class _LoginPageState extends State<LoginPage> {
             }
             if (state.isFailure) {
               FocusScope.of(context).unfocus();
-              Scaffold.of(context)
-                ..hideCurrentSnackBar()
-                ..showSnackBar(
-                  SnackBar(
-                    content: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text('Có lỗi xảy ra'),
-                        Icon(Icons.error),
-                      ],
-                    ),
-                    backgroundColor: Colors.red,
-                  ),
-                );
+              showSnackbar(context, "Có lỗi xảy ra", true);
             }
           },
           child: BlocBuilder(
