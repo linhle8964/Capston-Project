@@ -1,4 +1,6 @@
+import 'package:wedding_app/model/user_wedding.dart';
 import 'package:wedding_app/repository/user_repository.dart';
+import 'package:wedding_app/repository/user_wedding_repository.dart';
 import 'package:wedding_app/utils/validations.dart';
 import 'bloc.dart';
 import 'dart:async';
@@ -8,11 +10,14 @@ import 'package:rxdart/rxdart.dart';
 
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   final UserRepository _userRepository;
-
-  RegisterBloc({
-    @required UserRepository userRepository,
-  })  : assert(userRepository != null),
+  final UserWeddingRepository _userWeddingRepository;
+  RegisterBloc(
+      {@required UserRepository userRepository,
+      @required UserWeddingRepository userWeddingRepository})
+      : assert(userRepository != null),
+        assert(userWeddingRepository != null),
         _userRepository = userRepository,
+        _userWeddingRepository = userWeddingRepository,
         super(RegisterState.empty());
 
   @override
@@ -56,10 +61,22 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       String email, String password) async* {
     yield RegisterState.loading();
     try {
-      await _userRepository.signUp(
+      await _userRepository
+          .signUp(
         email: email,
         password: password,
-      );
+      )
+          .then((user) async {
+        UserWedding userWedding =
+            await _userWeddingRepository.getUserWeddingByUser(user);
+        if (userWedding == null) {
+          _userWeddingRepository.createUserWedding(user);
+        } else {
+          if (userWedding.userId == null) {
+            await _userWeddingRepository.addUserId(userWedding, user);
+          }
+        }
+      });
       yield RegisterState.success();
     } catch (_) {
       yield RegisterState.failure();
