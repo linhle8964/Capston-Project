@@ -3,6 +3,7 @@ import 'package:wedding_app/screens/Budget/curveshape.dart';
 
 import 'package:wedding_app/screens/Budget/model/category.dart';
 import 'package:wedding_app/screens/Budget/model/item.dart';
+import 'package:wedding_app/screens/edit_task/edit_task.dart';
 
 class BudgetList extends StatefulWidget {
   @override
@@ -14,7 +15,10 @@ class _BudgetListState extends State<BudgetList> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
+    final screenWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
     final List<Item> Items = [];
     final it = Item("HoneyMoon", 10000);
     final it1 = Item("Dinner", 10000);
@@ -35,39 +39,39 @@ class _BudgetListState extends State<BudgetList> {
         title: Center(
           child: !isSearching
               ? Text(
-                  'BUDGETS',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                )
+            'BUDGETS',
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          )
               : TextField(
-                  onChanged: (value) {},
-                  style: TextStyle(color: Colors.white),
-                  decoration: InputDecoration(
-                      icon: Icon(
-                        Icons.search,
-                        color: Colors.white,
-                      ),
-                      hintText: "Search Item",
-                      hintStyle: TextStyle(color: Colors.black)),
+            onChanged: (value) {},
+            style: TextStyle(color: Colors.white),
+            decoration: InputDecoration(
+                icon: Icon(
+                  Icons.search,
+                  color: Colors.white,
                 ),
+                hintText: "Search Item",
+                hintStyle: TextStyle(color: Colors.black)),
+          ),
         ),
         actions: <Widget>[
           isSearching
               ? IconButton(
-                  icon: Icon(Icons.cancel),
-                  onPressed: () {
-                    setState(() {
-                      this.isSearching = false;
-                    });
-                  },
-                )
+            icon: Icon(Icons.cancel),
+            onPressed: () {
+              setState(() {
+                this.isSearching = false;
+              });
+            },
+          )
               : IconButton(
-                  icon: Icon(Icons.search),
-                  onPressed: () {
-                    setState(() {
-                      this.isSearching = true;
-                    });
-                  },
-                )
+            icon: Icon(Icons.search),
+            onPressed: () {
+              setState(() {
+                this.isSearching = true;
+              });
+            },
+          )
         ],
       ),
       body: Stack(
@@ -83,7 +87,10 @@ class _BudgetListState extends State<BudgetList> {
                           begin: Alignment.topRight,
                           end: Alignment.bottomLeft,
                           colors: [Colors.blue, Colors.red])),
-                  width: MediaQuery.of(context).size.width,
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width,
                   height: 200,
                 ),
               )),
@@ -97,7 +104,10 @@ class _BudgetListState extends State<BudgetList> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10)),
               child: Container(
-                width: MediaQuery.of(context).size.height * .90,
+                width: MediaQuery
+                    .of(context)
+                    .size
+                    .height * .90,
                 height: 100,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -163,28 +173,30 @@ class _BudgetListState extends State<BudgetList> {
                               final low = item.items[i];
                               return Card(
                                   child: Container(
-                                height: 60,
-                                padding: EdgeInsets.only(left: 15, right: 15),
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      child: Text(low.itemName,
+                                    height: 60,
+                                    padding: EdgeInsets.only(
+                                        left: 15, right: 15),
+                                    child: Row(
+                                      children: [
+                                        Container(
+                                          child: Text(low.itemName,
+                                              style: TextStyle(
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold)
+                                          ),
+                                        ),
+                                        Flexible(
+                                            fit: FlexFit.tight,
+                                            child: SizedBox()),
+                                        Text(
+                                          low.cost.toString() + "₫",
                                           style: TextStyle(
                                               fontSize: 20,
-                                              fontWeight: FontWeight.bold)
-                                      ),
+                                              fontWeight: FontWeight.bold),
+                                        )
+                                      ],
                                     ),
-                                    Flexible(
-                                        fit: FlexFit.tight, child: SizedBox()),
-                                    Text(
-                                      low.cost.toString() + "₫",
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold),
-                                    )
-                                  ],
-                                ),
-                              ));
+                                  ));
                             })
                         // Card(
                         //   child:ListTile(
@@ -200,7 +212,11 @@ class _BudgetListState extends State<BudgetList> {
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => EditTaskPage())
+          );
+        },
         label: Text('add a item'),
         icon: Icon(Icons.add),
         backgroundColor: Colors.lightBlue,
