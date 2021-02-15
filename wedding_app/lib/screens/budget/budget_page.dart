@@ -3,6 +3,7 @@ import 'package:wedding_app/screens/Budget/curveshape.dart';
 
 import 'package:wedding_app/screens/Budget/model/category.dart';
 import 'package:wedding_app/screens/Budget/model/item.dart';
+import 'package:wedding_app/screens/add_budget/addbudget.dart';
 import 'package:wedding_app/screens/edit_task/edit_task.dart';
 
 class BudgetList extends StatefulWidget {
@@ -214,7 +215,7 @@ class _BudgetListState extends State<BudgetList> {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => EditTaskPage())
+              context, MaterialPageRoute(builder: (context) => AddBudget())
           );
         },
         label: Text('add a item'),
