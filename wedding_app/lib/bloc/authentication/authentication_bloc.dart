@@ -4,6 +4,7 @@ import 'package:wedding_app/bloc/authentication/bloc.dart';
 import 'package:wedding_app/model/user_wedding.dart';
 import 'package:wedding_app/repository/user_repository.dart';
 import 'package:wedding_app/repository/user_wedding_repository.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
@@ -58,11 +59,15 @@ class AuthenticationBloc
     if (userWedding.weddingId == null) {
       yield WeddingNull(user);
     } else {
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      await preferences.setString("wedding_id", userWedding.weddingId);
       yield Authenticated(user);
     }
   }
 
   Stream<AuthenticationState> _mapLoggedOutToState() async* {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    preferences.remove("wedding_id");
     yield Unauthenticated();
     _userRepository.signOut();
   }

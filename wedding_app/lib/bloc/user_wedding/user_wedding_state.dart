@@ -13,8 +13,27 @@ class UserWeddingLoaded extends UserWeddingState {
   final UserWedding userWedding;
 
   UserWeddingLoaded(this.userWedding);
+
+  @override
+  List<Object> get props => [userWedding];
 }
 
-class UserWeddingNull extends UserWeddingState {}
-
 class UserWeddingNotLoaded extends UserWeddingState {}
+
+class UserWeddingSuccess extends UserWeddingState {
+  final String message;
+
+  UserWeddingSuccess(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
+
+class UserWeddingFailed extends UserWeddingState {
+  final String message;
+
+  UserWeddingFailed(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
