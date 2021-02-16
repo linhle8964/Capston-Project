@@ -1,8 +1,5 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:wedding_app/screens/checklist/listview.dart';
-import 'package:wedding_app/utils/hex_color.dart';
 
 class ChecklistPage extends StatefulWidget {
   @override
@@ -12,11 +9,11 @@ class ChecklistPage extends StatefulWidget {
 class _ChecklistPageState extends State<ChecklistPage>
     with SingleTickerProviderStateMixin {
   static final GlobalKey<ScaffoldState> scaffoldKey =
-  new GlobalKey<ScaffoldState>();
+      new GlobalKey<ScaffoldState>();
 
   TextEditingController _searchQuery;
   bool _isSearching = false;
-  
+
   @override
   void initState() {
     super.initState();
@@ -24,8 +21,7 @@ class _ChecklistPageState extends State<ChecklistPage>
   }
 
   void _startSearch() {
-    ModalRoute
-        .of(context)
+    ModalRoute.of(context)
         .addLocalHistoryEntry(new LocalHistoryEntry(onRemove: _stopSearching));
 
     setState(() {
@@ -58,8 +54,9 @@ class _ChecklistPageState extends State<ChecklistPage>
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: horizontalTitleAlignment,
           children: <Widget>[
-            const Text('CÔNG VIỆC',
-            style: TextStyle(color: Colors.grey),
+            const Text(
+              'CÔNG VIỆC',
+              style: TextStyle(color: Colors.grey),
             ),
           ],
         ),
@@ -81,11 +78,13 @@ class _ChecklistPageState extends State<ChecklistPage>
   }
 
   List<Widget> _buildActions() {
-
     if (_isSearching) {
       return <Widget>[
         new IconButton(
-          icon: const Icon(Icons.clear, color: Colors.grey,),
+          icon: const Icon(
+            Icons.clear,
+            color: Colors.grey,
+          ),
           onPressed: () {
             if (_searchQuery == null || _searchQuery.text.isEmpty) {
               Navigator.pop(context);
@@ -99,15 +98,17 @@ class _ChecklistPageState extends State<ChecklistPage>
 
     return <Widget>[
       new IconButton(
-        icon: const Icon(Icons.search, color: Colors.grey,),
+        icon: const Icon(
+          Icons.search,
+          color: Colors.grey,
+        ),
         onPressed: _startSearch,
       ),
     ];
   }
 
-
-  Widget _body(){
-    return  SingleChildScrollView(
+  Widget _body() {
+    return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -117,22 +118,23 @@ class _ChecklistPageState extends State<ChecklistPage>
             child: Row(
               children: <Widget>[
                 IconButton(
-                    icon: Icon(Icons.arrow_back_ios_outlined,color: Colors.white),
-                    onPressed: null,
+                  icon:
+                      Icon(Icons.arrow_back_ios_outlined, color: Colors.white),
+                  onPressed: null,
                 ),
                 Expanded(
                   child: Text(
                     'THÁNG 1, 2021',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600
-                    ),
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600),
                   ),
                 ),
                 IconButton(
-                  icon: Icon(Icons.arrow_forward_ios_outlined,color: Colors.white),
+                  icon: Icon(Icons.arrow_forward_ios_outlined,
+                      color: Colors.white),
                   onPressed: null,
                 ),
               ],
@@ -143,7 +145,7 @@ class _ChecklistPageState extends State<ChecklistPage>
             child: Text(
               "Đã quá hạn !",
               style: TextStyle(
-                  fontSize:16,
+                fontSize: 16,
               ),
             ),
           ),
@@ -189,7 +191,3 @@ class _ChecklistPageState extends State<ChecklistPage>
     );
   }
 }
-
-
-
-

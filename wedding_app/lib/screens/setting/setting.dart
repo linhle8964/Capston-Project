@@ -38,7 +38,7 @@ class _SettingPageState extends State<SettingPage> {
                     height: 40,
                     child: RaisedButton(
                       color: Colors.white,
-                      onPressed: OnPersonInfoClick,
+                      onPressed: onPersonInfoClick,
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(0, 0, 210, 0),
                         child: Text(
@@ -68,7 +68,7 @@ class _SettingPageState extends State<SettingPage> {
                       height: 40,
                       child: RaisedButton(
                         color: Colors.white,
-                        onPressed: OnPersonInfoClick,
+                        onPressed: onPersonInfoClick,
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(0, 0, 200, 0),
                           child: Text(
@@ -99,7 +99,7 @@ class _SettingPageState extends State<SettingPage> {
                       height: 40,
                       child: RaisedButton(
                         color: Colors.white,
-                        onPressed: OnPersonInfoClick,
+                        onPressed: onPersonInfoClick,
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(0, 0, 240, 0),
                           child: Text(
@@ -130,7 +130,7 @@ class _SettingPageState extends State<SettingPage> {
                       height: 40,
                       child: RaisedButton(
                         color: Colors.white,
-                        onPressed: OnPersonInfoClick,
+                        onPressed: onPersonInfoClick,
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(0, 0, 200, 0),
                           child: Text(
@@ -161,7 +161,9 @@ class _SettingPageState extends State<SettingPage> {
                       height: 40,
                       child: RaisedButton(
                         color: Colors.white,
-                        onPressed: OnPersonInfoClick,
+                        onPressed: () {
+                          Navigator.pushNamed(context, "/invite_collaborator");
+                        },
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(0, 0, 200, 0),
                           child: Text(
@@ -192,7 +194,7 @@ class _SettingPageState extends State<SettingPage> {
                       height: 40,
                       child: RaisedButton(
                         color: Colors.white,
-                        onPressed: OnPersonInfoClick,
+                        onPressed: onPersonInfoClick,
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(0, 0, 260, 0),
                           child: Text(
@@ -223,7 +225,7 @@ class _SettingPageState extends State<SettingPage> {
                       height: 40,
                       child: RaisedButton(
                         color: Colors.white,
-                        onPressed: OnPersonInfoClick,
+                        onPressed: onPersonInfoClick,
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(0, 0, 200, 0),
                           child: Text(
@@ -254,7 +256,7 @@ class _SettingPageState extends State<SettingPage> {
                       height: 40,
                       child: RaisedButton(
                         color: Colors.white,
-                        onPressed: OnPersonInfoClick,
+                        onPressed: onPersonInfoClick,
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(0, 0, 250, 0),
                           child: Text(
@@ -285,7 +287,7 @@ class _SettingPageState extends State<SettingPage> {
                       height: 40,
                       child: RaisedButton(
                         color: Colors.white,
-                        onPressed: OnPersonInfoClick,
+                        onPressed: onPersonInfoClick,
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(0, 0, 260, 0),
                           child: Text(
@@ -346,6 +348,6 @@ class _SettingPageState extends State<SettingPage> {
   }
 }
 
-void OnPersonInfoClick() {}
+void onPersonInfoClick() {}
 void onLogOutClick() {}
 void onDeleteWeddingClick() {}

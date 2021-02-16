@@ -67,11 +67,14 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         password: password,
       )
           .then((user) async {
+        // kiểm tra tài khoản người dùng
         UserWedding userWedding =
             await _userWeddingRepository.getUserWeddingByUser(user);
+        // nếu người dùng chưa có tài khoản và không có đám cưới
         if (userWedding == null) {
           _userWeddingRepository.createUserWedding(user);
         } else {
+          // nếu người dùng chưa có tài khoản nhưng được mời qua người dùng khác
           if (userWedding.userId == null) {
             await _userWeddingRepository.addUserId(userWedding, user);
           }
