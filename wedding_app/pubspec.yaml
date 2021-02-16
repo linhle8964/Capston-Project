@@ -35,29 +35,26 @@ dev_dependencies:
     sdk: flutter
     # Add Sign in method for google and facebook
   google_sign_in: ^4.5.9
-  flutter_facebook_login: ^3.0.0
   # bloc dependencies
   flutter_bloc: ^6.1.1
   bloc: ^6.1.1
   bloc_test: ^7.1.0
 
   #
-  fluttertoast: ^7.1.6
   intl: ^0.16.1
 
     # Add the dependencies for any other Firebase products you want to use in your app
     # For example, to use Firebase Authentication and Cloud Firestore
   firebase_auth: ^0.20.0+1
     # Add the dependency for the FlutterFire plugin for Google Analytics
-  firebase_analytics: ^7.0.1
   cloud_firestore: ^0.16.0
-  cloud_functions: "^0.9.0"
   firebase_core: "^0.7.0"
 
   rxdart: ^0.25.0
   equatable: ^1.2.5
   flutter_launcher_icons: ^0.8.1
   shared_preferences: ^0.5.12+4
+  mailer: ^3.3.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

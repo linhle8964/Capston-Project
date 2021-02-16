@@ -105,6 +105,7 @@ class FirebaseUserWeddingRepository extends UserWeddingRepository {
   Stream<List<UserWedding>> getAllUserWedding(String weddingId) {
     return userWeddingCollection
         .where("wedding_id", isEqualTo: weddingId)
+        .orderBy("join_date", descending: false)
         .snapshots()
         .map((snapshot) {
       return snapshot.docs

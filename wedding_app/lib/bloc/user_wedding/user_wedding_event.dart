@@ -8,14 +8,7 @@ abstract class UserWeddingEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class LoadUserWeddingByWedding extends UserWeddingEvent {
-  final String weddingId;
-
-  LoadUserWeddingByWedding(this.weddingId);
-
-  @override
-  List<Object> get props => [this.weddingId];
-}
+class LoadUserWeddingByWedding extends UserWeddingEvent {}
 
 class AddUserToUserWedding extends UserWeddingEvent {
   final String email;

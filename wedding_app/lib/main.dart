@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:wedding_app/bloc/create_wedding/bloc.dart';
+import 'package:wedding_app/firebase_repository/invite_email_firebase_repository.dart';
 import 'package:wedding_app/firebase_repository/user_wedding_firebase_repository.dart';
 import 'package:wedding_app/firebase_repository/wedding_firebase_repository.dart';
 import 'package:wedding_app/screens/create_wedding/create_wedding_page.dart';
+import 'package:wedding_app/screens/invite_collaborator/invite_collaborator.dart';
 import 'package:wedding_app/screens/login/login_page.dart';
 import 'package:wedding_app/screens/navigator/navigator.dart';
 import 'package:bloc/bloc.dart';
@@ -16,6 +17,9 @@ import 'bloc/authentication/bloc.dart';
 import 'bloc/login/bloc.dart';
 import 'bloc/register/bloc.dart';
 import 'bloc/wedding/bloc.dart';
+import 'bloc/invite_email/bloc.dart';
+import 'bloc/create_wedding/bloc.dart';
+import 'bloc/user_wedding/bloc.dart';
 import 'bloc/simple_bloc_observer.dart';
 import 'firebase_repository/user_firebase_repository.dart';
 
@@ -26,7 +30,6 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -84,6 +87,23 @@ class MyApp extends StatelessWidget {
                 return LoadingIndicator();
               });
             },
+            '/invite_collaborator': (context) {
+              return MultiBlocProvider(
+                providers: [
+                  BlocProvider<UserWeddingBloc>(create: (context) {
+                    return UserWeddingBloc(
+                      userWeddingRepository: FirebaseUserWeddingRepository(),
+                    )..add(LoadUserWeddingByWedding());
+                  }),
+                  BlocProvider<InviteEmailBloc>(create: (context) {
+                    return InviteEmailBloc(
+                      inviteEmailRepository: FirebaseInviteEmailRepository(),
+                    );
+                  }),
+                ],
+                child: InviteCollaboratorPage(),
+              );
+            }
           },
           title: 'Wedding App',
           theme: ThemeData(

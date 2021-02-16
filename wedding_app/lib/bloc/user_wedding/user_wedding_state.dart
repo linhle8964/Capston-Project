@@ -10,12 +10,12 @@ abstract class UserWeddingState extends Equatable {
 class UserWeddingLoading extends UserWeddingState {}
 
 class UserWeddingLoaded extends UserWeddingState {
-  final UserWedding userWedding;
+  final List<UserWedding> userWeddings;
 
-  UserWeddingLoaded(this.userWedding);
+  UserWeddingLoaded(this.userWeddings);
 
   @override
-  List<Object> get props => [userWedding];
+  List<Object> get props => [userWeddings];
 }
 
 class UserWeddingNotLoaded extends UserWeddingState {}
