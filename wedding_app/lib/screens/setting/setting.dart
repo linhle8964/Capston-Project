@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wedding_app/bloc/authentication/bloc.dart';
 
 class SettingPage extends StatefulWidget {
   @override
@@ -318,7 +320,11 @@ class _SettingPageState extends State<SettingPage> {
                 height: 50,
                 child: RaisedButton(
                   color: Colors.blue,
-                  onPressed: onLogOutClick,
+                  onPressed: () {
+                    BlocProvider.of<AuthenticationBloc>(context).add(
+                      LoggedOut(),
+                    );
+                  },
                   child: Text(
                     'Đăng xuất ',
                     style: TextStyle(color: Colors.white, fontSize: 16),

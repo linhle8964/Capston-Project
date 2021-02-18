@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
-import 'package:wedding_app/model/user_wedding.dart';
 import 'package:wedding_app/repository/user_wedding_repository.dart';
 import 'bloc.dart';
 import 'package:meta/meta.dart';
@@ -36,24 +35,6 @@ class UserWeddingBloc extends Bloc<UserWeddingEvent, UserWeddingState> {
         print(userWeddings.length);
       },
     );
-  }
-
-  Stream<UserWeddingState> _mapUserToUserWeddingToState(
-      AddUserToUserWedding event) async* {
-    try {
-      UserWedding userWedding =
-          await _userWeddingRepository.getUserWeddingByEmail(event.email);
-      if (userWedding == null) {
-        _userWeddingRepository.createUserWeddingByEmail(event.email);
-      } else {
-        if (userWedding.weddingId != null) {
-          yield UserWeddingFailed(
-              "Người dùng này đã có đám cưới. Hãy liên hệ và thử lại");
-        }
-      }
-    } catch (_) {
-      yield UserWeddingFailed("Có lỗi xảy ra");
-    }
   }
 
   Stream<UserWeddingState> _mapUserWeddingsUpdateToState(

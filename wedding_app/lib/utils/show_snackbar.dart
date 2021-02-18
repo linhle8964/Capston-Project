@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-void showSnackbar(BuildContext context, String message, bool status) {
+void showFailedSnackbar(BuildContext context, String message) {
   FocusScope.of(context).unfocus();
   Scaffold.of(context)
     ..hideCurrentSnackBar()
@@ -10,10 +10,45 @@ void showSnackbar(BuildContext context, String message, bool status) {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(message),
-            status ? Icon(Icons.error) : CircularProgressIndicator(),
+            Icon(Icons.error),
           ],
         ),
-        backgroundColor: status ? Colors.red : null,
+        backgroundColor: Colors.red,
+      ),
+    );
+}
+
+void showProcessingSnackbar(BuildContext context, String message) {
+  FocusScope.of(context).unfocus();
+  Scaffold.of(context)
+    ..hideCurrentSnackBar()
+    ..showSnackBar(
+      SnackBar(
+        content: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(message),
+            CircularProgressIndicator(),
+          ],
+        ),
+      ),
+    );
+}
+
+void showSuccessSnackbar(BuildContext context, String message) {
+  FocusScope.of(context).unfocus();
+  Scaffold.of(context)
+    ..hideCurrentSnackBar()
+    ..showSnackBar(
+      SnackBar(
+        content: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(message),
+            Icon(Icons.check),
+          ],
+        ),
+        backgroundColor: Colors.green,
       ),
     );
 }

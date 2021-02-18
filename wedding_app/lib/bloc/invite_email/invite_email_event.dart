@@ -11,9 +11,10 @@ abstract class InviteEmailEvent extends Equatable {
 
 class SendEmailButtonSubmitted extends InviteEmailEvent {
   final String email;
+  final String role;
 
-  const SendEmailButtonSubmitted(this.email);
+  const SendEmailButtonSubmitted(this.email, this.role);
 
   @override
-  List<Object> get props => [email];
+  List<Object> get props => [email, role];
 }

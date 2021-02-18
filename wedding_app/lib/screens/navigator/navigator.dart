@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:wedding_app/bloc/user_wedding/bloc.dart';
 import 'package:wedding_app/bloc/wedding/bloc.dart';
 import 'package:wedding_app/demo_page.dart';
 import 'package:wedding_app/firebase_repository/user_wedding_firebase_repository.dart';
@@ -8,6 +7,8 @@ import 'package:wedding_app/firebase_repository/wedding_firebase_repository.dart
 import 'package:wedding_app/screens/budget/budget_page.dart';
 import 'package:wedding_app/screens/checklist/checklist_page.dart';
 import 'package:wedding_app/screens/guest/view_guest_page.dart';
+import 'package:wedding_app/screens/home/home_page.dart';
+import 'package:wedding_app/screens/pick_wedding/pick_wedding_screen.dart';
 import 'package:wedding_app/screens/setting/setting.dart';
 
 class NavigatorPage extends StatefulWidget {
@@ -18,10 +19,10 @@ class NavigatorPage extends StatefulWidget {
 class _NavigatorPageState extends State<NavigatorPage> {
   int _selectedIndex = 0;
   final List<Widget> _children = [
-    DemoPage(),
+    HomePage(),
     ChecklistPage(),
     BudgetList(),
-    ViewGuestPage(),
+    PickWeddingPage(),
     SettingPage(),
   ];
   void onTabTapped(int index) {

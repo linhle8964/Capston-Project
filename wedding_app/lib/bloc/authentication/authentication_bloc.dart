@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:wedding_app/bloc/authentication/bloc.dart';
@@ -61,6 +63,8 @@ class AuthenticationBloc
     } else {
       SharedPreferences preferences = await SharedPreferences.getInstance();
       await preferences.setString("wedding_id", userWedding.weddingId);
+      await preferences.setString(
+          "user_wedding", json.encode(userWedding.toEntity().toJson()));
       yield Authenticated(user);
     }
   }

@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:wedding_app/model/invite_email.dart';
+import 'package:wedding_app/model/user_wedding.dart';
 import 'package:wedding_app/repository/invite_email_repository.dart';
+import 'package:wedding_app/repository/user_wedding_repository.dart';
 import 'package:wedding_app/utils/random_string.dart';
 import 'package:wedding_app/utils/validations.dart';
 import 'bloc.dart';
@@ -10,15 +12,19 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 class InviteEmailBloc extends Bloc<InviteEmailEvent, InviteEmailState> {
   final InviteEmailRepository _inviteEmailRepository;
   final FirebaseAuth auth = FirebaseAuth.instance;
+  final UserWeddingRepository _userWeddingRepository;
 
-  InviteEmailBloc({@required InviteEmailRepository inviteEmailRepository})
+  InviteEmailBloc(
+      {@required InviteEmailRepository inviteEmailRepository,
+      @required UserWeddingRepository userWeddingRepository})
       : assert(inviteEmailRepository != null),
+        assert(userWeddingRepository != null),
         _inviteEmailRepository = inviteEmailRepository,
+        _userWeddingRepository = userWeddingRepository,
         super(InviteEmailLoading());
 
   @override
@@ -37,21 +43,34 @@ class InviteEmailBloc extends Bloc<InviteEmailEvent, InviteEmailState> {
 
     User user = auth.currentUser;
     String from = user.email;
+    String to = event.email;
     String title = "Bạn nhận được lời mời tham dự chỉnh sửa đám cưới";
-    String body = "";
+    String body =
+        "<h1>$code</h1>\n<p>Tải app và nhập code trên để tham dự chỉnh sửa đám cưới. Nếu không phải là bạn xin hãy bỏ qua mail này</p> ";
+    String role = event.role;
     try {
       yield InviteEmailProcessing();
+      InviteEmail checkInviteEmail =
+          await _inviteEmailRepository.getInviteEmail(weddingId, to);
+
+      UserWedding userWedding =
+          await _userWeddingRepository.getUserWeddingByEmail(to);
       if (!Validation.isEmailValid(event.email)) {
         yield InviteEmailError(message: "Email không đúng");
+      } else if (checkInviteEmail != null) {
+        yield InviteEmailError(message: "Email này đã được mời");
+      } else if (userWedding.weddingId == weddingId) {
+        yield InviteEmailError(message: "Người dùng này đã có trong đám cưới");
       } else {
         InviteEmail inviteEmail = new InviteEmail(
             from: from,
             date: DateTime.now(),
-            to: event.email,
+            to: to,
             code: code,
             weddingId: weddingId,
             title: title,
-            body: body);
+            body: body,
+            role: role);
         await _sendEmail(inviteEmail).then(
             (value) => _inviteEmailRepository.createInviteEmail(inviteEmail));
 
@@ -64,32 +83,25 @@ class InviteEmailBloc extends Bloc<InviteEmailEvent, InviteEmailState> {
   }
 
   Future<void> _sendEmail(InviteEmail inviteEmail) async {
-    String username = "linhlche130970@fpt.edu.vn";
-    // Setting up Google SignIn
-    final googleSignIn = GoogleSignIn.standard(
-        scopes: ['email', 'https://www.googleapis.com/auth/gmail.send']);
+    String username = 'linhlche130970@fpt.edu.vn';
+    String password = 'Linh4698,';
 
-    // Signing in
-    final account = await googleSignIn.signIn();
-
-    if (account == null) {
-      // User didn't authorize
-      return;
-    }
-
-    final auth = await account.authentication;
-
-    // Creating SMTP server from the access token
-    SmtpServer smtpServer = gmailSaslXoauth2(username, auth.accessToken);
+    final smtpServer = gmail(username, password);
 
     final message = Message()
-      ..from = Address(username, 'Your name')
+      ..from = Address(username, 'Lê Linh')
       ..recipients.add(inviteEmail.to)
-      ..subject = 'Test Dart Mailer library :: 😀 :: ${DateTime.now()}'
-      ..text = inviteEmail.title
-      ..html = inviteEmail.code;
-    final sendReport = await send(message, smtpServer);
-  }
-  // Create our message.
+      ..subject = inviteEmail.title
+      ..text = "Xin chào\nVWED xin kính chào"
+      ..html = inviteEmail.body;
+    //final sendReport = await send(message, smtpServer);
+    //print('Message sent: ' + sendReport.toString());
+    var connection = PersistentConnection(smtpServer);
 
+    // Send the first message
+    await connection.send(message);
+
+    // close the connection
+    await connection.close();
+  }
 }

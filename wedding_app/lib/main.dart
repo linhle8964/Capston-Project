@@ -9,6 +9,7 @@ import 'package:wedding_app/screens/navigator/navigator.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:wedding_app/screens/pick_wedding/wedding_code.dart';
 import 'package:wedding_app/screens/register/register_page.dart';
 import 'package:wedding_app/screens/splash_page.dart';
 import 'package:wedding_app/widgets/loading_indicator.dart';
@@ -98,11 +99,15 @@ class MyApp extends StatelessWidget {
                   BlocProvider<InviteEmailBloc>(create: (context) {
                     return InviteEmailBloc(
                       inviteEmailRepository: FirebaseInviteEmailRepository(),
+                      userWeddingRepository: FirebaseUserWeddingRepository(),
                     );
                   }),
                 ],
                 child: InviteCollaboratorPage(),
               );
+            },
+            "/wedding_code": (context) {
+              return WeddingCodePage();
             }
           },
           title: 'Wedding App',

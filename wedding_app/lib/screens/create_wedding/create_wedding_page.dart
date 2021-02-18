@@ -83,12 +83,12 @@ class _CreateWeddingPageState extends State<CreateWeddingPage> {
             cubit: BlocProvider.of<WeddingBloc>(context),
             listener: (context, state) {
               if (state is Success) {
-                FocusScope.of(context).unfocus();
+                showSuccessSnackbar(context, "Tạo đám cưới thành công");
                 BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
               } else if (state is Failed) {
-                showSnackbar(context, "Có lỗi xảy ra", true);
+                showFailedSnackbar(context, "Có lỗi xảy ra");
               } else if (state is Loading) {
-                showSnackbar(context, "Đang xử lý dữ liệu", false);
+                showProcessingSnackbar(context, "Đang xử lý dữ liệu");
               }
             },
             child: BlocBuilder(
@@ -120,43 +120,6 @@ class _CreateWeddingPageState extends State<CreateWeddingPage> {
                               style: new TextStyle(
                                 fontSize: 18.0,
                               ),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                CircleAvatar(
-                                  maxRadius: 70.0,
-                                  minRadius: 15.0,
-                                  backgroundImage:
-                                      AssetImage('assets/puppy.jpg'),
-                                ),
-                                SizedBox(
-                                  width: 30.0,
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "THAY ĐỔI HÌNH ẢNH",
-                                      style: new TextStyle(
-                                        fontSize: 18.0,
-                                      ),
-                                    ),
-                                    IconButton(
-                                      icon: Icon(
-                                        Icons.camera_alt,
-                                        size: 50,
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
                             ),
                             SizedBox(
                               height: 10,
@@ -311,7 +274,7 @@ class _CreateWeddingPageState extends State<CreateWeddingPage> {
       BlocProvider.of<WeddingBloc>(context)
           .add(CreateWedding(wedding, widget.user));
     } else {
-      showSnackbar(context, "Hãy điền đầy đủ thông tin", true);
+      showFailedSnackbar(context, "Hãy điền đầy đủ thông tin");
     }
   }
 }

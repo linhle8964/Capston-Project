@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:wedding_app/model/user_wedding.dart';
-import 'package:wedding_app/model/wedding.dart';
 import 'package:wedding_app/repository/user_wedding_repository.dart';
 import 'package:wedding_app/repository/wedding_repository.dart';
 import 'bloc.dart';

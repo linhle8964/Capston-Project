@@ -1,6 +1,7 @@
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
+@immutable
 abstract class CreateWeddingEvent extends Equatable {
   const CreateWeddingEvent();
 

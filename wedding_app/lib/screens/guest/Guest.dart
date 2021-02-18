@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-class Guest{
+class Guest {
   String name;
   String description;
   int status;
