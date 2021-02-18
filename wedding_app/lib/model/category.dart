@@ -21,6 +21,11 @@ class Category{
     return CategoryEntity(id, CateName);
   }
 
+  @override
+  String toString() {
+    return 'Category{id: $id, CateName: $CateName}';
+  }
+
   static Category fromEntity(CategoryEntity entity) {
     return Category(
       entity.CateName,

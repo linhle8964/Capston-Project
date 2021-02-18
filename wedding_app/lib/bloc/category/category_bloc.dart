@@ -1,39 +1,41 @@
 import 'dart:async';
-
 import 'package:bloc/bloc.dart';
-import 'package:wedding_app/model/user_wedding.dart';
-import 'package:wedding_app/model/wedding.dart';
-import 'package:wedding_app/repository/category_repository.dart';
-import 'package:wedding_app/repository/user_wedding_repository.dart';
-import 'package:wedding_app/repository/wedding_repository.dart';
-import 'bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:wedding_app/bloc/category/bloc.dart';
+import 'package:wedding_app/repository/category_repository.dart';
 
-class CategoryBloc extends Bloc<DataEvent, DataState> {
-  final CategoryRepository _CategoryRepository;
-  final UserWeddingRepository _userWeddingRepository;
-  StreamSubscription _streamSubscription;
+class CateBloc extends Bloc<TodosEvent, TodosState> {
+  final CategoryRepository _todosRepository;
+  StreamSubscription _todosSubscription;
 
-  CategoryBloc(
-      {@required CategoryRepository categoryRepository,
-        @required UserWeddingRepository userWeddingRepository})
-      : assert(categoryRepository != null),
-        assert(userWeddingRepository != null),
-        _CategoryRepository = categoryRepository,
-        _userWeddingRepository = userWeddingRepository,
-        super(CategoryLoading());
+  CateBloc({@required CategoryRepository todosRepository})
+      : assert(todosRepository != null),
+        _todosRepository = todosRepository,
+        super(TodosLoading());
+
   @override
-  Stream<DataState> mapEventToState(DataEvent event) async* {
-    if (event is LoadCategory) {
-      yield* _mapLoadToState();
-  }}
-
-    Stream<DataState> _mapLoadToState() async* {
-      _CategoryRepository.GetallCategory();
+  Stream<TodosState> mapEventToState(TodosEvent event) async* {
+    if (event is LoadTodos) {
+      yield* _mapLoadTodosToState();
+    } else if (event is TodosUpdated) {
+      yield* _mapTodosUpdateToState(event);
     }
+  }
+
+  Stream<TodosState> _mapLoadTodosToState() async* {
+    _todosSubscription?.cancel();
+    _todosSubscription = _todosRepository.GetallCategory().listen(
+      (cates) => add(TodosUpdated(cates)),
+    );
+  }
+
+  Stream<TodosState> _mapTodosUpdateToState(TodosUpdated event) async* {
+    yield TodosLoaded(event.cates);
+  }
+
   @override
   Future<void> close() {
-    _streamSubscription?.cancel();
+    _todosSubscription?.cancel();
     return super.close();
   }
-  }
+}

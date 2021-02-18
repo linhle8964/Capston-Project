@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:wedding_app/bloc/category/bloc.dart';
 import 'package:wedding_app/bloc/create_wedding/bloc.dart';
 import 'package:wedding_app/firebase_repository/user_wedding_firebase_repository.dart';
 import 'package:wedding_app/firebase_repository/wedding_firebase_repository.dart';
+import 'package:wedding_app/screens/add_budget/addbudget.dart';
 import 'package:wedding_app/screens/create_wedding/create_wedding_page.dart';
 import 'package:wedding_app/screens/login/login_page.dart';
 import 'package:wedding_app/screens/navigator/navigator.dart';
@@ -17,6 +19,7 @@ import 'bloc/login/bloc.dart';
 import 'bloc/register/bloc.dart';
 import 'bloc/wedding/bloc.dart';
 import 'bloc/simple_bloc_observer.dart';
+import 'firebase_repository/category_firebase_repository.dart';
 import 'firebase_repository/user_firebase_repository.dart';
 
 void main() async {
@@ -31,6 +34,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
         providers: [
+          BlocProvider<CateBloc>(
+            create: (BuildContext context) => CateBloc(
+              todosRepository: FirebaseCategoryRepository(),
+            ),
+
+          ),
           BlocProvider<AuthenticationBloc>(create: (context) {
             return AuthenticationBloc(
               userRepository: FirebaseUserRepository(),
@@ -47,6 +56,14 @@ class MyApp extends StatelessWidget {
                     userRepository: FirebaseUserRepository(),
                     userWeddingRepository: FirebaseUserWeddingRepository()),
                 child: RegisterPage(),
+              );
+            },
+            '/AddBudget': (context) {
+              return BlocProvider(
+                create: (BuildContext context) => CateBloc(
+                  todosRepository: FirebaseCategoryRepository(),
+                ),
+                child: AddBudget(),
               );
             },
             // When navigating to the "/" route, build the FirstScreen widget.

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:wedding_app/bloc/category/bloc.dart';
 import 'package:wedding_app/screens/Budget/curveshape.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wedding_app/screens/Budget/model/category.dart';
 import 'package:wedding_app/screens/Budget/model/item.dart';
 import 'package:wedding_app/screens/add_budget/addbudget.dart';
@@ -214,9 +215,16 @@ class _BudgetListState extends State<BudgetList> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => AddBudget())
-          );
+
+          Navigator.of(context).push(
+              MaterialPageRoute<AddBudget>(
+                builder: (_) => BlocProvider.value(
+                  value: BlocProvider.of<CateBloc>(context),
+                  child: AddBudget(),
+                ),
+              ));
+
+
         },
         label: Text('add a item'),
         icon: Icon(Icons.add),

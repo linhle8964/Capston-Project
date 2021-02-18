@@ -1,50 +1,24 @@
 import 'package:equatable/equatable.dart';
 import 'package:wedding_app/model/category.dart';
+abstract class TodosState extends Equatable {
+  const TodosState();
 
-abstract class DataState extends Equatable {
-  const DataState();
-
+  @override
   List<Object> get props => [];
 }
 
+class TodosLoading extends TodosState {}
 
+class TodosLoaded extends TodosState {
+  final List<Category> cates;
 
-class CategoryLoading extends DataState {}
-
-class CategoryLoaded extends DataState {
-  final Category cate;
-
-  const CategoryLoaded([this.cate]);
+  const TodosLoaded([this.cates = const []]);
 
   @override
-  List<Object> get props => [cate];
-}
-
-class CategoryNotLoaded extends DataState {}
-
-class Success extends DataState {
-  final String message;
-
-  const Success(this.message);
+  List<Object> get props => [cates];
 
   @override
-  List<Object> get props => [message];
+  String toString() => 'TodosLoaded { todos: $cates }';
 }
 
-class Failed extends DataState {
-  final String message;
-
-  const Failed(this.message);
-
-  @override
-  List<Object> get props => [message];
-}
-
-class Loading extends DataState {
-  final String message;
-
-  const Loading(this.message);
-
-  @override
-  List<Object> get props => [message];
-}
+class TodosNotLoaded extends TodosState {}

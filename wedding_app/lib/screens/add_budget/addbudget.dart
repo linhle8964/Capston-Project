@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wedding_app/bloc/category/bloc.dart';
+import 'package:wedding_app/widgets/loading_indicator.dart';
+
 class AddBudget extends StatefulWidget {
   @override
   _AddBudgetState createState() => _AddBudgetState();
@@ -9,29 +13,31 @@ class _AddBudgetState extends State<AddBudget> {
   bool _visible = true;
   String _dropdownValue = 'One';
   bool _checkboxListTile = false;
+  CateBloc _cateBloc;
 
   @override
   void initState() {
     super.initState();
     _visible = false;
-    _dropdownValue = 'One';
+    _cateBloc = BlocProvider.of<CateBloc>(context);
+    _dropdownValue = '';
   }
 
   @override
   Widget build(BuildContext context) {
     MediaQueryData queryData;
     queryData = MediaQuery.of(context);
-    List _values = ['One', 'Two', 'Free', 'Four'];
+    List _values = [];
     int maxLines = 3;
     return Scaffold(
         appBar: AppBar(
-            backgroundColor: Colors.indigo,
-            bottomOpacity: 0.0,
-            elevation: 0.0,
-            title: Padding(
+          backgroundColor: Colors.indigo,
+          bottomOpacity: 0.0,
+          elevation: 0.0,
+          title: Padding(
               padding: const EdgeInsets.only(left: 70),
-              child:Text('Thêm Quỹ')) ,
-            ),
+              child: Text('Thêm Quỹ')),
+        ),
         body: SingleChildScrollView(
             child: SizedBox(
           height: queryData.size.height,
@@ -164,25 +170,38 @@ class _AddBudgetState extends State<AddBudget> {
                   padding: EdgeInsets.only(left: 20, right: 20),
                   decoration: BoxDecoration(
                       border: Border.all(color: Colors.black, width: 2)),
-                  child: DropdownButton(
-                    value: _dropdownValue,
-                    icon: Icon(Icons.arrow_downward),
-                    iconSize: 24,
-                    elevation: 16,
-                    isExpanded: true,
-                    style: TextStyle(color: Colors.deepPurple),
-                    onChanged: (value) {
-                      setState(() {
-                        _dropdownValue = value;
-                        print(value);
-                      });
+                  child: BlocBuilder(
+                    cubit: _cateBloc,
+                    builder: (context, state) {
+                      if (state is TodosLoaded) {
+                        _values = state.cates;
+                        print(state.cates.toString());
+
+                        return DropdownButton(
+                          value: state.cates[0].CateName,
+                          icon: Icon(Icons.arrow_downward),
+                          iconSize: 24,
+                          elevation: 16,
+                          isExpanded: true,
+                          style: TextStyle(color: Colors.deepPurple),
+                          onChanged: (value) {
+                            setState(() {
+                              _dropdownValue = value;
+                              print(value);
+                            });
+                          },
+                          items: _values.map((value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                        );
+                      } else if (state is TodosLoading) {
+                        return LoadingIndicator();
+                      } else if (state is TodosNotLoaded) {}
+                      return LoadingIndicator();
                     },
-                    items: _values.map((value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
                   ),
                 ),
               ),
