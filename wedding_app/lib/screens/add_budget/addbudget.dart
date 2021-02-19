@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wedding_app/bloc/budget/bloc.dart';
 import 'package:wedding_app/bloc/category/bloc.dart';
@@ -15,10 +15,15 @@ class AddBudget extends StatefulWidget {
 
 class _AddBudgetState extends State<AddBudget> {
   bool _visible = true;
+  Future<String> loadData() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    return preferences.getString("wedding_id");
+  }
 
   bool _checkboxListTile = false;
   CateBloc _cateBloc;
   Category selectedCate;
+  String _weddid="";
   List<Category> _values = [];
   List<Category> _values2 = [];
   Category initialCate = new Category("1G23wMGwdk1pnQWnT368", "other");
@@ -31,6 +36,8 @@ class _AddBudgetState extends State<AddBudget> {
     super.initState();
     _visible = false;
     _cateBloc = BlocProvider.of<CateBloc>(context);
+    loadData();
+    print(loadData());
 
   }
 
@@ -321,7 +328,7 @@ class _AddBudgetState extends State<AddBudget> {
                                             payMoney: double.parse(payMoneyController.text.replaceAll(",", "")));
 
                                         BlocProvider.of<BudgetBloc>(context)
-                                            .add(CreateBudget(,budget));
+                                            .add(CreateBudget(loadData().toString(),budget));
                                       };
                                     },
                                   ),
