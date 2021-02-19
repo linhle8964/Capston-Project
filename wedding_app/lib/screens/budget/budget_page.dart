@@ -215,16 +215,7 @@ class _BudgetListState extends State<BudgetList> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-
-          Navigator.of(context).push(
-              MaterialPageRoute<AddBudget>(
-                builder: (_) => BlocProvider.value(
-                  value: BlocProvider.of<CateBloc>(context),
-                  child: AddBudget(),
-                ),
-              ));
-
-
+        Navigator.pushNamed(context, "/AddBudget");
         },
         label: Text('add a item'),
         icon: Icon(Icons.add),

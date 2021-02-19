@@ -24,12 +24,13 @@ class Category{
   @override
   String toString() {
     return 'Category{id: $id, CateName: $CateName}';
-  }
+  }bool operator ==(o) => o is Category && o.CateName == CateName && o.id == id;
 
   static Category fromEntity(CategoryEntity entity) {
     return Category(
-      entity.CateName,
+
       entity.id,
+      entity.CateName,
     );
   }
 

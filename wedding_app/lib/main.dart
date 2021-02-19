@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:wedding_app/bloc/budget/bloc.dart';
 import 'package:wedding_app/bloc/category/bloc.dart';
 import 'package:wedding_app/bloc/create_wedding/bloc.dart';
+import 'package:wedding_app/firebase_repository/budget_firebase_repository.dart';
 import 'package:wedding_app/firebase_repository/user_wedding_firebase_repository.dart';
 import 'package:wedding_app/firebase_repository/wedding_firebase_repository.dart';
 import 'package:wedding_app/screens/add_budget/addbudget.dart';
@@ -38,7 +40,6 @@ class MyApp extends StatelessWidget {
             create: (BuildContext context) => CateBloc(
               todosRepository: FirebaseCategoryRepository(),
             ),
-
           ),
           BlocProvider<AuthenticationBloc>(create: (context) {
             return AuthenticationBloc(
@@ -59,11 +60,22 @@ class MyApp extends StatelessWidget {
               );
             },
             '/AddBudget': (context) {
-              return BlocProvider(
-                create: (BuildContext context) => CateBloc(
-                  todosRepository: FirebaseCategoryRepository(),
-                ),
-                child: AddBudget(),
+              return MultiBlocProvider(
+                providers: [
+                  BlocProvider(
+                    create: (BuildContext context) => CateBloc(
+                      todosRepository: FirebaseCategoryRepository(),
+                    ),
+                    child: AddBudget(),
+                  ),
+                  BlocProvider(
+                    create: (BuildContext context) => BudgetBloc(
+                      budgetRepository: FirebaseBudgetRepository(),
+                      weddingRepository: FirebaseWeddingRepository(),
+                    ),
+                    child: AddBudget(),
+                  ),
+                ],
               );
             },
             // When navigating to the "/" route, build the FirstScreen widget.

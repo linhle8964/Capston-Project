@@ -10,9 +10,14 @@ class FirebaseCategoryRepository implements CategoryRepository {
   @override
   Stream<List<Category>> GetallCategory() {
     return cateCollection.snapshots().map((snapshot) {
+      print(snapshot.docs
+          .map((doc) => Category.fromEntity(CategoryEntity.fromSnapshot(doc)))
+          .toList());
       return snapshot.docs
           .map((doc) => Category.fromEntity(CategoryEntity.fromSnapshot(doc)))
           .toList();
+
     });
+
   }
 }
