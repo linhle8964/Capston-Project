@@ -21,7 +21,7 @@ class LoadBudgetbyCateId extends BudgetEvent {
 }
 
 class CreateBudget extends BudgetEvent {
-  final Wedding wedding;
+  final String wedding;
   final Budget budget;
 
   const CreateBudget(this.wedding, this.budget);

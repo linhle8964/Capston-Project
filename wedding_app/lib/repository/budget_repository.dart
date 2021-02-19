@@ -3,7 +3,7 @@ import 'package:wedding_app/model/category.dart';
 import 'package:wedding_app/model/wedding.dart';
 
 abstract class BudgetRepository {
-  Future<void> createBudget(Wedding wedding, Budget budget);
+  Future<void> createBudget(String WeddingId, Budget budget);
 
   Future<void> updateBudget(Wedding wedding, Budget budget);
 

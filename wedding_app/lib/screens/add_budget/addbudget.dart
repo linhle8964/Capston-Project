@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wedding_app/bloc/budget/bloc.dart';
 import 'package:wedding_app/bloc/category/bloc.dart';
+import 'package:wedding_app/bloc/wedding/bloc.dart';
 import 'package:wedding_app/model/budget.dart';
 import 'package:wedding_app/model/category.dart';
 import 'package:wedding_app/widgets/loading_indicator.dart';
@@ -12,7 +13,10 @@ class AddBudget extends StatefulWidget {
   _AddBudgetState createState() => _AddBudgetState();
 
 }
-
+Future<String> loadData() async {
+  SharedPreferences preferences = await SharedPreferences.getInstance();
+  return preferences.getString(nameKey);
+}
 class _AddBudgetState extends State<AddBudget> {
   bool _visible = true;
   Future<String> loadData() async {
@@ -22,6 +26,7 @@ class _AddBudgetState extends State<AddBudget> {
 
   bool _checkboxListTile = false;
   CateBloc _cateBloc;
+  CateBloc _budgetBloc;
   Category selectedCate;
   String _weddid="";
   List<Category> _values = [];
@@ -35,6 +40,7 @@ class _AddBudgetState extends State<AddBudget> {
   void initState() {
     super.initState();
     _visible = false;
+
     _cateBloc = BlocProvider.of<CateBloc>(context);
     loadData();
     print(loadData());
@@ -44,6 +50,7 @@ class _AddBudgetState extends State<AddBudget> {
   @override
   Widget build(BuildContext context) {
     BlocProvider.of<CateBloc>(context).add(LoadTodos());
+
     MediaQueryData queryData;
     queryData = MediaQuery.of(context);
     TextEditingController budgetNameController = new TextEditingController();
@@ -144,6 +151,7 @@ class _AddBudgetState extends State<AddBudget> {
                       Padding(
                         padding: EdgeInsets.only(left: 20, right: 20),
                         child: TextField(
+                            controller: payMoneyController,
                             decoration: new InputDecoration(
                                 focusedBorder: OutlineInputBorder(
                                   borderSide:
@@ -160,7 +168,7 @@ class _AddBudgetState extends State<AddBudget> {
                           child: Padding(
                             padding: EdgeInsets.only(left: 20, right: 20, top: 20),
                             child: TextField(
-                              controller: payMoneyController,
+
                                 decoration: new InputDecoration(
                                     focusedBorder: OutlineInputBorder(
                                       borderSide:
@@ -203,7 +211,7 @@ class _AddBudgetState extends State<AddBudget> {
                             cubit: _cateBloc,
                             builder: (context, state) {
                               if (state is TodosLoaded) {
-                                _values = state.cates;
+
                                 _values2 = state.cates;
                                 print(state.cates.toString());
 
@@ -221,7 +229,8 @@ class _AddBudgetState extends State<AddBudget> {
                                     );
                                   }).toList(),
                                   onChanged: (val) =>
-                                      setState(() => selectedCate = val),
+                                      setState(() => selectedCate = val
+                                      ),
                                 );
                               } else if (state is TodosLoading) {
                                 return LoadingIndicator();
@@ -322,14 +331,18 @@ class _AddBudgetState extends State<AddBudget> {
                                     color: Colors.white,
                                     iconSize: 30,
                                     onPressed: () {
-                                      void _save(){
-                                        Budget budget = new Budget( budgetNameController.text,selectedCate.id,1,
-                                            money:double.parse(moneyController.text.replaceAll(",", "")),
-                                            payMoney: double.parse(payMoneyController.text.replaceAll(",", "")));
-
+                                      print(selectedCate.toString());
+                                        Budget budget = new Budget( budgetNameController.text,"abc",1,
+                                            money:double.parse(moneyController.text.replaceAll(".", "")),
+                                            payMoney:double.parse(payMoneyController.text.replaceAll(".", "")));
                                         BlocProvider.of<BudgetBloc>(context)
+<<<<<<< Updated upstream
                                             .add(CreateBudget(loadData().toString(),budget));
                                       };
+=======
+                                            .add(CreateBudget("Ao61c5q6Y00xcOrKrYSe", budget));
+
+>>>>>>> Stashed changes
                                     },
                                   ),
                                 ],

@@ -13,16 +13,16 @@ import 'bloc.dart';
 import 'package:meta/meta.dart';
 
 class BudgetBloc extends Bloc<BudgetEvent, BudgetState> {
-  final WeddingRepository _weddingRepository;
+  final String _weddingId;
 
   final BudgetRepository _budgetRepository;
   StreamSubscription _streamSubscription;
 
-  BudgetBloc({@required WeddingRepository weddingRepository,
+  BudgetBloc({@required String weddingId,
     @required BudgetRepository budgetRepository})
-      : assert(weddingRepository != null),
+      : assert(weddingId != null),
         assert(budgetRepository != null),
-        _weddingRepository = weddingRepository,
+        _weddingId = weddingId,
         _budgetRepository = budgetRepository,
         super(WeddingLoading());
 
@@ -49,7 +49,7 @@ class BudgetBloc extends Bloc<BudgetEvent, BudgetState> {
   Stream<BudgetState> _mapCreateWeddingToState(CreateBudget event) async* {
     yield Loading("Đang xử lý dữ liệu");
     try {
-      await _budgetRepository.createBudget(event.wedding,event.budget);
+      await _budgetRepository.createBudget(_weddingId,event.budget);
       yield Success("Tạo thành công");
     } catch (_) {
       yield Failed("Có lỗi xảy ra");

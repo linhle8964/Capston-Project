@@ -61,21 +61,24 @@ class MyApp extends StatelessWidget {
             },
             '/AddBudget': (context) {
               return MultiBlocProvider(
+
                 providers: [
                   BlocProvider(
                     create: (BuildContext context) => CateBloc(
                       todosRepository: FirebaseCategoryRepository(),
                     ),
-                    child: AddBudget(),
+
                   ),
+
                   BlocProvider(
                     create: (BuildContext context) => BudgetBloc(
-                      budgetRepository: FirebaseBudgetRepository(),
-                      weddingRepository: FirebaseWeddingRepository(),
+                      weddingId :"Ao61c5q6Y00xcOrKrYSe",
+                      budgetRepository: FirebaseBudgetRepository()
                     ),
-                    child: AddBudget(),
+
                   ),
                 ],
+                child: AddBudget(),
               );
             },
             // When navigating to the "/" route, build the FirstScreen widget.

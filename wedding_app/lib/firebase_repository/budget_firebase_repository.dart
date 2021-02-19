@@ -11,9 +11,9 @@ class FirebaseBudgetRepository implements BudgetRepository{
   
 
   @override
-  Future<void> createBudget(Wedding wedding, Budget budget) {
+  Future<void> createBudget(String weddingId, Budget budget) {
     
-    final budgetCollection = FirebaseFirestore.instance.collection('wedding').doc(wedding.id).collection("budget");
+    final budgetCollection = FirebaseFirestore.instance.collection('wedding').doc(weddingId).collection("budget");
 
     return budgetCollection.add(budget.toEntity().toDocument());
   }
