@@ -50,6 +50,11 @@ class BudgetEntity extends Equatable {
     );
   }
 
+  @override
+  String toString() {
+    return 'BudgetEntity{id: $id, BudgetName: $BudgetName, CateID: $CateID, money: $money, payMoney: $payMoney, status: $status}';
+  }
+
   Map<String, Object> toDocument() {
     return {
       "BudgetName": BudgetName,

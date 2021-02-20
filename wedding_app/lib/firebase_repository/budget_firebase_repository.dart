@@ -24,8 +24,22 @@ class FirebaseBudgetRepository implements BudgetRepository{
   }
 
   @override
-  Future<Budget> getWeddingByCategory(String CateId) {
+  Stream<List<Budget>> getBudgetByCateId(String weddingId,String cateId) {
+    final budgetCollection = FirebaseFirestore.instance.collection('wedding')
+        .doc(weddingId)
+        .collection("budget");
 
+
+    return budgetCollection
+        .where("CateID", isEqualTo:cateId)
+        .snapshots()
+        .map((snapshot) {
+      return snapshot.docs
+          .map((doc) =>
+          Budget.fromEntity(BudgetEntity.fromSnapshot(doc)))
+          .toList();
+
+    });
   }
 
   @override

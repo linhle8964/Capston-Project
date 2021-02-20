@@ -12,9 +12,14 @@ abstract class BudgetEvent extends Equatable {
 class LoadBudget extends BudgetEvent {}
 
 class LoadBudgetbyCateId extends BudgetEvent {
-  final String CateId;
+  final String cateId;
+  final String weddingId;
+  const LoadBudgetbyCateId(this.cateId,this.weddingId);
 
-  const LoadBudgetbyCateId(this.CateId);
+  @override
+  String toString() {
+    return 'LoadBudgetbyCateId{cateId: $cateId, weddingId: $weddingId}';
+  }
 
   @override
   List<Object> get props => [];
@@ -42,5 +47,10 @@ class DeleteBudget extends BudgetEvent {
 }
 
 class BudgetUpdated extends BudgetEvent {
+  final List<Budget> budgets;
 
+  const BudgetUpdated(this.budgets);
+
+  @override
+  List<Object> get props => [budgets];
 }

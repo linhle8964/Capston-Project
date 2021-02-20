@@ -8,11 +8,10 @@ class Budget {
   final double payMoney;
   final int status;
 
-  Budget(this.BudgetName, this.CateID, this.status,
-      {String id, double money, double payMoney})
-      : this.id = id,
-        this.money = money,
-        this.payMoney = payMoney;
+  Budget(this.BudgetName, this.CateID,this.money,this.payMoney, this.status,
+      {String id})
+      : this.id = id;
+
 
   Budget copyWith(
       {String id,
@@ -21,8 +20,13 @@ class Budget {
       double money,
       double payMoney,
       int status}) {
-    return Budget(BudgetName ?? this.BudgetName, CateID ?? this.CateID,
+    return Budget(BudgetName ?? this.BudgetName, CateID ?? this.CateID,money?? this.money,payMoney??this.payMoney,
         status ?? this.status);
+  }
+
+  @override
+  String toString() {
+    return 'Budget{id: $id, BudgetName: $BudgetName, CateID: $CateID, money: $money, payMoney: $payMoney, status: $status}\n';
   }
 
   BudgetEntity toEntity() {
@@ -39,6 +43,6 @@ class Budget {
       o.status == status;
 
   static Budget fromEntity(BudgetEntity entity) {
-    return Budget(entity.BudgetName, entity.CateID, entity.status);
+    return Budget(entity.BudgetName, entity.CateID,entity.money,entity.payMoney,entity.status);
   }
 }

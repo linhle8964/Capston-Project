@@ -2,25 +2,28 @@ import 'package:equatable/equatable.dart';
 import 'package:wedding_app/model/budget.dart';
 
 abstract class BudgetState extends Equatable {
-  final String isSubmitted;
-  const BudgetState([this.isSubmitted]);
+
+  const BudgetState();
 
   @override
   List<Object> get props => [];
 }
 
-class WeddingLoading extends BudgetState {}
+class BudgetLoading extends BudgetState {}
 
-class WeddingLoaded extends BudgetState {
-  final Budget budget;
-
-  const WeddingLoaded([this.budget]);
+class BudgetLoaded extends BudgetState {
+  final List<Budget> budgets;
+  const BudgetLoaded([this.budgets = const []]);
+  @override
+  List<Object> get props => [budgets];
 
   @override
-  List<Object> get props => [budget];
+  String toString() {
+    return 'BudgetLoaded{budgets: $budgets}\n';
+  }
 }
 
-class WeddingNotLoaded extends BudgetState {}
+class BudgetNotLoaded extends BudgetState {}
 
 class Success extends BudgetState {
   final String message;

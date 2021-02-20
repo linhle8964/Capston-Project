@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:wedding_app/bloc/budget/bloc.dart';
 import 'package:wedding_app/bloc/category/bloc.dart';
+import 'package:wedding_app/model/budget.dart';
+import 'package:wedding_app/model/category.dart';
 import 'package:wedding_app/screens/Budget/curveshape.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wedding_app/screens/Budget/model/category.dart';
 import 'package:wedding_app/screens/Budget/model/item.dart';
-import 'package:wedding_app/screens/add_budget/addbudget.dart';
-import 'package:wedding_app/screens/edit_task/edit_task.dart';
 
 class BudgetList extends StatefulWidget {
   @override
@@ -17,10 +18,9 @@ class _BudgetListState extends State<BudgetList> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
+    BlocProvider.of<CateBloc>(context).add(LoadTodos());
+    // BlocProvider.of<BudgetBloc>(context).add(LoadBudgetbyCateId("",""));
+    final screenWidth = MediaQuery.of(context).size.width;
     final List<Item> Items = [];
     final it = Item("HoneyMoon", 10000);
     final it1 = Item("Dinner", 10000);
@@ -28,11 +28,8 @@ class _BudgetListState extends State<BudgetList> {
     Items.add(it);
     Items.add(it1);
     Items.add(it2);
-    final List<category> Categorys = [];
-    final cate = category("Entertainment and music", Items);
-    final cate2 = category("other", Items);
-    Categorys.add(cate);
-    Categorys.add(cate2);
+    List<Category> _categorys = [];
+    List<Budget> _budgets = [];
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.indigo,
@@ -41,39 +38,39 @@ class _BudgetListState extends State<BudgetList> {
         title: Center(
           child: !isSearching
               ? Text(
-            'BUDGETS',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          )
+                  'BUDGETS',
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                )
               : TextField(
-            onChanged: (value) {},
-            style: TextStyle(color: Colors.white),
-            decoration: InputDecoration(
-                icon: Icon(
-                  Icons.search,
-                  color: Colors.white,
+                  onChanged: (value) {},
+                  style: TextStyle(color: Colors.white),
+                  decoration: InputDecoration(
+                      icon: Icon(
+                        Icons.search,
+                        color: Colors.white,
+                      ),
+                      hintText: "Search Item",
+                      hintStyle: TextStyle(color: Colors.black)),
                 ),
-                hintText: "Search Item",
-                hintStyle: TextStyle(color: Colors.black)),
-          ),
         ),
         actions: <Widget>[
           isSearching
               ? IconButton(
-            icon: Icon(Icons.cancel),
-            onPressed: () {
-              setState(() {
-                this.isSearching = false;
-              });
-            },
-          )
+                  icon: Icon(Icons.cancel),
+                  onPressed: () {
+                    setState(() {
+                      this.isSearching = false;
+                    });
+                  },
+                )
               : IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {
-              setState(() {
-                this.isSearching = true;
-              });
-            },
-          )
+                  icon: Icon(Icons.search),
+                  onPressed: () {
+                    setState(() {
+                      this.isSearching = true;
+                    });
+                  },
+                )
         ],
       ),
       body: Stack(
@@ -89,10 +86,7 @@ class _BudgetListState extends State<BudgetList> {
                           begin: Alignment.topRight,
                           end: Alignment.bottomLeft,
                           colors: [Colors.blue, Colors.red])),
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width,
+                  width: MediaQuery.of(context).size.width,
                   height: 200,
                 ),
               )),
@@ -106,10 +100,7 @@ class _BudgetListState extends State<BudgetList> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10)),
               child: Container(
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .height * .90,
+                width: MediaQuery.of(context).size.height * .90,
                 height: 100,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -152,70 +143,89 @@ class _BudgetListState extends State<BudgetList> {
             right: 15,
             bottom: 15,
             child: Container(
-              child: ListView.builder(
-                  itemCount: Categorys.length,
-                  itemBuilder: (context, index) {
-                    final item = Categorys[index];
-                    double sum = 0;
-                    for (int i = 0; i < item.items.length; i++) {
-                      sum += item.items[i].cost;
-                    }
-                    return Column(
-                      children: <Widget>[
-                        Container(
-                          child: ListTile(
-                            title: Text(
-                                item.header + " | " + sum.toString() + " ₫"),
-                          ),
-                        ),
-                        ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: item.items.length,
-                            itemBuilder: (context, i) {
-                              final low = item.items[i];
-                              return Card(
-                                  child: Container(
-                                    height: 60,
-                                    padding: EdgeInsets.only(
-                                        left: 15, right: 15),
-                                    child: Row(
-                                      children: [
-                                        Container(
-                                          child: Text(low.itemName,
-                                              style: TextStyle(
-                                                  fontSize: 20,
-                                                  fontWeight: FontWeight.bold)
+              child: BlocBuilder(
+                cubit: BlocProvider.of<CateBloc>(context),
+                builder: (context, state) {
+                  if (state is TodosLoaded) {
+                    _categorys = state.cates;
+                  }
+                  return ListView.builder(
+                      itemCount: _categorys.length,
+                      itemBuilder: (context, index) {
+                        Category item = _categorys[index];
+                        print(index);
+                        return Column(
+                          children: <Widget>[
+                            Container(
+                              child: ListTile(
+                                title: Text(item.CateName + " | " + " ₫"),
+                              ),
+                            ),
+                            BlocBuilder(
+                                cubit: BlocProvider.of<BudgetBloc>(context),
+                                builder: (context, state) {
+                                  BlocProvider.of<BudgetBloc>(context).add(LoadBudgetbyCateId(item.id, "Ao61c5q6Y00xcOrKrYSe"));
+                                  if (state is BudgetLoaded) {
+                                    _budgets = state.budgets;
+                                  }
+
+
+                                  print(_budgets.toString());
+                                  print(item.id);
+
+                                  return ListView.builder(
+                                      shrinkWrap: true,
+                                      itemCount: _budgets.length,
+                                      itemBuilder: (context, i) {
+                                        Budget low = _budgets[i];
+                                        return Card(
+                                            child: Container(
+                                          height: 60,
+                                          padding: EdgeInsets.only(
+                                              left: 15, right: 15),
+                                          child: Row(
+                                            children: [
+                                              Container(
+                                                child: Text(low.BudgetName,
+                                                    style: TextStyle(
+                                                        fontSize: 20,
+                                                        fontWeight:
+                                                            FontWeight.bold)),
+                                              ),
+                                              Flexible(
+                                                  fit: FlexFit.tight,
+                                                  child: SizedBox()),
+                                              Text(
+                                                low.money.toString() + "₫",
+                                                style: TextStyle(
+                                                    fontSize: 20,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              )
+                                            ],
                                           ),
-                                        ),
-                                        Flexible(
-                                            fit: FlexFit.tight,
-                                            child: SizedBox()),
-                                        Text(
-                                          low.cost.toString() + "₫",
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold),
-                                        )
-                                      ],
-                                    ),
-                                  ));
-                            })
-                        // Card(
-                        //   child:ListTile(
-                        //     title:Text(item.items[index].itemName),
-                        //     subtitle: Text(item.items[index].cost.toString()),
-                        //   ),
-                        // )
-                      ],
-                    );
-                  }),
+                                        ));
+                                      });
+                                }),
+
+                            // Card(
+                            //   child:ListTile(
+                            //     title:Text(item.items[index].itemName),
+                            //     subtitle: Text(item.items[index].cost.toString()),
+                            //   ),
+                            // )
+                          ],
+                        );
+                      });
+                },
+              ),
             ),
           )
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-        Navigator.pushNamed(context, "/AddBudget");
+          Navigator.pushNamed(context, "/AddBudget");
         },
         label: Text('add a item'),
         icon: Icon(Icons.add),

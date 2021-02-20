@@ -6,6 +6,7 @@ import 'package:wedding_app/firebase_repository/budget_firebase_repository.dart'
 import 'package:wedding_app/firebase_repository/user_wedding_firebase_repository.dart';
 import 'package:wedding_app/firebase_repository/wedding_firebase_repository.dart';
 import 'package:wedding_app/screens/add_budget/addbudget.dart';
+import 'package:wedding_app/screens/budget/budget_page.dart';
 import 'package:wedding_app/screens/create_wedding/create_wedding_page.dart';
 import 'package:wedding_app/screens/login/login_page.dart';
 import 'package:wedding_app/screens/navigator/navigator.dart';
@@ -36,16 +37,25 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
         providers: [
+          BlocProvider(
+            create: (BuildContext context) =>
+                BudgetBloc(
+                  budgetRepository: FirebaseBudgetRepository(),
+                ),
+
+          ),
           BlocProvider<CateBloc>(
-            create: (BuildContext context) => CateBloc(
-              todosRepository: FirebaseCategoryRepository(),
-            ),
+            create: (BuildContext context) =>
+                CateBloc(
+                  todosRepository: FirebaseCategoryRepository(),
+                ),
           ),
           BlocProvider<AuthenticationBloc>(create: (context) {
             return AuthenticationBloc(
               userRepository: FirebaseUserRepository(),
               userWeddingRepository: FirebaseUserWeddingRepository(),
-            )..add(AppStarted());
+            )
+              ..add(AppStarted());
           }),
         ],
         child: MaterialApp(
@@ -53,31 +63,52 @@ class MyApp extends StatelessWidget {
           routes: {
             '/register': (context) {
               return BlocProvider(
-                create: (BuildContext context) => RegisterBloc(
-                    userRepository: FirebaseUserRepository(),
-                    userWeddingRepository: FirebaseUserWeddingRepository()),
+                create: (BuildContext context) =>
+                    RegisterBloc(
+                        userRepository: FirebaseUserRepository(),
+                        userWeddingRepository: FirebaseUserWeddingRepository()),
                 child: RegisterPage(),
+              );
+            },
+            '/BudgetList': (context) {
+              return MultiBlocProvider(
+                providers: [
+                  BlocProvider(
+                    create: (BuildContext context) =>
+                        BudgetBloc(
+                          budgetRepository: FirebaseBudgetRepository(),
+                        ),
+
+                  ),
+                  BlocProvider(
+                    create: (BuildContext context) =>
+                        CateBloc(
+                          todosRepository: FirebaseCategoryRepository(),
+                        ),
+
+                  )
+                ],
+                child:BudgetList(),
               );
             },
             '/AddBudget': (context) {
               return MultiBlocProvider(
-
                 providers: [
                   BlocProvider(
-                    create: (BuildContext context) => CateBloc(
-                      todosRepository: FirebaseCategoryRepository(),
-                    ),
-
+                  create: (BuildContext context) =>
+                  BudgetBloc(
+                    budgetRepository: FirebaseBudgetRepository(),
                   ),
 
-                  BlocProvider(
-                    create: (BuildContext context) => BudgetBloc(
-                      weddingId :"Ao61c5q6Y00xcOrKrYSe",
-                      budgetRepository: FirebaseBudgetRepository()
-                    ),
+              ),
+              BlocProvider(
+              create: (BuildContext context) =>
+              CateBloc(
+              todosRepository: FirebaseCategoryRepository(),
+              ),
+              )
 
-                  ),
-                ],
+              ],
                 child: AddBudget(),
               );
             },
@@ -85,36 +116,51 @@ class MyApp extends StatelessWidget {
             '/': (context) {
               return BlocBuilder<AuthenticationBloc, AuthenticationState>(
                   builder: (context, state) {
-                if (state is Authenticated) {
-                  return NavigatorPage();
-                } else if (state is Unauthenticated) {
-                  return BlocProvider<LoginBloc>(
-                    create: (context) => LoginBloc(
-                      userRepository: FirebaseUserRepository(),
-                    ),
-                    child: LoginPage(),
-                  );
-                } else if (state is Uninitialized) {
-                  return SplashPage();
-                } else if (state is WeddingNull) {
-                  return MultiBlocProvider(
-                    providers: [
-                      BlocProvider<WeddingBloc>(
-                        create: (context) => WeddingBloc(
-                          weddingRepository: FirebaseWeddingRepository(),
-                          userWeddingRepository:
-                              FirebaseUserWeddingRepository(),
-                        ),
-                      ),
-                      BlocProvider<CreateWeddingBloc>(
-                        create: (context) => CreateWeddingBloc(),
-                      ),
-                    ],
-                    child: CreateWeddingPage(user: state.user),
-                  );
-                }
-                return LoadingIndicator();
-              });
+                    if (state is Authenticated) {
+                      return NavigatorPage();
+                    } else if (state is Unauthenticated) {
+                      return BlocProvider<LoginBloc>(
+                        create: (context) =>
+                            LoginBloc(
+                              userRepository: FirebaseUserRepository(),
+                            ),
+                        child: LoginPage(),
+                      );
+                    } else if (state is Uninitialized) {
+                      return SplashPage();
+                    } else if (state is WeddingNull) {
+                      return MultiBlocProvider(
+                        providers: [
+                          BlocProvider(
+                            create: (BuildContext context) =>
+                                CateBloc(
+                                  todosRepository: FirebaseCategoryRepository(),
+                                ),
+                          ),
+                          BlocProvider(
+                            create: (BuildContext context) =>
+                                BudgetBloc(
+                                    budgetRepository: FirebaseBudgetRepository()
+                                ),
+
+                          ),
+                          BlocProvider<WeddingBloc>(
+                            create: (context) =>
+                                WeddingBloc(
+                                  weddingRepository: FirebaseWeddingRepository(),
+                                  userWeddingRepository:
+                                  FirebaseUserWeddingRepository(),
+                                ),
+                          ),
+                          BlocProvider<CreateWeddingBloc>(
+                            create: (context) => CreateWeddingBloc(),
+                          ),
+                        ],
+                        child: CreateWeddingPage(user: state.user),
+                      );
+                    }
+                    return LoadingIndicator();
+                  });
             },
           },
           title: 'Wedding App',
