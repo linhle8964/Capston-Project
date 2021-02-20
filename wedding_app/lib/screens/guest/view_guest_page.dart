@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wedding_app/screens/guest/ListGuest.dart';
 import 'Guest.dart';
 import 'ListGuest.dart';
 
@@ -11,7 +12,9 @@ class ViewGuestPage extends StatefulWidget {
 
   _ViewGuestPageState createState() => _ViewGuestPageState();
 }
-class _ViewGuestPageState extends State<ViewGuestPage> with WidgetsBindingObserver{
+
+class _ViewGuestPageState extends State<ViewGuestPage>
+    with WidgetsBindingObserver {
   List<Guest> _guests = List<Guest>();
   List<Guest> _filterguests = List<Guest>();
   int c1 = 0, c2 = 0, c0 = 0;
@@ -25,20 +28,20 @@ class _ViewGuestPageState extends State<ViewGuestPage> with WidgetsBindingObserv
     c1 = _guests.where((_guest) => _guest.status == 1).toList().length;
     c2 = _guests.where((_guest) => _guest.status == 2).toList().length;
   }
+
   @override
   void dispose() {
     super.dispose();
     WidgetsBinding.instance.removeObserver(this);
   }
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
-    if(state == AppLifecycleState.paused){
-
-    }else if(state == AppLifecycleState.resumed){
-
-    }
+    if (state == AppLifecycleState.paused) {
+    } else if (state == AppLifecycleState.resumed) {}
   }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -49,13 +52,13 @@ class _ViewGuestPageState extends State<ViewGuestPage> with WidgetsBindingObserv
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.share),
-              onPressed: (){
+              onPressed: () {
                 print('share');
               },
             ),
             IconButton(
               icon: Icon(Icons.search),
-              onPressed: (){
+              onPressed: () {
                 print('search');
               },
             )
@@ -64,7 +67,7 @@ class _ViewGuestPageState extends State<ViewGuestPage> with WidgetsBindingObserv
         floatingActionButton: FloatingActionButton(
           tooltip: 'Mời thêm khách',
           child: Icon(Icons.add),
-          onPressed: (){
+          onPressed: () {
             print('invite guest');
           },
         ),
@@ -78,107 +81,107 @@ class _ViewGuestPageState extends State<ViewGuestPage> with WidgetsBindingObserv
                   children: <Widget>[
                     Expanded(
                         child: FlatButton(
-                          child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children:[
-                                Text(
-                                  '$c1',
-                                  style: TextStyle(fontSize: 20),
-                                ),
-                                Text(
-                                  'Sẽ tới',
-                                  style: TextStyle(fontSize: 10),
-                                ),
-                              ]
-                          ),
-                          color: Colors.green,
-                          height: 60,
-                          onPressed: (){
-                            print('coming');
-                            this.setState(() {
-                              _filterguests= _guests.where((_guest) => _guest.status == 1).toList();
-                            });
-                          },
-                        )
-                    ),
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              '$c1',
+                              style: TextStyle(fontSize: 20),
+                            ),
+                            Text(
+                              'Sẽ tới',
+                              style: TextStyle(fontSize: 10),
+                            ),
+                          ]),
+                      color: Colors.green,
+                      height: 60,
+                      onPressed: () {
+                        print('coming');
+                        this.setState(() {
+                          _filterguests = _guests
+                              .where((_guest) => _guest.status == 1)
+                              .toList();
+                        });
+                      },
+                    )),
                     Expanded(
                         child: FlatButton(
-                          child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children:[
-                                Text(
-                                  '$c2',
-                                  style: TextStyle(fontSize: 20),
-                                ),
-                                Text(
-                                  'Không tới',
-                                  style: TextStyle(fontSize: 10),
-                                ),
-                              ]
-                          ),
-                          color: Colors.red,
-                          height: 60,
-                          onPressed: (){
-                            print('not coming');
-                            this.setState(() {
-                              _filterguests= _guests.where((_guest) => _guest.status == 2).toList();
-                            });
-                          },
-                        )
-                    ),
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              '$c2',
+                              style: TextStyle(fontSize: 20),
+                            ),
+                            Text(
+                              'Không tới',
+                              style: TextStyle(fontSize: 10),
+                            ),
+                          ]),
+                      color: Colors.red,
+                      height: 60,
+                      onPressed: () {
+                        print('not coming');
+                        this.setState(() {
+                          _filterguests = _guests
+                              .where((_guest) => _guest.status == 2)
+                              .toList();
+                        });
+                      },
+                    )),
                     Expanded(
                         child: FlatButton(
-                          child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children:[
-                                Text(
-                                  '$c0',
-                                  style: TextStyle(fontSize: 20),
-                                ),
-                                Text(
-                                  'Đang mời',
-                                  style: TextStyle(fontSize: 10),
-                                ),
-                              ]
-                          ),
-                          color: Colors.yellow,
-                          height: 60,
-                          onPressed: (){
-                            print('waiting');
-                            this.setState(() {
-                              _filterguests= _guests.where((_guest) => _guest.status == 0).toList();
-                            });
-                          },
-                        )
-                    ),
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              '$c0',
+                              style: TextStyle(fontSize: 20),
+                            ),
+                            Text(
+                              'Đang mời',
+                              style: TextStyle(fontSize: 10),
+                            ),
+                          ]),
+                      color: Colors.yellow,
+                      height: 60,
+                      onPressed: () {
+                        print('waiting');
+                        this.setState(() {
+                          _filterguests = _guests
+                              .where((_guest) => _guest.status == 0)
+                              .toList();
+                        });
+                      },
+                    )),
                     Expanded(
                         child: FlatButton(
-                          child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children:[
-                                Text(
-                                  '${c0+c1+c2}',
-                                  style: TextStyle(fontSize: 20),
-                                ),
-                                Text(
-                                  'Tổng',
-                                  style: TextStyle(fontSize: 10),
-                                ),
-                              ]
-                          ),
-                          color: Colors.pinkAccent,
-                          height: 60,
-                          onPressed: (){
-                            print('total');
-                            this.setState(() {
-                              _filterguests= _guests;
-                            });
-                          },
-                        )
-                    ),
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              '${c0 + c1 + c2}',
+                              style: TextStyle(fontSize: 20),
+                            ),
+                            Text(
+                              'Tổng',
+                              style: TextStyle(fontSize: 10),
+                            ),
+                          ]),
+                      color: Colors.pinkAccent,
+                      height: 60,
+                      onPressed: () {
+                        print('total');
+                        this.setState(() {
+                          _filterguests = _guests;
+                        });
+                      },
+                    )),
                   ],
                 ),
-                ListGuest(guests: _filterguests,)
+                ListGuest(
+                  guests: _filterguests,
+                )
               ],
             ),
           ),

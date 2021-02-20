@@ -27,11 +27,10 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
       categories.listen((listOfCategories) {
         for (Category cate in listOfCategories) {
           categoriesList.add(cate);
+          print(cate.name.toString());
         }
       });
-      yield CategoryLoadSuccess(
-          categoriesList
-      );
+      yield CategoryLoadSuccess(categoriesList);
     } catch (_) {
       yield CategoryLoadFailure();
     }
