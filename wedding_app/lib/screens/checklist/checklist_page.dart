@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:wedding_app/screens/add_task/add_task.dart';
 import 'package:wedding_app/screens/checklist/listview.dart';
 import 'package:wedding_app/utils/hex_color.dart';
 
@@ -180,7 +181,12 @@ class _ChecklistPageState extends State<ChecklistPage>
       ),
       body: _body(),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AddTaskPage()),
+          );
+        },
         label: Text('thêm công việc'),
         icon: Icon(Icons.add),
         backgroundColor: Colors.lightBlue,

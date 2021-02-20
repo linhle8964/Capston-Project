@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/ListGuest.dart';
 import 'Guest.dart';
+import 'ListGuest.dart';
 
 class ViewGuestPage extends StatefulWidget {
   List<Guest> guests = List<Guest>();
 
-  MyApp({this.guests});
-  @override
-  State<StatefulWidget> createState() {
-    return _MyAppState();
-  }
+  ViewGuestPage({
+    @required this.guests,
+  });
+
+  _ViewGuestPageState createState() => _ViewGuestPageState();
 }
 class _ViewGuestPageState extends State<ViewGuestPage> with WidgetsBindingObserver{
   List<Guest> _guests = List<Guest>();
