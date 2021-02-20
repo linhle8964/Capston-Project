@@ -9,10 +9,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class FirebaseUserWeddingRepository extends UserWeddingRepository {
   final userWeddingCollection =
       FirebaseFirestore.instance.collection("user_wedding");
+
   @override
-  Future<void> addUserToWedding(String email, UserWedding userWedding) async {
-    // TODO: implement addUserToWedding
-    throw UnimplementedError();
+  Future<void> addUserToWedding(UserWedding userWedding) async {
+    return userWeddingCollection
+        .doc(userWedding.id)
+        .update(userWedding.toEntity().toDocument());
   }
 
   @override
@@ -42,6 +44,12 @@ class FirebaseUserWeddingRepository extends UserWeddingRepository {
   Future<void> createUserWedding(User user) {
     return userWeddingCollection
         .add(new UserWedding(user.email, id: user.uid).toEntity().toDocument());
+  }
+
+  @override
+  Future<void> createUserWeddingByEmail(String email) {
+    return userWeddingCollection
+        .add(new UserWedding(email).toEntity().toDocument());
   }
 
   @override
@@ -91,5 +99,19 @@ class FirebaseUserWeddingRepository extends UserWeddingRepository {
             weddingId: userWedding.weddingId)
         .toEntity()
         .toDocument());
+  }
+
+  @override
+  Stream<List<UserWedding>> getAllUserWedding(String weddingId) {
+    return userWeddingCollection
+        .where("wedding_id", isEqualTo: weddingId)
+        .orderBy("join_date", descending: false)
+        .snapshots()
+        .map((snapshot) {
+      return snapshot.docs
+          .map((doc) =>
+              UserWedding.fromEntity(UserWeddingEntity.fromSnapshot(doc)))
+          .toList();
+    });
   }
 }
