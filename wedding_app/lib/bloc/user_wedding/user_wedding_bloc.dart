@@ -21,6 +21,8 @@ class UserWeddingBloc extends Bloc<UserWeddingEvent, UserWeddingState> {
       yield* _mapLoadUserWeddingsToState();
     } else if (event is UserWeddingUpdated) {
       yield* _mapUserWeddingsUpdateToState(event);
+    } else if (event is RemoveUserFromUserWedding) {
+      yield* _mapRemoveUserFromWedding(event);
     }
   }
 
@@ -38,27 +40,29 @@ class UserWeddingBloc extends Bloc<UserWeddingEvent, UserWeddingState> {
     );
   }
 
-  Stream<UserWeddingState> _mapUserToUserWeddingToState(
-      AddUserToUserWedding event) async* {
-    try {
-      UserWedding userWedding =
-          await _userWeddingRepository.getUserWeddingByEmail(event.email);
-      if (userWedding == null) {
-        _userWeddingRepository.createUserWeddingByEmail(event.email);
-      } else {
-        if (userWedding.weddingId != null) {
-          yield UserWeddingFailed(
-              "Người dùng này đã có đám cưới. Hãy liên hệ và thử lại");
-        }
-      }
-    } catch (_) {
-      yield UserWeddingFailed("Có lỗi xảy ra");
-    }
-  }
-
   Stream<UserWeddingState> _mapUserWeddingsUpdateToState(
       UserWeddingUpdated event) async* {
     yield UserWeddingLoaded(event.userWeddings);
+  }
+
+  Stream<UserWeddingState> _mapRemoveUserFromWedding(
+      RemoveUserFromUserWedding event) async* {
+    yield UserWeddingProcessing();
+    try {
+      UserWedding userWedding =
+          await _userWeddingRepository.getUserWeddingByUser(event.user);
+      _userWeddingRepository.updateUserWedding(new UserWedding(
+          userWedding.email,
+          id: userWedding.id,
+          userId: userWedding.userId,
+          role: null,
+          joinDate: userWedding.joinDate,
+          weddingId: null));
+      yield UserWeddingSuccess("Thành công");
+    } catch (e) {
+      print(e);
+      yield UserWeddingFailed("Có lỗi xảy ra");
+    }
   }
 
   @override

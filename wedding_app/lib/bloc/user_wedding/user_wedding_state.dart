@@ -37,3 +37,5 @@ class UserWeddingFailed extends UserWeddingState {
   @override
   List<Object> get props => [message];
 }
+
+class UserWeddingProcessing extends UserWeddingState {}

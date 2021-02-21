@@ -1,8 +1,7 @@
 import 'dart:async';
-
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:bloc/bloc.dart';
 import 'package:wedding_app/model/user_wedding.dart';
-import 'package:wedding_app/model/wedding.dart';
 import 'package:wedding_app/repository/user_wedding_repository.dart';
 import 'package:wedding_app/repository/wedding_repository.dart';
 import 'bloc.dart';
@@ -47,7 +46,8 @@ class WeddingBloc extends Bloc<WeddingEvent, WeddingState> {
   Stream<WeddingState> _mapCreateWeddingToState(CreateWedding event) async* {
     yield Loading("Đang xử lý dữ liệu");
     try {
-      await _weddingRepository.createWedding(event.wedding, event.user);
+      final user = FirebaseAuth.instance.currentUser;
+      await _weddingRepository.createWedding(event.wedding, user);
       yield Success("Tạo thành công");
     } catch (_) {
       yield Failed("Có lỗi xảy ra");
@@ -71,7 +71,16 @@ class WeddingBloc extends Bloc<WeddingEvent, WeddingState> {
   }
 
   Stream<WeddingState> _mapDeleteWeddingToState(DeleteWedding event) async* {
-    _weddingRepository.deleteWedding(event.wedding, event.listUserWedding);
+    yield Loading("Đang xử lý dữ liệu");
+    try {
+      _weddingRepository.deleteWedding(event.weddingId).then((value) async {
+        _userWeddingRepository.deleteAllUserWeddingByWedding(event.weddingId);
+      });
+      yield Success("Xoá thành công thành công");
+    } catch (e) {
+      print(e);
+      yield Failed("Có lỗi xảy ra");
+    }
   }
 
   Stream<WeddingState> _mapWeddingUpdatedToState(WeddingUpdated event) async* {

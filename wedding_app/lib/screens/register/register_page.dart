@@ -40,16 +40,17 @@ class _RegisterPageState extends State<RegisterPage> {
           listener: (BuildContext context, RegisterState state) {
             if (state.isSubmitting) {
               FocusScope.of(context).unfocus();
-              showSnackbar(context, "Đang xử lý dữ liệu", false);
+              showProcessingSnackbar(context, "Đang xử lý dữ liệu");
             }
             if (state.isSuccess) {
               FocusScope.of(context).unfocus();
+              showSuccessSnackbar(context, "Tạo tài khoản thành công");
               BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
-              Navigator.of(context).pop();
+              Navigator.pop(context);
             }
             if (state.isFailure) {
               FocusScope.of(context).unfocus();
-              showSnackbar(context, "Có lỗi xảy ra", true);
+              showFailedSnackbar(context, "Có lỗi xảy ra");
             }
           },
           child: BlocBuilder(

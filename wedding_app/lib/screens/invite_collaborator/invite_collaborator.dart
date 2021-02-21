@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:wedding_app/bloc/invite_email/bloc.dart';
+import 'package:wedding_app/screens/splash_page.dart';
 import 'package:wedding_app/utils/show_snackbar.dart';
 
 import 'dropdown_role.dart';
@@ -10,18 +11,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wedding_app/widgets/loading_indicator.dart';
 
 class InviteCollaboratorPage extends StatelessWidget {
-  String role = "";
+  String role = "Admin";
   void _submit(BuildContext context, String role) {
-    print(role);
     String email = _emailController.text.toString();
     BlocProvider.of<InviteEmailBloc>(context)
-        .add(SendEmailButtonSubmitted(email));
+        .add(SendEmailButtonSubmitted(email, role));
+    _emailController.clear();
   }
 
   final TextEditingController _emailController = new TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: hexToColor("#d86a77"),
         title: Text('Mời cộng tác viên'),
@@ -30,25 +32,11 @@ class InviteCollaboratorPage extends StatelessWidget {
         cubit: BlocProvider.of<InviteEmailBloc>(context),
         listener: (context, state) {
           if (state is InviteEmailProcessing) {
-            showSnackbar(context, "Đang xử lý", false);
+            showProcessingSnackbar(context, "Đang xử lý");
           } else if (state is InviteEmailError) {
-            showSnackbar(context, state.message, true);
+            showFailedSnackbar(context, state.message);
           } else if (state is InviteEmailSuccess) {
-            FocusScope.of(context).unfocus();
-            Scaffold.of(context)
-              ..hideCurrentSnackBar()
-              ..showSnackBar(
-                SnackBar(
-                  content: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(state.message),
-                      Icon(Icons.check),
-                    ],
-                  ),
-                  backgroundColor: Colors.green,
-                ),
-              );
+            showSuccessSnackbar(context, state.message);
           }
         },
         child: BlocBuilder(
@@ -166,7 +154,7 @@ class InviteCollaboratorPage extends StatelessWidget {
                 ),
               );
             } else if (state is UserWeddingLoading) {
-              return Center(child: Text("31231"));
+              return SplashPage();
             }
             return Center(child: LoadingIndicator());
           },

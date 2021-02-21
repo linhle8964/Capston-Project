@@ -9,6 +9,8 @@ import 'package:wedding_app/screens/navigator/navigator.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:wedding_app/screens/pick_wedding/pick_wedding_screen.dart';
+import 'package:wedding_app/screens/pick_wedding/wedding_code.dart';
 import 'package:wedding_app/screens/register/register_page.dart';
 import 'package:wedding_app/screens/splash_page.dart';
 import 'package:wedding_app/widgets/loading_indicator.dart';
@@ -57,6 +59,7 @@ class MyApp extends StatelessWidget {
               return BlocBuilder<AuthenticationBloc, AuthenticationState>(
                   builder: (context, state) {
                 if (state is Authenticated) {
+                  print("Authenticated");
                   return NavigatorPage();
                 } else if (state is Unauthenticated) {
                   return BlocProvider<LoginBloc>(
@@ -68,21 +71,8 @@ class MyApp extends StatelessWidget {
                 } else if (state is Uninitialized) {
                   return SplashPage();
                 } else if (state is WeddingNull) {
-                  return MultiBlocProvider(
-                    providers: [
-                      BlocProvider<WeddingBloc>(
-                        create: (context) => WeddingBloc(
-                          weddingRepository: FirebaseWeddingRepository(),
-                          userWeddingRepository:
-                              FirebaseUserWeddingRepository(),
-                        ),
-                      ),
-                      BlocProvider<CreateWeddingBloc>(
-                        create: (context) => CreateWeddingBloc(),
-                      ),
-                    ],
-                    child: CreateWeddingPage(user: state.user),
-                  );
+                  print("Wedding Null");
+                  return PickWeddingPage();
                 }
                 return LoadingIndicator();
               });
@@ -98,10 +88,44 @@ class MyApp extends StatelessWidget {
                   BlocProvider<InviteEmailBloc>(create: (context) {
                     return InviteEmailBloc(
                       inviteEmailRepository: FirebaseInviteEmailRepository(),
+                      userWeddingRepository: FirebaseUserWeddingRepository(),
                     );
                   }),
                 ],
                 child: InviteCollaboratorPage(),
+              );
+            },
+            "/wedding_code": (context) {
+              return MultiBlocProvider(
+                providers: [
+                  BlocProvider<UserWeddingBloc>(
+                    create: (context) => UserWeddingBloc(
+                      userWeddingRepository: FirebaseUserWeddingRepository(),
+                    ),
+                  ),
+                  BlocProvider<InviteEmailBloc>(
+                    create: (context) => InviteEmailBloc(
+                        inviteEmailRepository: FirebaseInviteEmailRepository(),
+                        userWeddingRepository: FirebaseUserWeddingRepository()),
+                  ),
+                ],
+                child: WeddingCodePage(),
+              );
+            },
+            "/create_wedding": (context) {
+              return MultiBlocProvider(
+                providers: [
+                  BlocProvider<WeddingBloc>(
+                    create: (context) => WeddingBloc(
+                      weddingRepository: FirebaseWeddingRepository(),
+                      userWeddingRepository: FirebaseUserWeddingRepository(),
+                    ),
+                  ),
+                  BlocProvider<CreateWeddingBloc>(
+                    create: (context) => CreateWeddingBloc(),
+                  ),
+                ],
+                child: CreateWeddingPage(),
               );
             }
           },
