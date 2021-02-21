@@ -7,14 +7,9 @@ import 'package:wedding_app/bloc/create_wedding/bloc.dart';
 import 'package:wedding_app/bloc/wedding/bloc.dart';
 import 'package:wedding_app/model/wedding.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:wedding_app/utils/show_snackbar.dart';
 
 class CreateWeddingPage extends StatefulWidget {
-  final User user;
-
-  CreateWeddingPage({Key key, @required this.user}) : super(key: key);
-
   @override
   _CreateWeddingPageState createState() => _CreateWeddingPageState();
 }
@@ -73,171 +68,173 @@ class _CreateWeddingPageState extends State<CreateWeddingPage> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Welcome to Flutter',
-      theme: ThemeData(
-        primaryColor: Colors.pink,
-      ),
-      home: Scaffold(
-        body: BlocListener(
-            cubit: BlocProvider.of<WeddingBloc>(context),
-            listener: (context, state) {
-              if (state is Success) {
-                showSuccessSnackbar(context, "Tạo đám cưới thành công");
-                BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
-              } else if (state is Failed) {
-                showFailedSnackbar(context, "Có lỗi xảy ra");
-              } else if (state is Loading) {
-                showProcessingSnackbar(context, "Đang xử lý dữ liệu");
-              }
-            },
-            child: BlocBuilder(
-                cubit: BlocProvider.of<CreateWeddingBloc>(context),
-                builder: (context, state) {
-                  return Scaffold(
-                    appBar: AppBar(
-                      title: Center(
-                        child: Text("TẠO ĐÁM CƯỚI"),
-                      ),
-                      actions: [
-                        IconButton(
-                            icon: Icon(
-                              Icons.check,
-                              size: 40,
-                              color: Colors.blue,
-                            ),
-                            onPressed: () => _save(state)),
-                      ],
+    return Scaffold(
+      body: MultiBlocListener(
+          listeners: [
+            BlocListener<WeddingBloc, WeddingState>(
+              listener: (context, state) {
+                if (state is Success) {
+                  showSuccessSnackbar(context, "Tạo đám cưới thành công");
+                  BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
+                } else if (state is Failed) {
+                  showFailedSnackbar(context, "Có lỗi xảy ra");
+                } else if (state is Loading) {
+                  showProcessingSnackbar(context, "Đang xử lý dữ liệu");
+                }
+              },
+            ),
+            BlocListener<AuthenticationBloc, AuthenticationState>(
+              listener: (context, state) {
+                if (state is Authenticated) {
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, "/", (route) => false);
+                }
+              },
+            )
+          ],
+          child: BlocBuilder(
+              cubit: BlocProvider.of<CreateWeddingBloc>(context),
+              builder: (context, state) {
+                return Scaffold(
+                  appBar: AppBar(
+                    title: Center(
+                      child: Text("TẠO ĐÁM CƯỚI"),
                     ),
-                    body: SingleChildScrollView(
-                      child: Container(
-                        padding: EdgeInsets.all(20.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "THÔNG TIN CỦA BẠN",
-                              style: new TextStyle(
-                                fontSize: 18.0,
+                    actions: [
+                      IconButton(
+                          icon: Icon(
+                            Icons.check,
+                            size: 40,
+                            color: Colors.blue,
+                          ),
+                          onPressed: () => _save(state)),
+                    ],
+                  ),
+                  body: SingleChildScrollView(
+                    child: Container(
+                      padding: EdgeInsets.all(20.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "THÔNG TIN CỦA BẠN",
+                            style: new TextStyle(
+                              fontSize: 18.0,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          TextField(
+                            controller: groomNameController,
+                            decoration: new InputDecoration(
+                              border: new OutlineInputBorder(
+                                borderSide: new BorderSide(color: Colors.black),
                               ),
+                              hintText: 'TÊN CHÚ RỂ',
+                              errorText: !state.isGroomNameValid
+                                  ? "Tên phải có tối thiểu 6 ký tự"
+                                  : null,
                             ),
-                            SizedBox(
-                              height: 10,
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          TextField(
+                            controller: brideNameController,
+                            decoration: new InputDecoration(
+                              border: new OutlineInputBorder(
+                                borderSide: new BorderSide(color: Colors.black),
+                              ),
+                              errorText: !state.isBrideNameValid
+                                  ? "Tên phải có tối thiểu 6 ký tự"
+                                  : null,
+                              hintText: 'TÊN CÔ DÂU',
                             ),
-                            TextField(
-                              controller: groomNameController,
-                              decoration: new InputDecoration(
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: <Widget>[
+                              Text(
+                                _selectedDate,
+                                style: new TextStyle(
+                                  fontSize: 18.0,
+                                ),
+                              ),
+                              IconButton(
+                                icon: Icon(Icons.calendar_today),
+                                tooltip: 'Tap to open date picker',
+                                onPressed: () {
+                                  _selectDate(context);
+                                },
+                              ),
+                              Text(
+                                _selectedTime,
+                                style: new TextStyle(
+                                  fontSize: 18.0,
+                                ),
+                              ),
+                              IconButton(
+                                icon: Icon(Icons.access_time_outlined),
+                                tooltip: 'Tap to open time picker',
+                                onPressed: () {
+                                  _selectTime(context);
+                                },
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          TextField(
+                            controller: addressController,
+                            decoration: new InputDecoration(
+                              border: new OutlineInputBorder(
+                                borderSide: new BorderSide(color: Colors.black),
+                              ),
+                              errorText: !state.isAddressValid
+                                  ? "Địa chỉ không được rỗng"
+                                  : null,
+                              hintText: 'ĐỊA CHỈ',
+                            ),
+                          ),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          TextField(
+                            controller: budgetController,
+                            decoration: new InputDecoration(
                                 border: new OutlineInputBorder(
                                   borderSide:
                                       new BorderSide(color: Colors.black),
                                 ),
-                                hintText: 'TÊN CHÚ RỂ',
-                                errorText: !state.isGroomNameValid
-                                    ? "Tên phải có tối thiểu 6 ký tự"
-                                    : null,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            TextField(
-                              controller: brideNameController,
-                              decoration: new InputDecoration(
-                                border: new OutlineInputBorder(
-                                  borderSide:
-                                      new BorderSide(color: Colors.black),
-                                ),
-                                errorText: !state.isBrideNameValid
-                                    ? "Tên phải có tối thiểu 6 ký tự"
-                                    : null,
-                                hintText: 'TÊN CÔ DÂU',
-                              ),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: <Widget>[
-                                Text(
-                                  _selectedDate,
-                                  style: new TextStyle(
-                                    fontSize: 18.0,
-                                  ),
-                                ),
-                                IconButton(
-                                  icon: Icon(Icons.calendar_today),
-                                  tooltip: 'Tap to open date picker',
-                                  onPressed: () {
-                                    _selectDate(context);
-                                  },
-                                ),
-                                Text(
-                                  _selectedTime,
-                                  style: new TextStyle(
-                                    fontSize: 18.0,
-                                  ),
-                                ),
-                                IconButton(
-                                  icon: Icon(Icons.access_time_outlined),
-                                  tooltip: 'Tap to open time picker',
-                                  onPressed: () {
-                                    _selectTime(context);
-                                  },
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            TextField(
-                              controller: addressController,
-                              decoration: new InputDecoration(
-                                border: new OutlineInputBorder(
-                                  borderSide:
-                                      new BorderSide(color: Colors.black),
-                                ),
-                                errorText: !state.isAddressValid
-                                    ? "Địa chỉ không được rỗng"
-                                    : null,
-                                hintText: 'ĐỊA CHỈ',
-                              ),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            TextField(
-                              controller: budgetController,
-                              decoration: new InputDecoration(
-                                  border: new OutlineInputBorder(
-                                    borderSide:
-                                        new BorderSide(color: Colors.black),
-                                  ),
-                                  hintText: 'SỐ TIỀN',
-                                  suffixText: 'VND',
-                                  suffixStyle:
-                                      const TextStyle(color: Colors.black)),
-                              keyboardType: TextInputType.number,
-                              inputFormatters: [
-                                FilteringTextInputFormatter.digitsOnly
-                              ],
-                              onChanged: (string) {
-                                string =
-                                    '${_formatNumber(string.replaceAll(',', ''))}';
-                                budgetController.value = TextEditingValue(
-                                  text: string,
-                                  selection: TextSelection.collapsed(
-                                      offset: string.length),
-                                );
-                              },
-                            ),
-                          ],
-                        ),
+                                hintText: 'SỐ TIỀN',
+                                suffixText: 'VND',
+                                suffixStyle:
+                                    const TextStyle(color: Colors.black)),
+                            keyboardType: TextInputType.number,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly
+                            ],
+                            onChanged: (string) {
+                              string =
+                                  '${_formatNumber(string.replaceAll(',', ''))}';
+                              budgetController.value = TextEditingValue(
+                                text: string,
+                                selection: TextSelection.collapsed(
+                                    offset: string.length),
+                              );
+                            },
+                          ),
+                        ],
                       ),
                     ),
-                  );
-                })),
-      ),
+                  ),
+                );
+              })),
     );
   }
 
@@ -271,8 +268,7 @@ class _CreateWeddingPageState extends State<CreateWeddingPage> {
           dateCreated: DateTime.now(),
           budget: double.parse(budgetController.text.replaceAll(",", "")),
           modifiedDate: DateTime.now());
-      BlocProvider.of<WeddingBloc>(context)
-          .add(CreateWedding(wedding, widget.user));
+      BlocProvider.of<WeddingBloc>(context).add(CreateWedding(wedding));
     } else {
       showFailedSnackbar(context, "Hãy điền đầy đủ thông tin");
     }

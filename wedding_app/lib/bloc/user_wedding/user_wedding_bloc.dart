@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
+import 'package:wedding_app/model/user_wedding.dart';
 import 'package:wedding_app/repository/user_wedding_repository.dart';
 import 'bloc.dart';
 import 'package:meta/meta.dart';
@@ -20,6 +21,8 @@ class UserWeddingBloc extends Bloc<UserWeddingEvent, UserWeddingState> {
       yield* _mapLoadUserWeddingsToState();
     } else if (event is UserWeddingUpdated) {
       yield* _mapUserWeddingsUpdateToState(event);
+    } else if (event is RemoveUserFromUserWedding) {
+      yield* _mapRemoveUserFromWedding(event);
     }
   }
 
@@ -40,6 +43,26 @@ class UserWeddingBloc extends Bloc<UserWeddingEvent, UserWeddingState> {
   Stream<UserWeddingState> _mapUserWeddingsUpdateToState(
       UserWeddingUpdated event) async* {
     yield UserWeddingLoaded(event.userWeddings);
+  }
+
+  Stream<UserWeddingState> _mapRemoveUserFromWedding(
+      RemoveUserFromUserWedding event) async* {
+    yield UserWeddingProcessing();
+    try {
+      UserWedding userWedding =
+          await _userWeddingRepository.getUserWeddingByUser(event.user);
+      _userWeddingRepository.updateUserWedding(new UserWedding(
+          userWedding.email,
+          id: userWedding.id,
+          userId: userWedding.userId,
+          role: null,
+          joinDate: userWedding.joinDate,
+          weddingId: null));
+      yield UserWeddingSuccess("Thành công");
+    } catch (e) {
+      print(e);
+      yield UserWeddingFailed("Có lỗi xảy ra");
+    }
   }
 
   @override

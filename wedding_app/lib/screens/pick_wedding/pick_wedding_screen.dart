@@ -43,7 +43,8 @@ class PickWeddingPage extends StatelessWidget {
                             style: TextStyle(color: Colors.white),
                           ),
                           color: hexToColor("#d86a77"),
-                          onPressed: () {}),
+                          onPressed: () =>
+                              Navigator.pushNamed(context, "/create_wedding")),
                     ),
                     ButtonTheme(
                       minWidth: width / 2,

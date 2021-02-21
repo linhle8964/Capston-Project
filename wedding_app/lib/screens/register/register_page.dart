@@ -46,6 +46,7 @@ class _RegisterPageState extends State<RegisterPage> {
               FocusScope.of(context).unfocus();
               showSuccessSnackbar(context, "Tạo tài khoản thành công");
               BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
+              Navigator.pop(context);
             }
             if (state.isFailure) {
               FocusScope.of(context).unfocus();

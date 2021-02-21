@@ -18,3 +18,12 @@ class SendEmailButtonSubmitted extends InviteEmailEvent {
   @override
   List<Object> get props => [email, role];
 }
+
+class SubmittedCode extends InviteEmailEvent {
+  final String code;
+
+  const SubmittedCode(this.code);
+
+  @override
+  List<Object> get props => [code];
+}

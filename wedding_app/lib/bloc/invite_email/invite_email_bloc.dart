@@ -31,6 +31,8 @@ class InviteEmailBloc extends Bloc<InviteEmailEvent, InviteEmailState> {
   Stream<InviteEmailState> mapEventToState(InviteEmailEvent event) async* {
     if (event is SendEmailButtonSubmitted) {
       yield* _mapSendEmailSubmittedToState(event);
+    } else if (event is SubmittedCode) {
+      yield* _mapSubmittedCodeToState(event);
     }
   }
 
@@ -103,5 +105,37 @@ class InviteEmailBloc extends Bloc<InviteEmailEvent, InviteEmailState> {
 
     // close the connection
     await connection.close();
+  }
+
+  Stream<InviteEmailState> _mapSubmittedCodeToState(
+      SubmittedCode event) async* {
+    yield InviteEmailProcessing();
+    try {
+      final User user = auth.currentUser;
+      InviteEmail inviteEmail =
+          await _inviteEmailRepository.getInviteEmailByCode(event.code);
+      if (inviteEmail.to == user.email) {
+        UserWedding userWedding =
+            await _userWeddingRepository.getUserWeddingByEmail(inviteEmail.to);
+        UserWedding newUserWedding = new UserWedding(inviteEmail.to,
+            userId: user.uid,
+            joinDate: DateTime.now(),
+            role: inviteEmail.role,
+            weddingId: inviteEmail.weddingId,
+            id: userWedding.id);
+        _userWeddingRepository
+            .updateUserWedding(newUserWedding)
+            .then((value) async {
+          await _inviteEmailRepository.deleteInviteEmailByEmail(
+              inviteEmail.to, inviteEmail.weddingId);
+        });
+        yield InviteEmailSuccess(message: "Thành công");
+      } else {
+        yield InviteEmailError(message: "Mã không đúng");
+      }
+    } catch (e) {
+      print(e);
+      yield InviteEmailError(message: "Có lỗi xảy ra");
+    }
   }
 }

@@ -1,4 +1,3 @@
-import 'package:wedding_app/model/user_wedding.dart';
 import 'package:wedding_app/repository/user_repository.dart';
 import 'package:wedding_app/repository/user_wedding_repository.dart';
 import 'package:wedding_app/utils/validations.dart';
@@ -67,18 +66,8 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         password: password,
       )
           .then((user) async {
-        // kiểm tra tài khoản người dùng
-        UserWedding userWedding =
-            await _userWeddingRepository.getUserWeddingByUser(user);
-        // nếu người dùng chưa có tài khoản và không có đám cưới
-        if (userWedding == null) {
-          _userWeddingRepository.createUserWedding(user);
-        } else {
-          // nếu người dùng chưa có tài khoản nhưng được mời qua người dùng khác
-          if (userWedding.userId == null) {
-            await _userWeddingRepository.addUserId(userWedding, user);
-          }
-        }
+        // tạo user wedding
+        _userWeddingRepository.createUserWedding(user);
       });
       yield RegisterState.success();
     } catch (_) {
