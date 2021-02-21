@@ -27,6 +27,7 @@ class _SettingPageState extends State<SettingPage> {
       ),
       body: Container(
         padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+        child: SingleChildScrollView(
         child: Column(
           children: <Widget>[
             Container(
@@ -342,7 +343,7 @@ class _SettingPageState extends State<SettingPage> {
               ),
             ),
           ],
-        ),
+        ),)
       ),
     ));
   }

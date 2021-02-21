@@ -25,8 +25,11 @@ dependencies:
     sdk: flutter
   flutter_time_picker_spinner: ^1.0.6+1
   flutter_countdown_timer: ^3.0.0
-
-
+  image_picker:
+  firebase_storage:
+  cloud_firestore:
+  firebase_core:
+  transparent_image:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.0
@@ -75,7 +78,6 @@ flutter:
   assets:
     - assets/
     - assets/app_icon/
-    - assets/cardTemplate/
     - assets/edit_invitation/
 
 

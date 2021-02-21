@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wedding_app/bloc/authentication/bloc.dart';
 import 'package:wedding_app/bloc/wedding/bloc.dart';
+import 'package:wedding_app/screens/choose_template_invitation/chooseTemplate_page.dart';
 import 'package:wedding_app/utils/hex_color.dart';
 import 'package:wedding_app/widgets/loading_indicator.dart';
 
@@ -43,6 +44,11 @@ class _DemoPageState extends State<DemoPage> {
                   return Column(
                     children: [
                       Text(state.wedding.id),
+                      FlatButton(onPressed: () {
+                        Navigator.of(context)
+                            .push(MaterialPageRoute(builder: (context) => ChooseTemplatePage()));
+                      },
+                          child: Text('Thiep moi'))
                     ],
                   );
                 } else if (state is Loading) {
@@ -53,6 +59,7 @@ class _DemoPageState extends State<DemoPage> {
             );
           }
           return LoadingIndicator();
+
         },
       ),
     );

@@ -60,6 +60,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
                   constraints: BoxConstraints.expand(),
                   color: Colors.white,
+                  child: SingleChildScrollView(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -172,7 +173,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                       ),
                     ],
-                  ),
+                  ),)
                 ));
               })),
     );
