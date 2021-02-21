@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:wedding_app/bloc/invite_email/bloc.dart';
 import 'package:wedding_app/screens/splash_page.dart';
+import 'package:wedding_app/utils/role_convert.dart';
 import 'package:wedding_app/utils/show_snackbar.dart';
 
 import 'dropdown_role.dart';
@@ -15,7 +16,7 @@ class InviteCollaboratorPage extends StatelessWidget {
   void _submit(BuildContext context, String role) {
     String email = _emailController.text.toString();
     BlocProvider.of<InviteEmailBloc>(context)
-        .add(SendEmailButtonSubmitted(email, role));
+        .add(SendEmailButtonSubmitted(email, convertRoleToDb(role)));
     _emailController.clear();
   }
 
@@ -89,7 +90,8 @@ class InviteCollaboratorPage extends StatelessWidget {
                                 style: TextStyle(fontSize: 15.0),
                               ),
                               Text(
-                                state.userWeddings[index].role,
+                                convertRoleFromDb(
+                                    state.userWeddings[index].role),
                                 style: TextStyle(fontSize: 15.0),
                               )
                             ],
