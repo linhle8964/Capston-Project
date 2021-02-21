@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:wedding_app/bloc/invite_email/bloc.dart';
 import 'package:wedding_app/screens/splash_page.dart';
+import 'package:wedding_app/utils/alert_dialog.dart';
 import 'package:wedding_app/utils/role_convert.dart';
 import 'package:wedding_app/utils/show_snackbar.dart';
 
@@ -37,7 +38,9 @@ class InviteCollaboratorPage extends StatelessWidget {
           } else if (state is InviteEmailError) {
             showFailedSnackbar(context, state.message);
           } else if (state is InviteEmailSuccess) {
-            showSuccessSnackbar(context, state.message);
+            showSuccessAlertDialog(context, "Gửi lời mời", state.message, () {
+              Navigator.pop(context);
+            });
           }
         },
         child: BlocBuilder(

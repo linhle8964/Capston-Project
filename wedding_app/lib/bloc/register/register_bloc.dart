@@ -70,7 +70,8 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         _userWeddingRepository.createUserWedding(user);
       });
       yield RegisterState.success();
-    } catch (_) {
+    } catch (e) {
+      print("[ERROR]" + e);
       yield RegisterState.failure();
     }
   }

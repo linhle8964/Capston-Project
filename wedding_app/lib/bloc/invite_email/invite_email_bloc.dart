@@ -61,8 +61,11 @@ class InviteEmailBloc extends Bloc<InviteEmailEvent, InviteEmailState> {
         yield InviteEmailError(message: "Email không đúng");
       } else if (checkInviteEmail != null) {
         yield InviteEmailError(message: "Email này đã được mời");
-      } else if (userWedding.weddingId == weddingId) {
-        yield InviteEmailError(message: "Người dùng này đã có trong đám cưới");
+      } else if (userWedding != null) {
+        if (userWedding.weddingId == weddingId) {
+          yield InviteEmailError(
+              message: "Người dùng này đã có trong đám cưới");
+        }
       } else {
         InviteEmail inviteEmail = new InviteEmail(
             from: from,
@@ -79,7 +82,7 @@ class InviteEmailBloc extends Bloc<InviteEmailEvent, InviteEmailState> {
         yield InviteEmailSuccess(message: "Thành công");
       }
     } catch (e) {
-      print(e);
+      print("[ERROR]" + e);
       yield InviteEmailError(message: "Có lỗi xảy ra");
     }
   }
@@ -91,7 +94,7 @@ class InviteEmailBloc extends Bloc<InviteEmailEvent, InviteEmailState> {
     final smtpServer = gmail(username, password);
 
     final message = Message()
-      ..from = Address(username, 'Lê Linh')
+      ..from = Address(username, 'VWED')
       ..recipients.add(inviteEmail.to)
       ..subject = inviteEmail.title
       ..text = "Xin chào\nVWED xin kính chào"

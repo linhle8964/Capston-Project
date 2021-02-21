@@ -60,7 +60,7 @@ class UserWeddingBloc extends Bloc<UserWeddingEvent, UserWeddingState> {
           weddingId: null));
       yield UserWeddingSuccess("Thành công");
     } catch (e) {
-      print(e);
+      print("[ERROR]" + e);
       yield UserWeddingFailed("Có lỗi xảy ra");
     }
   }

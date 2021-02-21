@@ -49,7 +49,8 @@ class WeddingBloc extends Bloc<WeddingEvent, WeddingState> {
       final user = FirebaseAuth.instance.currentUser;
       await _weddingRepository.createWedding(event.wedding, user);
       yield Success("Tạo thành công");
-    } catch (_) {
+    } catch (e) {
+      print("[ERROR]" + e);
       yield Failed("Có lỗi xảy ra");
     }
   }
@@ -78,7 +79,7 @@ class WeddingBloc extends Bloc<WeddingEvent, WeddingState> {
       });
       yield Success("Xoá thành công thành công");
     } catch (e) {
-      print(e);
+      print("[ERROR]" + e);
       yield Failed("Có lỗi xảy ra");
     }
   }
