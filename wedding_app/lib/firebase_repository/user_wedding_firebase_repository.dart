@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:wedding_app/entity/user_wedding_entity.dart';
 import 'package:wedding_app/model/user_wedding.dart';
-import 'package:wedding_app/model/wedding.dart';
 import 'package:wedding_app/repository/user_wedding_repository.dart';
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -21,13 +20,6 @@ class FirebaseUserWeddingRepository extends UserWeddingRepository {
   Stream<UserWedding> getWeddingByUser(String userId) {
     return userWeddingCollection.doc(userId).snapshots().map((snapshot) =>
         UserWedding.fromEntity(UserWeddingEntity.fromSnapshot(snapshot)));
-  }
-
-  @override
-  Future<void> removeUserFromWedding(
-      String email, UserWedding userWedding) async {
-    // TODO: implement removeUserFromWedding
-    throw UnimplementedError();
   }
 
   @override
@@ -53,16 +45,10 @@ class FirebaseUserWeddingRepository extends UserWeddingRepository {
   }
 
   @override
-  Future<void> updateUserWedding(
-      User user, Wedding wedding, String userWeddingId, String role) {
-    return userWeddingCollection.doc(userWeddingId).set(new UserWedding(
-            user.email,
-            joinDate: DateTime.now(),
-            role: role,
-            userId: user.uid,
-            weddingId: wedding.id)
-        .toEntity()
-        .toDocument());
+  Future<void> updateUserWedding(UserWedding userWedding) {
+    return userWeddingCollection
+        .doc(userWedding.id)
+        .set(userWedding.toEntity().toDocument());
   }
 
   @override
@@ -112,6 +98,18 @@ class FirebaseUserWeddingRepository extends UserWeddingRepository {
           .map((doc) =>
               UserWedding.fromEntity(UserWeddingEntity.fromSnapshot(doc)))
           .toList();
+    });
+  }
+
+  @override
+  Future<void> deleteAllUserWeddingByWedding(String weddingId) {
+    return userWeddingCollection
+        .where("wedding_id", isEqualTo: weddingId)
+        .get()
+        .then((snapshots) {
+      for (DocumentSnapshot snapshot in snapshots.docs) {
+        snapshot.reference.update({"wedding_id": null, "role": null});
+      }
     });
   }
 }

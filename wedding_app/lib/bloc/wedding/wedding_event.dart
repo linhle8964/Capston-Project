@@ -1,6 +1,5 @@
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
-import 'package:wedding_app/model/user_wedding.dart';
 import 'package:wedding_app/model/wedding.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -24,9 +23,8 @@ class LoadWeddingByUser extends WeddingEvent {
 
 class CreateWedding extends WeddingEvent {
   final Wedding wedding;
-  final User user;
 
-  const CreateWedding(this.wedding, this.user);
+  const CreateWedding(this.wedding);
 
   @override
   List<Object> get props => [wedding];
@@ -48,16 +46,15 @@ class UpdateWedding extends WeddingEvent {
 }
 
 class DeleteWedding extends WeddingEvent {
-  final Wedding wedding;
-  final List<UserWedding> listUserWedding;
+  final String weddingId;
 
-  const DeleteWedding(this.wedding, this.listUserWedding);
-
-  @override
-  List<Object> get props => [wedding];
+  const DeleteWedding(this.weddingId);
 
   @override
-  String toString() => 'CreateWedding { wedding: $wedding }';
+  List<Object> get props => [weddingId];
+
+  @override
+  String toString() => 'DeleteWedding { wedding: $weddingId }';
 }
 
 class WeddingUpdated extends WeddingEvent {

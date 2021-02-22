@@ -10,12 +10,14 @@ class InviteEmailEntity extends Equatable {
   final String body;
   final String code;
   final DateTime date;
+  final String role;
 
   InviteEmailEntity(this.id, this.from, this.to, this.weddingId, this.title,
-      this.body, this.code, this.date);
+      this.body, this.code, this.date, this.role);
 
   @override
-  List<Object> get props => [id, from, to, weddingId, title, body, code, date];
+  List<Object> get props =>
+      [id, from, to, weddingId, title, body, code, date, role];
 
   Map<String, Object> toJson() {
     return {
@@ -27,6 +29,7 @@ class InviteEmailEntity extends Equatable {
       "body": body,
       "code": code,
       "date": date,
+      "role": role,
     };
   }
 
@@ -40,21 +43,24 @@ class InviteEmailEntity extends Equatable {
       json["body"] as String,
       json["code"] as String,
       (json["date"] as Timestamp).toDate(),
+      json["role"] as String,
     );
   }
 
   static InviteEmailEntity fromSnapshot(DocumentSnapshot snapshot) {
     return InviteEmailEntity(
-        snapshot.id,
-        snapshot.get("from"),
-        snapshot.get("to"),
-        snapshot.get("wedding_id"),
-        snapshot.get("title"),
-        snapshot.get("body"),
-        snapshot.get("code"),
-        snapshot.get("date") == null
-            ? null
-            : (snapshot.get("date") as Timestamp).toDate());
+      snapshot.id,
+      snapshot.get("from"),
+      snapshot.get("to"),
+      snapshot.get("wedding_id"),
+      snapshot.get("title"),
+      snapshot.get("body"),
+      snapshot.get("code"),
+      snapshot.get("date") == null
+          ? null
+          : (snapshot.get("date") as Timestamp).toDate(),
+      snapshot.get("role"),
+    );
   }
 
   Map<String, Object> toDocument() {
@@ -66,6 +72,7 @@ class InviteEmailEntity extends Equatable {
       "body": body,
       "code": code,
       "date": date,
+      "role": role,
     };
   }
 }

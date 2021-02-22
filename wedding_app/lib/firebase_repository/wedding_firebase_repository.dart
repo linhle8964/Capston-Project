@@ -45,12 +45,26 @@ class FirebaseWeddingRepository extends WeddingRepository {
   }
 
   @override
-  Future<void> deleteWedding(
-      Wedding wedding, List<UserWedding> listUserWedding) {
-    for (UserWedding uw in listUserWedding) {
-      userWeddingCollection.doc(uw.userId).delete();
-    }
-    return weddingCollection.doc(wedding.id).delete();
+  Future<void> deleteWedding(String weddingId) {
+    return weddingCollection.doc(weddingId).delete().then((value) {
+      deleteNestedCollection(weddingId, "budget");
+      deleteNestedCollection(weddingId, "task");
+      deleteNestedCollection(weddingId, "guest");
+      deleteNestedCollection(weddingId, "invitiation_card");
+    });
+  }
+
+  void deleteNestedCollection(String weddingId, String collection) {
+    final nestedCollection =
+        weddingCollection.doc(weddingId).collection(collection);
+    nestedCollection.get().then((value) {
+      value.docs.forEach((element) {
+        nestedCollection
+            .doc(element.id)
+            .delete()
+            .then((value) => print("Success"));
+      });
+    });
   }
 
   @override

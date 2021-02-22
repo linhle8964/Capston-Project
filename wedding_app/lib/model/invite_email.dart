@@ -9,6 +9,7 @@ class InviteEmail {
   final String body;
   final String code;
   final DateTime date;
+  final String role;
 
   InviteEmail(
       {String id,
@@ -18,7 +19,8 @@ class InviteEmail {
       String title,
       String body,
       String code,
-      DateTime date})
+      DateTime date,
+      String role})
       : this.id = id,
         this.from = from,
         this.to = to,
@@ -26,7 +28,8 @@ class InviteEmail {
         this.title = title,
         this.body = body,
         this.code = code,
-        this.date = date;
+        this.date = date,
+        this.role = role;
 
   static InviteEmail fromEntity(InviteEmailEntity entity) {
     return InviteEmail(
@@ -37,10 +40,12 @@ class InviteEmail {
         title: entity.title,
         body: entity.body,
         code: entity.code,
-        date: entity.date);
+        date: entity.date,
+        role: entity.role);
   }
 
   InviteEmailEntity toEntity() {
-    return InviteEmailEntity(id, from, to, weddingId, title, body, code, date);
+    return InviteEmailEntity(
+        id, from, to, weddingId, title, body, code, date, role);
   }
 }
