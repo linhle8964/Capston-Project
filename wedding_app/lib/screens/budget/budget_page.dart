@@ -15,21 +15,22 @@ class BudgetList extends StatefulWidget {
 
 class _BudgetListState extends State<BudgetList> {
   bool isSearching = false;
-
+  List<Category> _categorys = [];
+  List<Budget> _budgets = [];
+@override
+  void initState() {
+  BlocProvider.of<BudgetBloc>(context);
+  BlocProvider.of<CateBloc>(context).add(LoadTodos());
+  _budgets=[];
+  _categorys=[];
+}
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<CateBloc>(context).add(LoadTodos());
-    // BlocProvider.of<BudgetBloc>(context).add(LoadBudgetbyCateId("",""));
-    final screenWidth = MediaQuery.of(context).size.width;
-    final List<Item> Items = [];
-    final it = Item("HoneyMoon", 10000);
-    final it1 = Item("Dinner", 10000);
-    final it2 = Item("Water", 10000);
-    Items.add(it);
-    Items.add(it1);
-    Items.add(it2);
-    List<Category> _categorys = [];
-    List<Budget> _budgets = [];
+
+
+
+
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.indigo,
@@ -153,7 +154,7 @@ class _BudgetListState extends State<BudgetList> {
                       itemCount: _categorys.length,
                       itemBuilder: (context, index) {
                         Category item = _categorys[index];
-                        print(index);
+
                         return Column(
                           children: <Widget>[
                             Container(
@@ -164,14 +165,19 @@ class _BudgetListState extends State<BudgetList> {
                             BlocBuilder(
                                 cubit: BlocProvider.of<BudgetBloc>(context),
                                 builder: (context, state) {
-                                  BlocProvider.of<BudgetBloc>(context).add(LoadBudgetbyCateId(item.id, "Ao61c5q6Y00xcOrKrYSe"));
-                                  if (state is BudgetLoaded) {
-                                    _budgets = state.budgets;
+                                  if (state is BudgetLoading){
+                                    BlocProvider.of<BudgetBloc>(context).add(LoadBudgetbyCateId(item.id, "Ao61c5q6Y00xcOrKrYSe",_budgets));
+
                                   }
+                                  if(state is BudgetLoaded){
+                                    print("test");
 
+_budgets=state.budgets;
+                                    print(_budgets.toString());
+                                  }
+                                  if(state is BudgetNotLoaded){
 
-                                  print(_budgets.toString());
-                                  print(item.id);
+                                  }
 
                                   return ListView.builder(
                                       shrinkWrap: true,

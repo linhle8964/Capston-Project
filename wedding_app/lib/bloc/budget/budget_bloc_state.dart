@@ -9,7 +9,9 @@ abstract class BudgetState extends Equatable {
   List<Object> get props => [];
 }
 
-class BudgetLoading extends BudgetState {}
+class BudgetLoading extends BudgetState {
+
+}
 
 class BudgetLoaded extends BudgetState {
   final List<Budget> budgets;
@@ -19,7 +21,7 @@ class BudgetLoaded extends BudgetState {
 
   @override
   String toString() {
-    return 'BudgetLoaded{budgets: $budgets}\n';
+    return '\nBudgetLoaded{budgets: $budgets}\n';
   }
 }
 

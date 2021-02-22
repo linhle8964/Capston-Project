@@ -60,7 +60,6 @@ class BudgetBloc extends Bloc<BudgetEvent, BudgetState> {
     }
   }
   Stream<BudgetState> _mapGetBudgetByCateIdToState(LoadBudgetbyCateId event) async* {
-    _streamSubscription?.cancel();
     _streamSubscription = _budgetRepository.getBudgetByCateId(event.weddingId, event.cateId).listen(
           (budgets) => add(BudgetUpdated(budgets)),
     );

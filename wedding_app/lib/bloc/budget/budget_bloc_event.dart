@@ -14,15 +14,15 @@ class LoadBudget extends BudgetEvent {}
 class LoadBudgetbyCateId extends BudgetEvent {
   final String cateId;
   final String weddingId;
-  const LoadBudgetbyCateId(this.cateId,this.weddingId);
-
+final List<Budget> budgets;
+  const LoadBudgetbyCateId(this.cateId,this.weddingId,this.budgets);
+  @override
+  List<Object> get props => [budgets];
   @override
   String toString() {
     return 'LoadBudgetbyCateId{cateId: $cateId, weddingId: $weddingId}';
   }
 
-  @override
-  List<Object> get props => [];
 }
 
 class CreateBudget extends BudgetEvent {
