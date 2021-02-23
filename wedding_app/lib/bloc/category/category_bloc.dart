@@ -1,43 +1,41 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:wedding_app/model/category_model.dart';
+import 'package:wedding_app/bloc/category/bloc.dart';
 import 'package:wedding_app/repository/category_repository.dart';
-import 'bloc.dart';
 
+class CateBloc extends Bloc<TodosEvent, TodosState> {
+  final CategoryRepository _todosRepository;
+  StreamSubscription _todosSubscription;
 
-class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
-  final CategoryRepository categoryRepository;
-
-  CategoryBloc({@required this.categoryRepository}) : super(CategoryLoadSuccess());
+  CateBloc({@required CategoryRepository todosRepository})
+      : assert(todosRepository != null),
+        _todosRepository = todosRepository,
+        super(TodosLoading());
 
   @override
-  Stream<CategoryState> mapEventToState(
-    CategoryEvent event,
-  ) async* {
-    if(event is CategoryLoadedSuccess){
-      yield* _mapCategoryLoadedSuccessToState();
+  Stream<TodosState> mapEventToState(TodosEvent event) async* {
+    if (event is LoadTodos) {
+      yield* _mapLoadTodosToState();
+    } else if (event is TodosUpdated) {
+      yield* _mapTodosUpdateToState(event);
     }
   }
 
-  Stream<CategoryState> _mapCategoryLoadedSuccessToState() async* {
-    try {
-      final categories = await this.categoryRepository.getCategories();
-      List<Category> categoriesList = [];
-      categories.listen((listOfCategories) {
-        for (Category cate in listOfCategories) {
-          categoriesList.add(cate);
-          print(cate.name.toString());
-        }
-      });
-      yield CategoryLoadSuccess(categoriesList);
-    } catch (_) {
-      yield CategoryLoadFailure();
-    }
+  Stream<TodosState> _mapLoadTodosToState() async* {
+    _todosSubscription?.cancel();
+    _todosSubscription = _todosRepository.GetallCategory().listen(
+          (cates) => add(TodosUpdated(cates)),
+    );
+  }
+
+  Stream<TodosState> _mapTodosUpdateToState(TodosUpdated event) async* {
+    yield TodosLoaded(event.cates);
   }
 
   @override
   Future<void> close() {
-     super.close();
+    _todosSubscription?.cancel();
+    return super.close();
   }
 }

@@ -11,53 +11,56 @@ class ChecklistBloc extends Bloc<TasksEvent, TaskState> {
 
   ChecklistBloc({@required TaskRepository taskRepository}) : assert(taskRepository != null),
         _taskRepository = taskRepository,
-        super(TasksLoadInProgress());
+        super(TasksLoading());
 
   @override
   Stream<TaskState> mapEventToState(
     TasksEvent event,
   ) async* {
-    if(event is TasksLoadedSuccess){
-      yield* _mapTasksLoadedSuccessToState();
-    }else if(event is TaskAdded){
+    if(event is LoadSuccess){
+      yield* _mapTasksLoadedSuccessToState(event);
+    }else if(event is AddTask){
       yield* _mapTaskAddedToState(event);
-    }else if(event is TaskUpdated){
+    }else if(event is UpdateTask){
       yield* _mapTaskUpdatedToState(event);
-    }else if(event is TaskDeleted){
+    }else if(event is Update2Task){
+      yield* _mapTaskUpdated2ToState(event);
+    }else if(event is DeleteTask){
       yield* _mapTaskDeletedToState(event);
-    }else if(event is ClearCompleted){
-      yield* _mapClearCompletedToState();
     }else if(event is ToggleAll){
-      yield* _mapToggleAllToState();
+      yield* _mapToggleAllToState(event);
     }
   }
 
-  Stream<TaskState> _mapTasksLoadedSuccessToState() async* {
-
+  Stream<TaskState> _mapTasksLoadedSuccessToState(LoadSuccess event) async* {
+    _taskSubscription?.cancel();
+    _taskSubscription = _taskRepository.getTasks().listen(
+          (tasks) => add(ToggleAll(tasks)),
+    );
   }
 
-  Stream<TaskState> _mapTaskAddedToState(TaskAdded event) async* {
-
+  Stream<TaskState> _mapToggleAllToState(ToggleAll event) async* {
+    yield TasksLoaded(event.tasks);
   }
 
-  Stream<TaskState> _mapTaskUpdatedToState(TaskUpdated event) async* {
-
+  Stream<TaskState> _mapTaskAddedToState(AddTask event) async* {
+    _taskRepository.addNewTask(event.task);
+    yield TaskAdded();
   }
 
-  Stream<TaskState> _mapTaskDeletedToState(TaskDeleted event) async* {
-
+  Stream<TaskState> _mapTaskUpdatedToState(UpdateTask event) async* {
+    _taskRepository.updateTask(event.task);
+    yield TaskUpdated();
   }
 
-  Stream<TaskState> _mapToggleAllToState() async* {
-
+  Stream<TaskState> _mapTaskUpdated2ToState(Update2Task event) async* {
+    _taskRepository.updateTask(event.task);
+    yield TaskUpdated2();
   }
 
-  Stream<TaskState> _mapClearCompletedToState() async* {
-
-  }
-
-  Future _saveTasks(List<Task> tasks) {
-    return null;
+  Stream<TaskState> _mapTaskDeletedToState(DeleteTask event) async* {
+    _taskRepository.deleteTask(event.task);
+    yield TaskDeleted();
   }
 
   @override

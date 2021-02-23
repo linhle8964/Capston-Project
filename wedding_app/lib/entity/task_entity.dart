@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:intl/intl.dart';
 
 class TaskEntity extends Equatable {
   final String id;
@@ -7,6 +8,7 @@ class TaskEntity extends Equatable {
   final DateTime dueDate;
   final bool status;
   final String note;
+  final String category;
 
 
   @override
@@ -16,6 +18,7 @@ class TaskEntity extends Equatable {
     dueDate,
     status,
     note,
+    category,
   ];
 
   const TaskEntity(
@@ -24,11 +27,12 @@ class TaskEntity extends Equatable {
      this.dueDate,
      this.status,
      this.note,
+     this.category,
   );
 
   @override
   String toString() {
-    return 'TaskEntity{id: $id, name: $name, dueDate: $dueDate, status: $status, note: $note}';
+    return 'TaskEntity{id: $id, name: $name, dueDate: $dueDate, status: $status, note: $note, category: $category}';
   }
 
 
@@ -40,6 +44,7 @@ class TaskEntity extends Equatable {
       "due_date": dueDate,
       "status": status,
       "note": note,
+      "category": category,
     };
   }
 
@@ -50,16 +55,20 @@ class TaskEntity extends Equatable {
       json["due_date"] as DateTime,
       json["status"] as bool,
       json["note"] as String,
+      json["category"] as String,
     );
   }
 
   static TaskEntity fromSnapshot(DocumentSnapshot snapshot) {
+    Timestamp timestamp = snapshot.get("due_date");
+    DateTime tempDate = timestamp.toDate();
     return TaskEntity(
       snapshot.id,
       snapshot.get("name"),
-      snapshot.get("due_date"),
+      tempDate,
       snapshot.get("status"),
       snapshot.get("note"),
+      snapshot.get("category"),
     );
   }
 
@@ -69,6 +78,7 @@ class TaskEntity extends Equatable {
       "due_date": dueDate,
       "status": status,
       "note": note,
+      "category": category,
     };
   }
 }

@@ -11,18 +11,27 @@ abstract class TaskState extends Equatable {
   List<Object> get props => [];
 }
 
-class TasksLoadInProgress extends TaskState {}
-class TasksLoadSuccess extends TaskState {
-  final List<Task> tasks;
+class TasksLoading extends TaskState {}
 
-  TasksLoadSuccess([this.tasks = const []]);
+class TasksLoaded extends TaskState {
+  final List<Task> tasks;
+  TasksLoaded(this.tasks);
 
   @override
   List<Object> get props => [tasks];
 
   @override
   String toString() {
-    return 'TasksLoadSuccess{tasks: $tasks}';
+    return 'TasksLoaded{tasks: $tasks}';
   }
 }
 class TasksLoadFailure extends TaskState {}
+
+class TaskDeleted extends TaskState {}
+
+class TaskAdded extends TaskState {}
+
+class TaskUpdated extends TaskState {}
+
+class TaskUpdated2 extends TaskState {}
+

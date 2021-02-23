@@ -10,12 +10,12 @@ abstract class TasksEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class TasksLoadedSuccess extends TasksEvent{}
+class LoadSuccess extends TasksEvent{}
 
-class TaskAdded extends TasksEvent {
+class AddTask extends TasksEvent {
   final Task task;
 
-  const TaskAdded(this.task);
+  const AddTask(this.task);
 
   @override
   List<Object> get props => [task];
@@ -26,10 +26,10 @@ class TaskAdded extends TasksEvent {
   }
 }
 
-class TaskUpdated extends TasksEvent {
+class UpdateTask extends TasksEvent {
   final Task task;
 
-  const TaskUpdated(this.task);
+  const UpdateTask(this.task);
 
   @override
   List<Object> get props => [task];
@@ -40,10 +40,24 @@ class TaskUpdated extends TasksEvent {
   }
 }
 
-class TaskDeleted extends TasksEvent {
+class Update2Task extends TasksEvent {
   final Task task;
 
-  const TaskDeleted(this.task);
+  const Update2Task(this.task);
+
+  @override
+  List<Object> get props => [task];
+
+  @override
+  String toString() {
+    return 'TaskUpdated{task: $task}';
+  }
+}
+
+class DeleteTask extends TasksEvent {
+  final Task task;
+
+  const DeleteTask(this.task);
 
   @override
   List<Object> get props => [task];
@@ -54,7 +68,17 @@ class TaskDeleted extends TasksEvent {
   }
 }
 
-class ClearCompleted extends TasksEvent {}
+class ToggleAll extends TasksEvent {
+  final List<Task> tasks;
 
-class ToggleAll extends TasksEvent {}
+  const ToggleAll(this.tasks);
 
+  @override
+  List<Object> get props => [tasks];
+}
+
+class DuedateCome extends TasksEvent {
+  final DateTime dueDate;
+
+  const DuedateCome(this.dueDate);
+}

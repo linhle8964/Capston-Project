@@ -12,8 +12,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:wedding_app/screens/register/register_page.dart';
 import 'package:wedding_app/screens/splash_page.dart';
 import 'package:wedding_app/widgets/loading_indicator.dart';
-
 import 'bloc/authentication/bloc.dart';
+import 'bloc/category/category_bloc.dart';
 import 'bloc/login/bloc.dart';
 import 'bloc/register/bloc.dart';
 import 'bloc/wedding/bloc.dart';
@@ -21,6 +21,7 @@ import 'bloc/invite_email/bloc.dart';
 import 'bloc/create_wedding/bloc.dart';
 import 'bloc/user_wedding/bloc.dart';
 import 'bloc/simple_bloc_observer.dart';
+import 'firebase_repository/category_firebase_repository.dart';
 import 'firebase_repository/user_firebase_repository.dart';
 
 void main() async {

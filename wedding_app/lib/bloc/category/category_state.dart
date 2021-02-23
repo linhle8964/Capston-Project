@@ -1,31 +1,25 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:wedding_app/model/category_model.dart';
+import 'package:wedding_app/model/category.dart';
 
-@immutable
-abstract class CategoryState extends Equatable {
-
-  CategoryState();
+abstract class TodosState extends Equatable {
+  const TodosState();
 
   @override
   List<Object> get props => [];
 }
 
-class CategoryInProgress extends CategoryState {}
+class TodosLoading extends TodosState {}
 
-class CategoryLoadSuccess extends CategoryState {
-  final List<Category> categories;
+class TodosLoaded extends TodosState {
+  final List<Category> cates;
 
-
-  CategoryLoadSuccess([this.categories = const []]);
-
-  @override
-  List<Object> get props => [categories];
+  const TodosLoaded([this.cates = const []]);
 
   @override
-  String toString() {
-    return 'CategoryLoadSuccess{tasks: $categories}';
-  }
+  List<Object> get props => [cates];
+
+  @override
+  String toString() => 'TodosLoaded { todos: $cates }';
 }
 
-class CategoryLoadFailure extends CategoryState {}
+class TodosNotLoaded extends TodosState {}

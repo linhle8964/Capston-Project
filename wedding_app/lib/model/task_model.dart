@@ -1,13 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:wedding_app/entity/task_entity.dart';
+import 'package:wedding_app/screens/budget/model/category.dart';
+import 'package:equatable/equatable.dart';
 
 @immutable
-class Task{
+class Task extends Equatable{
   final String id;
   final String name;
   final DateTime dueDate;
   final bool status;
   final String note;
+  final String category;
 
 //<editor-fold desc="Data Methods" defaultstate="collapsed">
 
@@ -17,6 +20,7 @@ class Task{
     @required this.dueDate,
     @required this.status,
     @required this.note,
+    @required this.category,
   });
 
   Task copyWith({
@@ -25,12 +29,15 @@ class Task{
     DateTime dueDate,
     bool status,
     String note,
+    String category,
   }) {
     if ((id == null || identical(id, this.id)) &&
         (name == null || identical(name, this.name)) &&
         (dueDate == null || identical(dueDate, this.dueDate)) &&
         (status == null || identical(status, this.status)) &&
-        (note == null || identical(note, this.note))) {
+        (note == null || identical(note, this.note)) &&
+        (category == null || identical(category, this.category))
+    ) {
       return this;
     }
 
@@ -40,12 +47,13 @@ class Task{
       dueDate: dueDate ?? this.dueDate,
       status: status ?? this.status,
       note: note ?? this.note,
+      category: category ?? this.category,
     );
   }
 
   @override
   String toString() {
-    return 'Task{id: $id, name: $name, dueDate: $dueDate, status: $status, note: $note}';
+    return 'Task{id: $id, name: $name, dueDate: $dueDate, status: $status, note: $note, category: $category}';
   }
 
   @override
@@ -57,7 +65,9 @@ class Task{
           name == other.name &&
           dueDate == other.dueDate &&
           status == other.status &&
-          note == other.note);
+          note == other.note &&
+          category == other.category
+      );
 
   @override
   int get hashCode =>
@@ -65,10 +75,11 @@ class Task{
       name.hashCode ^
       dueDate.hashCode ^
       status.hashCode ^
-      note.hashCode;
+      note.hashCode ^
+      category.hashCode ;
 
   TaskEntity toEntity() {
-    return TaskEntity(id, name, dueDate, status,note);
+    return TaskEntity(id, name, dueDate, status,note, category);
   }
 
   static Task fromEntity(TaskEntity entity) {
@@ -78,8 +89,12 @@ class Task{
       dueDate: entity.dueDate,
       status: entity.status,
       note: entity.note,
+      category: entity.category,
     );
   }
+
+  @override
+  List<Object> get props => [id,name,dueDate,status,note,category];
 
 
 
