@@ -12,7 +12,15 @@ abstract class BudgetState extends Equatable {
 class BudgetLoading extends BudgetState {
 
 }
+class GetBudget extends BudgetState{
+  final Budget budget;
 
+
+  const GetBudget(this.budget);
+  @override
+  List<Object> get props => [budget];
+
+}
 class BudgetLoaded extends BudgetState {
   final List<Budget> budgets;
   const BudgetLoaded([this.budgets = const []]);

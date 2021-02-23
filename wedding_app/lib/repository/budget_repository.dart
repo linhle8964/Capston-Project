@@ -5,9 +5,10 @@ import 'package:wedding_app/model/wedding.dart';
 abstract class BudgetRepository {
   Future<void> createBudget(String WeddingId, Budget budget);
 
-  Future<void> updateBudget(Wedding wedding, Budget budget);
+  Future<void> updateBudget(String weddingId, Budget budget);
 
   Stream<List<Budget>> getBudgetByCateId(String weddingId,String cateId);
 
-  Future<void> deleteBudget(Wedding wedding, Budget budget);
+  Future<void> deleteBudget(String weddingId, Budget budget);
+  Future<Budget> getBudgetById(String budgetId,String weddingId);
 }

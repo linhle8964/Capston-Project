@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,6 +11,9 @@ import 'package:wedding_app/model/category.dart';
 import 'package:wedding_app/widgets/loading_indicator.dart';
 
 class AddBudget extends StatefulWidget {
+  final bool isEditing;
+
+  const AddBudget({Key key, this.isEditing}) : super(key: key);
   @override
   _AddBudgetState createState() => _AddBudgetState();
 }
@@ -19,7 +24,7 @@ class AddBudget extends StatefulWidget {
 // }
 class _AddBudgetState extends State<AddBudget> {
   bool _visible = true;
-
+  bool get isEditing => widget.isEditing;
   Future<String> loadData() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     return preferences.getString("wedding_id");
@@ -30,19 +35,21 @@ class _AddBudgetState extends State<AddBudget> {
   Category holder;
   Category selectedCate;
   List<Category> _values2 = [];
+  String budgetId="";
+  String weddingId="";
+  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   Category initialCate = new Category("1G23wMGwdk1pnQWnT368", "other");
   TextEditingController budgetNameController = new TextEditingController();
   TextEditingController moneyController = new TextEditingController();
   TextEditingController payMoneyController = new TextEditingController();
   TextEditingController budgetController = new TextEditingController();
 
+
   @override
   void initState() {
     super.initState();
     _visible = false;
-
     _cateBloc = BlocProvider.of<CateBloc>(context);
-    loadData();
     print(loadData());
   }
 
@@ -50,6 +57,7 @@ class _AddBudgetState extends State<AddBudget> {
   Widget build(BuildContext context) {
     BlocProvider.of<CateBloc>(context).add(LoadTodos());
 
+    print(isEditing);
     MediaQueryData queryData;
     queryData = MediaQuery.of(context);
     TextEditingController budgetNameController = new TextEditingController();
@@ -64,8 +72,15 @@ class _AddBudgetState extends State<AddBudget> {
     }
 
     return BlocBuilder(
+
         cubit: BlocProvider.of<BudgetBloc>(context),
         builder: (context, state) {
+          BlocProvider.of<BudgetBloc>(context).add(GetBudgetById(
+              "uyTGNTC7GgW9mg2Z0nMi"
+              ,
+              "Ao61c5q6Y00xcOrKrYSe"
+          ));
+          print(ModalRoute.of(context).settings.name.toString());
           return Scaffold(
               appBar: AppBar(
                 backgroundColor: Colors.indigo,
@@ -83,7 +98,8 @@ class _AddBudgetState extends State<AddBudget> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(20.0),
-                      child: TextField(
+                      child: TextFormField(
+
                           controller: budgetNameController,
                           decoration: new InputDecoration(
                               labelText: 'Tên Quỹ',
@@ -104,7 +120,7 @@ class _AddBudgetState extends State<AddBudget> {
                             padding: EdgeInsets.only(
                                 left: 20, right: 20, bottom: 20),
                             width: 250.0,
-                            child: TextField(
+                            child: TextFormField(
                                 controller: moneyController,
                                 decoration: new InputDecoration(
                                     labelText: 'Số tiền',
@@ -156,7 +172,7 @@ class _AddBudgetState extends State<AddBudget> {
                     ),
                     Padding(
                       padding: EdgeInsets.only(left: 20, right: 20),
-                      child: TextField(
+                      child: TextFormField(
                           controller: payMoneyController,
                           decoration: new InputDecoration(
                               focusedBorder: OutlineInputBorder(
@@ -174,7 +190,7 @@ class _AddBudgetState extends State<AddBudget> {
                         child: Padding(
                           padding:
                               EdgeInsets.only(left: 20, right: 20, top: 20),
-                          child: TextField(
+                          child: TextFormField(
                               decoration: new InputDecoration(
                                   focusedBorder: OutlineInputBorder(
                                     borderSide: BorderSide(
@@ -247,7 +263,7 @@ class _AddBudgetState extends State<AddBudget> {
                     Container(
                       height: 200,
                       padding: const EdgeInsets.all(20.0),
-                      child: TextField(
+                      child: TextFormField(
                           maxLines: maxLines,
                           controller: budgetController,
                           decoration: new InputDecoration(
@@ -336,14 +352,25 @@ class _AddBudgetState extends State<AddBudget> {
                                   iconSize: 30,
                                   onPressed: () {
                                     getDropDownItem();
-                                    print(selectedCate.toString());
-                                    Budget budget = new Budget(
-                                        budgetNameController.text, holder.id,
-                                        double.parse(moneyController.text),
-                                        double.parse(payMoneyController.text),1);
-                                    BlocProvider.of<BudgetBloc>(context).add(
-                                        CreateBudget(
-                                            "Ao61c5q6Y00xcOrKrYSe", budget));
+                                    String route = "/UpdateBudget";
+                                    String route2 = "/AddBudget";
+                                    String getroute =
+                                        ModalRoute.of(context).settings.name;
+                                    // if (getroute.compareTo(route) != false) {
+                                    //
+                                    //
+                                    // } else if (getroute.compareTo(route2)!=false ) {
+                                      Budget budget = new Budget(
+                                          budgetNameController.text,
+                                          holder.id,
+                                          double.parse(moneyController.text),
+                                          double.parse(payMoneyController.text),
+                                          1);
+                                      BlocProvider.of<BudgetBloc>(context).add(
+                                          CreateBudget(
+                                              "Ao61c5q6Y00xcOrKrYSe", budget));
+
+
                                   },
                                 ),
                               ],

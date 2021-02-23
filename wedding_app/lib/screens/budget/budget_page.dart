@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:wedding_app/bloc/budget/bloc.dart';
 import 'package:wedding_app/bloc/category/bloc.dart';
@@ -5,32 +7,28 @@ import 'package:wedding_app/model/budget.dart';
 import 'package:wedding_app/model/category.dart';
 import 'package:wedding_app/screens/Budget/curveshape.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:wedding_app/screens/Budget/model/category.dart';
-import 'package:wedding_app/screens/Budget/model/item.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 class BudgetList extends StatefulWidget {
   @override
   _BudgetListState createState() => _BudgetListState();
 }
 
 class _BudgetListState extends State<BudgetList> {
+  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   bool isSearching = false;
   List<Category> _categorys = [];
   List<Budget> _budgets = [];
-@override
+
+  @override
   void initState() {
-  BlocProvider.of<BudgetBloc>(context);
-  BlocProvider.of<CateBloc>(context).add(LoadTodos());
-  _budgets=[];
-  _categorys=[];
-}
+    BlocProvider.of<BudgetBloc>(context);
+    BlocProvider.of<CateBloc>(context).add(LoadTodos());
+    _budgets = [];
+    _categorys = [];
+  }
+
   @override
   Widget build(BuildContext context) {
-
-
-
-
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.indigo,
@@ -165,51 +163,65 @@ class _BudgetListState extends State<BudgetList> {
                             BlocBuilder(
                                 cubit: BlocProvider.of<BudgetBloc>(context),
                                 builder: (context, state) {
-                                  if (state is BudgetLoading){
-                                    BlocProvider.of<BudgetBloc>(context).add(LoadBudgetbyCateId(item.id, "Ao61c5q6Y00xcOrKrYSe",_budgets));
-
-                                  }
-                                  if(state is BudgetLoaded){
-                                    print("test");
-
-_budgets=state.budgets;
+                                  if (state is BudgetLoading) {
+                                    BlocProvider.of<BudgetBloc>(context).add(
+                                        LoadBudgetbyCateId(item.id,
+                                            "Ao61c5q6Y00xcOrKrYSe", _budgets));
                                     print(_budgets.toString());
                                   }
-                                  if(state is BudgetNotLoaded){
+                                  if (state is BudgetLoaded) {
+                                    print("test");
+
+                                    _budgets = state.budgets;
 
                                   }
+                                  if (state is BudgetNotLoaded) {}
 
                                   return ListView.builder(
                                       shrinkWrap: true,
                                       itemCount: _budgets.length,
                                       itemBuilder: (context, i) {
                                         Budget low = _budgets[i];
-                                        return Card(
-                                            child: Container(
-                                          height: 60,
-                                          padding: EdgeInsets.only(
-                                              left: 15, right: 15),
-                                          child: Row(
-                                            children: [
-                                              Container(
-                                                child: Text(low.BudgetName,
-                                                    style: TextStyle(
-                                                        fontSize: 20,
-                                                        fontWeight:
-                                                            FontWeight.bold)),
+
+                                        return InkWell(
+                                            onTap: (){
+                                              Future<void> _updateBudget() async {
+                                                final SharedPreferences prefs = await _prefs;
+                                                prefs.setString("budgetId",low.id );
+                                              }
+                                              _updateBudget();
+                                              Navigator.pushNamed(context,"/UpdateBudget");
+                                            },
+                                            child: Card(
+                                              child: Container(
+                                                height: 60,
+                                                padding: EdgeInsets.only(
+                                                    left: 15, right: 15),
+                                                child: Row(
+                                                  children: [
+                                                    Container(
+
+                                                      child: Text(low.BudgetName,
+                                                          style: TextStyle(
+                                                              fontSize: 20,
+                                                              fontWeight:
+                                                              FontWeight.bold)),
+                                                    ),
+                                                    Flexible(
+                                                        fit: FlexFit.tight,
+                                                        child: SizedBox()),
+                                                    Text(
+                                                      low.money.toString() + "₫",
+                                                      style: TextStyle(
+                                                          fontSize: 20,
+                                                          fontWeight:
+                                                          FontWeight.bold),
+                                                    )
+                                                  ],
+                                                ),
                                               ),
-                                              Flexible(
-                                                  fit: FlexFit.tight,
-                                                  child: SizedBox()),
-                                              Text(
-                                                low.money.toString() + "₫",
-                                                style: TextStyle(
-                                                    fontSize: 20,
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              )
-                                            ],
-                                          ),
+                                          //
+
                                         ));
                                       });
                                 }),
@@ -240,4 +252,5 @@ _budgets=state.budgets;
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
+
 }

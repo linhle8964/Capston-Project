@@ -91,6 +91,27 @@ class MyApp extends StatelessWidget {
                 child:BudgetList(),
               );
             },
+            '/UpdateBudget': (context) {
+              return MultiBlocProvider(
+                providers: [
+                  BlocProvider(
+                    create: (BuildContext context) =>
+                        BudgetBloc(
+                          budgetRepository: FirebaseBudgetRepository(),
+                        ),
+
+                  ),
+                  BlocProvider(
+                    create: (BuildContext context) =>
+                        CateBloc(
+                          todosRepository: FirebaseCategoryRepository(),
+                        ),
+
+                  )
+                ],
+                child:AddBudget( isEditing: true),
+              );
+            },
             '/AddBudget': (context) {
               return MultiBlocProvider(
                 providers: [
@@ -109,7 +130,7 @@ class MyApp extends StatelessWidget {
               )
 
               ],
-                child: AddBudget(),
+                child: AddBudget(isEditing: false),
               );
             },
             // When navigating to the "/" route, build the FirstScreen widget.
@@ -156,7 +177,7 @@ class MyApp extends StatelessWidget {
                             create: (context) => CreateWeddingBloc(),
                           ),
                         ],
-                        child: CreateWeddingPage(user: state.user),
+                        child: CreateWeddingPage(),
                       );
                     }
                     return LoadingIndicator();

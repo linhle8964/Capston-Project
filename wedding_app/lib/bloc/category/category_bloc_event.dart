@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:wedding_app/model/category.dart';
-import 'package:wedding_app/screens/budget/model/category.dart';
+
 
 abstract class TodosEvent extends Equatable {
   const TodosEvent();
@@ -24,7 +24,7 @@ class AddTodo extends TodosEvent {
 }
 
 class UpdateTodo extends TodosEvent {
-  final category updatedTodo;
+  final Category updatedTodo;
 
   const UpdateTodo(this.updatedTodo);
 

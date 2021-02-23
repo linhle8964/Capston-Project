@@ -19,7 +19,7 @@ class FirebaseBudgetRepository implements BudgetRepository{
   }
 
   @override
-  Future<void> deleteBudget(Wedding wedding, Budget budget) {
+  Future<void> deleteBudget(String weddingId, Budget budget) {
 
   }
 
@@ -43,8 +43,16 @@ class FirebaseBudgetRepository implements BudgetRepository{
   }
 
   @override
-  Future<void> updateBudget(Wedding wedding, Budget budget) {
+  Future<void> updateBudget(String weddingId, Budget budget) {
+    final budgetCollection = FirebaseFirestore.instance.collection('wedding').doc(weddingId).collection("budget");
+    return budgetCollection.doc(budget.id).update(budget.toEntity().toDocument());
+  }
 
+  @override
+  Future<Budget> getBudgetById(String budgetId, String weddingId) async {
+    final budgetCollection = FirebaseFirestore.instance.collection('wedding').doc(weddingId).collection("budget");
+    DocumentSnapshot snapshot = await budgetCollection.doc(budgetId).get();
+    return Budget.fromEntity(BudgetEntity.fromSnapshot(snapshot));
   }
 
 }

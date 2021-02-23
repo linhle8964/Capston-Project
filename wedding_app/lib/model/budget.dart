@@ -8,10 +8,28 @@ class Budget {
   final double payMoney;
   final int status;
 
-  Budget(this.BudgetName, this.CateID,this.money,this.payMoney, this.status,
+  Budget(this.BudgetName, this.CateID, this.money, this.payMoney, this.status,
       {String id})
       : this.id = id;
 
+  Budget.fromMap(Map<dynamic, dynamic> map)
+      : this.id = map['id'],
+        this.BudgetName = map['BudgetName'],
+        this.CateID = map['CateID'],
+        this.money = map['money'],
+        this.payMoney = map['payMoney'],
+        this.status = map['status'];
+
+  Map toMap() {
+    return {
+      'id': this.id,
+      'BudgetName': this.BudgetName,
+      'CateID': this.CateID,
+      'money': this.money,
+      'payMoney': this.payMoney,
+      'status': this.status,
+    };
+  }
 
   Budget copyWith(
       {String id,
@@ -20,8 +38,9 @@ class Budget {
       double money,
       double payMoney,
       int status}) {
-    return Budget(BudgetName ?? this.BudgetName, CateID ?? this.CateID,money?? this.money,payMoney??this.payMoney,
-        status ?? this.status);
+    return Budget(BudgetName ?? this.BudgetName, CateID ?? this.CateID,
+        money ?? this.money, payMoney ?? this.payMoney, status ?? this.status,
+        id: id ?? this.id);
   }
 
   @override
@@ -43,6 +62,8 @@ class Budget {
       o.status == status;
 
   static Budget fromEntity(BudgetEntity entity) {
-    return Budget(entity.BudgetName, entity.CateID,entity.money,entity.payMoney,entity.status);
+    return Budget(entity.BudgetName, entity.CateID, entity.money,
+        entity.payMoney, entity.status,
+        id: entity.id);
   }
 }
