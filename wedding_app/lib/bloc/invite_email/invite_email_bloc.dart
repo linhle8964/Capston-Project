@@ -57,14 +57,15 @@ class InviteEmailBloc extends Bloc<InviteEmailEvent, InviteEmailState> {
 
       UserWedding userWedding =
           await _userWeddingRepository.getUserWeddingByEmail(to);
-      if (!Validation.isEmailValid(event.email)) {
-        yield InviteEmailError(message: "Email không đúng");
-      } else if (checkInviteEmail != null) {
-        yield InviteEmailError(message: "Email này đã được mời");
-      } else if (userWedding != null) {
-        if (userWedding.weddingId == weddingId) {
-          yield InviteEmailError(
-              message: "Người dùng này đã có trong đám cưới");
+
+      bool valid =
+          Validation.isEmailValid(event.email) && (checkInviteEmail == null);
+
+      if (!valid) {
+        if (!Validation.isEmailValid(event.email)) {
+          yield InviteEmailError(message: "Email không đúng");
+        } else if (checkInviteEmail != null) {
+          yield InviteEmailError(message: "Email này đã được mời");
         }
       } else {
         InviteEmail inviteEmail = new InviteEmail(
@@ -76,10 +77,26 @@ class InviteEmailBloc extends Bloc<InviteEmailEvent, InviteEmailState> {
             title: title,
             body: body,
             role: role);
-        await _sendEmail(inviteEmail).then(
-            (value) => _inviteEmailRepository.createInviteEmail(inviteEmail));
+        if (userWedding != null) {
+          // người dùng đã có tài khoản
+          if (userWedding.weddingId == weddingId) {
+            // đã có đám cưới
+            yield InviteEmailError(
+                message: "Người dùng này đã có trong đám cưới");
+          } else {
+            // chưa có đám cưới
+            await _sendEmail(inviteEmail).then((value) =>
+                _inviteEmailRepository.createInviteEmail(inviteEmail));
 
-        yield InviteEmailSuccess(message: "Thành công");
+            yield InviteEmailSuccess(message: "Thành công");
+          }
+        } else {
+          // người dùng chưa có tài khoản
+          await _sendEmail(inviteEmail).then(
+              (value) => _inviteEmailRepository.createInviteEmail(inviteEmail));
+
+          yield InviteEmailSuccess(message: "Thành công");
+        }
       }
     } catch (e) {
       print("[ERROR]" + e);
