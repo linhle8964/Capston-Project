@@ -12,6 +12,8 @@ abstract class BudgetState extends Equatable {
 class BudgetLoading extends BudgetState {
 
 }
+class BudgetUpdate extends BudgetState {
+}
 class GetBudget extends BudgetState{
   final Budget budget;
 

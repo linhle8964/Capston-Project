@@ -19,8 +19,9 @@ class FirebaseBudgetRepository implements BudgetRepository{
   }
 
   @override
-  Future<void> deleteBudget(String weddingId, Budget budget) {
-
+  Future<void> deleteBudget(String weddingId, String budgetId) {
+    final budgetCollection = FirebaseFirestore.instance.collection('wedding').doc(weddingId).collection("budget");
+    return budgetCollection.doc(budgetId).delete();
   }
 
   @override

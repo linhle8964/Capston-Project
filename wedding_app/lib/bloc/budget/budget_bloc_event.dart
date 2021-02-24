@@ -63,8 +63,12 @@ class UpdateBudget extends BudgetEvent {
 }
 
 class DeleteBudget extends BudgetEvent {
+ final String weddingId;
+ final String budgetId;
 
+ DeleteBudget(this.weddingId, this.budgetId);
 }
+
 
 class BudgetUpdated extends BudgetEvent {
   final List<Budget> budgets;

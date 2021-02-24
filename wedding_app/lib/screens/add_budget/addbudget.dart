@@ -13,7 +13,10 @@ import 'package:wedding_app/widgets/loading_indicator.dart';
 class AddBudget extends StatefulWidget {
   final bool isEditing;
   final Budget budget;
-  const AddBudget({Key key, @required this.isEditing,this.budget}) : super(key: key);
+
+  const AddBudget({Key key, @required this.isEditing, this.budget})
+      : super(key: key);
+
   @override
   _AddBudgetState createState() => _AddBudgetState();
 }
@@ -24,7 +27,9 @@ class AddBudget extends StatefulWidget {
 // }
 class _AddBudgetState extends State<AddBudget> {
   bool _visible = true;
+
   bool get isEditing => widget.isEditing;
+
   Future<String> loadData() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     return preferences.getString("wedding_id");
@@ -35,8 +40,8 @@ class _AddBudgetState extends State<AddBudget> {
   Category holder;
   Category selectedCate;
   List<Category> _values2 = [];
-  String budgetId="";
-  String weddingId="";
+  String budgetId = "";
+  String weddingId = "";
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   Category initialCate = new Category("1G23wMGwdk1pnQWnT368", "other");
   TextEditingController budgetNameController = new TextEditingController();
@@ -44,13 +49,12 @@ class _AddBudgetState extends State<AddBudget> {
   TextEditingController payMoneyController = new TextEditingController();
   TextEditingController budgetController = new TextEditingController();
 
-
   @override
   void initState() {
     super.initState();
     _visible = false;
     _cateBloc = BlocProvider.of<CateBloc>(context);
-    print(loadData());
+
   }
 
   @override
@@ -61,9 +65,12 @@ class _AddBudgetState extends State<AddBudget> {
     MediaQueryData queryData;
     queryData = MediaQuery.of(context);
     TextEditingController budgetNameController = new TextEditingController();
-    budgetNameController.text=budget
+    budgetNameController.text = isEditing ? widget.budget.BudgetName : "";
     TextEditingController moneyController = new TextEditingController();
+    moneyController.text = isEditing ? widget.budget.money.toString() : "";
     TextEditingController payMoneyController = new TextEditingController();
+    payMoneyController.text =
+        isEditing ? widget.budget.payMoney.toString() : "";
     TextEditingController budgetController = new TextEditingController();
     int maxLines = 3;
     void getDropDownItem() {
@@ -73,14 +80,8 @@ class _AddBudgetState extends State<AddBudget> {
     }
 
     return BlocBuilder(
-
         cubit: BlocProvider.of<BudgetBloc>(context),
         builder: (context, state) {
-          BlocProvider.of<BudgetBloc>(context).add(GetBudgetById(
-              "uyTGNTC7GgW9mg2Z0nMi"
-              ,
-              "Ao61c5q6Y00xcOrKrYSe"
-          ));
           print(ModalRoute.of(context).settings.name.toString());
           return Scaffold(
               appBar: AppBar(
@@ -100,7 +101,6 @@ class _AddBudgetState extends State<AddBudget> {
                     Padding(
                       padding: const EdgeInsets.all(20.0),
                       child: TextFormField(
-
                           controller: budgetNameController,
                           decoration: new InputDecoration(
                               labelText: 'Tên Quỹ',
@@ -209,7 +209,6 @@ class _AddBudgetState extends State<AddBudget> {
                         onPressed: () {
                           setState(() {
                             _visible = !_visible;
-                            print(_visible);
                           });
                         },
                         child: RichText(
@@ -292,7 +291,12 @@ class _AddBudgetState extends State<AddBudget> {
                               icon: Icon(Icons.delete_forever_outlined),
                               color: Colors.white,
                               iconSize: 40,
-                              onPressed: () {},
+                              onPressed: () {
+                                BlocProvider.of<BudgetBloc>(context)..add(DeleteBudget("Ao61c5q6Y00xcOrKrYSe", widget.budget.id));
+                                
+                                Navigator.pushNamed(
+                                    context, "/BudgetList");
+                              },
                             ),
                           ),
                         ],
@@ -353,25 +357,35 @@ class _AddBudgetState extends State<AddBudget> {
                                   iconSize: 30,
                                   onPressed: () {
                                     getDropDownItem();
-                                    String route = "/UpdateBudget";
-                                    String route2 = "/AddBudget";
-                                    String getroute =
-                                        ModalRoute.of(context).settings.name;
-                                    // if (getroute.compareTo(route) != false) {
-                                    //
-                                    //
-                                    // } else if (getroute.compareTo(route2)!=false ) {
+                                    if (isEditing) {
                                       Budget budget = new Budget(
                                           budgetNameController.text,
                                           holder.id,
                                           double.parse(moneyController.text),
                                           double.parse(payMoneyController.text),
-                                          1);
-                                      BlocProvider.of<BudgetBloc>(context).add(
-                                          CreateBudget(
-                                              "Ao61c5q6Y00xcOrKrYSe", budget));
+                                          1,
+                                          id: widget.budget.id);
+                                      print(budget.toString());
+                                      BlocProvider.of<BudgetBloc>(context)
+                                        ..add(UpdateBudget(
+                                            budget, "Ao61c5q6Y00xcOrKrYSe"));
+                                      Navigator.pushNamed(
+                                          context, "/BudgetList");
+                                    }
+
+                                      else if (isEditing!=true) {
+                                        Budget budget = new Budget(
+                                            budgetNameController.text,
+                                            holder.id,
+                                            double.parse(moneyController.text),
+                                            double.parse(payMoneyController.text),
+                                            1);
+                                        BlocProvider.of<BudgetBloc>(context).add(
+                                            CreateBudget(
+                                                "Ao61c5q6Y00xcOrKrYSe", budget));
 
 
+                                    }
                                   },
                                 ),
                               ],

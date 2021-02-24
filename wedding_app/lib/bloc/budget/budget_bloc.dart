@@ -67,10 +67,11 @@ class BudgetBloc extends Bloc<BudgetEvent, BudgetState> {
   }
   Stream<BudgetState> _mapUpdateWeddingToState(UpdateBudget event) async* {
     _budgetRepository.updateBudget(event.weddingId,event.updatedBudget);
+    yield BudgetUpdate();
   }
 
   Stream<BudgetState> _mapDeleteWeddingToState(DeleteBudget event) async* {
-
+ _budgetRepository.deleteBudget(event.weddingId, event.budgetId);
   }
 
   Stream<BudgetState> _mapWeddingUpdatedToState(BudgetUpdated event) async* {
