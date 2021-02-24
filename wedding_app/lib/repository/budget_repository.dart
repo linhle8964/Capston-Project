@@ -10,5 +10,5 @@ abstract class BudgetRepository {
   Stream<List<Budget>> getBudgetByCateId(String weddingId,String cateId);
 
   Future<void> deleteBudget(String weddingId, Budget budget);
-  Future<Budget> getBudgetById(String budgetId,String weddingId);
+
 }

@@ -12,8 +12,8 @@ import 'package:wedding_app/widgets/loading_indicator.dart';
 
 class AddBudget extends StatefulWidget {
   final bool isEditing;
-
-  const AddBudget({Key key, this.isEditing}) : super(key: key);
+  final Budget budget;
+  const AddBudget({Key key, @required this.isEditing,this.budget}) : super(key: key);
   @override
   _AddBudgetState createState() => _AddBudgetState();
 }
@@ -61,6 +61,7 @@ class _AddBudgetState extends State<AddBudget> {
     MediaQueryData queryData;
     queryData = MediaQuery.of(context);
     TextEditingController budgetNameController = new TextEditingController();
+    budgetNameController.text=budget
     TextEditingController moneyController = new TextEditingController();
     TextEditingController payMoneyController = new TextEditingController();
     TextEditingController budgetController = new TextEditingController();

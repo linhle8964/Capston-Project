@@ -8,6 +8,7 @@ import 'package:wedding_app/model/category.dart';
 import 'package:wedding_app/screens/Budget/curveshape.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wedding_app/screens/add_budget/addbudget.dart';
 class BudgetList extends StatefulWidget {
   @override
   _BudgetListState createState() => _BudgetListState();
@@ -191,6 +192,7 @@ class _BudgetListState extends State<BudgetList> {
                                               }
                                               _updateBudget();
                                               Navigator.pushNamed(context,"/UpdateBudget");
+                                              Navigator.push(context,MaterialPageRoute(builder: (context)=>AddBudget(isEditing: true,budget: low,)));
                                             },
                                             child: Card(
                                               child: Container(

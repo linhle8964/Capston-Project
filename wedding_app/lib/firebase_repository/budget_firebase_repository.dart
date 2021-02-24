@@ -47,12 +47,4 @@ class FirebaseBudgetRepository implements BudgetRepository{
     final budgetCollection = FirebaseFirestore.instance.collection('wedding').doc(weddingId).collection("budget");
     return budgetCollection.doc(budget.id).update(budget.toEntity().toDocument());
   }
-
-  @override
-  Future<Budget> getBudgetById(String budgetId, String weddingId) async {
-    final budgetCollection = FirebaseFirestore.instance.collection('wedding').doc(weddingId).collection("budget");
-    DocumentSnapshot snapshot = await budgetCollection.doc(budgetId).get();
-    return Budget.fromEntity(BudgetEntity.fromSnapshot(snapshot));
-  }
-
 }
