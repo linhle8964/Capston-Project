@@ -6,10 +6,18 @@ import 'package:wedding_app/repository/task_repository.dart';
 import 'package:wedding_app/utils/get_data.dart';
 
 class FirebaseTaskRepository implements TaskRepository{
+  String _weddingID;
 
-  var taskCollection = FirebaseFirestore.instance.collection('wedding')
-            .doc("M5TQqVr7WrpfsdyGbwP0").collection("task");
+  var taskCollection;
 
+
+  FirebaseTaskRepository(){
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    id = preferences.getString("wedding_id");
+    Getting.getWeddingID(_weddingID);
+    this.taskCollection = FirebaseFirestore.instance.collection('wedding')
+        .doc(_weddingID).collection("task");
+  }
 
   @override
   Future<void> addNewTask(Task task) {
