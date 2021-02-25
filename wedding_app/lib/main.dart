@@ -91,48 +91,8 @@ class MyApp extends StatelessWidget {
                 child:BudgetList(),
               );
             },
-            '/UpdateBudget': (context) {
-              return MultiBlocProvider(
-                providers: [
-                  BlocProvider(
-                    create: (BuildContext context) =>
-                        BudgetBloc(
-                          budgetRepository: FirebaseBudgetRepository(),
-                        ),
 
-                  ),
-                  BlocProvider(
-                    create: (BuildContext context) =>
-                        CateBloc(
-                          todosRepository: FirebaseCategoryRepository(),
-                        ),
 
-                  )
-                ],
-                child:AddBudget( isEditing: true),
-              );
-            },
-            '/AddBudget': (context) {
-              return MultiBlocProvider(
-                providers: [
-                  BlocProvider(
-                  create: (BuildContext context) =>
-                  BudgetBloc(
-                    budgetRepository: FirebaseBudgetRepository(),
-                  ),
-
-              ),
-              BlocProvider(
-              create: (BuildContext context) =>
-              CateBloc(
-              todosRepository: FirebaseCategoryRepository(),
-              ),
-              )
-
-              ],
-                child: AddBudget(isEditing: false),
-              );
-            },
             // When navigating to the "/" route, build the FirstScreen widget.
             '/': (context) {
               return BlocBuilder<AuthenticationBloc, AuthenticationState>(

@@ -376,8 +376,7 @@ class _AddBudgetState extends State<AddBudget> {
                                       BlocProvider.of<BudgetBloc>(context)
                                         ..add(UpdateBudget(
                                             budget, "Ao61c5q6Y00xcOrKrYSe"));
-                                      Navigator.pushNamed(
-                                          context, "/BudgetList");
+                                      Navigator.pop(context);
                                     } else if (isEditing != true) {
                                       Budget budget = new Budget(
                                           budgetNameController.text,
@@ -388,6 +387,7 @@ class _AddBudgetState extends State<AddBudget> {
                                       BlocProvider.of<BudgetBloc>(context).add(
                                           CreateBudget(
                                               "Ao61c5q6Y00xcOrKrYSe", budget));
+                                      Navigator.pop(context);
                                     }
                                   },
                                 ),

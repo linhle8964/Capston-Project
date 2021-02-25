@@ -9,6 +9,7 @@ import 'package:wedding_app/screens/Budget/curveshape.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wedding_app/screens/add_budget/addbudget.dart';
+
 class BudgetList extends StatefulWidget {
   @override
   _BudgetListState createState() => _BudgetListState();
@@ -174,7 +175,6 @@ class _BudgetListState extends State<BudgetList> {
                                     print("test");
 
                                     _budgets = state.budgets;
-
                                   }
                                   if (state is BudgetNotLoaded) {}
 
@@ -185,14 +185,37 @@ class _BudgetListState extends State<BudgetList> {
                                         Budget low = _budgets[i];
 
                                         return InkWell(
-                                            onTap: (){
-                                              Future<void> _updateBudget() async {
-                                                final SharedPreferences prefs = await _prefs;
-                                                prefs.setString("budgetId",low.id );
+                                            onTap: () {
+                                              Future<void>
+                                                  _updateBudget() async {
+                                                final SharedPreferences prefs =
+                                                    await _prefs;
+                                                prefs.setString(
+                                                    "budgetId", low.id);
                                               }
+
                                               _updateBudget();
-                                              Navigator.pushNamed(context,"/UpdateBudget");
-                                              Navigator.push(context,MaterialPageRoute(builder: (context)=>AddBudget(isEditing: true,budget: low,)));
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (_) =>
+                                                        BlocProvider.value(
+                                                          value: BlocProvider
+                                                              .of<CateBloc>(
+                                                                  context),
+                                                          child: BlocProvider
+                                                              .value(
+                                                                  value: BlocProvider
+                                                                      .of<BudgetBloc>(
+                                                                          context),
+                                                                  child:
+                                                                      AddBudget(
+                                                                    isEditing:
+                                                                        true,
+                                                                    budget: low,
+                                                                  )),
+                                                        )),
+                                              );
                                             },
                                             child: Card(
                                               child: Container(
@@ -202,29 +225,30 @@ class _BudgetListState extends State<BudgetList> {
                                                 child: Row(
                                                   children: [
                                                     Container(
-
-                                                      child: Text(low.BudgetName,
+                                                      child: Text(
+                                                          low.BudgetName,
                                                           style: TextStyle(
                                                               fontSize: 20,
                                                               fontWeight:
-                                                              FontWeight.bold)),
+                                                                  FontWeight
+                                                                      .bold)),
                                                     ),
                                                     Flexible(
                                                         fit: FlexFit.tight,
                                                         child: SizedBox()),
                                                     Text(
-                                                      low.money.toString() + "₫",
+                                                      low.money.toString() +
+                                                          "₫",
                                                       style: TextStyle(
                                                           fontSize: 20,
                                                           fontWeight:
-                                                          FontWeight.bold),
+                                                              FontWeight.bold),
                                                     )
                                                   ],
                                                 ),
                                               ),
-                                          //
-
-                                        ));
+                                              //
+                                            ));
                                       });
                                 }),
 
@@ -245,7 +269,18 @@ class _BudgetListState extends State<BudgetList> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          Navigator.pushNamed(context, "/AddBudget");
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (_) => BlocProvider.value(
+                      value: BlocProvider.of<CateBloc>(context),
+                      child: BlocProvider.value(
+                          value: BlocProvider.of<BudgetBloc>(context),
+                          child: AddBudget(
+                            isEditing: false,
+                          )),
+                    )),
+          );
         },
         label: Text('add a item'),
         icon: Icon(Icons.add),
@@ -254,5 +289,4 @@ class _BudgetListState extends State<BudgetList> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
-
 }
