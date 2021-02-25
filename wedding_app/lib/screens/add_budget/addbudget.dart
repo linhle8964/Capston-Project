@@ -54,7 +54,6 @@ class _AddBudgetState extends State<AddBudget> {
     super.initState();
     _visible = false;
     _cateBloc = BlocProvider.of<CateBloc>(context);
-
   }
 
   @override
@@ -235,7 +234,14 @@ class _AddBudgetState extends State<AddBudget> {
                             if (state is TodosLoaded) {
                               _values2 = state.cates;
                               print(state.cates.toString());
-
+                              if (isEditing == true && state is TodosLoaded) {
+                                for (int i = 0; i < state.cates.length; i++) {
+                                  if (state.cates[i].id ==
+                                      widget.budget.CateID) {
+                                    initialCate = state.cates[i];
+                                  }
+                                }
+                              }
                               return DropdownButtonFormField(
                                 value: selectedCate ?? initialCate,
                                 icon: Icon(Icons.arrow_downward),
@@ -292,10 +298,11 @@ class _AddBudgetState extends State<AddBudget> {
                               color: Colors.white,
                               iconSize: 40,
                               onPressed: () {
-                                BlocProvider.of<BudgetBloc>(context)..add(DeleteBudget("Ao61c5q6Y00xcOrKrYSe", widget.budget.id));
-                                
-                                Navigator.pushNamed(
-                                    context, "/BudgetList");
+                                BlocProvider.of<BudgetBloc>(context)
+                                  ..add(DeleteBudget("Ao61c5q6Y00xcOrKrYSe",
+                                      widget.budget.id));
+
+                                Navigator.pushNamed(context, "/BudgetList");
                               },
                             ),
                           ),
@@ -371,20 +378,16 @@ class _AddBudgetState extends State<AddBudget> {
                                             budget, "Ao61c5q6Y00xcOrKrYSe"));
                                       Navigator.pushNamed(
                                           context, "/BudgetList");
-                                    }
-
-                                      else if (isEditing!=true) {
-                                        Budget budget = new Budget(
-                                            budgetNameController.text,
-                                            holder.id,
-                                            double.parse(moneyController.text),
-                                            double.parse(payMoneyController.text),
-                                            1);
-                                        BlocProvider.of<BudgetBloc>(context).add(
-                                            CreateBudget(
-                                                "Ao61c5q6Y00xcOrKrYSe", budget));
-
-
+                                    } else if (isEditing != true) {
+                                      Budget budget = new Budget(
+                                          budgetNameController.text,
+                                          holder.id,
+                                          double.parse(moneyController.text),
+                                          double.parse(payMoneyController.text),
+                                          1);
+                                      BlocProvider.of<BudgetBloc>(context).add(
+                                          CreateBudget(
+                                              "Ao61c5q6Y00xcOrKrYSe", budget));
                                     }
                                   },
                                 ),
