@@ -42,18 +42,25 @@ class _AddBudgetState extends State<AddBudget> {
   List<Category> _values2 = [];
   String budgetId = "";
   String weddingId = "";
+  String id="";
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   Category initialCate = new Category("1G23wMGwdk1pnQWnT368", "other");
   TextEditingController budgetNameController = new TextEditingController();
   TextEditingController moneyController = new TextEditingController();
   TextEditingController payMoneyController = new TextEditingController();
   TextEditingController budgetController = new TextEditingController();
-
+  SharedPreferences sharedPrefs;
   @override
   void initState() {
     super.initState();
     _visible = false;
     _cateBloc = BlocProvider.of<CateBloc>(context);
+    SharedPreferences.getInstance().then((prefs) {
+      setState(() => sharedPrefs = prefs);
+      String weddingId = prefs.getString("wedding_id");
+      print("test shared "+ weddingId);
+      id=weddingId;
+    });
   }
 
   @override
@@ -375,7 +382,7 @@ class _AddBudgetState extends State<AddBudget> {
                                       print(budget.toString());
                                       BlocProvider.of<BudgetBloc>(context)
                                         ..add(UpdateBudget(
-                                            budget, "Ao61c5q6Y00xcOrKrYSe"));
+                                            budget, id));
                                       Navigator.pop(context);
                                     } else if (isEditing != true) {
                                       Budget budget = new Budget(
@@ -386,7 +393,7 @@ class _AddBudgetState extends State<AddBudget> {
                                           1);
                                       BlocProvider.of<BudgetBloc>(context).add(
                                           CreateBudget(
-                                              "Ao61c5q6Y00xcOrKrYSe", budget));
+                                              id, budget));
                                       Navigator.pop(context);
                                     }
                                   },

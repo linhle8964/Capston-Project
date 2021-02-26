@@ -20,13 +20,21 @@ class _BudgetListState extends State<BudgetList> {
   bool isSearching = false;
   List<Category> _categorys = [];
   List<Budget> _budgets = [];
-
+  String id="";
+  String weddingId="";
+  SharedPreferences sharedPrefs;
   @override
   void initState() {
     BlocProvider.of<BudgetBloc>(context);
     BlocProvider.of<CateBloc>(context).add(LoadTodos());
     _budgets = [];
     _categorys = [];
+    SharedPreferences.getInstance().then((prefs) {
+      setState(() => sharedPrefs = prefs);
+      String weddingId = prefs.getString("wedding_id");
+      print("test shared "+ weddingId);
+      id=weddingId;
+    });
   }
 
   @override
@@ -155,110 +163,119 @@ class _BudgetListState extends State<BudgetList> {
                       itemBuilder: (context, index) {
                         Category item = _categorys[index];
 
-                        return Column(
-                          children: <Widget>[
-                            Container(
-                              child: ListTile(
-                                title: Text(item.CateName + " | " + " ₫"),
-                              ),
-                            ),
-                            BlocBuilder(
-                                cubit: BlocProvider.of<BudgetBloc>(context),
-                                builder: (context, state) {
-                                  if (state is BudgetLoading) {
-                                    BlocProvider.of<BudgetBloc>(context).add(
-                                        LoadBudgetbyCateId(item.id,
-                                            "Ao61c5q6Y00xcOrKrYSe", _budgets));
-                                    print(_budgets.toString());
-                                  }
-                                  if (state is BudgetLoaded) {
-                                    print("test");
+                        return BlocBuilder(
+                          cubit: BlocProvider.of<BudgetBloc>(context),
+                          builder: (context,state){
+                            BlocProvider.of<BudgetBloc>(context).add(
+                                LoadBudgetbyCateId(item.id,
+                                    id, _budgets));
+                            if (state is BudgetLoading) {
+                              
+                            }
+                            if (state is BudgetLoaded) {
 
-                                    _budgets = state.budgets;
-                                  }
-                                  if (state is BudgetNotLoaded) {}
 
-                                  return ListView.builder(
-                                      shrinkWrap: true,
-                                      itemCount: _budgets.length,
-                                      itemBuilder: (context, i) {
-                                        Budget low = _budgets[i];
+                              _budgets = state.budgets;
+                            }
+                           return Column(
+                             children: <Widget>[
+                               Container(
+                                 child: ListTile(
+                                   title: Text(item.CateName + " | " + " ₫"),
+                                 ),
+                               ),
+                               BlocBuilder(
+                                   cubit: BlocProvider.of<BudgetBloc>(context),
+                                   builder: (context, state) {
+                                     if (state is BudgetLoading) {
 
-                                        return InkWell(
-                                            onTap: () {
-                                              Future<void>
-                                                  _updateBudget() async {
-                                                final SharedPreferences prefs =
-                                                    await _prefs;
-                                                prefs.setString(
-                                                    "budgetId", low.id);
-                                              }
+                                       print("test index" + index.toString());
+                                     }
+                                     if (state is BudgetNotLoaded) {}
 
-                                              _updateBudget();
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (_) =>
-                                                        BlocProvider.value(
-                                                          value: BlocProvider
-                                                              .of<CateBloc>(
-                                                                  context),
-                                                          child: BlocProvider
-                                                              .value(
-                                                                  value: BlocProvider
-                                                                      .of<BudgetBloc>(
-                                                                          context),
-                                                                  child:
-                                                                      AddBudget(
-                                                                    isEditing:
-                                                                        true,
-                                                                    budget: low,
-                                                                  )),
-                                                        )),
-                                              );
-                                            },
-                                            child: Card(
-                                              child: Container(
-                                                height: 60,
-                                                padding: EdgeInsets.only(
-                                                    left: 15, right: 15),
-                                                child: Row(
-                                                  children: [
-                                                    Container(
-                                                      child: Text(
-                                                          low.BudgetName,
-                                                          style: TextStyle(
-                                                              fontSize: 20,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold)),
-                                                    ),
-                                                    Flexible(
-                                                        fit: FlexFit.tight,
-                                                        child: SizedBox()),
-                                                    Text(
-                                                      low.money.toString() +
-                                                          "₫",
-                                                      style: TextStyle(
-                                                          fontSize: 20,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                              //
-                                            ));
-                                      });
-                                }),
+                                     return ListView.builder(
+                                         shrinkWrap: true,
+                                         itemCount: _budgets.length,
+                                         itemBuilder: (context, i) {
+                                           Budget low = _budgets[i];
 
-                            // Card(
-                            //   child:ListTile(
-                            //     title:Text(item.items[index].itemName),
-                            //     subtitle: Text(item.items[index].cost.toString()),
-                            //   ),
-                            // )
-                          ],
+                                           return InkWell(
+                                               onTap: () {
+                                                 Future<void>
+                                                 _updateBudget() async {
+                                                   final SharedPreferences prefs =
+                                                   await _prefs;
+                                                   prefs.setString(
+                                                       "budgetId", low.id);
+                                                 }
+
+                                                 _updateBudget();
+                                                 Navigator.push(
+                                                   context,
+                                                   MaterialPageRoute(
+                                                       builder: (_) =>
+                                                           BlocProvider.value(
+                                                             value: BlocProvider
+                                                                 .of<CateBloc>(
+                                                                 context),
+                                                             child: BlocProvider
+                                                                 .value(
+                                                                 value: BlocProvider
+                                                                     .of<BudgetBloc>(
+                                                                     context),
+                                                                 child:
+                                                                 AddBudget(
+                                                                   isEditing:
+                                                                   true,
+                                                                   budget: low,
+                                                                 )),
+                                                           )),
+                                                 );
+                                               },
+                                               child: Card(
+                                                 child: Container(
+                                                   height: 60,
+                                                   padding: EdgeInsets.only(
+                                                       left: 15, right: 15),
+                                                   child: Row(
+                                                     children: [
+                                                       Container(
+                                                         child: Text(
+                                                             low.BudgetName,
+                                                             style: TextStyle(
+                                                                 fontSize: 20,
+                                                                 fontWeight:
+                                                                 FontWeight
+                                                                     .bold)),
+                                                       ),
+                                                       Flexible(
+                                                           fit: FlexFit.tight,
+                                                           child: SizedBox()),
+                                                       Text(
+                                                         low.money.toString() +
+                                                             "₫",
+                                                         style: TextStyle(
+                                                             fontSize: 20,
+                                                             fontWeight:
+                                                             FontWeight.bold),
+                                                       )
+                                                     ],
+                                                   ),
+                                                 ),
+                                                 //
+                                               ));
+                                         });
+                                   }),
+
+                               // Card(
+                               //   child:ListTile(
+                               //     title:Text(item.items[index].itemName),
+                               //     subtitle: Text(item.items[index].cost.toString()),
+                               //   ),
+                               // )
+                             ],
+                           );
+                          },
                         );
                       });
                 },
