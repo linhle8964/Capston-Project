@@ -306,10 +306,10 @@ class _AddBudgetState extends State<AddBudget> {
                               iconSize: 40,
                               onPressed: () {
                                 BlocProvider.of<BudgetBloc>(context)
-                                  ..add(DeleteBudget("Ao61c5q6Y00xcOrKrYSe",
+                                  ..add(DeleteBudget(id,
                                       widget.budget.id));
 
-                                Navigator.pushNamed(context, "/BudgetList");
+                                Navigator.pop(context);
                               },
                             ),
                           ),

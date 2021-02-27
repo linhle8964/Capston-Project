@@ -34,7 +34,17 @@ class BudgetLoaded extends BudgetState {
     return '\nBudgetLoaded{budgets: $budgets}\n';
   }
 }
+class BudgetCate extends BudgetState{
+  final List<Budget> budgets;
+  const BudgetCate([this.budgets = const []]);
+  @override
+  List<Object> get props => [budgets];
 
+  @override
+  String toString() {
+    return '\nBudgetCate{budgets: $budgets}\n';
+  }
+}
 class BudgetNotLoaded extends BudgetState {}
 
 class Success extends BudgetState {

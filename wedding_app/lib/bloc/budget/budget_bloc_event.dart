@@ -24,6 +24,13 @@ final List<Budget> budgets;
   }
 
 }
+class GetAllBudget extends BudgetEvent{
+  final String weddingId;
+
+
+  const GetAllBudget(this.weddingId);
+
+}
 class GetBudgetById extends BudgetEvent{
   final String budgetId;
   final String weddingId;

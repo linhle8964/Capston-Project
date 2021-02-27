@@ -19,6 +19,20 @@ class FirebaseBudgetRepository implements BudgetRepository{
   }
 
   @override
+  Stream<List<Budget>> getAllBudget(String weddingId) {
+    final budgetCollection = FirebaseFirestore.instance.collection('wedding').doc(weddingId).collection("budget");
+    return budgetCollection.snapshots().map((snapshot) {
+      print(snapshot.docs
+          .map((doc) => Budget.fromEntity(BudgetEntity.fromSnapshot(doc)))
+          .toList());
+      return snapshot.docs
+          .map((doc) => Budget.fromEntity(BudgetEntity.fromSnapshot(doc)))
+          .toList();
+
+    });
+
+  }
+  @override
   Future<void> deleteBudget(String weddingId, String budgetId) {
     final budgetCollection = FirebaseFirestore.instance.collection('wedding').doc(weddingId).collection("budget");
     return budgetCollection.doc(budgetId).delete();
