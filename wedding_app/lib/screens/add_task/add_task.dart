@@ -14,6 +14,8 @@ import 'package:wedding_app/utils/hex_color.dart';
 import 'package:wedding_app/widgets/notification.dart';
 
 class AddTaskPage extends StatefulWidget {
+  String weddingID;
+  AddTaskPage({Key key,@required this.weddingID}) : super(key: key);
   @override
   _AddTaskPageState createState() => _AddTaskPageState();
 }
@@ -267,7 +269,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
         note: _note, category: _category);
     print(task.toString());
     if (_task!=null && _category != null && _task.trim().isNotEmpty) {
-      BlocProvider.of<ChecklistBloc>(context)..add(AddTask(task));
+      BlocProvider.of<ChecklistBloc>(context)..add(AddTask(task,widget.weddingID));
       NotificationManagement.addNotification(task);
       Navigator.pop(context);
     }else {

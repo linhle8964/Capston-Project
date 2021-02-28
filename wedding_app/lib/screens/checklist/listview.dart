@@ -11,8 +11,8 @@ import 'package:wedding_app/widgets/loading_indicator.dart';
 
 class ListViewWidget extends StatefulWidget {
   List<Task> tasks;
-
-  ListViewWidget({Key key,@required this.tasks}) : super(key: key);
+  String weddingID;
+  ListViewWidget({Key key,@required this.tasks,@required this.weddingID}) : super(key: key);
 
   @override
   _ListViewWidgetState createState() => _ListViewWidgetState();
@@ -68,6 +68,7 @@ class _ListViewWidgetState extends State<ListViewWidget> {
                                    BlocProvider.of<ChecklistBloc>(context),
                                    child: EditTaskPage(
                                      task: widget.tasks[index],
+                                     weddingID: widget.weddingID
                                    )),
                              )),
                        );
@@ -93,6 +94,6 @@ class _ListViewWidgetState extends State<ListViewWidget> {
         , status: !oldTask.status
         , category: oldTask.category
         , note: oldTask.note);
-    BlocProvider.of<ChecklistBloc>(context)..add(Update2Task(task));
+    BlocProvider.of<ChecklistBloc>(context)..add(Update2Task(task,widget.weddingID));
   }
 }

@@ -1,10 +1,7 @@
-import 'package:flutter/widgets.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-
-class Getting {
-  static void getWeddingID(String id) async {
-
-  }
-
-
+Future<String> getWeddingID() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String weddingID = prefs.getString("wedding_id");
+  return weddingID;
 }

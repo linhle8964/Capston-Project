@@ -3,6 +3,7 @@ import 'package:wedding_app/bloc/category/bloc.dart';
 import 'package:wedding_app/bloc/checklist/bloc.dart';
 import 'package:wedding_app/bloc/checklist/checklist_bloc.dart';
 import 'package:wedding_app/bloc/show_task/bloc.dart';
+import 'package:wedding_app/utils/get_data.dart';
 import 'package:wedding_app/utils/hex_color.dart';
 import 'package:wedding_app/firebase_repository/category_firebase_repository.dart';
 import 'package:wedding_app/firebase_repository/firebase_task_repository.dart';
@@ -23,8 +24,6 @@ class _ChecklistPageState extends State<ChecklistPage>
     with SingleTickerProviderStateMixin {
   static final GlobalKey<ScaffoldState> scaffoldKey =
       new GlobalKey<ScaffoldState>();
-  String id = "";
-  SharedPreferences sharedPrefs;
   List<DateTime> months = [];
   List<Task> valuess = []; // show by month
   List<Task> tasks = []; // all
@@ -37,12 +36,6 @@ class _ChecklistPageState extends State<ChecklistPage>
   void initState() {
     super.initState();
     _searchQuery.addListener(_onSearchChanged);
-    SharedPreferences.getInstance().then((prefs) {
-      setState(() => sharedPrefs = prefs);
-      String weddingId = prefs.getString("wedding_id");
-      id = weddingId;
-      print("test shared " + id);
-    });
   }
 
 
@@ -126,9 +119,9 @@ class _ChecklistPageState extends State<ChecklistPage>
       decoration: const InputDecoration(
         hintText: 'Tìm kiếm',
         border: InputBorder.none,
-        hintStyle: const TextStyle(color: Colors.grey),
+        hintStyle: const TextStyle(color: Colors.white),
       ),
-      style: const TextStyle(color: Colors.grey, fontSize: 16.0),
+      style: const TextStyle(color: Colors.white, fontSize: 16.0),
     );
   }
 
@@ -138,7 +131,7 @@ class _ChecklistPageState extends State<ChecklistPage>
         new IconButton(
           icon: const Icon(
             Icons.clear,
-            color: Colors.grey,
+            color: Colors.white,
           ),
           onPressed: () {
             _clearSearchQuery();
@@ -151,7 +144,7 @@ class _ChecklistPageState extends State<ChecklistPage>
       new IconButton(
         icon: const Icon(
           Icons.search,
-          color: Colors.grey,
+          color: Colors.white,
         ),
         onPressed: (){
           BlocProvider.of<ChecklistBloc>(context)
@@ -164,92 +157,101 @@ class _ChecklistPageState extends State<ChecklistPage>
 
   @override
   Widget build(BuildContext context) {
-    print("IDDD $id");
-    return  MultiBlocProvider(
-        providers: [
-          BlocProvider<CateBloc>(
-            create: (BuildContext context) => CateBloc(
-              todosRepository: FirebaseCategoryRepository(),
-            )..add(LoadTodos()),
-          ),
-          BlocProvider<ChecklistBloc>(
-            create: (BuildContext context)  {
-              return ChecklistBloc(
-                weddingId: id,
-              taskRepository: FirebaseTaskRepository(),
-            )..add(LoadSuccess(id));}
-          ),
-          BlocProvider<ShowTaskBloc>(
-            create: (BuildContext context) => ShowTaskBloc(number1: 0),
-          ),
-        ],
-        child: Builder(
-          builder: (context) => BlocListener(
-            cubit: BlocProvider.of<ChecklistBloc>(context),
-            listener: (context, state) {
-              if (state is TaskDeleted) {
-                BlocProvider.of<ShowTaskBloc>(context)..add(DeleteMonth());
-                BlocProvider.of<ChecklistBloc>(context)..add(LoadSuccess(id));
-                _stopSearching();
-                Scaffold.of(context).showSnackBar(
-                    new SnackBar(content: new Text("bạn đã xóa thành công")));
-              } else if (state is TaskAdded) {
-                BlocProvider.of<ChecklistBloc>(context)..add(LoadSuccess(id));
-                Scaffold.of(context).showSnackBar(
-                    new SnackBar(content: new Text("bạn đã thêm thành công")));
-              } else if (state is TaskUpdated) {
-                BlocProvider.of<ChecklistBloc>(context)..add(LoadSuccess(id));
-                _stopSearching();
-                Scaffold.of(context).showSnackBar(new SnackBar(
-                    content: new Text("bạn đã chỉnh sửa thành công")));
-              }
-            },
-            child: Scaffold(
-              key: scaffoldKey,
-              appBar: new AppBar(
-                centerTitle: true,
-                backgroundColor: hexToColor("#d86a77"),
-                leading:
-                    _isSearching ?  BackButton(
-                        color: Colors.grey,
-                        onPressed: (){
-                          setState(() {
-                            BlocProvider.of<ChecklistBloc>(context)
-                              ..add(LoadSuccess(id));
-                            _stopSearching();
-                          });
-                        },
-                    ) : null,
-                title: _isSearching ? _buildSearchField(context) : _buildTitle(context),
-                actions: _buildActions(context),
+    return  FutureBuilder(
+      future: getWeddingID(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          final String weddingID = snapshot.data;
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider<CateBloc>(
+                create: (BuildContext context) => CateBloc(
+                  todosRepository: FirebaseCategoryRepository(),
+                )..add(LoadTodos()),
               ),
-              body: _body(),
-              floatingActionButton:  _isSearching ? null : FloatingActionButton.extended(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (_) => BlocProvider.value(
-                          value: BlocProvider.of<CateBloc>(context),
-                          child: BlocProvider.value(
-                              value: BlocProvider.of<ChecklistBloc>(context),
-                              child: AddTaskPage()),
-                        )),
-                  );
+              BlocProvider<ChecklistBloc>(
+                  create: (BuildContext context)  {
+                    return ChecklistBloc(
+                      taskRepository: FirebaseTaskRepository(),
+                    )..add(LoadSuccess(weddingID));}
+              ),
+              BlocProvider<ShowTaskBloc>(
+                create: (BuildContext context) => ShowTaskBloc(number1: 0),
+              ),
+            ],
+            child: Builder(
+              builder: (context) => BlocListener(
+                cubit: BlocProvider.of<ChecklistBloc>(context),
+                listener: (context, state) {
+                  if (state is TaskDeleted) {
+                    BlocProvider.of<ShowTaskBloc>(context)..add(DeleteMonth());
+                    BlocProvider.of<ChecklistBloc>(context)..add(LoadSuccess(weddingID));
+                    _stopSearching();
+                    Scaffold.of(context).showSnackBar(
+                        new SnackBar(content: new Text("bạn đã xóa thành công")));
+                  } else if (state is TaskAdded) {
+                    BlocProvider.of<ChecklistBloc>(context)..add(LoadSuccess(weddingID));
+                    Scaffold.of(context).showSnackBar(
+                        new SnackBar(content: new Text("bạn đã thêm thành công")));
+                  } else if (state is TaskUpdated) {
+                    BlocProvider.of<ChecklistBloc>(context)..add(LoadSuccess(weddingID));
+                    _stopSearching();
+                    Scaffold.of(context).showSnackBar(new SnackBar(
+                        content: new Text("bạn đã chỉnh sửa thành công")));
+                  }
                 },
-                label: Text('thêm công việc'),
-                icon: Icon(Icons.add),
-                backgroundColor: Colors.lightBlue,
+                child: Scaffold(
+                  key: scaffoldKey,
+                  appBar: new AppBar(
+                    centerTitle: true,
+                    backgroundColor: hexToColor("#d86a77"),
+                    leading:
+                    _isSearching ?  BackButton(
+                      color: Colors.white,
+                      onPressed: (){
+                        setState(() {
+                          BlocProvider.of<ChecklistBloc>(context)
+                            ..add(LoadSuccess(weddingID));
+                          _stopSearching();
+                        });
+                      },
+                    ) : null,
+                    title: _isSearching ? _buildSearchField(context) : _buildTitle(context),
+                    actions: _buildActions(context),
+                  ),
+                  body: _body(weddingID),
+                  floatingActionButton:  _isSearching ? null : FloatingActionButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => BlocProvider.value(
+                              value: BlocProvider.of<CateBloc>(context),
+                              child: BlocProvider.value(
+                                  value: BlocProvider.of<ChecklistBloc>(context),
+                                  child: AddTaskPage(weddingID: weddingID)),
+                            )),
+                      );
+                    },
+                    child: Icon(Icons.add),
+                    backgroundColor: Colors.lightBlue,
+                  ),
+                  floatingActionButtonLocation:
+                  FloatingActionButtonLocation.endFloat,
+                ),
               ),
-              floatingActionButtonLocation:
-                  FloatingActionButtonLocation.centerFloat,
             ),
-          ),
-        ),
-      );
+          );
+        } else {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
+    );;
   }
 
-  Widget _body() {
+  Widget _body(String weddingID) {
     return Builder(
       builder: (context) => BlocBuilder(
           cubit: BlocProvider.of<ChecklistBloc>(context),
@@ -384,7 +386,7 @@ class _ChecklistPageState extends State<ChecklistPage>
                                     ),
                                   ],
                                 ),
-                                child: ListViewWidget(tasks: valuess,),
+                                child: ListViewWidget(tasks: valuess,weddingID: weddingID),
                               )
                             ],
                           );

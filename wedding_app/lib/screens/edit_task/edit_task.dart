@@ -14,8 +14,8 @@ import 'package:wedding_app/widgets/notification.dart';
 
 class EditTaskPage extends StatefulWidget {
   Task task;
-
-  EditTaskPage({Key key,@required this.task}) : super(key: key);
+  String weddingID;
+  EditTaskPage({Key key,@required this.task,@required this.weddingID}) : super(key: key);
 
   @override
   _EditTaskPageState createState() => _EditTaskPageState();
@@ -296,7 +296,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
   void deleteTask(context) {
     if (_formKey.currentState.validate() && _category != null) {
       _formKey.currentState.save();
-      BlocProvider.of<ChecklistBloc>(context)..add(DeleteTask(widget.task));
+      BlocProvider.of<ChecklistBloc>(context)..add(DeleteTask(widget.task,widget.weddingID));
       NotificationManagement.deleteNotification(widget.task);
       Navigator.pop(context);
     }else if(_task ==null){
@@ -314,7 +314,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
         Scaffold.of(context).showSnackBar(SnackBar(content: Text('Bạn chưa thay đổi tên công việc!!!'),),);
         return;
       }
-      BlocProvider.of<ChecklistBloc>(context)..add(UpdateTask(task));
+      BlocProvider.of<ChecklistBloc>(context)..add(UpdateTask(task,widget.weddingID));
       NotificationManagement.updateNotification(widget.task, task);
       Navigator.pop(context);
     }else {

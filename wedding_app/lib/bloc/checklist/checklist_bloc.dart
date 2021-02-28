@@ -9,8 +9,7 @@ class ChecklistBloc extends Bloc<TasksEvent, TaskState> {
   final TaskRepository _taskRepository;
   StreamSubscription _taskSubscription;
 
-  ChecklistBloc({@required String weddingId,
-                  @required TaskRepository taskRepository}) : assert(taskRepository != null),
+  ChecklistBloc({@required TaskRepository taskRepository}) : assert(taskRepository != null),
         _taskRepository = taskRepository,
         super(TasksLoading());
 
@@ -47,22 +46,22 @@ class ChecklistBloc extends Bloc<TasksEvent, TaskState> {
   }
 
   Stream<TaskState> _mapTaskAddedToState(AddTask event) async* {
-    _taskRepository.addNewTask(event.task);
+    _taskRepository.addNewTask(event.task,event.weddingID);
     yield TaskAdded();
   }
 
   Stream<TaskState> _mapTaskUpdatedToState(UpdateTask event) async* {
-    _taskRepository.updateTask(event.task);
+    _taskRepository.updateTask(event.task,event.weddingID);
     yield TaskUpdated();
   }
 
   Stream<TaskState> _mapTaskUpdated2ToState(Update2Task event) async* {
-    _taskRepository.updateTask(event.task);
+    _taskRepository.updateTask(event.task,event.weddingID);
     yield TaskUpdated2();
   }
 
   Stream<TaskState> _mapTaskDeletedToState(DeleteTask event) async* {
-    _taskRepository.deleteTask(event.task);
+    _taskRepository.deleteTask(event.task,event.weddingID);
     yield TaskDeleted();
   }
 

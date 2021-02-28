@@ -20,8 +20,9 @@ class SearchTasks extends TasksEvent{}
 
 class AddTask extends TasksEvent {
   final Task task;
+  String weddingID;
 
-  const AddTask(this.task);
+  AddTask(this.task,this.weddingID);
 
   @override
   List<Object> get props => [task];
@@ -34,8 +35,8 @@ class AddTask extends TasksEvent {
 
 class UpdateTask extends TasksEvent {
   final Task task;
-
-  const UpdateTask(this.task);
+  String weddingID;
+  UpdateTask(this.task,this.weddingID);
 
   @override
   List<Object> get props => [task];
@@ -48,8 +49,9 @@ class UpdateTask extends TasksEvent {
 
 class Update2Task extends TasksEvent {
   final Task task;
+  String weddingID;
 
-  const Update2Task(this.task);
+  Update2Task(this.task,this.weddingID);
 
   @override
   List<Object> get props => [task];
@@ -62,8 +64,9 @@ class Update2Task extends TasksEvent {
 
 class DeleteTask extends TasksEvent {
   final Task task;
+  String weddingID;
 
-  const DeleteTask(this.task);
+  DeleteTask(this.task,this.weddingID);
 
   @override
   List<Object> get props => [task];

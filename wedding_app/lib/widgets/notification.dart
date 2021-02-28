@@ -3,12 +3,12 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:wedding_app/model/task_model.dart';
 
-final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin(); //Nang
-Map<int, Task> notificationTime ={};
-int mapKey = 1;
-
 class NotificationManagement {
+  static final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+  FlutterLocalNotificationsPlugin(); //Nang
+  static Map<int, Task> notificationTime ={};
+  static int mapKey = 1;
+
   NotificationManagement() {
     WidgetsFlutterBinding.ensureInitialized();
     var initializationSettingsAndroid =
@@ -20,8 +20,9 @@ class NotificationManagement {
   }
 
   static void addNotification(Task task) async {
+    NotificationManagement();
     var scheduledNotificationDateTime =
-        DateTime.now().add(Duration(seconds: 30));
+        DateTime.now().add(Duration(seconds: 10));
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
         'channel id', 'channel NAME', 'CHANNEL DESCRIPTION',
         priority: Priority.high, importance: Importance.max);
@@ -34,12 +35,13 @@ class NotificationManagement {
     mapKey++;
     print("addNotification................: ${notificationTime.toString()}");
     if (task.dueDate.isAfter(DateTime.now())) {
-      await flutterLocalNotificationsPlugin.schedule(mapKey, 'Thông báo', "Đã đến hạn công việc: ${task.name}",
+      await flutterLocalNotificationsPlugin.schedule((mapKey-1), 'Thông báo', "Đã đến hạn công việc: ${task.name}",
           task.dueDate, platformChannelSpecifics);
     }
   }
 
   static void addExistingNotifications(List<Task> tasks) async {
+    NotificationManagement();
     for(int i=0; i< tasks.length;i++){
       addNotification(tasks[i]);
     }
@@ -47,12 +49,12 @@ class NotificationManagement {
   }
 
   static void updateNotification(Task oldTask,Task newTask) async {
+    NotificationManagement();
     var scheduledNotificationDateTime =
     DateTime.now().add(Duration(seconds: 30));
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
         'channel id', 'channel NAME', 'CHANNEL DESCRIPTION',
         priority: Priority.high, importance: Importance.max);
-
     var iOSPlatformChannelSpecifics = IOSNotificationDetails();
     var platformChannelSpecifics = NotificationDetails(
         android: androidPlatformChannelSpecifics,
@@ -68,9 +70,7 @@ class NotificationManagement {
       key= mapKey;
       mapKey++;
     }
-    print("KEY: $key");
     notificationTime.addAll({key: newTask});
-
     print("updateNotification.............: ${notificationTime.toString()}");
     if (newTask.dueDate.isAfter(DateTime.now())) {
       await flutterLocalNotificationsPlugin.schedule(key, 'Thông báo', "Đã đến hạn công việc: ${newTask.name}",
@@ -79,22 +79,21 @@ class NotificationManagement {
   }
 
   static void deleteNotification(Task task) async {
+    NotificationManagement();
     int key =-1;
-    print("DELETE ${task.toString()}");
     for(int i=0; i< notificationTime.length; i++){
-      print(notificationTime.values.elementAt(i).isEqual(task) ? "TTT": "FFF");
       if(notificationTime.values.elementAt(i).isEqual(task)){
         key = notificationTime.keys.elementAt(i);
         notificationTime.remove(key);
         break;
       }
     }
-    print("KEY: $key");
     print("DeleteNotification..............: ${notificationTime.toString()}");
     await flutterLocalNotificationsPlugin.cancel(key);
   }
 
   static void ClearAllNotifications() async {
+    NotificationManagement();
     notificationTime.clear();
     print("ClearAllNotification.............: ${notificationTime.toString()}");
     mapKey=1;
