@@ -6,7 +6,7 @@ abstract class TaskRepository {
 
   Future<void> deleteTask(Task task);
 
-  Stream<List<Task>> getTasks();
+  Stream<List<Task>> getTasks(String weddingId);
 
   Future<void> updateTask(Task task);
 }

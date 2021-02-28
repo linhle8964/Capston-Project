@@ -94,8 +94,20 @@ class Task extends Equatable{
   }
 
   @override
-  List<Object> get props => [id,name,dueDate,status,note,category];
+  List<Object> get props => [name,dueDate,status,note,category];
 
-
-
+  bool isEqual(Task task){
+    if(this.name == task.name &&
+        this.status== task.status &&
+        this.note== task.note &&
+        this.category == task.category &&
+        this.dueDate.hour == task.dueDate.hour &&
+        this.dueDate.minute == task.dueDate.minute &&
+        this.dueDate.second == task.dueDate.second &&
+        this.dueDate.year == task.dueDate.year &&
+        this.dueDate.month == task.dueDate.month &&
+        this.dueDate.day == task.dueDate.day){
+      return true;
+    } else return false;
+  }
 }

@@ -9,7 +9,8 @@ class ChecklistBloc extends Bloc<TasksEvent, TaskState> {
   final TaskRepository _taskRepository;
   StreamSubscription _taskSubscription;
 
-  ChecklistBloc({@required TaskRepository taskRepository}) : assert(taskRepository != null),
+  ChecklistBloc({@required String weddingId,
+                  @required TaskRepository taskRepository}) : assert(taskRepository != null),
         _taskRepository = taskRepository,
         super(TasksLoading());
 
@@ -29,12 +30,14 @@ class ChecklistBloc extends Bloc<TasksEvent, TaskState> {
       yield* _mapTaskDeletedToState(event);
     }else if(event is ToggleAll){
       yield* _mapToggleAllToState(event);
+    }else if(event is SearchTasks){
+      yield* _mapSearchingToState();
     }
   }
 
   Stream<TaskState> _mapTasksLoadedSuccessToState(LoadSuccess event) async* {
     _taskSubscription?.cancel();
-    _taskSubscription = _taskRepository.getTasks().listen(
+    _taskSubscription = _taskRepository.getTasks(event.weddingID).listen(
           (tasks) => add(ToggleAll(tasks)),
     );
   }
@@ -61,6 +64,10 @@ class ChecklistBloc extends Bloc<TasksEvent, TaskState> {
   Stream<TaskState> _mapTaskDeletedToState(DeleteTask event) async* {
     _taskRepository.deleteTask(event.task);
     yield TaskDeleted();
+  }
+
+  Stream<TaskState> _mapSearchingToState() async* {
+    yield TasksSearching();
   }
 
   @override

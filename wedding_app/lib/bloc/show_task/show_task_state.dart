@@ -19,3 +19,7 @@ class MonthMovedPreviously extends Month {
   int number;
   MonthMovedPreviously(this.number);
 }
+
+class MonthDeleted extends Month {
+  int number=0;
+}

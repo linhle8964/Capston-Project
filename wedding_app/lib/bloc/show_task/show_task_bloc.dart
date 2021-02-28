@@ -18,6 +18,8 @@ class ShowTaskBloc extends Bloc<ShowMonth, Month> {
       yield* _mapShowNextToState(event);
     } else if (event is ShowPrevious) {
       yield* _mapShowPreviousToState(event);
+    }else if (event is DeleteMonth) {
+      yield* _mapDeleteMonthToState();
     }
   }
 
@@ -33,5 +35,10 @@ class ShowTaskBloc extends Bloc<ShowMonth, Month> {
       print(_number);
       yield MonthMovedPreviously(--_number);
     }
+  }
+
+  Stream<Month> _mapDeleteMonthToState() async* {
+   _number=0;
+   yield MonthDeleted();
   }
 }

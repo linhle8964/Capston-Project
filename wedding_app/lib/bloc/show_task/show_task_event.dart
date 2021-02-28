@@ -9,3 +9,5 @@ class ShowNext extends ShowMonth {
 }
 
 class ShowPrevious extends ShowMonth {}
+
+class DeleteMonth extends ShowMonth {}

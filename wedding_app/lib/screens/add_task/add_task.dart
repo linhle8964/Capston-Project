@@ -4,18 +4,14 @@ import 'package:wedding_app/bloc/category/bloc.dart';
 import 'package:wedding_app/bloc/category/category_bloc.dart';
 import 'package:wedding_app/bloc/checklist/bloc.dart';
 import 'package:wedding_app/bloc/checklist/checklist_bloc.dart';
-import 'package:wedding_app/firebase_repository/category_firebase_repository.dart';
-import 'package:wedding_app/firebase_repository/firebase_task_repository.dart';
 import 'package:wedding_app/model/category.dart';
 import 'package:wedding_app/model/task_model.dart';
-import 'package:wedding_app/repository/category_repository.dart';
-import 'package:wedding_app/screens/edit_task/dropdown.dart';
 import 'package:wedding_app/utils/border.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:wedding_app/utils/show_snackbar.dart';
-import 'package:petitparser/context.dart';
 import 'package:wedding_app/widgets/confirm_dialog.dart';
+import 'package:wedding_app/utils/hex_color.dart';
+import 'package:wedding_app/widgets/notification.dart';
 
 class AddTaskPage extends StatefulWidget {
   @override
@@ -48,14 +44,14 @@ class _AddTaskPageState extends State<AddTaskPage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: Colors.white,
+        backgroundColor: hexToColor("#d86a77"),
         title: Text(
           "Thêm Công Việc",
-          style: TextStyle(color: Colors.grey),
+          style: TextStyle(color: Colors.white),
         ),
         leading: new IconButton(
           icon: new Icon(Icons.arrow_back),
-          color: Colors.black,
+          color: Colors.white,
           onPressed: () {
             showDialog(
                 context: context,
@@ -272,6 +268,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
     print(task.toString());
     if (_task!=null && _category != null && _task.trim().isNotEmpty) {
       BlocProvider.of<ChecklistBloc>(context)..add(AddTask(task));
+      NotificationManagement.addNotification(task);
       Navigator.pop(context);
     }else {
       Scaffold.of(context).showSnackBar(SnackBar(content: Text('có lỗi xảy ra'),),);

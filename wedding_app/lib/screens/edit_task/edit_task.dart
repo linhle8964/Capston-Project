@@ -4,12 +4,13 @@ import 'package:wedding_app/bloc/category/category_bloc.dart';
 import 'package:wedding_app/bloc/checklist/bloc.dart';
 import 'package:wedding_app/model/category.dart';
 import 'package:wedding_app/model/task_model.dart';
-import 'package:wedding_app/screens/edit_task/dropdown.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:wedding_app/utils/hex_color.dart';
 import 'package:wedding_app/utils/border.dart';
 import 'package:intl/intl.dart';
 import 'package:wedding_app/widgets/confirm_dialog.dart';
+import 'package:wedding_app/widgets/notification.dart';
+
 
 class EditTaskPage extends StatefulWidget {
   Task task;
@@ -55,11 +56,44 @@ class _EditTaskPageState extends State<EditTaskPage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: Colors.white,
+        backgroundColor: hexToColor("#d86a77"),
         title: Text(
           "Chỉnh Sửa Công Việc",
-          style: TextStyle(color: Colors.grey),
+          style: TextStyle(color: Colors.white),
         ),
+        leading: new IconButton(
+          icon: new Icon(Icons.arrow_back),
+          color: Colors.white,
+          onPressed: () {
+            showDialog(
+                context: context,
+                barrierDismissible: false,
+                child: PersonDetailsDialog(
+                  message:"Bạn có muốn thoát",
+                  onPressedFunction: (){Navigator.of(context).pop();},
+                ));
+          },
+        ),
+        actions: [
+          Builder(
+            builder: (ctx) => IconButton(
+              icon: Icon(
+                Icons.check,
+                size: 40,
+                color: Colors.blue,
+              ),
+              onPressed: () {
+                showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    child: PersonDetailsDialog(
+                      message:"Bạn đang thêm công việc",
+                      onPressedFunction: (){updateTask(ctx);},
+                    ));
+              },
+            ),
+          ),
+        ],
       ),
       body: Builder(
         builder: (context) => SingleChildScrollView(
@@ -252,83 +286,6 @@ class _EditTaskPageState extends State<EditTaskPage> {
                           ),
                         ],
                       ),
-                      SizedBox(height: 180,),
-                      Row(
-                        //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Expanded(
-                            child: RaisedButton(
-                              padding: EdgeInsets.only(left:0.0, right: 40.0),
-                              color: Colors.red,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  IconButton(
-                                    icon: Icon(Icons.cancel_outlined),
-                                    color: Colors.white,
-                                    iconSize: 30,
-                                    onPressed: () {},
-                                  ),
-                                  Expanded(
-                                    child: Center(
-                                      child: Text(
-                                        'CANCEL',
-                                         style: TextStyle(fontSize: 20, color: Colors.white),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              onPressed: () {
-                                showDialog(
-                                    context: context,
-                                    barrierDismissible: false,
-                                    child: PersonDetailsDialog(
-                                      message:"Bạn đang thoát",
-                                      onPressedFunction: (){Navigator.of(context).pop();},
-                                    ));
-                                },
-                            ),
-                          ),
-                          SizedBox(width: 5.0,),
-                          Expanded(
-                            child: Builder(
-                              builder: (ctx) => RaisedButton(
-                                padding: EdgeInsets.only(right: 0.0, left: 40.0),
-                                color: Colors.blue,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: [
-                                    Expanded(
-                                      child: Center(
-                                        child: Text(
-                                          'SAVE',
-                                          style: TextStyle(fontSize: 20, color: Colors.white),
-                                        ),
-                                      ),
-                                    ),
-                                    IconButton(
-                                        icon: Icon(Icons.arrow_forward_ios_outlined),
-                                        color: Colors.white,
-                                        iconSize: 30,
-                                        onPressed: () {},
-                                      ),
-                                  ],
-                                ),
-                                onPressed: () {
-                                  showDialog(
-                                      context: context,
-                                      barrierDismissible: false,
-                                      child: PersonDetailsDialog(
-                                        message:"Bạn muốn sửa công việc",
-                                        onPressedFunction: (){updateTask(context);},
-                                      ));
-                                },
-                              ),
-                            ),
-                          ),
-                        ],
-                      )
                     ])),
           ),
         ),
@@ -340,6 +297,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
     if (_formKey.currentState.validate() && _category != null) {
       _formKey.currentState.save();
       BlocProvider.of<ChecklistBloc>(context)..add(DeleteTask(widget.task));
+      NotificationManagement.deleteNotification(widget.task);
       Navigator.pop(context);
     }else if(_task ==null){
       Scaffold.of(context).showSnackBar(SnackBar(content: Text('Bạn chưa điền tên công việc'),),);
@@ -351,13 +309,13 @@ class _EditTaskPageState extends State<EditTaskPage> {
     Task task = new Task( id: widget.task.id,
         name: _task, dueDate: _dueDate, status: _checkboxListTile,
         note: _note, category: _category);
-    print(task);
     if (_task!=null && _task.trim().isNotEmpty) {
       if(task == widget.task) {
         Scaffold.of(context).showSnackBar(SnackBar(content: Text('Bạn chưa thay đổi tên công việc!!!'),),);
         return;
       }
       BlocProvider.of<ChecklistBloc>(context)..add(UpdateTask(task));
+      NotificationManagement.updateNotification(widget.task, task);
       Navigator.pop(context);
     }else {
       Scaffold.of(context).showSnackBar(SnackBar(content: Text('có lỗi xảy ra'),),);

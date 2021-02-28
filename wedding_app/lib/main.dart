@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wedding_app/firebase_repository/firebase_task_repository.dart';
 import 'package:wedding_app/firebase_repository/invite_email_firebase_repository.dart';
 import 'package:wedding_app/firebase_repository/user_wedding_firebase_repository.dart';
 import 'package:wedding_app/firebase_repository/wedding_firebase_repository.dart';
@@ -12,8 +13,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:wedding_app/screens/register/register_page.dart';
 import 'package:wedding_app/screens/splash_page.dart';
 import 'package:wedding_app/widgets/loading_indicator.dart';
+import 'package:wedding_app/widgets/notification.dart';
 import 'bloc/authentication/bloc.dart';
 import 'bloc/category/category_bloc.dart';
+import 'bloc/checklist/bloc.dart';
 import 'bloc/login/bloc.dart';
 import 'bloc/register/bloc.dart';
 import 'bloc/wedding/bloc.dart';
@@ -31,6 +34,7 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
+  DateTime _alarmTime;
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -40,7 +44,7 @@ class MyApp extends StatelessWidget {
               userRepository: FirebaseUserRepository(),
               userWeddingRepository: FirebaseUserWeddingRepository(),
             )..add(AppStarted());
-          }),
+          },),
         ],
         child: MaterialApp(
           initialRoute: '/',
@@ -113,4 +117,6 @@ class MyApp extends StatelessWidget {
           ),
         ));
   }
+
+
 }

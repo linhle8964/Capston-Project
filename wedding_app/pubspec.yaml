@@ -58,6 +58,7 @@ dev_dependencies:
   mailer: ^3.3.0
   flutter_local_notifications: ^4.0.1+1
 
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 flutter_icons:

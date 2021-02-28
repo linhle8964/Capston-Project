@@ -3,13 +3,16 @@ import 'package:wedding_app/bloc/category/bloc.dart';
 import 'package:wedding_app/bloc/checklist/bloc.dart';
 import 'package:wedding_app/bloc/checklist/checklist_bloc.dart';
 import 'package:wedding_app/bloc/show_task/bloc.dart';
+import 'package:wedding_app/utils/hex_color.dart';
 import 'package:wedding_app/firebase_repository/category_firebase_repository.dart';
 import 'package:wedding_app/firebase_repository/firebase_task_repository.dart';
 import 'package:wedding_app/model/task_model.dart';
 import 'package:wedding_app/screens/add_task/add_task.dart';
 import 'package:wedding_app/screens/checklist/listview.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wedding_app/screens/checklist/searching_page.dart';
 import 'package:wedding_app/widgets/loading_indicator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ChecklistPage extends StatefulWidget {
   @override
@@ -20,17 +23,57 @@ class _ChecklistPageState extends State<ChecklistPage>
     with SingleTickerProviderStateMixin {
   static final GlobalKey<ScaffoldState> scaffoldKey =
       new GlobalKey<ScaffoldState>();
+  String id = "";
+  SharedPreferences sharedPrefs;
   List<DateTime> months = [];
   List<Task> valuess = []; // show by month
   List<Task> tasks = []; // all
+  List<Task> searchList = []; // searching
 
-  TextEditingController _searchQuery;
+  TextEditingController _searchQuery= new TextEditingController();
   bool _isSearching = false;
 
   @override
   void initState() {
     super.initState();
-    _searchQuery = new TextEditingController();
+    _searchQuery.addListener(_onSearchChanged);
+    SharedPreferences.getInstance().then((prefs) {
+      setState(() => sharedPrefs = prefs);
+      String weddingId = prefs.getString("wedding_id");
+      id = weddingId;
+      print("test shared " + id);
+    });
+  }
+
+
+  @override
+  void dispose() {
+    _searchQuery.removeListener(_onSearchChanged);
+    _searchQuery.dispose();
+    super.dispose();
+  }
+
+
+  _onSearchChanged(){
+    print(_searchQuery);
+    searchResultsList();
+  }
+
+  searchResultsList(){
+    List<Task> showResults = [];
+    if(_searchQuery.text.trim() != ""){
+      for(var task in tasks){
+        var name = task.name.toLowerCase();
+        if(name.contains(_searchQuery.text.toLowerCase())){
+          showResults.add(task);
+        }
+      }
+    }else{
+      showResults.clear();
+    }
+    setState(() {
+       searchList = showResults;
+     });
   }
 
   void _startSearch() {
@@ -44,7 +87,6 @@ class _ChecklistPageState extends State<ChecklistPage>
 
   void _stopSearching() {
     _clearSearchQuery();
-
     setState(() {
       _isSearching = false;
     });
@@ -69,7 +111,7 @@ class _ChecklistPageState extends State<ChecklistPage>
           children: <Widget>[
             const Text(
               'CÔNG VIỆC',
-              style: TextStyle(color: Colors.grey),
+              style: TextStyle(color: Colors.white),
             ),
           ],
         ),
@@ -77,7 +119,7 @@ class _ChecklistPageState extends State<ChecklistPage>
     );
   }
 
-  Widget _buildSearchField() {
+  Widget _buildSearchField(context) {
     return new TextField(
       controller: _searchQuery,
       autofocus: true,
@@ -90,7 +132,7 @@ class _ChecklistPageState extends State<ChecklistPage>
     );
   }
 
-  List<Widget> _buildActions() {
+  List<Widget> _buildActions(context) {
     if (_isSearching) {
       return <Widget>[
         new IconButton(
@@ -99,10 +141,6 @@ class _ChecklistPageState extends State<ChecklistPage>
             color: Colors.grey,
           ),
           onPressed: () {
-            if (_searchQuery == null || _searchQuery.text.isEmpty) {
-              Navigator.pop(context);
-              return;
-            }
             _clearSearchQuery();
           },
         ),
@@ -115,84 +153,100 @@ class _ChecklistPageState extends State<ChecklistPage>
           Icons.search,
           color: Colors.grey,
         ),
-        onPressed: _startSearch,
+        onPressed: (){
+          BlocProvider.of<ChecklistBloc>(context)
+            ..add(SearchTasks());
+          _startSearch();
+          },
       ),
     ];
   }
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<CateBloc>(
-          create: (BuildContext context) => CateBloc(
-            todosRepository: FirebaseCategoryRepository(),
-          )..add(LoadTodos()),
-        ),
-        BlocProvider<ChecklistBloc>(
-          create: (BuildContext context) => ChecklistBloc(
-            taskRepository: FirebaseTaskRepository(),
-          )..add(LoadSuccess()),
-        ),
-        BlocProvider<ShowTaskBloc>(
-          create: (BuildContext context) => ShowTaskBloc(number1: 0),
-        ),
-      ],
-      child: Builder(
-        builder: (context) => BlocListener(
-          cubit: BlocProvider.of<ChecklistBloc>(context),
-          listener: (context, state) {
-            if (state is TaskDeleted) {
-              BlocProvider.of<ChecklistBloc>(context)..add(LoadSuccess());
-              Scaffold.of(context).showSnackBar(
-                  new SnackBar(content: new Text("bạn đã xóa thành công")));
-            } else if (state is TaskAdded) {
-              BlocProvider.of<ChecklistBloc>(context)..add(LoadSuccess());
-              Scaffold.of(context).showSnackBar(
-                  new SnackBar(content: new Text("bạn đã thêm thành công")));
-            } else if (state is TaskUpdated) {
-              BlocProvider.of<ChecklistBloc>(context)..add(LoadSuccess());
-              Scaffold.of(context).showSnackBar(new SnackBar(
-                  content: new Text("bạn đã chỉnh sửa thành công")));
-            }
-          },
-          child: Scaffold(
-            key: scaffoldKey,
-            appBar: new AppBar(
-              centerTitle: true,
-              backgroundColor: Colors.white,
-              leading:
-                  _isSearching ? const BackButton(
-                      color: Colors.grey,
-                      onPressed: null,
-                  ) : null,
-              title: _isSearching ? _buildSearchField() : _buildTitle(context),
-              actions: _buildActions(),
+    print("IDDD $id");
+    return  MultiBlocProvider(
+        providers: [
+          BlocProvider<CateBloc>(
+            create: (BuildContext context) => CateBloc(
+              todosRepository: FirebaseCategoryRepository(),
+            )..add(LoadTodos()),
+          ),
+          BlocProvider<ChecklistBloc>(
+            create: (BuildContext context)  {
+              return ChecklistBloc(
+                weddingId: id,
+              taskRepository: FirebaseTaskRepository(),
+            )..add(LoadSuccess(id));}
+          ),
+          BlocProvider<ShowTaskBloc>(
+            create: (BuildContext context) => ShowTaskBloc(number1: 0),
+          ),
+        ],
+        child: Builder(
+          builder: (context) => BlocListener(
+            cubit: BlocProvider.of<ChecklistBloc>(context),
+            listener: (context, state) {
+              if (state is TaskDeleted) {
+                BlocProvider.of<ShowTaskBloc>(context)..add(DeleteMonth());
+                BlocProvider.of<ChecklistBloc>(context)..add(LoadSuccess(id));
+                _stopSearching();
+                Scaffold.of(context).showSnackBar(
+                    new SnackBar(content: new Text("bạn đã xóa thành công")));
+              } else if (state is TaskAdded) {
+                BlocProvider.of<ChecklistBloc>(context)..add(LoadSuccess(id));
+                Scaffold.of(context).showSnackBar(
+                    new SnackBar(content: new Text("bạn đã thêm thành công")));
+              } else if (state is TaskUpdated) {
+                BlocProvider.of<ChecklistBloc>(context)..add(LoadSuccess(id));
+                _stopSearching();
+                Scaffold.of(context).showSnackBar(new SnackBar(
+                    content: new Text("bạn đã chỉnh sửa thành công")));
+              }
+            },
+            child: Scaffold(
+              key: scaffoldKey,
+              appBar: new AppBar(
+                centerTitle: true,
+                backgroundColor: hexToColor("#d86a77"),
+                leading:
+                    _isSearching ?  BackButton(
+                        color: Colors.grey,
+                        onPressed: (){
+                          setState(() {
+                            BlocProvider.of<ChecklistBloc>(context)
+                              ..add(LoadSuccess(id));
+                            _stopSearching();
+                          });
+                        },
+                    ) : null,
+                title: _isSearching ? _buildSearchField(context) : _buildTitle(context),
+                actions: _buildActions(context),
+              ),
+              body: _body(),
+              floatingActionButton:  _isSearching ? null : FloatingActionButton.extended(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => BlocProvider.value(
+                          value: BlocProvider.of<CateBloc>(context),
+                          child: BlocProvider.value(
+                              value: BlocProvider.of<ChecklistBloc>(context),
+                              child: AddTaskPage()),
+                        )),
+                  );
+                },
+                label: Text('thêm công việc'),
+                icon: Icon(Icons.add),
+                backgroundColor: Colors.lightBlue,
+              ),
+              floatingActionButtonLocation:
+                  FloatingActionButtonLocation.centerFloat,
             ),
-            body: _body(),
-            floatingActionButton: FloatingActionButton.extended(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (_) => BlocProvider.value(
-                            value: BlocProvider.of<CateBloc>(context),
-                            child: BlocProvider.value(
-                                value: BlocProvider.of<ChecklistBloc>(context),
-                                child: AddTaskPage()),
-                          )),
-                );
-              },
-              label: Text('thêm công việc'),
-              icon: Icon(Icons.add),
-              backgroundColor: Colors.lightBlue,
-            ),
-            floatingActionButtonLocation:
-                FloatingActionButtonLocation.centerFloat,
           ),
         ),
-      ),
-    );
+      );
   }
 
   Widget _body() {
@@ -200,7 +254,7 @@ class _ChecklistPageState extends State<ChecklistPage>
       builder: (context) => BlocBuilder(
           cubit: BlocProvider.of<ChecklistBloc>(context),
            buildWhen: (previous, current){
-             if(current is TaskUpdated2) {return false;}
+             if(current is TaskUpdated2 ) {return false;}
              else {return true;}
            },
           builder: (context, state) {
@@ -247,10 +301,10 @@ class _ChecklistPageState extends State<ChecklistPage>
                       builder: (context, state) {
                         if (state is MonthLoading ||
                             state is MonthMovedPreviously ||
-                            state is MonthMovedToNext) {
+                            state is MonthMovedToNext ||
+                            state is MonthDeleted) {
                           int month = months[state.number].month;
                           int year = months[state.number].year;
-                          print("number ${state.number}");
                           //add tasks to list by month
                           valuess.clear();
                           for (int i = 0; i < tasks.length; i++) {
@@ -262,7 +316,7 @@ class _ChecklistPageState extends State<ChecklistPage>
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Container(
-                                color: Colors.black38,
+                                color: Colors.black26,
                                 padding: EdgeInsets.symmetric(vertical: 5.0),
                                 child: Row(
                                   children: <Widget>[
@@ -290,7 +344,6 @@ class _ChecklistPageState extends State<ChecklistPage>
                                       onPressed: () {
                                         BlocProvider.of<ShowTaskBloc>(context)
                                             .add(ShowNext(months.length));
-                                        print("llll ${months.length}");
                                       },
                                     ),
                                   ],
@@ -298,11 +351,23 @@ class _ChecklistPageState extends State<ChecklistPage>
                               ),
                               Container(
                                 margin: EdgeInsets.all(15.0),
-                                child: Text(
-                                  "Đã quá hạn !",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                  ),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      "Chưa đến hạn",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                    SizedBox(width: 10,),
+                                    Text(
+                                      "Đã quá hạn",
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.red,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                               Container(
@@ -327,7 +392,14 @@ class _ChecklistPageState extends State<ChecklistPage>
                       }),
                 );
             } else if (state is TasksLoading) {
-              return LoadingIndicator();
+              return Column(
+                children: [
+                  SizedBox(height: 10,),
+                  Center(child: LoadingIndicator()),
+                ],
+              );
+            } else if (state is TasksSearching ) {
+              return SearchingResultPage(tasks: searchList);
             }
             return Container();
           }),

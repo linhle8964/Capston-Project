@@ -1,139 +1,103 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:wedding_app/model/task_model.dart';
 
-void main() => runApp(MyApp());
+final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin(); //Nang
+Map<int, Task> notificationTime ={};
+int mapKey = 1;
 
-class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  _MyHomePageState createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-  new FlutterLocalNotificationsPlugin();
-  var initializationSettingsAndroid;
-  var initializationSettingsIOS;
-  var initializationSettings;
-
-  void _showNotification() async {
-    await _demoNotification();
+class NotificationManagement {
+  NotificationManagement() {
+    WidgetsFlutterBinding.ensureInitialized();
+    var initializationSettingsAndroid =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
+    var initializationSettingsIOS = IOSInitializationSettings();
+    var initializationSettings = InitializationSettings(
+        android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
+    flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
 
-  Future<void> _demoNotification() async {
+  static void addNotification(Task task) async {
+    var scheduledNotificationDateTime =
+        DateTime.now().add(Duration(seconds: 30));
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-        'channel_ID', 'channel name', 'channel description',
-        importance: Importance.max,
-        priority: Priority.high,
-        ticker: 'test ticker');
+        'channel id', 'channel NAME', 'CHANNEL DESCRIPTION',
+        priority: Priority.high, importance: Importance.max);
 
-    var iOSChannelSpecifics = IOSNotificationDetails();
+    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
     var platformChannelSpecifics = NotificationDetails(
-        android: androidPlatformChannelSpecifics,iOS: iOSChannelSpecifics);
-
-    await flutterLocalNotificationsPlugin.show(0, 'Hello, buddy',
-        'A message from flutter buddy', platformChannelSpecifics,
-        payload: 'test oayload');
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    initializationSettingsAndroid =
-    new AndroidInitializationSettings('app_icon');
-    initializationSettingsIOS = new IOSInitializationSettings(
-        onDidReceiveLocalNotification: onDidReceiveLocalNotification);
-    initializationSettings = new InitializationSettings(
-        android: initializationSettingsAndroid,iOS: initializationSettingsIOS);
-    flutterLocalNotificationsPlugin.initialize(initializationSettings,
-        onSelectNotification: onSelectNotification);
-  }
-
-  Future onSelectNotification(String payload) async {
-    if (payload != null) {
-      debugPrint('Notification payload: $payload');
+        android: androidPlatformChannelSpecifics,
+        iOS: iOSPlatformChannelSpecifics);
+    notificationTime.addAll({mapKey: task});
+    mapKey++;
+    print("addNotification................: ${notificationTime.toString()}");
+    if (task.dueDate.isAfter(DateTime.now())) {
+      await flutterLocalNotificationsPlugin.schedule(mapKey, 'Thông báo', "Đã đến hạn công việc: ${task.name}",
+          task.dueDate, platformChannelSpecifics);
     }
-    await Navigator.push(context,
-        new MaterialPageRoute(builder: (context) => new SecondRoute()));
   }
 
-  Future onDidReceiveLocalNotification(
-      int id, String title, String body, String payload) async {
-    await showDialog(
-        context: context,
-        builder: (BuildContext context) => CupertinoAlertDialog(
-          title: Text(title),
-          content: Text(body),
-          actions: <Widget>[
-            CupertinoDialogAction(
-              isDefaultAction: true,
-              child: Text('Ok'),
-              onPressed: () async {
-                Navigator.of(context, rootNavigator: true).pop();
-                await Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => SecondRoute()));
-              },
-            )
-          ],
-        ));
+  static void addExistingNotifications(List<Task> tasks) async {
+    for(int i=0; i< tasks.length;i++){
+      addNotification(tasks[i]);
+    }
+    print("addAllNotification................: ${notificationTime.toString()}");
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
+  static void updateNotification(Task oldTask,Task newTask) async {
+    var scheduledNotificationDateTime =
+    DateTime.now().add(Duration(seconds: 30));
+    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+        'channel id', 'channel NAME', 'CHANNEL DESCRIPTION',
+        priority: Priority.high, importance: Importance.max);
 
-        title: Text(widget.title),
-      ),
-      body: Center(
+    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
+    var platformChannelSpecifics = NotificationDetails(
+        android: androidPlatformChannelSpecifics,
+        iOS: iOSPlatformChannelSpecifics);
+    int key =-1;
+    for(int i=0; i< notificationTime.length; i++){
+      if(notificationTime.values.elementAt(i).isEqual(oldTask)){
+        key = notificationTime.keys.elementAt(i);
+        break;
+      }
+    }
+    if(key==-1){
+      key= mapKey;
+      mapKey++;
+    }
+    print("KEY: $key");
+    notificationTime.addAll({key: newTask});
 
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _showNotification,
-        tooltip: 'Increment',
-        child: Icon(Icons.notifications),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
+    print("updateNotification.............: ${notificationTime.toString()}");
+    if (newTask.dueDate.isAfter(DateTime.now())) {
+      await flutterLocalNotificationsPlugin.schedule(key, 'Thông báo', "Đã đến hạn công việc: ${newTask.name}",
+          newTask.dueDate, platformChannelSpecifics);
+    }
   }
-}
 
-class SecondRoute extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Thông báo hết hạn'),
-      ),
-      body: Center(
-        child: RaisedButton(
-          child: Text('Trở về ...'),
-          onPressed: () {
-          },
-        ),
-      ),
-    );
+  static void deleteNotification(Task task) async {
+    int key =-1;
+    print("DELETE ${task.toString()}");
+    for(int i=0; i< notificationTime.length; i++){
+      print(notificationTime.values.elementAt(i).isEqual(task) ? "TTT": "FFF");
+      if(notificationTime.values.elementAt(i).isEqual(task)){
+        key = notificationTime.keys.elementAt(i);
+        notificationTime.remove(key);
+        break;
+      }
+    }
+    print("KEY: $key");
+    print("DeleteNotification..............: ${notificationTime.toString()}");
+    await flutterLocalNotificationsPlugin.cancel(key);
+  }
+
+  static void ClearAllNotifications() async {
+    notificationTime.clear();
+    print("ClearAllNotification.............: ${notificationTime.toString()}");
+    mapKey=1;
+    await flutterLocalNotificationsPlugin.cancelAll();
   }
 }

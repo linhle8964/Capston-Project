@@ -20,10 +20,10 @@ class ListViewWidget extends StatefulWidget {
 
 class _ListViewWidgetState extends State<ListViewWidget> {
   @override
-  bool checkbox = false;
 
   Widget build(BuildContext context) {
-    return ListView.separated(
+
+    if(widget.tasks != null) {return ListView.separated(
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
                 itemCount: widget.tasks.length,
@@ -34,20 +34,28 @@ class _ListViewWidgetState extends State<ListViewWidget> {
                       key: UniqueKey(),
                       style: TextStyle(
                         fontSize: 17,
+                        color: widget.tasks[index].dueDate.isBefore(DateTime.now())? Colors.red : Colors.black,
                       ),
                     ),
-                    trailing: Checkbox(
-                      activeColor: Colors.lightBlue,
-                      value: widget.tasks[index].status,
-                      onChanged: (bool value) {
-                        showDialog(
-                            context: context,
-                            barrierDismissible: false,
-                            child: PersonDetailsDialog(
-                              message:"Bạn đang thay đổi trạng thái của công việc",
-                              onPressedFunction: (){updateStatus(index);},
-                            ));
-                      },
+                    trailing: Theme(
+                      data: ThemeData(
+                        primarySwatch: Colors.red,
+                        unselectedWidgetColor: widget.tasks[index].dueDate.isBefore(DateTime.now())? Colors.red : Colors.black,
+                        // Your color
+                      ),
+                      child: Checkbox(
+                        activeColor: widget.tasks[index].dueDate.isBefore(DateTime.now())? Colors.red : Colors.blue,
+                        value: widget.tasks[index].status,
+                        onChanged: (bool value) {
+                          showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              child: PersonDetailsDialog(
+                                message:"Bạn đang thay đổi trạng thái của công việc",
+                                onPressedFunction: (){updateStatus(index);},
+                              ));
+                        },
+                      ),
                     ),
                      onTap: () {
                        Navigator.push(
@@ -71,7 +79,10 @@ class _ListViewWidgetState extends State<ListViewWidget> {
                     thickness: 2.0,
                   );
                 },
-              );
+              );}
+    else {
+      return Text ("Bạn vừa xóa công việc này");
+    }
   }
   
   void updateStatus(int index){

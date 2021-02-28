@@ -10,7 +10,13 @@ abstract class TasksEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class LoadSuccess extends TasksEvent{}
+class LoadSuccess extends TasksEvent{
+  String weddingID;
+
+  LoadSuccess(this.weddingID);
+}
+
+class SearchTasks extends TasksEvent{}
 
 class AddTask extends TasksEvent {
   final Task task;

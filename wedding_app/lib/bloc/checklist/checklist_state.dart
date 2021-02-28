@@ -13,6 +13,8 @@ abstract class TaskState extends Equatable {
 
 class TasksLoading extends TaskState {}
 
+class TasksSearching extends TaskState {}
+
 class TasksLoaded extends TaskState {
   final List<Task> tasks;
   TasksLoaded(this.tasks);
