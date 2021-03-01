@@ -50,7 +50,7 @@ dev_dependencies:
     # Add the dependency for the FlutterFire plugin for Google Analytics
   cloud_firestore: ^0.16.0
   firebase_core: "^0.7.0"
-
+  firebase_storage:
   rxdart: ^0.25.0
   equatable: ^1.2.5
   flutter_launcher_icons: ^0.8.1

@@ -3,9 +3,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
-void main() {
-  runApp(ChooseTemplatePage());
-}
 
 class ChooseTemplatePage extends StatelessWidget {
   @override
@@ -23,6 +20,7 @@ class ChooseTemplate extends StatefulWidget {
 }
 
 class _ChooseTemplateState extends State<ChooseTemplate> {
+  Future<SharedPreferences> _prefs = SharedPreferences.getInstances();
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wedding_app/firebase_repository/invite_email_firebase_repository.dart';
 import 'package:wedding_app/firebase_repository/user_wedding_firebase_repository.dart';
 import 'package:wedding_app/firebase_repository/wedding_firebase_repository.dart';
+import 'package:wedding_app/screens/choose_template_invitation/chooseTemplate_page.dart';
 import 'package:wedding_app/screens/create_wedding/create_wedding_page.dart';
 import 'package:wedding_app/screens/invite_collaborator/invite_collaborator.dart';
 import 'package:wedding_app/screens/login/login_page.dart';
@@ -18,11 +19,13 @@ import 'package:wedding_app/widgets/loading_indicator.dart';
 import 'bloc/authentication/bloc.dart';
 import 'bloc/login/bloc.dart';
 import 'bloc/register/bloc.dart';
+import 'bloc/template_card/template_card_bloc.dart';
 import 'bloc/wedding/bloc.dart';
 import 'bloc/invite_email/bloc.dart';
 import 'bloc/create_wedding/bloc.dart';
 import 'bloc/user_wedding/bloc.dart';
 import 'bloc/simple_bloc_observer.dart';
+import 'firebase_repository/template_card_firebase_repository.dart';
 import 'firebase_repository/user_firebase_repository.dart';
 
 void main() async {
@@ -52,6 +55,13 @@ class MyApp extends StatelessWidget {
                     userRepository: FirebaseUserRepository(),
                     userWeddingRepository: FirebaseUserWeddingRepository()),
                 child: RegisterPage(),
+              );
+            },
+            '/template_card': (context) {
+              return BlocProvider(
+                create: (BuildContext context) => TemplateCardBloc(
+                    templateCardRepository: FirebaseTemplateCardRepository()),
+                child: ChooseTemplatePage(),
               );
             },
             // When navigating to the "/" route, build the FirstScreen widget.

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_countdown_timer/current_remaining_time.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
+import 'package:wedding_app/screens/choose_template_invitation/demo.dart';
 
 class HomePage extends StatefulWidget{
   @override
@@ -102,6 +103,15 @@ class _HomePageState extends State<HomePage> {
                       _buildButtonColumn(main_color, Icons.add_rounded, 'KHÁCH MỜI'),
                       _buildButtonColumn(main_color, Icons.assignment_ind_outlined, 'THIỆP MỜI'),
                       _buildButtonColumn(main_color, Icons.add_alarm, 'THÔNG BÁO'),
+                      ElevatedButton(
+                        child: Text('Open route'),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => NewScreen()),
+                          );
+                        },
+                      ),
                     ],
                   ),
                 ),
