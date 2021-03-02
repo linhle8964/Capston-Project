@@ -1,4 +1,3 @@
-import 'dart:html';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
@@ -31,7 +30,7 @@ class TemplateCardEntity extends Equatable {
   static TemplateCardEntity fromSnapshot(DocumentSnapshot snapshot){
     return TemplateCardEntity(
       snapshot.id,
-      snapshot.get('backgroud_url'),
+      snapshot.get('background_url'),
       snapshot.get('name'),
       snapshot.get('url')
     );
@@ -40,7 +39,7 @@ class TemplateCardEntity extends Equatable {
   static TemplateCardEntity fromJson(Map<String, Object> json){
     return TemplateCardEntity(
       json['id'] as String,
-      json['backgroud_url'] as String,
+      json['background_url'] as String,
       json['name'] as String,
       json['url'] as String
     );
@@ -48,7 +47,7 @@ class TemplateCardEntity extends Equatable {
 
   Map<String,Object> toDocument(){
     return{
-      'backgroud_url': backgroundUrl,
+      'background_url': backgroundUrl,
       'name': name,
       'url': url
     };

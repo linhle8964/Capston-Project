@@ -2,8 +2,13 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-
-
+import 'package:wedding_app/bloc/invitation_card/bloc.dart';
+import 'package:wedding_app/bloc/template_card/bloc.dart';
+import 'package:wedding_app/model/template_card.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:transparent_image/transparent_image.dart';
+import 'package:wedding_app/screens/choose_template_invitation/fill_info_page.dart';
 class ChooseTemplatePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -20,7 +25,8 @@ class ChooseTemplate extends StatefulWidget {
 }
 
 class _ChooseTemplateState extends State<ChooseTemplate> {
-  Future<SharedPreferences> _prefs = SharedPreferences.getInstances();
+
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -101,49 +107,60 @@ class CardList extends StatefulWidget {
   }
 }
 class CardListState extends State<CardList> {
+  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  List<TemplateCard> _templates = [];
+  SharedPreferences sharedPrefs;
+
+  @override
+  void initState(){
+    BlocProvider.of<TemplateCardBloc>(context).add(LoadTemplateCard());
+    _templates = [];
+  }
   @override
   Widget build(BuildContext context) {
     final screenSide= MediaQuery.of(context).size;
     return new Scaffold(
       body: new Container(
-        child: new ListView(
-          scrollDirection: Axis.horizontal,
-          shrinkWrap: true,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: new Container(
-                width: screenSide.width,
-                height: screenSide.height,
-                child: Image.asset('assets/cardTemplate/template1.jpg',height: screenSide.height,),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: new Container(
-                width: screenSide.width,
-                height: screenSide.height,
-                child: Image.asset('assets/cardTemplate/template2.jpg',height: screenSide.height,),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: new Container(
-                width: screenSide.width,
-                height: screenSide.height,
-                child: Image.asset('assets/cardTemplate/template3.jpg',height: screenSide.height,),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: new Container(
-                width: screenSide.width,
-                height: screenSide.height,
-                child: Image.asset('assets/cardTemplate/template4.jpg',height: screenSide.height,),
-              ),
-            ),
-          ],
-        ),
+        child: BlocBuilder(
+          cubit: BlocProvider.of<TemplateCardBloc>(context),
+          builder: (context,state){
+            if(state is TemplateCardLoaded){
+              _templates = state.template;
+            }
+            return ListView.builder(
+                itemCount: _templates.length,
+                scrollDirection: Axis.horizontal,
+                shrinkWrap: true,
+                itemBuilder: (context,index){
+                  TemplateCard item = _templates[index];
+                  print(index);
+                  return InkWell(
+                    onTap: (){
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) =>
+                              BlocProvider.value(
+                                  value: BlocProvider.of<TemplateCardBloc>(context),
+                                child: BlocProvider.value(value: BlocProvider.of<InvitationCardBloc>(context),
+                                child: FillInfoPage(
+                                  //template: item,
+                                ),)
+
+                              )));
+                    },
+                    child: Container(
+                      margin: EdgeInsets.all(3),
+                      child: FadeInImage.memoryNetwork(
+                          width: screenSide.width,
+                          height: screenSide.height,
+                          placeholder: kTransparentImage,
+                          image: item.url),
+                    ) ,
+                  );
+                });
+          }
+        )
       ),
     );
   }

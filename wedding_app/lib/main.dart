@@ -45,6 +45,11 @@ class MyApp extends StatelessWidget {
               userWeddingRepository: FirebaseUserWeddingRepository(),
             )..add(AppStarted());
           }),
+          BlocProvider<TemplateCardBloc>(create: (context) {
+            return TemplateCardBloc(
+             templateCardRepository: FirebaseTemplateCardRepository()
+            );
+          }),
         ],
         child: MaterialApp(
           initialRoute: '/',

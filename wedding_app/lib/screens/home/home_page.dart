@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_countdown_timer/current_remaining_time.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
-import 'package:wedding_app/screens/choose_template_invitation/demo.dart';
+import 'package:wedding_app/screens/choose_template_invitation/chooseTemplate_page.dart';
+
 
 class HomePage extends StatefulWidget{
   @override
@@ -108,7 +109,7 @@ class _HomePageState extends State<HomePage> {
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => NewScreen()),
+                            MaterialPageRoute(builder: (context) => ChooseTemplatePage()),
                           );
                         },
                       ),
