@@ -42,15 +42,16 @@ class _LoginPageState extends State<LoginPage> {
           listener: (context, state) {
             if (state.isSubmitting) {
               FocusScope.of(context).unfocus();
-              showSnackbar(context, "Đang xử lý dữ liệu ...", false);
+              showProcessingSnackbar(context, "Đang xử lý dữ liệu ...");
             }
             if (state.isSuccess) {
               FocusScope.of(context).unfocus();
+              showSuccessSnackbar(context, "Đăng nhập thành công");
               BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
             }
             if (state.isFailure) {
               FocusScope.of(context).unfocus();
-              showSnackbar(context, "Có lỗi xảy ra", true);
+              showFailedSnackbar(context, "Có lỗi xảy ra");
             }
           },
           child: BlocBuilder(

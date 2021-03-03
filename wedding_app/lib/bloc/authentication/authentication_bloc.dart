@@ -47,7 +47,8 @@ class AuthenticationBloc
       } else {
         yield Unauthenticated();
       }
-    } catch (_) {
+    } catch (e) {
+      print("[ERROR]" + e);
       yield Unauthenticated();
     }
   }
@@ -61,6 +62,7 @@ class AuthenticationBloc
     } else {
       SharedPreferences preferences = await SharedPreferences.getInstance();
       await preferences.setString("wedding_id", userWedding.weddingId);
+      await preferences.setString("role", userWedding.role);
       yield Authenticated(user);
     }
   }
@@ -68,6 +70,7 @@ class AuthenticationBloc
   Stream<AuthenticationState> _mapLoggedOutToState() async* {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     preferences.remove("wedding_id");
+    preferences.remove("role");
     yield Unauthenticated();
     _userRepository.signOut();
   }
