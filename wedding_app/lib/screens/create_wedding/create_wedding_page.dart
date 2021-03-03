@@ -7,6 +7,7 @@ import 'package:wedding_app/bloc/create_wedding/bloc.dart';
 import 'package:wedding_app/bloc/wedding/bloc.dart';
 import 'package:wedding_app/model/wedding.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wedding_app/utils/hex_color.dart';
 import 'package:wedding_app/utils/show_snackbar.dart';
 
 class CreateWeddingPage extends StatefulWidget {
@@ -97,6 +98,7 @@ class _CreateWeddingPageState extends State<CreateWeddingPage> {
               builder: (context, state) {
                 return Scaffold(
                   appBar: AppBar(
+                    backgroundColor: hexToColor("#d86a77"),
                     title: Center(
                       child: Text("TẠO ĐÁM CƯỚI"),
                     ),
@@ -105,7 +107,7 @@ class _CreateWeddingPageState extends State<CreateWeddingPage> {
                           icon: Icon(
                             Icons.check,
                             size: 40,
-                            color: Colors.blue,
+                            color: Colors.white,
                           ),
                           onPressed: () => _save(state)),
                     ],

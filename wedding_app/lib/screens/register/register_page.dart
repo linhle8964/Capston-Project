@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:wedding_app/bloc/register/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wedding_app/bloc/authentication/bloc.dart';
+import 'package:wedding_app/utils/alert_dialog.dart';
 import 'package:wedding_app/utils/show_snackbar.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -44,9 +45,10 @@ class _RegisterPageState extends State<RegisterPage> {
             }
             if (state.isSuccess) {
               FocusScope.of(context).unfocus();
-              showSuccessSnackbar(context, "Tạo tài khoản thành công");
-              BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
-              Navigator.pop(context);
+              showSuccessAlertDialog(context, "Thông báo", "Đăng ký thành công",
+                  () {
+                Navigator.pop(context);
+              });
             }
             if (state.isFailure) {
               FocusScope.of(context).unfocus();

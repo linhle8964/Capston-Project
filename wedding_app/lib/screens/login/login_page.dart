@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wedding_app/bloc/login/bloc.dart';
 import 'package:wedding_app/bloc/authentication/bloc.dart';
+import 'package:wedding_app/utils/alert_dialog.dart';
 import 'package:wedding_app/utils/show_snackbar.dart';
 
 class LoginPage extends StatefulWidget {
@@ -42,16 +43,18 @@ class _LoginPageState extends State<LoginPage> {
           listener: (context, state) {
             if (state.isSubmitting) {
               FocusScope.of(context).unfocus();
-              showProcessingSnackbar(context, "Đang xử lý dữ liệu ...");
+              showProcessingSnackbar(context, state.message);
             }
             if (state.isSuccess) {
               FocusScope.of(context).unfocus();
-              showSuccessSnackbar(context, "Đăng nhập thành công");
+              showSuccessSnackbar(context, state.message);
               BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
             }
             if (state.isFailure) {
               FocusScope.of(context).unfocus();
-              showFailedSnackbar(context, "Có lỗi xảy ra");
+              showSuccessAlertDialog(context, "Có lỗi", state.message, () {
+                Navigator.pop(context);
+              });
             }
           },
           child: BlocBuilder(

@@ -80,7 +80,7 @@ class _SettingPageState extends State<SettingPage> {
                       SettingItem(null, "Thông tin cá nhân"),
                       SettingItem(null, "Thông tin mặc định"),
                       SettingItem(null, "Chi phí dự trù"),
-                      SettingItem(null, "Thông tin ngày cưới"),
+                      SettingItem("/create_wedding", "Thông tin ngày cưới"),
                       isAdmin(role)
                           ? SettingItem(
                               "/invite_collaborator", "Kết nối với người ấy")

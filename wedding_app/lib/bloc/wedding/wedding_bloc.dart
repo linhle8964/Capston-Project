@@ -33,6 +33,8 @@ class WeddingBloc extends Bloc<WeddingEvent, WeddingState> {
       yield* _mapWeddingUpdatedToState(event);
     } else if (event is LoadWeddingByUser) {
       yield* _mapLoadWeddingByUserToState(event);
+    } else if (event is LoadWeddingById) {
+      yield* _mapLoadWeddingByIdToState(event);
     }
   }
 
@@ -77,7 +79,7 @@ class WeddingBloc extends Bloc<WeddingEvent, WeddingState> {
       _weddingRepository.deleteWedding(event.weddingId).then((value) async {
         _userWeddingRepository.deleteAllUserWeddingByWedding(event.weddingId);
       });
-      yield Success("Xoá thành công thành công");
+      yield Success("Xoá thành công");
     } catch (e) {
       print("[ERROR]" + e);
       yield Failed("Có lỗi xảy ra");
@@ -86,6 +88,19 @@ class WeddingBloc extends Bloc<WeddingEvent, WeddingState> {
 
   Stream<WeddingState> _mapWeddingUpdatedToState(WeddingUpdated event) async* {
     yield WeddingLoaded(event.wedding);
+  }
+
+  Stream<WeddingState> _mapLoadWeddingByIdToState(
+      LoadWeddingById event) async* {
+    String weddingId = event.weddingId;
+    if (weddingId == null || weddingId == "") {
+      yield Failed("Có lỗi xảy ra");
+    } else {
+      _streamSubscription?.cancel();
+      _streamSubscription = _weddingRepository
+          .getWedding(event.weddingId)
+          .listen((wedding) => add(WeddingUpdated(wedding)));
+    }
   }
 
   @override

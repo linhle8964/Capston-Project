@@ -6,6 +6,12 @@ Future<String> getRole() async {
   return role;
 }
 
+Future<String> getWeddingId() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String role = prefs.getString("wedding_id");
+  return role;
+}
+
 bool isAdmin(String role) {
   if (role == "wedding_admin") {
     return true;
