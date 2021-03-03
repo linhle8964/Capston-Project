@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:wedding_app/screens/guest/ListGuest.dart';
 import 'Guest.dart';
+import 'ListGuest.dart';
 
 class ViewGuestPage extends StatefulWidget {
   List<Guest> guests = List<Guest>();
 
-  ViewGuestPage({this.guests});
-  @override
-  State<StatefulWidget> createState() {
-    return _ViewGuestPageState();
-  }
+  ViewGuestPage({
+    @required this.guests,
+  });
+
+  _ViewGuestPageState createState() => _ViewGuestPageState();
 }
 
 class _ViewGuestPageState extends State<ViewGuestPage>
