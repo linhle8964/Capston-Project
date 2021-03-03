@@ -35,7 +35,7 @@ class NotificationManagement {
     mapKey++;
     print("addNotification................: ${notificationTime.toString()}");
     if (task.dueDate.isAfter(DateTime.now())) {
-      await flutterLocalNotificationsPlugin.schedule((mapKey-1), 'Thông báo', "Đã đến hạn công việc: ${task.name}",
+      await flutterLocalNotificationsPlugin.schedule((mapKey-1), 'Đã đến hạn công việc', task.name,
           task.dueDate, platformChannelSpecifics);
     }
   }

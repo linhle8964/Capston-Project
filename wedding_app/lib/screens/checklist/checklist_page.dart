@@ -396,8 +396,7 @@ class _ChecklistPageState extends State<ChecklistPage>
             } else if (state is TasksLoading) {
               return Column(
                 children: [
-                  SizedBox(height: 10,),
-                  Center(child: LoadingIndicator()),
+                  Expanded(child: Center(child: CircularProgressIndicator())),
                 ],
               );
             } else if (state is TasksSearching ) {
