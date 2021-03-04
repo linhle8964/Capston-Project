@@ -19,26 +19,29 @@ class BudgetList extends StatefulWidget {
 class _BudgetListState extends State<BudgetList> {
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   bool isSearching = false;
+  bool _isShow = false;
   List<Category> _categorys = [];
   List<Budget> _budgets = [];
   String id = "";
   String weddingId = "";
   SharedPreferences sharedPrefs;
   double sum = 0;
+  double _cateSum = 0;
 
   @override
   void initState() {
-    BlocProvider.of<BudgetBloc>(context);
     BlocProvider.of<CateBloc>(context).add(LoadTodos());
     _budgets = [];
     _categorys = [];
     sum = 0;
+    _cateSum = 0;
     SharedPreferences.getInstance().then((prefs) {
       setState(() => sharedPrefs = prefs);
       String weddingId = prefs.getString("wedding_id");
       print("test shared " + weddingId);
       id = weddingId;
     });
+    BlocProvider.of<BudgetBloc>(context).add(GetAllBudget(id));
   }
 
   @override
@@ -51,7 +54,7 @@ class _BudgetListState extends State<BudgetList> {
         title: Center(
           child: !isSearching
               ? Text(
-                  'BUDGETS',
+                  'KINH PHÍ',
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 )
               : TextField(
@@ -80,35 +83,54 @@ class _BudgetListState extends State<BudgetList> {
                   icon: Icon(Icons.search),
                   onPressed: () => showSearch(
                       context: context,
-
                       delegate: SearchPage<Budget>(
                         searchLabel: "Tim Kiem Kinh Phi",
-                        builder: (Budget) => Card(
-                          child: Container(
-                            height: 60,
-                            padding: EdgeInsets.only(left: 15, right: 15),
-                            child: Row(
-                              children: [
-                                Container(
-                                  child: Text(Budget.BudgetName,
+                        builder: (Budget) => InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => BlocProvider.value(
+                                          value: BlocProvider.of<CateBloc>(
+                                              context),
+                                          child: BlocProvider.value(
+                                              value:
+                                                  BlocProvider.of<BudgetBloc>(
+                                                      context),
+                                              child: AddBudget(
+                                                isEditing: true,
+                                                budget: Budget,
+                                              )),
+                                        )),
+                              );
+                            },
+                            child: Card(
+                              child: Container(
+                                height: 60,
+                                padding: EdgeInsets.only(left: 15, right: 15),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      child: Text(Budget.BudgetName,
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold)),
+                                    ),
+                                    Flexible(
+                                        fit: FlexFit.tight, child: SizedBox()),
+                                    Text(
+                                      Budget.money.toString() + "₫",
                                       style: TextStyle(
-                                        color: Colors.black,
+                                          color: Colors.black,
                                           fontSize: 20,
-                                          fontWeight: FontWeight.bold)),
+                                          fontWeight: FontWeight.bold),
+                                    )
+                                  ],
                                 ),
-                                Flexible(fit: FlexFit.tight, child: SizedBox()),
-                                Text(
-                                  Budget.money.toString() + "₫",
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold),
-                                )
-                              ],
-                            ),
-                          ),
-                          //
-                        ),
+                              ),
+                              //
+                            )),
                         filter: (Budget) =>
                             [Budget.BudgetName, Budget.money.toString()],
                         items: _budgets,
@@ -178,7 +200,7 @@ class _BudgetListState extends State<BudgetList> {
                               BlocProvider.of<BudgetBloc>(context)
                                   .add(GetAllBudget(id));
                               if (state is BudgetLoaded) {
-                                sum=0;
+                                sum = 0;
                                 _budgets = state.budgets;
                                 for (int i = 0; i < _budgets.length; i++) {
                                   sum += _budgets[i].money;
@@ -204,23 +226,38 @@ class _BudgetListState extends State<BudgetList> {
                 builder: (context, state) {
                   if (state is TodosLoaded) {
                     _categorys = state.cates;
+
                   }
                   return ListView.builder(
                       itemCount: _categorys.length,
                       itemBuilder: (context, index) {
                         Category item = _categorys[index];
-                        print(index);
+                        if(state is TodosLoaded){
+                          _cateSum=0;
+                          for (int i = 0; i < _budgets.length; i++) {
+                            if (item.id == _budgets[i].CateID) {
+                              _cateSum += _budgets[i].money;
+                            }
+                          }
+                        }
+
+                        if (state is BudgetNotLoaded) {}
+
                         return Column(
                           children: <Widget>[
                             Container(
                               child: ListTile(
-                                title: Text(item.CateName + " | " + " ₫"),
+                                title: Text(item.CateName +
+                                    " | " +
+                                    _cateSum.toString() +
+                                    " ₫"),
                               ),
                             ),
                             BlocBuilder(
                                 cubit: BlocProvider.of<BudgetBloc>(context),
                                 builder: (context, state) {
-                                  if (state is BudgetLoading) {}
+                                  BlocProvider.of<BudgetBloc>(context)
+                                    ..add(GetAllBudget(id));
                                   if (state is BudgetLoaded) {
                                     print("test index" + index.toString());
                                     _budgets = state.budgets;
@@ -232,64 +269,74 @@ class _BudgetListState extends State<BudgetList> {
                                       shrinkWrap: true,
                                       itemCount: _budgets.length,
                                       itemBuilder: (context, i) {
-                                        Budget low = _budgets[i];
+                                        Budget low = Budget("", "", 1, 1, 1);
+                                        if (item.id == _budgets[i].CateID) {
+                                          low = _budgets[i];
+                                          _isShow = true;
+                                        } else {
+                                          _isShow = false;
+                                        }
 
-                                        return InkWell(
-                                            onTap: () {
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (_) =>
-                                                        BlocProvider.value(
-                                                          value: BlocProvider
-                                                              .of<CateBloc>(
-                                                                  context),
-                                                          child: BlocProvider
-                                                              .value(
-                                                                  value: BlocProvider
-                                                                      .of<BudgetBloc>(
+                                        return Visibility(
+                                            visible: _isShow,
+                                            child: InkWell(
+                                                onTap: () {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (_) =>
+                                                            BlocProvider.value(
+                                                              value: BlocProvider
+                                                                  .of<CateBloc>(
+                                                                      context),
+                                                              child: BlocProvider
+                                                                  .value(
+                                                                      value: BlocProvider.of<
+                                                                              BudgetBloc>(
                                                                           context),
-                                                                  child:
-                                                                      AddBudget(
-                                                                    isEditing:
-                                                                        true,
-                                                                    budget: low,
-                                                                  )),
-                                                        )),
-                                              );
-                                            },
-                                            child: Card(
-                                              child: Container(
-                                                height: 60,
-                                                padding: EdgeInsets.only(
-                                                    left: 15, right: 15),
-                                                child: Row(
-                                                  children: [
-                                                    Container(
-                                                      child: Text(
-                                                          low.BudgetName,
+                                                                      child:
+                                                                          AddBudget(
+                                                                        isEditing:
+                                                                            true,
+                                                                        budget:
+                                                                            low,
+                                                                      )),
+                                                            )),
+                                                  );
+                                                },
+                                                child: Card(
+                                                  child: Container(
+                                                    height: 60,
+                                                    padding: EdgeInsets.only(
+                                                        left: 15, right: 15),
+                                                    child: Row(
+                                                      children: [
+                                                        Container(
+                                                          child: Text(
+                                                              low.BudgetName,
+                                                              style: TextStyle(
+                                                                  fontSize: 20,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold)),
+                                                        ),
+                                                        Flexible(
+                                                            fit: FlexFit.tight,
+                                                            child: SizedBox()),
+                                                        Text(
+                                                          low.money.toString() +
+                                                              "₫",
                                                           style: TextStyle(
                                                               fontSize: 20,
                                                               fontWeight:
                                                                   FontWeight
-                                                                      .bold)),
+                                                                      .bold),
+                                                        )
+                                                      ],
                                                     ),
-                                                    Flexible(
-                                                        fit: FlexFit.tight,
-                                                        child: SizedBox()),
-                                                    Text(
-                                                      low.money.toString() +
-                                                          "₫",
-                                                      style: TextStyle(
-                                                          fontSize: 20,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                              //
-                                            ));
+                                                  ),
+                                                  //
+                                                )));
                                       });
                                 }),
 
@@ -323,11 +370,10 @@ class _BudgetListState extends State<BudgetList> {
                     )),
           );
         },
-        label: Text('add a item'),
+        label: Text('Thêm'),
         icon: Icon(Icons.add),
         backgroundColor: Colors.lightBlue,
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

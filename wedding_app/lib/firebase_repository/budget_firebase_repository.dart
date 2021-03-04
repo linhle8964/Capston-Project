@@ -22,9 +22,6 @@ class FirebaseBudgetRepository implements BudgetRepository{
   Stream<List<Budget>> getAllBudget(String weddingId) {
     final budgetCollection = FirebaseFirestore.instance.collection('wedding').doc(weddingId).collection("budget");
     return budgetCollection.snapshots().map((snapshot) {
-      print(snapshot.docs
-          .map((doc) => Budget.fromEntity(BudgetEntity.fromSnapshot(doc)))
-          .toList());
       return snapshot.docs
           .map((doc) => Budget.fromEntity(BudgetEntity.fromSnapshot(doc)))
           .toList();
