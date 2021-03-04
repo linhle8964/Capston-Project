@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import "package:flutter/services.dart";
 import 'package:wedding_app/bloc/authentication/bloc.dart';
-import 'package:wedding_app/bloc/create_wedding/bloc.dart';
+import 'package:wedding_app/bloc/validate_wedding/bloc.dart';
 import 'package:wedding_app/bloc/wedding/bloc.dart';
 import 'package:wedding_app/model/wedding.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,7 +21,7 @@ class _CreateWeddingPageState extends State<CreateWeddingPage> {
   TextEditingController addressController = new TextEditingController();
   TextEditingController budgetController = new TextEditingController();
 
-  bool isSubmitButtonEnabled(CreateWeddingState state) {
+  bool isSubmitButtonEnabled(ValidateWeddingState state) {
     return state.isFormValid;
   }
 
@@ -94,7 +94,7 @@ class _CreateWeddingPageState extends State<CreateWeddingPage> {
             )
           ],
           child: BlocBuilder(
-              cubit: BlocProvider.of<CreateWeddingBloc>(context),
+              cubit: BlocProvider.of<ValidateWeddingBloc>(context),
               builder: (context, state) {
                 return Scaffold(
                   appBar: AppBar(
@@ -241,22 +241,22 @@ class _CreateWeddingPageState extends State<CreateWeddingPage> {
   }
 
   void _onBrideNameChanged() {
-    BlocProvider.of<CreateWeddingBloc>(context)
+    BlocProvider.of<ValidateWeddingBloc>(context)
         .add(BrideNameChanged(brideName: brideNameController.text));
   }
 
   void _onGroomNameChanged() {
-    BlocProvider.of<CreateWeddingBloc>(context).add(
+    BlocProvider.of<ValidateWeddingBloc>(context).add(
       GroomNameChanged(groomName: groomNameController.text),
     );
   }
 
   void _onAddressChanged() {
-    BlocProvider.of<CreateWeddingBloc>(context)
+    BlocProvider.of<ValidateWeddingBloc>(context)
         .add(AddressChanged(address: addressController.text));
   }
 
-  void _save(CreateWeddingState state) {
+  void _save(ValidateWeddingState state) {
     if (isSubmitButtonEnabled(state)) {
       String weddingDateStr = _selectedDate.trim() + " " + _selectedTime.trim();
       print(weddingDateStr);

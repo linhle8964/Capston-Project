@@ -50,7 +50,7 @@ class FirebaseUserRepository extends UserRepository {
         throw Exception();
       }
     } catch (e) {
-      print(e.toString());
+      print("Error: $e");
       throw Exception("Có lỗi xảy ra");
     }
 
@@ -91,17 +91,29 @@ class FirebaseUserRepository extends UserRepository {
 
   @override
   Future<User> signUp({String email, String password}) async {
-    final UserCredential userCredential = await _firebaseAuth
-        .createUserWithEmailAndPassword(email: email, password: password)
-        .catchError(
-            (onError) => {print('[Firebase Sign Up Error] : $onError')});
+    try {
+      final UserCredential userCredential = await _firebaseAuth
+          .createUserWithEmailAndPassword(email: email, password: password);
 
-    final User user = userCredential.user;
+      final User user = userCredential.user;
 
-    if (user != null) {
-      user.sendEmailVerification();
-      return user;
+      if (user != null) {
+        user.sendEmailVerification();
+        return user;
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'email-already-in-use') {
+        print(e.message);
+        throw Exception("email-already-in-use");
+      } else {
+        print(e.code);
+        throw Exception();
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception("Có lỗi xảy ra");
     }
+
     return null;
   }
 

@@ -82,7 +82,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       }
     } catch (e) {
       print("[ERROR] : $e");
-      print(e.toString());
       if (e.toString() == "Exception: user-not-found") {
         yield LoginState.failure(message: "Tài khoản không tồn tại");
       } else if (e.toString() == "Exception: wrong-password") {

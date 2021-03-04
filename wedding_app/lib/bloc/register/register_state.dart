@@ -7,6 +7,7 @@ class RegisterState {
   final bool isSubmitting;
   final bool isSuccess;
   final bool isFailure;
+  final String message;
 
   bool get isFormValid => isEmailValid && isPasswordValid;
 
@@ -16,6 +17,7 @@ class RegisterState {
     @required this.isSubmitting,
     @required this.isSuccess,
     @required this.isFailure,
+    @required this.message,
   });
 
   factory RegisterState.empty() {
@@ -25,36 +27,39 @@ class RegisterState {
       isSubmitting: false,
       isSuccess: false,
       isFailure: false,
+      message: "",
     );
   }
 
   factory RegisterState.loading() {
     return RegisterState(
-      isEmailValid: true,
-      isPasswordValid: true,
-      isSubmitting: true,
-      isSuccess: false,
-      isFailure: false,
-    );
+        isEmailValid: true,
+        isPasswordValid: true,
+        isSubmitting: true,
+        isSuccess: false,
+        isFailure: false,
+        message: "Đang xử lý dữ liệu");
   }
 
-  factory RegisterState.failure() {
+  factory RegisterState.failure(String message) {
     return RegisterState(
       isEmailValid: true,
       isPasswordValid: true,
       isSubmitting: false,
       isSuccess: false,
       isFailure: true,
+      message: message,
     );
   }
 
-  factory RegisterState.success() {
+  factory RegisterState.success(String message) {
     return RegisterState(
       isEmailValid: true,
       isPasswordValid: true,
       isSubmitting: false,
       isSuccess: true,
       isFailure: false,
+      message: message,
     );
   }
 
@@ -68,6 +73,7 @@ class RegisterState {
       isSubmitting: false,
       isSuccess: false,
       isFailure: false,
+      message: "",
     );
   }
 
@@ -78,6 +84,7 @@ class RegisterState {
     bool isSubmitting,
     bool isSuccess,
     bool isFailure,
+    String message,
   }) {
     return RegisterState(
       isEmailValid: isEmailValid ?? this.isEmailValid,
@@ -85,6 +92,7 @@ class RegisterState {
       isSubmitting: isSubmitting ?? this.isSubmitting,
       isSuccess: isSuccess ?? this.isSuccess,
       isFailure: isFailure ?? this.isFailure,
+      message: message ?? this.message,
     );
   }
 
@@ -96,6 +104,7 @@ class RegisterState {
       isSubmitting: $isSubmitting,
       isSuccess: $isSuccess,
       isFailure: $isFailure,
+      message: $message,
     }''';
   }
 }

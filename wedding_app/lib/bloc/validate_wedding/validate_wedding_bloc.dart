@@ -4,12 +4,12 @@ import 'bloc.dart';
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 
-class CreateWeddingBloc extends Bloc<CreateWeddingEvent, CreateWeddingState> {
-  CreateWeddingBloc() : super(CreateWeddingState.empty());
+class ValidateWeddingBloc extends Bloc<ValidateWeddingEvent, ValidateWeddingState> {
+  ValidateWeddingBloc() : super(ValidateWeddingState.empty());
 
   @override
-  Stream<Transition<CreateWeddingEvent, CreateWeddingState>> transformEvents(
-      Stream<CreateWeddingEvent> events, transitionFn) {
+  Stream<Transition<ValidateWeddingEvent, ValidateWeddingState>> transformEvents(
+      Stream<ValidateWeddingEvent> events, transitionFn) {
     final observableStream = events;
     final nonDebounceStream = observableStream.where((event) {
       return (event is! BrideNameChanged &&
@@ -26,7 +26,7 @@ class CreateWeddingBloc extends Bloc<CreateWeddingEvent, CreateWeddingState> {
   }
 
   @override
-  Stream<CreateWeddingState> mapEventToState(CreateWeddingEvent event) async* {
+  Stream<ValidateWeddingState> mapEventToState(ValidateWeddingEvent event) async* {
     if (event is GroomNameChanged) {
       yield* _mapGroomNameChangedToState(event.groomName);
     } else if (event is BrideNameChanged) {
@@ -36,19 +36,19 @@ class CreateWeddingBloc extends Bloc<CreateWeddingEvent, CreateWeddingState> {
     }
   }
 
-  Stream<CreateWeddingState> _mapBrideNameChangedToState(
+  Stream<ValidateWeddingState> _mapBrideNameChangedToState(
       String brideName) async* {
     yield state.update(
         isBrideNameValid: Validation.isStringValid(brideName, 6));
   }
 
-  Stream<CreateWeddingState> _mapGroomNameChangedToState(
+  Stream<ValidateWeddingState> _mapGroomNameChangedToState(
       String groomName) async* {
     yield state.update(
         isGroomNameValid: Validation.isStringValid(groomName, 6));
   }
 
-  Stream<CreateWeddingState> _mapAddressChangedToState(String address) async* {
+  Stream<ValidateWeddingState> _mapAddressChangedToState(String address) async* {
     yield state.update(isAddressValid: Validation.isStringValid(address, 6));
   }
 }
