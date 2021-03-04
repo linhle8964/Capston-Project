@@ -1,49 +1,38 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wedding_app/bloc/category/bloc.dart';
 import 'package:wedding_app/bloc/category/category_bloc.dart';
 import 'package:wedding_app/bloc/checklist/bloc.dart';
+import 'package:wedding_app/bloc/checklist/checklist_bloc.dart';
 import 'package:wedding_app/model/category.dart';
 import 'package:wedding_app/model/task_model.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:wedding_app/utils/hex_color.dart';
 import 'package:wedding_app/utils/border.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:wedding_app/widgets/confirm_dialog.dart';
+import 'package:wedding_app/utils/hex_color.dart';
 import 'package:wedding_app/widgets/notification.dart';
 
-
-class EditTaskPage extends StatefulWidget {
-  Task task;
+class AddTaskPage extends StatefulWidget {
   String weddingID;
-  EditTaskPage({Key key,@required this.task,@required this.weddingID}) : super(key: key);
-
+  AddTaskPage({Key key,@required this.weddingID}) : super(key: key);
   @override
-  _EditTaskPageState createState() => _EditTaskPageState();
+  _AddTaskPageState createState() => _AddTaskPageState();
 }
 
-class _EditTaskPageState extends State<EditTaskPage> {
+class _AddTaskPageState extends State<AddTaskPage> {
   final _formKey = GlobalKey<FormState>();
-  String _task, _note, _category;
+  String _task = null, _note = null, _category = null;
   bool _checkboxListTile = false;
-  String _selectedDate= new DateFormat('dd-MM-yyyy').format(DateTime.now());
-  DateTime _dueDate;
-
-  @override
-  void initState() {
-    _task = widget.task.name;
-    _selectedDate = new DateFormat('dd-MM-yyyy').format(widget.task.dueDate);
-    _category = widget.task.category;
-    _checkboxListTile = widget.task.status;
-    _note = widget.task.note;
-    _dueDate = widget.task.dueDate;
-  }
+  String _selectedDate = new DateFormat('dd-MM-yyyy').format(DateTime.now());
+  DateTime _dueDate = DateTime.now();
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime d = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime.now(),
-      lastDate: DateTime(DateTime.now().year+3),
+      firstDate: DateTime(DateTime.now().year - 1),
+      lastDate: DateTime(DateTime.now().year + 3),
     );
     if (d != null)
       setState(() {
@@ -51,6 +40,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
         _dueDate = d;
       });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,7 +48,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
         centerTitle: true,
         backgroundColor: hexToColor("#d86a77"),
         title: Text(
-          "Chỉnh Sửa Công Việc",
+          "Thêm Công Việc",
           style: TextStyle(color: Colors.white),
         ),
         leading: new IconButton(
@@ -78,26 +68,25 @@ class _EditTaskPageState extends State<EditTaskPage> {
           Builder(
             builder: (ctx) => IconButton(
               icon: Icon(
-                Icons.check,
-                size: 40,
-                color: Colors.blue,
-              ),
+                  Icons.check,
+                  size: 40,
+                  color: Colors.blue,
+                ),
               onPressed: () {
                 showDialog(
                     context: context,
                     barrierDismissible: false,
                     child: PersonDetailsDialog(
                       message:"Bạn đang thêm công việc",
-                      onPressedFunction: (){updateTask(ctx);},
+                      onPressedFunction: (){addNewTask(ctx);},
                     ));
               },
             ),
           ),
         ],
       ),
-      body: Builder(
-        builder: (context) => SingleChildScrollView(
-          child: Container(
+      body: SingleChildScrollView(
+        child: Container(
             margin: EdgeInsets.all(10.0),
             child: Form(
                 key: _formKey,
@@ -105,7 +94,6 @@ class _EditTaskPageState extends State<EditTaskPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       TextFormField(
-                        initialValue: _task,
                         decoration: InputDecoration(
                           labelText: "Công Việc",
                           focusedBorder: focusedBorder,
@@ -117,14 +105,18 @@ class _EditTaskPageState extends State<EditTaskPage> {
                             input == null ? 'Hãy điền công việc của bạn' : null,
                         onSaved: (input) => _task = input,
                       ),
-                      SizedBox(height: 5,),
+                      SizedBox(
+                        height: 5,
+                      ),
                       Text(
                         'Hạn công việc',
                         style: new TextStyle(
                           fontSize: 15.0,
                         ),
                       ),
-                      SizedBox(height: 5,),
+                      SizedBox(
+                        height: 5,
+                      ),
                       Row(
                         children: [
                           Expanded(
@@ -161,7 +153,9 @@ class _EditTaskPageState extends State<EditTaskPage> {
                               ),
                             ),
                           ),
-                          SizedBox(width: 7.0,),
+                          SizedBox(
+                            width: 7.0,
+                          ),
                           SizedBox(
                             height: 60,
                             width: 150,
@@ -186,14 +180,18 @@ class _EditTaskPageState extends State<EditTaskPage> {
                           ),
                         ],
                       ),
-                      SizedBox(height: 5,),
+                      SizedBox(
+                        height: 5,
+                      ),
                       Text(
                         'Loại công việc',
                         style: TextStyle(
                           fontSize: 15,
                         ),
                       ),
-                      SizedBox(height: 5,),
+                      SizedBox(
+                        height: 5,
+                      ),
                       Container(
                         height: 60,
                         padding: EdgeInsets.only(left: 10.0, right: 10.0),
@@ -201,52 +199,53 @@ class _EditTaskPageState extends State<EditTaskPage> {
                           border: Border.all(),
                           color: Colors.white,
                         ),
-                          child: Builder(
-                            builder: (context) => BlocBuilder(
-                              cubit: BlocProvider.of<CateBloc>(context),
-                              builder: (context, state) {
-                                List<String> categories = [];
-                                List<Category> categoryObjects = [];
-                                if (state is TodosLoaded) {
-                                  categoryObjects = state.cates;
-                                  for (int i = 0; i < categoryObjects.length; i++) {
-                                    categories.add(categoryObjects[i].name.toString());
-                                  }
-                                  // widget.dropdownValue = categories.length !=0? categories[0].toString()
-                                  //    : widget.dropdownValue;
-                                } else if (state is TodosLoading) {}
-                                else if (state is TodosNotLoaded) {}
-                                return DropdownButton<String>(
-                                  isExpanded: true,
-                                  value: _category,
-                                  icon: Icon(Icons.keyboard_arrow_down_outlined),
-                                  iconSize: 40,
-                                  elevation: 16,
-                                  onChanged: (String newValue) {
-                                    setState(() {
-                                      _category = newValue;
-                                    });
-                                  },
-                                  items: categories.map<DropdownMenuItem<String>>((String value) {
-                                    return DropdownMenuItem<String>(
-                                      value: value,
-                                      child: Text(
-                                        value,
-                                        style: TextStyle(
-                                          fontSize: 17,
-                                        ),
+                        child: Builder(
+                          builder: (context) => BlocBuilder(
+                            cubit: BlocProvider.of<CateBloc>(context),
+                            builder: (context, state) {
+                              List<String> categories = [];
+                              List<Category> categoryObjects = [];
+                              if (state is TodosLoaded) {
+                                categoryObjects = state.cates;
+                                for (int i = 0; i < categoryObjects.length; i++) {
+                                  categories.add(categoryObjects[i].name.toString());
+                                }
+                                // widget.dropdownValue = categories.length !=0? categories[0].toString()
+                                //    : widget.dropdownValue;
+                              } else if (state is TodosLoading) {}
+                              else if (state is TodosNotLoaded) {}
+                              return DropdownButton<String>(
+                                isExpanded: true,
+                                value: _category,
+                                icon: Icon(Icons.keyboard_arrow_down_outlined),
+                                iconSize: 40,
+                                elevation: 16,
+                                onChanged: (String newValue) {
+                                  setState(() {
+                                    _category = newValue;
+                                  });
+                                },
+                                items: categories.map<DropdownMenuItem<String>>((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(
+                                      value,
+                                      style: TextStyle(
+                                        fontSize: 17,
                                       ),
-                                    );
-                                  }).toList(),
-                                );
-                              },
-                            ),
+                                    ),
+                                  );
+                                }).toList(),
+                              );
+                            },
                           ),
+                        ),
                       ),
-                      SizedBox(height: 20,),
+                      SizedBox(
+                        height: 20,
+                      ),
                       TextFormField(
                         maxLines: 8,
-                        initialValue: _note,
                         decoration: InputDecoration(
                           labelText: "Ghi chú",
                           focusedBorder: focusedBorder,
@@ -257,65 +256,21 @@ class _EditTaskPageState extends State<EditTaskPage> {
                         ),
                         onSaved: (input) => _note = input,
                       ),
-                      SizedBox(height: 10,),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Ink(
-                            decoration: const ShapeDecoration(
-                              color: Colors.red,
-                              shape: CircleBorder(),
-                            ),
-                            child: Builder(
-                              builder: (ctx) => IconButton(
-                                icon: Icon(Icons.delete_forever_outlined),
-                                color: Colors.white,
-                                iconSize: 40,
-                                onPressed: () {
-                                  showDialog(
-                                      context: context,
-                                      barrierDismissible: false,
-                                      child: PersonDetailsDialog(
-                                        message:"Bạn đang xóa",
-                                        onPressedFunction: (){deleteTask(ctx);},
-                                      ));
-                                },
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
                     ])),
           ),
-        ),
       ),
     );
   }
 
-  void deleteTask(context) {
-    if (_formKey.currentState.validate() && _category != null) {
-      _formKey.currentState.save();
-      BlocProvider.of<ChecklistBloc>(context)..add(DeleteTask(widget.task,widget.weddingID));
-      NotificationManagement.deleteNotification(widget.task);
-      Navigator.pop(context);
-    }else if(_task ==null){
-      Scaffold.of(context).showSnackBar(SnackBar(content: Text('Bạn chưa điền tên công việc'),),);
-    }
-  }
-
-  void updateTask(context){
+  void addNewTask(context) {
     _formKey.currentState.save();
-    Task task = new Task( id: widget.task.id,
+    Task task = new Task(
         name: _task, dueDate: _dueDate, status: _checkboxListTile,
         note: _note, category: _category);
-    if (_task!=null && _task.trim().isNotEmpty) {
-      if(task == widget.task) {
-        Scaffold.of(context).showSnackBar(SnackBar(content: Text('Bạn chưa thay đổi tên công việc!!!'),),);
-        return;
-      }
-      BlocProvider.of<ChecklistBloc>(context)..add(UpdateTask(task,widget.weddingID));
-      NotificationManagement.updateNotification(widget.task, task);
+    print(task.toString());
+    if (_task!=null && _category != null && _task.trim().isNotEmpty) {
+      BlocProvider.of<ChecklistBloc>(context)..add(AddTask(task,widget.weddingID));
+      NotificationManagement.addNotification(task);
       Navigator.pop(context);
     }else {
       Scaffold.of(context).showSnackBar(SnackBar(content: Text('có lỗi xảy ra'),),);
