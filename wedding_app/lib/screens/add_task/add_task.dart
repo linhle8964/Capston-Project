@@ -15,7 +15,7 @@ import 'package:wedding_app/widgets/notification.dart';
 
 class AddTaskPage extends StatefulWidget {
   String weddingID;
-  AddTaskPage({Key key,@required this.weddingID}) : super(key: key);
+  AddTaskPage({Key key, @required this.weddingID}) : super(key: key);
   @override
   _AddTaskPageState createState() => _AddTaskPageState();
 }
@@ -58,28 +58,32 @@ class _AddTaskPageState extends State<AddTaskPage> {
             showDialog(
                 context: context,
                 barrierDismissible: false,
-                child: PersonDetailsDialog(
-                  message:"Bạn có muốn thoát",
-                  onPressedFunction: (){Navigator.of(context).pop();},
-                ));
+                builder: (BuildContext context) => PersonDetailsDialog(
+                      message: "Bạn có muốn thoát",
+                      onPressedFunction: () {
+                        Navigator.of(context).pop();
+                      },
+                    ));
           },
         ),
         actions: [
           Builder(
             builder: (ctx) => IconButton(
               icon: Icon(
-                  Icons.check,
-                  size: 40,
-                  color: Colors.blue,
-                ),
+                Icons.check,
+                size: 40,
+                color: Colors.blue,
+              ),
               onPressed: () {
                 showDialog(
                     context: context,
                     barrierDismissible: false,
-                    child: PersonDetailsDialog(
-                      message:"Bạn đang thêm công việc",
-                      onPressedFunction: (){addNewTask(ctx);},
-                    ));
+                    builder: (BuildContext context) => PersonDetailsDialog(
+                          message: "Bạn đang thêm công việc",
+                          onPressedFunction: () {
+                            addNewTask(ctx);
+                          },
+                        ));
               },
             ),
           ),
@@ -87,177 +91,179 @@ class _AddTaskPageState extends State<AddTaskPage> {
       ),
       body: SingleChildScrollView(
         child: Container(
-            margin: EdgeInsets.all(10.0),
-            child: Form(
-                key: _formKey,
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      TextFormField(
-                        decoration: InputDecoration(
-                          labelText: "Công Việc",
-                          focusedBorder: focusedBorder,
-                          enabledBorder: enabledBorder,
-                          fillColor: Colors.white,
-                          filled: true,
-                        ),
-                        validator: (input) =>
-                            input == null ? 'Hãy điền công việc của bạn' : null,
-                        onSaved: (input) => _task = input,
+          margin: EdgeInsets.all(10.0),
+          child: Form(
+              key: _formKey,
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    TextFormField(
+                      decoration: InputDecoration(
+                        labelText: "Công Việc",
+                        focusedBorder: focusedBorder,
+                        enabledBorder: enabledBorder,
+                        fillColor: Colors.white,
+                        filled: true,
                       ),
-                      SizedBox(
-                        height: 5,
+                      validator: (input) =>
+                          input == null ? 'Hãy điền công việc của bạn' : null,
+                      onSaved: (input) => _task = input,
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Text(
+                      'Hạn công việc',
+                      style: new TextStyle(
+                        fontSize: 15.0,
                       ),
-                      Text(
-                        'Hạn công việc',
-                        style: new TextStyle(
-                          fontSize: 15.0,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Container(
-                              padding: EdgeInsets.only(left: 10.0, top: 4.0),
-                              height: 60,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                border: Border.all(),
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: Text(
-                                          _selectedDate,
-                                          style: new TextStyle(
-                                            fontSize: 17.0,
-                                          ),
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Container(
+                            padding: EdgeInsets.only(left: 10.0, top: 4.0),
+                            height: 60,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border.all(),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        _selectedDate,
+                                        style: new TextStyle(
+                                          fontSize: 17.0,
                                         ),
                                       ),
-                                      IconButton(
-                                        icon: Icon(Icons.calendar_today),
-                                        tooltip: 'Tap to open date picker',
-                                        onPressed: () {
-                                          _selectDate(context);
-                                        },
-                                      ),
-                                    ],
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 7.0,
-                          ),
-                          SizedBox(
-                            height: 60,
-                            width: 150,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                border: Border.all(),
-                              ),
-                              child: CheckboxListTile(
-                                contentPadding: EdgeInsets.all(0),
-                                activeColor: Colors.blue,
-                                controlAffinity: ListTileControlAffinity.leading,
-                                title: Text('Chưa hoàn thành'),
-                                value: _checkboxListTile,
-                                onChanged: (value) {
-                                  setState(() {
-                                    _checkboxListTile = !_checkboxListTile;
-                                  });
-                                },
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Text(
-                        'Loại công việc',
-                        style: TextStyle(
-                          fontSize: 15,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 5,
-                      ),
-                      Container(
-                        height: 60,
-                        padding: EdgeInsets.only(left: 10.0, right: 10.0),
-                        decoration: BoxDecoration(
-                          border: Border.all(),
-                          color: Colors.white,
-                        ),
-                        child: Builder(
-                          builder: (context) => BlocBuilder(
-                            cubit: BlocProvider.of<CateBloc>(context),
-                            builder: (context, state) {
-                              List<String> categories = [];
-                              List<Category> categoryObjects = [];
-                              if (state is TodosLoaded) {
-                                categoryObjects = state.cates;
-                                for (int i = 0; i < categoryObjects.length; i++) {
-                                  categories.add(categoryObjects[i].name.toString());
-                                }
-                                // widget.dropdownValue = categories.length !=0? categories[0].toString()
-                                //    : widget.dropdownValue;
-                              } else if (state is TodosLoading) {}
-                              else if (state is TodosNotLoaded) {}
-                              return DropdownButton<String>(
-                                isExpanded: true,
-                                value: _category,
-                                icon: Icon(Icons.keyboard_arrow_down_outlined),
-                                iconSize: 40,
-                                elevation: 16,
-                                onChanged: (String newValue) {
-                                  setState(() {
-                                    _category = newValue;
-                                  });
-                                },
-                                items: categories.map<DropdownMenuItem<String>>((String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(
-                                      value,
-                                      style: TextStyle(
-                                        fontSize: 17,
-                                      ),
                                     ),
-                                  );
-                                }).toList(),
-                              );
-                            },
+                                    IconButton(
+                                      icon: Icon(Icons.calendar_today),
+                                      tooltip: 'Tap to open date picker',
+                                      onPressed: () {
+                                        _selectDate(context);
+                                      },
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      TextFormField(
-                        maxLines: 8,
-                        decoration: InputDecoration(
-                          labelText: "Ghi chú",
-                          focusedBorder: focusedBorder,
-                          enabledBorder: enabledBorder,
-                          fillColor: Colors.white,
-                          filled: true,
-                          alignLabelWithHint: true,
+                        SizedBox(
+                          width: 7.0,
                         ),
-                        onSaved: (input) => _note = input,
+                        SizedBox(
+                          height: 60,
+                          width: 150,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border.all(),
+                            ),
+                            child: CheckboxListTile(
+                              contentPadding: EdgeInsets.all(0),
+                              activeColor: Colors.blue,
+                              controlAffinity: ListTileControlAffinity.leading,
+                              title: Text('Chưa hoàn thành'),
+                              value: _checkboxListTile,
+                              onChanged: (value) {
+                                setState(() {
+                                  _checkboxListTile = !_checkboxListTile;
+                                });
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Text(
+                      'Loại công việc',
+                      style: TextStyle(
+                        fontSize: 15,
                       ),
-                    ])),
-          ),
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Container(
+                      height: 60,
+                      padding: EdgeInsets.only(left: 10.0, right: 10.0),
+                      decoration: BoxDecoration(
+                        border: Border.all(),
+                        color: Colors.white,
+                      ),
+                      child: Builder(
+                        builder: (context) => BlocBuilder(
+                          cubit: BlocProvider.of<CateBloc>(context),
+                          builder: (context, state) {
+                            List<String> categories = [];
+                            List<Category> categoryObjects = [];
+                            if (state is TodosLoaded) {
+                              categoryObjects = state.cates;
+                              for (int i = 0; i < categoryObjects.length; i++) {
+                                categories
+                                    .add(categoryObjects[i].name.toString());
+                              }
+                              // widget.dropdownValue = categories.length !=0? categories[0].toString()
+                              //    : widget.dropdownValue;
+                            } else if (state is TodosLoading) {
+                            } else if (state is TodosNotLoaded) {}
+                            return DropdownButton<String>(
+                              isExpanded: true,
+                              value: _category,
+                              icon: Icon(Icons.keyboard_arrow_down_outlined),
+                              iconSize: 40,
+                              elevation: 16,
+                              onChanged: (String newValue) {
+                                setState(() {
+                                  _category = newValue;
+                                });
+                              },
+                              items: categories.map<DropdownMenuItem<String>>(
+                                  (String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(
+                                    value,
+                                    style: TextStyle(
+                                      fontSize: 17,
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    TextFormField(
+                      maxLines: 8,
+                      decoration: InputDecoration(
+                        labelText: "Ghi chú",
+                        focusedBorder: focusedBorder,
+                        enabledBorder: enabledBorder,
+                        fillColor: Colors.white,
+                        filled: true,
+                        alignLabelWithHint: true,
+                      ),
+                      onSaved: (input) => _note = input,
+                    ),
+                  ])),
+        ),
       ),
     );
   }
@@ -265,15 +271,23 @@ class _AddTaskPageState extends State<AddTaskPage> {
   void addNewTask(context) {
     _formKey.currentState.save();
     Task task = new Task(
-        name: _task, dueDate: _dueDate, status: _checkboxListTile,
-        note: _note, category: _category);
+        name: _task,
+        dueDate: _dueDate,
+        status: _checkboxListTile,
+        note: _note,
+        category: _category);
     print(task.toString());
-    if (_task!=null && _category != null && _task.trim().isNotEmpty) {
-      BlocProvider.of<ChecklistBloc>(context)..add(AddTask(task,widget.weddingID));
+    if (_task != null && _category != null && _task.trim().isNotEmpty) {
+      BlocProvider.of<ChecklistBloc>(context)
+        ..add(AddTask(task, widget.weddingID));
       NotificationManagement.addNotification(task);
       Navigator.pop(context);
-    }else {
-      Scaffold.of(context).showSnackBar(SnackBar(content: Text('có lỗi xảy ra'),),);
+    } else {
+      Scaffold.of(context).showSnackBar(
+        SnackBar(
+          content: Text('có lỗi xảy ra'),
+        ),
+      );
     }
   }
 }

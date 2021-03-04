@@ -33,6 +33,9 @@ class FirebaseUserRepository extends UserRepository {
 
       final user = userCredential.user;
       if (user != null) {
+        if (!user.emailVerified) {
+          user.sendEmailVerification();
+        }
         return user;
       }
     } on FirebaseAuthException catch (e) {
@@ -121,5 +124,10 @@ class FirebaseUserRepository extends UserRepository {
   Future<bool> isEmailVerified() async {
     final currentUser = _firebaseAuth.currentUser;
     return currentUser.emailVerified;
+  }
+
+  @override
+  Future<void> resetPassword(String email) async {
+    await _firebaseAuth.sendPasswordResetEmail(email: email);
   }
 }

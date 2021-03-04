@@ -16,4 +16,6 @@ abstract class UserRepository {
   Future<void> signOut();
 
   Future<bool> isEmailVerified();
+
+  Future<void> resetPassword(String email);
 }

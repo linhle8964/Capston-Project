@@ -9,7 +9,6 @@ import 'package:wedding_app/utils/get_data.dart';
 import 'package:wedding_app/widgets/notification.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 class HomePage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -37,128 +36,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-<<<<<<< HEAD
-    return Scaffold(
-      appBar: AppBar(title: const Text('Cung hỉ')),
-      body: SafeArea(
-        minimum: const EdgeInsets.only(top: 5, left: 10, right: 10),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage('assets/image/home_top.jpg'),
-                      fit: BoxFit.cover),
-                ),
-                height: 180,
-                alignment: Alignment.center,
-                child: CountdownTimer(
-                  endTime: endTime,
-                  widgetBuilder: (_, CurrentRemainingTime time) {
-                    if (time == null) {
-                      return Text('Game over');
-                    }
-                    return Text(
-                      ' ${(time.days == null) ? '' : (time.days.toString() + ' ngày,')}  ${(time.hours == null) ? '0' : time.hours} :  ${(time.min == null) ? '0' : time.min} : ${time.sec}',
-                      style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black38),
-                    );
-                  },
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.all(20),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          FlatButton(
-                            child: Container(
-                              padding: const EdgeInsets.all(5),
-                              child: Text(
-                                'Chia sẻ quyền quản lý',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              decoration: BoxDecoration(
-                                  border:
-                                      Border.all(color: main_color, width: 2)),
-                            ),
-                            onPressed: () {
-                              print('Share');
-                            },
-                          )
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    _buildButtonColumn(
-                        main_color, Icons.add_rounded, 'KHÁCH MỜI'),
-                    _buildButtonColumn(
-                        main_color, Icons.assignment_ind_outlined, 'THIỆP MỜI'),
-                    _buildButtonColumn(
-                        main_color, Icons.add_alarm, 'THÔNG BÁO'),
-                  ],
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.all(20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    _buildInfoColumn(main_color, 'Việc cần làm ', 0),
-                    _buildInfoColumn(main_color, 'Việc đã xong ', 0),
-                  ],
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.all(20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    _buildInfoColumn(main_color, 'Tổng ngân sách ', 0),
-                    _buildInfoColumn(main_color, 'Đã dùng ', 0),
-                  ],
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.all(20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    _buildInfoColumn(main_color, 'Số khách dự kiến ', 0),
-                    _buildInfoColumn(main_color, 'Khách đã xác nhận ', 0),
-                  ],
-                ),
-              ),
-              // Container(
-              //   padding: const EdgeInsets.all(20),
-              //   child: Row(
-              //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              //     children: [
-              //       _buildInfoColumn(main_color, 'Tổng dịch vụ ', 0),
-              //       _buildInfoColumn(main_color, 'Đã đặt ', 0),
-              //     ],
-              //   ),
-              // )
-            ],
-          ),
-        ),
-      ),
-=======
     return FutureBuilder(
       future: getWeddingID(),
       builder: (context, snapshot) {
@@ -175,22 +52,22 @@ class _HomePageState extends State<HomePage> {
             child: Builder(
               builder: (context) => BlocBuilder(
                 cubit: BlocProvider.of<ChecklistBloc>(context),
-                builder:  (context,state){
+                builder: (context, state) {
                   // Nang added
-                  if(NotificationManagement.notificationTime.isEmpty){
-                    if(state is TasksLoaded){
-                      NotificationManagement.addExistingNotifications(state.tasks);
+                  if (NotificationManagement.notificationTime.isEmpty) {
+                    if (state is TasksLoaded) {
+                      NotificationManagement.addExistingNotifications(
+                          state.tasks);
                     }
                   }
                   //end
                   return MaterialApp(
                     title: 'Home screen',
                     home: Scaffold(
-                      appBar: AppBar(
-                          title: const Text('Cung hỉ')
-                      ),
+                      appBar: AppBar(title: const Text('Cung hỉ')),
                       body: SafeArea(
-                        minimum: const EdgeInsets.only(top: 5, left: 10, right: 10),
+                        minimum:
+                            const EdgeInsets.only(top: 5, left: 10, right: 10),
                         child: SingleChildScrollView(
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -198,24 +75,25 @@ class _HomePageState extends State<HomePage> {
                               Container(
                                 decoration: const BoxDecoration(
                                   image: DecorationImage(
-                                      image: AssetImage('assets/image/home_top.jpg'),
+                                      image: AssetImage(
+                                          'assets/image/home_top.jpg'),
                                       fit: BoxFit.cover),
                                 ),
                                 height: 180,
                                 alignment: Alignment.center,
                                 child: CountdownTimer(
                                   endTime: endTime,
-                                  widgetBuilder: (_, CurrentRemainingTime time) {
+                                  widgetBuilder:
+                                      (_, CurrentRemainingTime time) {
                                     if (time == null) {
                                       return Text('Game over');
                                     }
                                     return Text(
-                                      ' ${(time.days==null)?'':(time.days.toString() + ' ngày,')}  ${(time.hours==null)?'0':time.hours} :  ${(time.min==null)?'0':time.min} : ${time.sec}',
+                                      ' ${(time.days == null) ? '' : (time.days.toString() + ' ngày,')}  ${(time.hours == null) ? '0' : time.hours} :  ${(time.min == null) ? '0' : time.min} : ${time.sec}',
                                       style: TextStyle(
                                           fontSize: 24,
                                           fontWeight: FontWeight.bold,
-                                          color: Colors.black38
-                                      ),
+                                          color: Colors.black38),
                                     );
                                   },
                                 ),
@@ -226,7 +104,8 @@ class _HomePageState extends State<HomePage> {
                                   children: [
                                     Expanded(
                                       child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
                                         children: [
                                           FlatButton(
                                             child: Container(
@@ -238,10 +117,11 @@ class _HomePageState extends State<HomePage> {
                                                 ),
                                               ),
                                               decoration: BoxDecoration(
-                                                  border: Border.all(color: main_color, width: 2)
-                                              ),
+                                                  border: Border.all(
+                                                      color: main_color,
+                                                      width: 2)),
                                             ),
-                                            onPressed: (){
+                                            onPressed: () {
                                               print('Share');
                                             },
                                           )
@@ -253,30 +133,41 @@ class _HomePageState extends State<HomePage> {
                               ),
                               Container(
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
                                   children: [
-                                    _buildButtonColumn(main_color, Icons.add_rounded, 'KHÁCH MỜI'),
-                                    _buildButtonColumn(main_color, Icons.assignment_ind_outlined, 'THIỆP MỜI'),
-                                    _buildButtonColumn(main_color, Icons.add_alarm, 'THÔNG BÁO'),
+                                    _buildButtonColumn(main_color,
+                                        Icons.add_rounded, 'KHÁCH MỜI'),
+                                    _buildButtonColumn(
+                                        main_color,
+                                        Icons.assignment_ind_outlined,
+                                        'THIỆP MỜI'),
+                                    _buildButtonColumn(main_color,
+                                        Icons.add_alarm, 'THÔNG BÁO'),
                                   ],
                                 ),
                               ),
                               Container(
                                 padding: const EdgeInsets.all(20),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
                                   children: [
-                                    _buildInfoColumn(main_color, 'Việc cần làm ', 0),
-                                    _buildInfoColumn(main_color, 'Việc đã xong ', 0),
+                                    _buildInfoColumn(
+                                        main_color, 'Việc cần làm ', 0),
+                                    _buildInfoColumn(
+                                        main_color, 'Việc đã xong ', 0),
                                   ],
                                 ),
                               ),
                               Container(
                                 padding: const EdgeInsets.all(20),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
                                   children: [
-                                    _buildInfoColumn(main_color, 'Tổng ngân sách ', 0),
+                                    _buildInfoColumn(
+                                        main_color, 'Tổng ngân sách ', 0),
                                     _buildInfoColumn(main_color, 'Đã dùng ', 0),
                                   ],
                                 ),
@@ -284,10 +175,13 @@ class _HomePageState extends State<HomePage> {
                               Container(
                                 padding: const EdgeInsets.all(20),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
                                   children: [
-                                    _buildInfoColumn(main_color, 'Số khách dự kiến ', 0),
-                                    _buildInfoColumn(main_color, 'Khách đã xác nhận ', 0),
+                                    _buildInfoColumn(
+                                        main_color, 'Số khách dự kiến ', 0),
+                                    _buildInfoColumn(
+                                        main_color, 'Khách đã xác nhận ', 0),
                                   ],
                                 ),
                               ),
@@ -317,10 +211,8 @@ class _HomePageState extends State<HomePage> {
           );
         }
       },
->>>>>>> main
     );
-      //nang added
-
+    //nang added
   }
 
   Column _buildButtonColumn(Color color, IconData icon, String label) {
@@ -377,9 +269,4 @@ class _HomePageState extends State<HomePage> {
       ],
     );
   }
-<<<<<<< HEAD
 }
-=======
-
-}
->>>>>>> main
