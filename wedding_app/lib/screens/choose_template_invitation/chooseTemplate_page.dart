@@ -1,8 +1,11 @@
 import 'dart:ui';
-
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:wedding_app/bloc/invitation_card/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:wedding_app/bloc/template_card/bloc.dart';
 import 'package:wedding_app/model/template_card.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,7 +28,14 @@ class ChooseTemplate extends StatefulWidget {
 }
 
 class _ChooseTemplateState extends State<ChooseTemplate> {
+  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
+  SharedPreferences sharedPrefs;
+
+
+  bool uploading = false;
+  List<File> _image=[];
+  final picker = ImagePicker();
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +78,8 @@ class _ChooseTemplateState extends State<ChooseTemplate> {
                             padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Container(
+                              child: _image.length ==0 ?
+                              Container(
                                 width: 250,
                                 height: 350,
                                 decoration: new BoxDecoration(
@@ -76,7 +87,19 @@ class _ChooseTemplateState extends State<ChooseTemplate> {
                                   border: new Border.all(color: Colors.black, width: 2.0),
                                   borderRadius: new BorderRadius.circular(10.0),
                                 ),
-                                child: IconButton(icon: Icon(Icons.add),iconSize: 100,onPressed: onAddClick,),
+                                child: IconButton(icon: Icon(Icons.add),iconSize: 100,onPressed: ()=>
+                                  !uploading ? chooseImage() : null,),
+                              ):Container(
+                                width: 250,
+                                  height: 350,
+                                decoration: new BoxDecoration(
+                                  image: DecorationImage(
+                                    image: FileImage(_image[_image.length -1]),
+                                    fit: BoxFit.cover
+                                  )
+                                ),
+                                child: IconButton(icon: Icon(Icons.add),iconSize: 0,onPressed: ()=>
+                                !uploading ? chooseImage() : null,),
                               ),
                             )
                         ),
@@ -87,7 +110,12 @@ class _ChooseTemplateState extends State<ChooseTemplate> {
                               height: 40,
                               child:RaisedButton(
                                 color: Colors.blue,
-                                onPressed: onUploadClick,
+                                onPressed: (){
+                                  setState(() {
+                                    uploading = true;
+                                  });
+                                  uploadFile();
+                                },
                                 child: Text('Tải ảnh lên',style: TextStyle(color: Colors.white,fontSize: 20),),
                               )
                           ),
@@ -98,6 +126,50 @@ class _ChooseTemplateState extends State<ChooseTemplate> {
               ],
             )
         ));
+  }
+  chooseImage() async{
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    setState(() {
+      _image.add(File(pickedFile?.path));
+
+    });
+    if (pickedFile.path == null) retriverLostData();
+  }
+  Future<void> retriverLostData () async {
+    final LostData response = await picker.getLostData();
+    if(response.isEmpty){
+      return;
+    }
+    if(response.file != null){
+      setState(() {
+        _image.add(File(response.file.path));
+      });
+    }else{
+      print(response.file);
+    }
+  }
+  Future uploadFile() async{
+    int i=1;
+    String id = '';
+    SharedPreferences.getInstance().then((prefs){
+      setState(() => sharedPrefs = prefs);
+      String weddingId = prefs.getString('wedding_id');
+      id = weddingId;
+    });
+    for (var img in _image){
+      print(id);
+      var storage = FirebaseStorage.instance;
+      final Directory systemTempDir = Directory.systemTemp;
+      final file = File('${systemTempDir.path}/demo.jpeg');
+      String imgName = 'IMG_${DateTime.now().microsecondsSinceEpoch}';
+
+      TaskSnapshot taskSnapshot =
+      await storage.ref('invitation_card/$imgName').putFile(img);
+      final String downloadUrl = await taskSnapshot.ref.getDownloadURL();
+      await FirebaseFirestore.instance
+          .collection('wedding/$id/invitation_card')
+          .add({"url": downloadUrl, "name": imgName});
+    }
   }
 }
 class CardList extends StatefulWidget {
@@ -137,17 +209,9 @@ class CardListState extends State<CardList> {
                   return InkWell(
                     onTap: (){
                       Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) =>
-                              BlocProvider.value(
-                                  value: BlocProvider.of<TemplateCardBloc>(context),
-                                child: BlocProvider.value(value: BlocProvider.of<InvitationCardBloc>(context),
-                                child: FillInfoPage(
-                                  //template: item,
-                                ),)
-
-                              )));
+                        context,
+                        MaterialPageRoute(builder: (context) => FillInfoPage(template: item),
+                      ));
                     },
                     child: Container(
                       margin: EdgeInsets.all(3),
