@@ -47,7 +47,8 @@ class _AddBudgetState extends State<AddBudget> {
   TextEditingController payMoneyController = new TextEditingController();
   TextEditingController budgetController = new TextEditingController();
   SharedPreferences sharedPrefs;
-final _formkey=GlobalKey<FormState>();
+  final _formkey = GlobalKey<FormState>();
+
   @override
   void initState() {
     super.initState();
@@ -57,6 +58,11 @@ final _formkey=GlobalKey<FormState>();
       String weddingId = prefs.getString("wedding_id");
       print("test shared " + weddingId);
       id = weddingId;
+      budgetNameController.text = isEditing ? widget.budget.BudgetName : "";
+      moneyController.text = isEditing ? widget.budget.money.toString() : "";
+      payMoneyController.text =
+      isEditing ? widget.budget.payMoney.toString() : "";
+      _checkboxListTile=isEditing?widget.budget.isComplete:false;
     });
   }
 
@@ -64,17 +70,8 @@ final _formkey=GlobalKey<FormState>();
   Widget build(BuildContext context) {
     BlocProvider.of<CateBloc>(context).add(LoadTodos());
 
-    print(isEditing);
     MediaQueryData queryData;
     queryData = MediaQuery.of(context);
-    TextEditingController budgetNameController = new TextEditingController();
-    budgetNameController.text = isEditing ? widget.budget.BudgetName : "";
-    TextEditingController moneyController = new TextEditingController();
-    moneyController.text = isEditing ? widget.budget.money.toString() : "";
-    TextEditingController payMoneyController = new TextEditingController();
-    payMoneyController.text =
-        isEditing ? widget.budget.payMoney.toString() : "";
-    TextEditingController budgetController = new TextEditingController();
     int maxLines = 3;
     void getDropDownItem() {
       setState(() {
@@ -96,7 +93,6 @@ final _formkey=GlobalKey<FormState>();
                     child: Text('Thêm Quỹ')),
               ),
               body: SingleChildScrollView(
-
                   child: SizedBox(
                 height: queryData.size.height,
                 width: queryData.size.width,
@@ -125,26 +121,28 @@ final _formkey=GlobalKey<FormState>();
                             padding: EdgeInsets.only(
                                 left: 20, right: 20, bottom: 20),
                             width: 250.0,
-                            child:Form(
-                              key: _formkey,
-                            child: TextFormField(
-                                controller: moneyController,
-                                onSaved: (input) =>
-                                    moneyController.text = input,
-                                validator: (val) => double.parse(val) < 1000
-                                    ? "Tiền phải lớn hơn 1000 đồng":null,
-                                decoration: new InputDecoration(
-                                  labelText: 'Số tiền',
-                                  focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Colors.blue, width: 2.0),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: Colors.black, width: 2.0),
-                                  ),
-                                  hintText: 'Tiền',
-                                ))),
+                            child: Form(
+                                key: _formkey,
+
+                                child: TextFormField(
+                                    controller: moneyController,
+                                    onSaved: (input) =>
+                                        moneyController.text = input,
+                                    validator: (val) => double.parse(val) < 1000
+                                        ? "Tiền phải lớn hơn 1000 đồng"
+                                        : null,
+                                    decoration: new InputDecoration(
+                                      labelText: 'Số tiền',
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Colors.blue, width: 2.0),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Colors.black, width: 2.0),
+                                      ),
+                                      hintText: 'Tiền',
+                                    ))),
                           ),
                           Container(
                               padding: EdgeInsets.only(bottom: 20),
@@ -219,6 +217,7 @@ final _formkey=GlobalKey<FormState>();
                                 }).toList(),
                                 onChanged: (val) =>
                                     setState(() => selectedCate = val),
+                                onSaved: (val) => selectedCate = val ,
                               );
                             } else if (state is TodosLoading) {
                               return LoadingIndicator();
@@ -327,13 +326,16 @@ final _formkey=GlobalKey<FormState>();
                                   color: Colors.white,
                                   iconSize: 30,
                                   onPressed: () {
-                                    if(_formkey.currentState.validate()){
+                                    getDropDownItem();
+                                    if (_formkey.currentState.validate()) {
                                       if (isEditing) {
                                         Budget budget = new Budget(
                                             budgetNameController.text,
-                                            holder.id,
+                                            holder.id, _checkboxListTile,
                                             double.parse(moneyController.text),
-                                            double.parse(payMoneyController.text),
+                                            double.parse(
+                                                payMoneyController.text),
+
                                             1,
                                             id: widget.budget.id);
                                         print(budget.toString());
@@ -343,9 +345,11 @@ final _formkey=GlobalKey<FormState>();
                                       } else if (isEditing != true) {
                                         Budget budget = new Budget(
                                             budgetNameController.text,
-                                            holder.id,
+                                            holder.id,_checkboxListTile,
                                             double.parse(moneyController.text),
-                                            double.parse(payMoneyController.text),
+                                            double.parse(
+                                                payMoneyController.text),
+
                                             1);
                                         BlocProvider.of<BudgetBloc>(context)
                                             .add(CreateBudget(id, budget));
@@ -353,7 +357,6 @@ final _formkey=GlobalKey<FormState>();
                                       }
                                     }
                                     getDropDownItem();
-
                                   },
                                 ),
                               ],

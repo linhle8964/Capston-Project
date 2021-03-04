@@ -7,8 +7,10 @@ class Budget {
   final double money;
   final double payMoney;
   final int status;
+  final bool isComplete;
 
-  Budget(this.BudgetName, this.CateID, this.money, this.payMoney, this.status,
+  Budget(this.BudgetName, this.CateID, this.isComplete, this.money, this.payMoney, this.status,
+
       {String id})
       : this.id = id;
 
@@ -18,6 +20,7 @@ class Budget {
         this.CateID = map['CateID'],
         this.money = map['money'],
         this.payMoney = map['payMoney'],
+        this.isComplete = map['Complete'],
         this.status = map['status'];
 
   Map toMap() {
@@ -27,6 +30,7 @@ class Budget {
       'CateID': this.CateID,
       'money': this.money,
       'payMoney': this.payMoney,
+      'Complete':this.isComplete,
       'status': this.status,
     };
   }
@@ -37,9 +41,10 @@ class Budget {
       String CateID,
       double money,
       double payMoney,
+        bool isComplete,
       int status}) {
-    return Budget(BudgetName ?? this.BudgetName, CateID ?? this.CateID,
-        money ?? this.money, payMoney ?? this.payMoney, status ?? this.status,
+    return Budget(BudgetName ?? this.BudgetName, CateID ?? this.CateID,isComplete??this.isComplete,
+        money ?? this.money, payMoney ?? this.payMoney ,status ?? this.status,
         id: id ?? this.id);
   }
 
@@ -49,7 +54,7 @@ class Budget {
   }
 
   BudgetEntity toEntity() {
-    return BudgetEntity(id, BudgetName, CateID, money, payMoney, status);
+    return BudgetEntity(id, BudgetName, CateID,isComplete, money, payMoney, status);
   }
 
   bool operator ==(o) =>
@@ -59,10 +64,11 @@ class Budget {
       o.CateID == CateID &&
       o.money == money &&
       o.payMoney == payMoney &&
+      o.isComplete==isComplete&&
       o.status == status;
 
   static Budget fromEntity(BudgetEntity entity) {
-    return Budget(entity.BudgetName, entity.CateID, entity.money,
+    return Budget(entity.BudgetName, entity.CateID,entity.isComplete,entity.money,
         entity.payMoney, entity.status,
         id: entity.id);
   }
