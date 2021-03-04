@@ -36,13 +36,18 @@ class AuthenticationBloc
     try {
       final isAuthenticated = await _userRepository.isAuthenticated();
       if (isAuthenticated) {
-        final user = await _userRepository.getUser();
-        final UserWedding userWedding =
-            await _userWeddingRepository.getUserWeddingByUser(user);
-        if (userWedding.weddingId == null) {
-          yield Unauthenticated();
+        final isEmailVerified = await _userRepository.isEmailVerified();
+        if (isEmailVerified) {
+          final user = await _userRepository.getUser();
+          final UserWedding userWedding =
+              await _userWeddingRepository.getUserWeddingByUser(user);
+          if (userWedding.weddingId == null) {
+            yield Unauthenticated();
+          } else {
+            yield Authenticated(user);
+          }
         } else {
-          yield Authenticated(user);
+          yield Unauthenticated();
         }
       } else {
         yield Unauthenticated();

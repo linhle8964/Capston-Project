@@ -27,15 +27,33 @@ class FirebaseUserRepository extends UserRepository {
 
   @override
   Future<User> signInWithCredentials(String email, String password) async {
-    final UserCredential userCredential = await _firebaseAuth
-        .signInWithEmailAndPassword(email: email, password: password)
-        .catchError((onError) => {print('[Firebase Log In Error] : $onError')});
+    try {
+      final UserCredential userCredential = await _firebaseAuth
+          .signInWithEmailAndPassword(email: email, password: password);
 
-    final User user = userCredential.user;
-
-    if (user != null) {
-      return user;
+      final user = userCredential.user;
+      if (user != null) {
+        return user;
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        print(e.message);
+        throw Exception("user-not-found");
+      } else if (e.code == 'wrong-password') {
+        print(e.message);
+        throw Exception("wrong-password");
+      } else if (e.code == 'too-many-requests') {
+        print(e.message);
+        throw Exception("too-many-requests");
+      } else {
+        print(e.code);
+        throw Exception();
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception("Có lỗi xảy ra");
     }
+
     return null;
   }
 
@@ -59,6 +77,7 @@ class FirebaseUserRepository extends UserRepository {
     final User user = userCredential.user;
 
     if (user != null) {
+      if (!user.emailVerified) user.sendEmailVerification();
       return user;
     }
 
@@ -72,16 +91,35 @@ class FirebaseUserRepository extends UserRepository {
 
   @override
   Future<User> signUp({String email, String password}) async {
-    final UserCredential userCredential = await _firebaseAuth
-        .createUserWithEmailAndPassword(email: email, password: password)
-        .catchError(
-            (onError) => {print('[Firebase Sign Up Error] : $onError')});
+    try {
+      final UserCredential userCredential = await _firebaseAuth
+          .createUserWithEmailAndPassword(email: email, password: password);
 
-    final User user = userCredential.user;
+      final User user = userCredential.user;
 
-    if (user != null) {
-      return user;
+      if (user != null) {
+        user.sendEmailVerification();
+        return user;
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'email-already-in-use') {
+        print(e.message);
+        throw Exception("email-already-in-use");
+      } else {
+        print(e.code);
+        throw Exception();
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception("Có lỗi xảy ra");
     }
+
     return null;
+  }
+
+  @override
+  Future<bool> isEmailVerified() async {
+    final currentUser = _firebaseAuth.currentUser;
+    return currentUser.emailVerified;
   }
 }

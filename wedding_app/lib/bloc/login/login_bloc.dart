@@ -5,6 +5,7 @@ import 'package:wedding_app/repository/user_repository.dart';
 import 'bloc.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:wedding_app/utils/validations.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final UserRepository _userRepository;
@@ -58,8 +59,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       await _userRepository.signInWithGoogle();
       yield LoginState.success();
     } catch (e) {
-      print("[ERROR]" + e);
-      yield LoginState.failure();
+      print("[ERROR] : $e");
+      yield LoginState.failure(message: "Có lỗi xảy ra");
     }
   }
 
@@ -69,11 +70,29 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }) async* {
     yield LoginState.loading();
     try {
-      await _userRepository.signInWithCredentials(email, password);
-      yield LoginState.success();
+      final user = await _userRepository.signInWithCredentials(email, password);
+      if (user == null) {
+        yield LoginState.failure(message: "Có lỗi xảy ra");
+      } else {
+        if (!user.emailVerified) {
+          yield LoginState.failure(message: "Bạn chưa xác nhận email");
+        } else {
+          yield LoginState.success();
+        }
+      }
     } catch (e) {
-      print("[ERROR]" + e);
-      yield LoginState.failure();
+      print("[ERROR] : $e");
+      if (e.toString() == "Exception: user-not-found") {
+        yield LoginState.failure(message: "Tài khoản không tồn tại");
+      } else if (e.toString() == "Exception: wrong-password") {
+        yield LoginState.failure(message: "Sai mật khẩu");
+      } else if (e.toString() == "Exception: too-many-requests") {
+        yield LoginState.failure(
+            message:
+                "Bạn đã đăng nhập quá nhiều lần. Hãy thử lại trong giây lát");
+      } else {
+        yield LoginState.failure(message: "Có lỗi xảy ra");
+      }
     }
   }
 }
