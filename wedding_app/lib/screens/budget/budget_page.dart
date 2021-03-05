@@ -398,7 +398,7 @@ class _BudgetListState extends State<BudgetList> {
           )
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
+      floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
             context,
@@ -413,9 +413,10 @@ class _BudgetListState extends State<BudgetList> {
                     )),
           );
         },
-        label: Text('Thêm'),
-        icon: Icon(Icons.add),
-        backgroundColor: Colors.lightBlue,
+
+        child: Icon(Icons.add),
+        backgroundColor: Colors.blue,
+
       ),
     );
   }
