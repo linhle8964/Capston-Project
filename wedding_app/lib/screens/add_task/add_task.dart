@@ -213,7 +213,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                               categoryObjects = state.cates;
                               for (int i = 0; i < categoryObjects.length; i++) {
                                 categories
-                                    .add(categoryObjects[i].name.toString());
+                                    .add(categoryObjects[i].CateName.toString());
                               }
                               // widget.dropdownValue = categories.length !=0? categories[0].toString()
                               //    : widget.dropdownValue;

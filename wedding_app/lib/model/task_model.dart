@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:wedding_app/entity/task_entity.dart';
-import 'package:wedding_app/screens/budget/model/category.dart';
 import 'package:equatable/equatable.dart';
 
 @immutable
