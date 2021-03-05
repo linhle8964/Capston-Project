@@ -54,89 +54,86 @@ class _BudgetListState extends State<BudgetList> {
         title: Center(
           child: !isSearching
               ? Text(
-            'KINH PHÍ',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          )
+                  'KINH PHÍ',
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                )
               : TextField(
-            onChanged: (value) {},
-            style: TextStyle(color: Colors.white),
-            decoration: InputDecoration(
-                icon: Icon(
-                  Icons.search,
-                  color: Colors.white,
+                  onChanged: (value) {},
+                  style: TextStyle(color: Colors.white),
+                  decoration: InputDecoration(
+                      icon: Icon(
+                        Icons.search,
+                        color: Colors.white,
+                      ),
+                      hintText: "Search Item",
+                      hintStyle: TextStyle(color: Colors.black)),
                 ),
-                hintText: "Search Item",
-                hintStyle: TextStyle(color: Colors.black)),
-          ),
         ),
         actions: <Widget>[
           isSearching
               ? IconButton(
-            icon: Icon(Icons.cancel),
-            onPressed: () {
-              setState(() {
-                this.isSearching = false;
-              });
-            },
-          )
+                  icon: Icon(Icons.cancel),
+                  onPressed: () {
+                    setState(() {
+                      this.isSearching = false;
+                    });
+                  },
+                )
               : IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () =>
-                showSearch(
-                    context: context,
-                    delegate: SearchPage<Budget>(
-                      searchLabel: "Tim Kiem Kinh Phi",
-                      builder: (Budget) =>
-                          InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (_) =>
-                                          BlocProvider.value(
-                                            value: BlocProvider.of<CateBloc>(
-                                                context),
-                                            child: BlocProvider.value(
-                                                value:
-                                                BlocProvider.of<BudgetBloc>(
-                                                    context),
-                                                child: AddBudget(
-                                                  isEditing: true,
-                                                  budget: Budget,
-                                                )),
-                                          )),
-                                );
-                              },
-                              child: Card(
-                                child: Container(
-                                  height: 60,
-                                  padding: EdgeInsets.only(left: 15, right: 15),
-                                  child: Row(
-                                    children: [
-                                      Container(
-                                        child: Text(Budget.BudgetName,
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.bold)),
-                                      ),
-                                      Text(
-                                        Budget.money.toString() + "₫",
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold),
-                                      )
-                                    ],
-                                  ),
+                  icon: Icon(Icons.search),
+                  onPressed: () => showSearch(
+                      context: context,
+                      delegate: SearchPage<Budget>(
+                        searchLabel: "Tim Kiem Kinh Phi",
+                        builder: (Budget) => InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => BlocProvider.value(
+                                          value: BlocProvider.of<CateBloc>(
+                                              context),
+                                          child: BlocProvider.value(
+                                              value:
+                                                  BlocProvider.of<BudgetBloc>(
+                                                      context),
+                                              child: AddBudget(
+                                                isEditing: true,
+                                                budget: Budget,
+                                              )),
+                                        )),
+                              );
+                            },
+                            child: Card(
+                              child: Container(
+                                height: 60,
+                                padding: EdgeInsets.only(left: 15, right: 15),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      child: Text(Budget.BudgetName,
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold)),
+                                    ),
+                                    Text(
+                                      Budget.money.toString() + "₫",
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold),
+                                    )
+                                  ],
                                 ),
-                                //
-                              )),
-                      filter: (Budget) =>
-                      [Budget.BudgetName, Budget.money.toString()],
-                      items: _budgets,
-                    )),
-          )
+                              ),
+                              //
+                            )),
+                        filter: (Budget) =>
+                            [Budget.BudgetName, Budget.money.toString()],
+                        items: _budgets,
+                      )),
+                )
         ],
       ),
       body: Stack(
@@ -152,10 +149,7 @@ class _BudgetListState extends State<BudgetList> {
                           begin: Alignment.topRight,
                           end: Alignment.bottomLeft,
                           colors: [Colors.blue, Colors.red])),
-                  width: MediaQuery
-                      .of(context)
-                      .size
-                      .width,
+                  width: MediaQuery.of(context).size.width,
                   height: 200,
                 ),
               )),
@@ -169,10 +163,7 @@ class _BudgetListState extends State<BudgetList> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10)),
               child: Container(
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .height * .90,
+                width: MediaQuery.of(context).size.height * .90,
                 height: 100,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -281,7 +272,7 @@ class _BudgetListState extends State<BudgetList> {
                                           itemCount: _budgets.length,
                                           itemBuilder: (context, i) {
                                             Budget low =
-                                            Budget("", "", false, 1, 1, 1);
+                                                Budget("", "", false, 1, 1, 1);
                                             if (item.id == _budgets[i].CateID) {
                                               low = _budgets[i];
                                               _isShow = true;
@@ -298,34 +289,29 @@ class _BudgetListState extends State<BudgetList> {
                                                         MaterialPageRoute(
                                                             builder:
                                                                 (_) =>
-                                                                BlocProvider
-                                                                    .value(
-                                                                  value: BlocProvider
-                                                                      .of<
-                                                                      CateBloc>(
-                                                                      context),
-                                                                  child: BlocProvider
-                                                                      .value(
-                                                                      value: BlocProvider
-                                                                          .of<
-                                                                          BudgetBloc>(
+                                                                    BlocProvider
+                                                                        .value(
+                                                                      value: BlocProvider.of<
+                                                                              CateBloc>(
                                                                           context),
-                                                                      child: AddBudget(
-                                                                        isEditing:
-                                                                        true,
-                                                                        budget:
-                                                                        low,
-                                                                      )),
-                                                                )),
+                                                                      child: BlocProvider.value(
+                                                                          value: BlocProvider.of<BudgetBloc>(context),
+                                                                          child: AddBudget(
+                                                                            isEditing:
+                                                                                true,
+                                                                            budget:
+                                                                                low,
+                                                                          )),
+                                                                    )),
                                                       );
                                                     },
                                                     child: Card(
                                                       child: Container(
                                                         height: 60,
                                                         padding:
-                                                        EdgeInsets.only(
-                                                            left: 15,
-                                                            right: 15),
+                                                            EdgeInsets.only(
+                                                                left: 15,
+                                                                right: 15),
                                                         child: Row(
                                                           children: [
                                                             Container(
@@ -334,53 +320,58 @@ class _BudgetListState extends State<BudgetList> {
                                                                       .BudgetName,
                                                                   style: TextStyle(
                                                                       fontSize:
-                                                                      20,
+                                                                          20,
                                                                       fontWeight:
-                                                                      FontWeight
-                                                                          .bold)),
+                                                                          FontWeight
+                                                                              .bold)),
                                                             ),
                                                             Flexible(
                                                                 fit: FlexFit
                                                                     .tight,
                                                                 child:
-                                                                SizedBox()),
+                                                                    SizedBox()),
                                                             Visibility(
                                                                 visible: low
                                                                     .isComplete,
                                                                 child: SizedBox(
                                                                   child:
-                                                                  Container(
-padding: EdgeInsets.only(left:5,right:5,top:3,bottom:3 ),
-                                                                    decoration: new BoxDecoration(
+                                                                      Container(
+                                                                    padding: EdgeInsets.only(
+                                                                        left: 5,
+                                                                        right:
+                                                                            5,
+                                                                        top: 3,
+                                                                        bottom:
+                                                                            3),
+                                                                    decoration:
+                                                                        new BoxDecoration(
                                                                       color: Colors
                                                                           .greenAccent,
-                                                                      borderRadius: BorderRadius
-                                                                          .circular(
-                                                                          16),
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              16),
                                                                     ),
-
                                                                     child: Text(
-                                                                        " Đã Hoàn Thành ",
+                                                                        " Hoàn Thành ",
                                                                         style: TextStyle(
                                                                             color: Colors
                                                                                 .black,
                                                                             fontSize:
-                                                                            15,
+                                                                                15,
                                                                             fontWeight:
-                                                                            FontWeight
-                                                                                .normal)),
+                                                                                FontWeight.normal)),
                                                                   ),
                                                                 )),
-
                                                             Text(
+                                                              low.isComplete?"0 ₫":
                                                               low.money
-                                                                  .toString() +
+                                                                      .toString() +
                                                                   "₫",
                                                               style: TextStyle(
                                                                   fontSize: 20,
                                                                   fontWeight:
-                                                                  FontWeight
-                                                                      .bold),
+                                                                      FontWeight
+                                                                          .bold),
                                                             )
                                                           ],
                                                         ),
@@ -412,8 +403,7 @@ padding: EdgeInsets.only(left:5,right:5,top:3,bottom:3 ),
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (_) =>
-                    BlocProvider.value(
+                builder: (_) => BlocProvider.value(
                       value: BlocProvider.of<CateBloc>(context),
                       child: BlocProvider.value(
                           value: BlocProvider.of<BudgetBloc>(context),

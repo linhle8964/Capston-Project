@@ -41,7 +41,7 @@ class _AddBudgetState extends State<AddBudget> {
   String weddingId = "";
   String id = "";
   bool _checkboxListTile = false;
-  Category initialCate = new Category("1G23wMGwdk1pnQWnT368", "other");
+  Category initialCate = new Category("", "other");
   TextEditingController budgetNameController = new TextEditingController();
   TextEditingController moneyController = new TextEditingController();
   TextEditingController payMoneyController = new TextEditingController();
@@ -63,17 +63,16 @@ class _AddBudgetState extends State<AddBudget> {
       payMoneyController.text =
           isEditing ? widget.budget.payMoney.toString() : "";
       _checkboxListTile = isEditing ? widget.budget.isComplete : false;
+      initialCate = new Category(widget.budget.CateID, "");
     });
   }
 
   @override
   Widget build(BuildContext context) {
     BlocProvider.of<CateBloc>(context).add(LoadTodos());
-
     MediaQueryData queryData;
     queryData = MediaQuery.of(context);
     int maxLines = 3;
-
 
     return BlocBuilder(
         cubit: BlocProvider.of<BudgetBloc>(context),
@@ -99,12 +98,21 @@ class _AddBudgetState extends State<AddBudget> {
                         showDialog(
                             context: context,
                             barrierDismissible: false,
-                            builder: (BuildContext context) =>
-                                PersonDetailsDialog(
-                                  message: "Bạn đang thêm công việc",
-                                  onPressedFunction: () {
-                                    updateBudget();
-                                  },
+                            builder: (BuildContext context) => AlertDialog(
+                                  title: Text("Xác nhận"),
+                                  content: SingleChildScrollView(
+                                    child: Text(isEditing
+                                        ? " cập nhật Thành Công"
+                                        : "Thêm thành công"),
+                                  ),
+                                  actions: <Widget>[
+                                    TextButton(
+                                        onPressed: () {
+                                          updateBudget();
+                                          Navigator.pop(context);
+                                        },
+                                        child: Text("OK"))
+                                  ],
                                 ));
                       },
                     ),
@@ -290,78 +298,18 @@ class _AddBudgetState extends State<AddBudget> {
                         ],
                       ),
                     ),
-                    Row(
-                      //mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Expanded(
-                          child: RaisedButton(
-                            padding: EdgeInsets.only(left: 0.0, right: 40.0),
-                            color: Colors.red,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                IconButton(
-                                  icon: Icon(Icons.cancel_outlined),
-                                  color: Colors.white,
-                                  iconSize: 30,
-                                  onPressed: () {},
-                                ),
-                                Expanded(
-                                  child: Center(
-                                    child: Text(
-                                      'CANCEL',
-                                      style: TextStyle(
-                                          fontSize: 20, color: Colors.white),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            onPressed: () {},
-                          ),
-                        ),
-                        SizedBox(
-                          width: 5.0,
-                        ),
-                        Expanded(
-                          child: RaisedButton(
-                            padding: EdgeInsets.only(right: 0.0, left: 40.0),
-                            color: Colors.blue,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Expanded(
-                                  child: Center(
-                                    child: Text(
-                                      'SAVE',
-                                      style: TextStyle(
-                                          fontSize: 20, color: Colors.white),
-                                    ),
-                                  ),
-                                ),
-                                IconButton(
-                                  icon: Icon(Icons.arrow_forward_ios_outlined),
-                                  color: Colors.white,
-                                  iconSize: 30,
-                                  onPressed: () {},
-                                ),
-                              ],
-                            ),
-                            onPressed: () {},
-                          ),
-                        ),
-                      ],
-                    )
                   ],
                 ),
               )));
         });
   }
+
   void getDropDownItem() {
     setState(() {
       holder = selectedCate;
     });
   }
+
   void updateBudget() {
     getDropDownItem();
     if (_formkey.currentState.validate()) {
