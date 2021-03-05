@@ -80,7 +80,7 @@ class _AddBudgetState extends State<AddBudget> {
           print(ModalRoute.of(context).settings.name.toString());
           return Scaffold(
               appBar: AppBar(
-                backgroundColor: Colors.indigo,
+                backgroundColor: Colors.blue,
                 bottomOpacity: 0.0,
                 elevation: 0.0,
                 title: Padding(
@@ -92,7 +92,7 @@ class _AddBudgetState extends State<AddBudget> {
                       icon: Icon(
                         Icons.check,
                         size: 40,
-                        color: Colors.blue,
+                        color: Colors.red,
                       ),
                       onPressed: () {
                         showDialog(

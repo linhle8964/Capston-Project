@@ -48,7 +48,7 @@ class _BudgetListState extends State<BudgetList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.indigo,
+        backgroundColor: Colors.blue,
         bottomOpacity: 0.0,
         elevation: 0.0,
         title: Center(
@@ -148,7 +148,7 @@ class _BudgetListState extends State<BudgetList> {
                       gradient: LinearGradient(
                           begin: Alignment.topRight,
                           end: Alignment.bottomLeft,
-                          colors: [Colors.blue, Colors.red])),
+                          colors: [Colors.blue, Colors.blue])),
                   width: MediaQuery.of(context).size.width,
                   height: 200,
                 ),
