@@ -61,8 +61,8 @@ class _AddBudgetState extends State<AddBudget> {
       budgetNameController.text = isEditing ? widget.budget.BudgetName : "";
       moneyController.text = isEditing ? widget.budget.money.toString() : "";
       payMoneyController.text =
-      isEditing ? widget.budget.payMoney.toString() : "";
-      _checkboxListTile=isEditing?widget.budget.isComplete:false;
+          isEditing ? widget.budget.payMoney.toString() : "";
+      _checkboxListTile = isEditing ? widget.budget.isComplete : false;
     });
   }
 
@@ -73,11 +73,7 @@ class _AddBudgetState extends State<AddBudget> {
     MediaQueryData queryData;
     queryData = MediaQuery.of(context);
     int maxLines = 3;
-    void getDropDownItem() {
-      setState(() {
-        holder = selectedCate;
-      });
-    }
+
 
     return BlocBuilder(
         cubit: BlocProvider.of<BudgetBloc>(context),
@@ -91,6 +87,29 @@ class _AddBudgetState extends State<AddBudget> {
                 title: Padding(
                     padding: const EdgeInsets.only(left: 70),
                     child: Text('Thêm Quỹ')),
+                actions: [
+                  Builder(
+                    builder: (ctx) => IconButton(
+                      icon: Icon(
+                        Icons.check,
+                        size: 40,
+                        color: Colors.blue,
+                      ),
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (BuildContext context) =>
+                                PersonDetailsDialog(
+                                  message: "Bạn đang thêm công việc",
+                                  onPressedFunction: () {
+                                    updateBudget();
+                                  },
+                                ));
+                      },
+                    ),
+                  ),
+                ],
               ),
               body: SingleChildScrollView(
                   child: SizedBox(
@@ -123,7 +142,6 @@ class _AddBudgetState extends State<AddBudget> {
                             width: 250.0,
                             child: Form(
                                 key: _formkey,
-
                                 child: TextFormField(
                                     controller: moneyController,
                                     onSaved: (input) =>
@@ -217,7 +235,7 @@ class _AddBudgetState extends State<AddBudget> {
                                 }).toList(),
                                 onChanged: (val) =>
                                     setState(() => selectedCate = val),
-                                onSaved: (val) => selectedCate = val ,
+                                onSaved: (val) => selectedCate = val,
                               );
                             } else if (state is TodosLoading) {
                               return LoadingIndicator();
@@ -325,39 +343,7 @@ class _AddBudgetState extends State<AddBudget> {
                                   icon: Icon(Icons.arrow_forward_ios_outlined),
                                   color: Colors.white,
                                   iconSize: 30,
-                                  onPressed: () {
-                                    getDropDownItem();
-                                    if (_formkey.currentState.validate()) {
-                                      if (isEditing) {
-                                        Budget budget = new Budget(
-                                            budgetNameController.text,
-                                            holder.id, _checkboxListTile,
-                                            double.parse(moneyController.text),
-                                            double.parse(
-                                                payMoneyController.text),
-
-                                            1,
-                                            id: widget.budget.id);
-                                        print(budget.toString());
-                                        BlocProvider.of<BudgetBloc>(context)
-                                          ..add(UpdateBudget(budget, id));
-                                        Navigator.pop(context);
-                                      } else if (isEditing != true) {
-                                        Budget budget = new Budget(
-                                            budgetNameController.text,
-                                            holder.id,_checkboxListTile,
-                                            double.parse(moneyController.text),
-                                            double.parse(
-                                                payMoneyController.text),
-
-                                            1);
-                                        BlocProvider.of<BudgetBloc>(context)
-                                            .add(CreateBudget(id, budget));
-                                        Navigator.pop(context);
-                                      }
-                                    }
-                                    getDropDownItem();
-                                  },
+                                  onPressed: () {},
                                 ),
                               ],
                             ),
@@ -370,5 +356,39 @@ class _AddBudgetState extends State<AddBudget> {
                 ),
               )));
         });
+  }
+  void getDropDownItem() {
+    setState(() {
+      holder = selectedCate;
+    });
+  }
+  void updateBudget() {
+    getDropDownItem();
+    if (_formkey.currentState.validate()) {
+      if (isEditing) {
+        Budget budget = new Budget(
+            budgetNameController.text,
+            holder.id,
+            _checkboxListTile,
+            double.parse(moneyController.text),
+            double.parse(payMoneyController.text),
+            1,
+            id: widget.budget.id);
+        print(budget.toString());
+        BlocProvider.of<BudgetBloc>(context)..add(UpdateBudget(budget, id));
+        Navigator.pop(context);
+      } else if (isEditing != true) {
+        Budget budget = new Budget(
+            budgetNameController.text,
+            holder.id,
+            _checkboxListTile,
+            double.parse(moneyController.text),
+            double.parse(payMoneyController.text),
+            1);
+        BlocProvider.of<BudgetBloc>(context).add(CreateBudget(id, budget));
+        Navigator.pop(context);
+      }
+    }
+    getDropDownItem();
   }
 }

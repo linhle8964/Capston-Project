@@ -11,22 +11,23 @@ class EditTaskPage extends StatefulWidget {
 
 class _EditTaskPageState extends State<EditTaskPage> {
   final _formKey = GlobalKey<FormState>();
-  String _task = null, _dueDate = null, _note=null;
+  String _task = null, _dueDate = null, _note = null;
   bool _checkboxListTile = false;
-  String _selectedDate= '20/10/2021';
+  String _selectedDate = '20/10/2021';
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime d = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime.now(),
-      lastDate: DateTime(DateTime.now().year+3),
+      lastDate: DateTime(DateTime.now().year + 3),
     );
     if (d != null)
       setState(() {
         _selectedDate = new DateFormat('dd-MM-yyyy').format(d);
       });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,14 +58,18 @@ class _EditTaskPageState extends State<EditTaskPage> {
                         input == null ? 'Hãy điền công việc của bạn' : null,
                     onSaved: (input) => _task = input,
                   ),
-                  SizedBox(height: 5,),
+                  SizedBox(
+                    height: 5,
+                  ),
                   Text(
                     'Hạn công việc',
                     style: new TextStyle(
                       fontSize: 15.0,
                     ),
                   ),
-                  SizedBox(height: 5,),
+                  SizedBox(
+                    height: 5,
+                  ),
                   Row(
                     children: [
                       Expanded(
@@ -101,7 +106,9 @@ class _EditTaskPageState extends State<EditTaskPage> {
                           ),
                         ),
                       ),
-                      SizedBox(width: 7.0,),
+                      SizedBox(
+                        width: 7.0,
+                      ),
                       SizedBox(
                         height: 60,
                         width: 150,
@@ -126,14 +133,18 @@ class _EditTaskPageState extends State<EditTaskPage> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 5,),
+                  SizedBox(
+                    height: 5,
+                  ),
                   Text(
                     'Loại công việc',
                     style: TextStyle(
                       fontSize: 15,
                     ),
                   ),
-                  SizedBox(height: 5,),
+                  SizedBox(
+                    height: 5,
+                  ),
                   Container(
                     height: 60,
                     padding: EdgeInsets.only(left: 10.0, right: 10.0),
@@ -141,9 +152,11 @@ class _EditTaskPageState extends State<EditTaskPage> {
                       border: Border.all(),
                       color: Colors.white,
                     ),
-                      child: DropDown(),
+                    child: DropDown(),
                   ),
-                  SizedBox(height: 20,),
+                  SizedBox(
+                    height: 20,
+                  ),
                   TextFormField(
                     maxLines: 8,
                     decoration: InputDecoration(
@@ -156,7 +169,9 @@ class _EditTaskPageState extends State<EditTaskPage> {
                     ),
                     onSaved: (input) => _note = input,
                   ),
-                  SizedBox(height: 10,),
+                  SizedBox(
+                    height: 10,
+                  ),
                   Expanded(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
@@ -182,7 +197,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
                     children: [
                       Expanded(
                         child: RaisedButton(
-                          padding: EdgeInsets.only(left:0.0, right: 40.0),
+                          padding: EdgeInsets.only(left: 0.0, right: 40.0),
                           color: Colors.red,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -197,7 +212,8 @@ class _EditTaskPageState extends State<EditTaskPage> {
                                 child: Center(
                                   child: Text(
                                     'CANCEL',
-                                     style: TextStyle(fontSize: 20, color: Colors.white),
+                                    style: TextStyle(
+                                        fontSize: 20, color: Colors.white),
                                   ),
                                 ),
                               ),
@@ -206,7 +222,9 @@ class _EditTaskPageState extends State<EditTaskPage> {
                           onPressed: () {},
                         ),
                       ),
-                      SizedBox(width: 5.0,),
+                      SizedBox(
+                        width: 5.0,
+                      ),
                       Expanded(
                         child: RaisedButton(
                           padding: EdgeInsets.only(right: 0.0, left: 40.0),
@@ -218,7 +236,8 @@ class _EditTaskPageState extends State<EditTaskPage> {
                                 child: Center(
                                   child: Text(
                                     'SAVE',
-                                    style: TextStyle(fontSize: 20, color: Colors.white),
+                                    style: TextStyle(
+                                        fontSize: 20, color: Colors.white),
                                   ),
                                 ),
                               ),
@@ -235,7 +254,6 @@ class _EditTaskPageState extends State<EditTaskPage> {
                       ),
                     ],
                   )
-
                 ])),
       ),
     );
