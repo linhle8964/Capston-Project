@@ -7,6 +7,7 @@ class LoginState {
   final bool isSubmitting;
   final bool isSuccess;
   final bool isFailure;
+  final String message;
 
   bool get isFormValid => isEmailValid && isPasswordValid;
 
@@ -16,6 +17,7 @@ class LoginState {
     @required this.isSubmitting,
     @required this.isSuccess,
     @required this.isFailure,
+    @required this.message,
   });
 
   factory LoginState.empty() {
@@ -25,6 +27,7 @@ class LoginState {
       isSubmitting: false,
       isSuccess: false,
       isFailure: false,
+      message: "",
     );
   }
 
@@ -35,16 +38,18 @@ class LoginState {
       isSubmitting: true,
       isSuccess: false,
       isFailure: false,
+      message: "Đang xử lý dữ liệu",
     );
   }
 
-  factory LoginState.failure() {
+  factory LoginState.failure({String message}) {
     return LoginState(
       isEmailValid: true,
       isPasswordValid: true,
       isSubmitting: false,
       isSuccess: false,
       isFailure: true,
+      message: message,
     );
   }
 
@@ -55,6 +60,7 @@ class LoginState {
       isSubmitting: false,
       isSuccess: true,
       isFailure: false,
+      message: "Đăng nhập thành công",
     );
   }
 
@@ -63,12 +69,12 @@ class LoginState {
     bool isPasswordValid,
   }) {
     return copyWith(
-      isEmailValid: isEmailValid,
-      isPasswordValid: isPasswordValid,
-      isSubmitting: false,
-      isSuccess: false,
-      isFailure: false,
-    );
+        isEmailValid: isEmailValid,
+        isPasswordValid: isPasswordValid,
+        isSubmitting: false,
+        isSuccess: false,
+        isFailure: false,
+        message: "");
   }
 
   LoginState copyWith({
@@ -78,6 +84,7 @@ class LoginState {
     bool isSubmitting,
     bool isSuccess,
     bool isFailure,
+    String message,
   }) {
     return LoginState(
       isEmailValid: isEmailValid ?? this.isEmailValid,
@@ -85,6 +92,7 @@ class LoginState {
       isSubmitting: isSubmitting ?? this.isSubmitting,
       isSuccess: isSuccess ?? this.isSuccess,
       isFailure: isFailure ?? this.isFailure,
+      message: message ?? this.message,
     );
   }
 
@@ -96,6 +104,7 @@ class LoginState {
       isSubmitting: $isSubmitting,
       isSuccess: $isSuccess,
       isFailure: $isFailure,
+      message: $message,
     }''';
   }
 }

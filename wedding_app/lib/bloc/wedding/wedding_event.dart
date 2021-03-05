@@ -21,6 +21,15 @@ class LoadWeddingByUser extends WeddingEvent {
   List<Object> get props => [user];
 }
 
+class LoadWeddingById extends WeddingEvent {
+  final String weddingId;
+
+  const LoadWeddingById(this.weddingId);
+
+  @override
+  List<Object> get props => [weddingId];
+}
+
 class CreateWedding extends WeddingEvent {
   final Wedding wedding;
 

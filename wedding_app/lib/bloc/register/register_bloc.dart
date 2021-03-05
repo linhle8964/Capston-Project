@@ -69,10 +69,16 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         // tạo user wedding
         _userWeddingRepository.createUserWedding(user);
       });
-      yield RegisterState.success();
+      yield RegisterState.success("Đăng ký thành công");
     } catch (e) {
-      print("[ERROR]" + e);
-      yield RegisterState.failure();
+      print("[ERROR] $e");
+      String message = "";
+      if (e.toString() == "Exception: email-already-in-use") {
+        message = "Email đã tồn tại";
+      } else {
+        message = "Có lỗi xảy ra";
+      }
+      yield RegisterState.failure(message);
     }
   }
 }

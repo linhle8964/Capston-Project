@@ -1,7 +1,7 @@
 import 'package:meta/meta.dart';
 
 @immutable
-class CreateWeddingState {
+class ValidateWeddingState {
   final bool isGroomNameValid;
   final bool isBrideNameValid;
   final bool isAddressValid;
@@ -9,21 +9,21 @@ class CreateWeddingState {
   bool get isFormValid =>
       isGroomNameValid && isBrideNameValid && isAddressValid;
 
-  CreateWeddingState({
+  ValidateWeddingState({
     @required this.isGroomNameValid,
     @required this.isBrideNameValid,
     @required this.isAddressValid,
   });
 
-  factory CreateWeddingState.empty() {
-    return CreateWeddingState(
+  factory ValidateWeddingState.empty() {
+    return ValidateWeddingState(
       isGroomNameValid: true,
       isBrideNameValid: true,
       isAddressValid: true,
     );
   }
 
-  CreateWeddingState update({
+  ValidateWeddingState update({
     bool isGroomNameValid,
     bool isBrideNameValid,
     bool isAddressValid,
@@ -35,13 +35,13 @@ class CreateWeddingState {
     );
   }
 
-  CreateWeddingState copyWith({
+  ValidateWeddingState copyWith({
     bool isGroomNameValid,
     bool isBrideNameValid,
     bool isAddressValid,
     bool isSubmitEnabled,
   }) {
-    return CreateWeddingState(
+    return ValidateWeddingState(
       isGroomNameValid: isGroomNameValid ?? this.isGroomNameValid,
       isBrideNameValid: isBrideNameValid ?? this.isBrideNameValid,
       isAddressValid: isAddressValid ?? this.isAddressValid,

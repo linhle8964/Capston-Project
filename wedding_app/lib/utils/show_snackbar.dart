@@ -25,7 +25,6 @@ void showProcessingSnackbar(BuildContext context, String message) {
     ..hideCurrentSnackBar()
     ..showSnackBar(
       SnackBar(
-        duration: Duration(seconds: 2),
         content: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
