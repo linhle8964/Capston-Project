@@ -10,7 +10,7 @@ import 'package:wedding_app/widgets/loading_indicator.dart';
 import 'package:wedding_app/widgets/notification.dart';
 import 'bloc/checklist/bloc.dart';
 import 'bloc/checklist/checklist_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:android_alarm_manager/android_alarm_manager.dart';
 
 class DemoPage extends StatefulWidget {
   @override
@@ -30,76 +30,50 @@ class _DemoPageState extends State<DemoPage> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           final String weddingID = snapshot.data;
-          return MultiBlocProvider(
-            providers: [
-              BlocProvider<ChecklistBloc>(
-                create: (BuildContext context) => ChecklistBloc(
-                  taskRepository: FirebaseTaskRepository(),
-                )..add(LoadSuccess(weddingID)),
-              ),
-            ],
-            child: Builder(
-              builder: (context) => BlocBuilder(
-                cubit: BlocProvider.of<ChecklistBloc>(context),
-                builder: (context, state) {
-                  // Nang added
-                  if (NotificationManagement.notificationTime.isEmpty) {
-                    if (state is TasksLoaded) {
-                      NotificationManagement.addExistingNotifications(
-                          state.tasks);
-                    }
-                  }
-                  //end
-                  return Scaffold(
-                    appBar: AppBar(
-                      backgroundColor: hexToColor("#d86a77"),
-                      title: Text('Home'),
-                      actions: <Widget>[
-                        IconButton(
-                          icon: Icon(Icons.exit_to_app),
-                          onPressed: () {
-                            BlocProvider.of<AuthenticationBloc>(context).add(
-                              LoggedOut(),
-                            );
-                            //NAng ADded
-                            NotificationManagement.ClearAllNotifications();
-                            //end
-                          },
-                        )
-                      ],
-                    ),
-                    body: BlocBuilder(
-                      cubit: BlocProvider.of<AuthenticationBloc>(context),
-                      builder: (context, state) {
-                        if (state is Uninitialized) {
-                          return LoadingIndicator();
-                        } else if (state is Authenticated) {
-                          BlocProvider.of<WeddingBloc>(context)
-                              .add(LoadWeddingByUser(state.user));
-                          return BlocBuilder(
-                            cubit: BlocProvider.of<WeddingBloc>(context),
-                            builder: (context, state) {
-                              if (state is WeddingLoaded) {
-                                return Column(
-                                  children: [
-                                    Text(state.wedding.id),
-                                  ],
-                                );
-                              } else if (state is Loading) {
-                                return LoadingIndicator();
-                              } else if (state is Failed) {}
-                              return LoadingIndicator();
-                            },
+          return Scaffold(
+                  appBar: AppBar(
+                    backgroundColor: hexToColor("#d86a77"),
+                    title: Text('Home'),
+                    actions: <Widget>[
+                      IconButton(
+                        icon: Icon(Icons.exit_to_app),
+                        onPressed: () async {
+                          BlocProvider.of<AuthenticationBloc>(context).add(
+                            LoggedOut(),
                           );
-                        }
+
+                        },
+                      )
+                    ],
+                  ),
+                  body: BlocBuilder(
+                    cubit: BlocProvider.of<AuthenticationBloc>(context),
+                    builder: (context, state) {
+                      if (state is Uninitialized) {
                         return LoadingIndicator();
-                      },
-                    ),
-                  );
-                },
-              ),
-            ),
-          );
+                      } else if (state is Authenticated) {
+                        BlocProvider.of<WeddingBloc>(context)
+                            .add(LoadWeddingByUser(state.user));
+                        return BlocBuilder(
+                          cubit: BlocProvider.of<WeddingBloc>(context),
+                          builder: (context, state) {
+                            if (state is WeddingLoaded) {
+                              return Column(
+                                children: [
+                                  Text(state.wedding.id),
+                                ],
+                              );
+                            } else if (state is Loading) {
+                              return LoadingIndicator();
+                            } else if (state is Failed) {}
+                            return LoadingIndicator();
+                          },
+                        );
+                      }
+                      return LoadingIndicator();
+                    },
+                  ),
+                );
         } else {
           return Center(
             child: CircularProgressIndicator(),

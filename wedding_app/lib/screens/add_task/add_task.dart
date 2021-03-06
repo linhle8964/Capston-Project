@@ -280,7 +280,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
     if (_task != null && _category != null && _task.trim().isNotEmpty) {
       BlocProvider.of<ChecklistBloc>(context)
         ..add(AddTask(task, widget.weddingID));
-      NotificationManagement.addNotification(task);
+      //NotificationManagement.addNotification(task);
       Navigator.pop(context);
     } else {
       Scaffold.of(context).showSnackBar(
