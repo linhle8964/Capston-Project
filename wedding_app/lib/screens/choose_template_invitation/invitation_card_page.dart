@@ -11,6 +11,7 @@ import 'package:flutter/rendering.Dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wedding_app/screens/choose_template_invitation/chooseTemplate_page.dart';
 class InvitationCardPage extends StatefulWidget {
   final TemplateCard template;
   final String brideName;
@@ -42,9 +43,13 @@ class _InvitationCardPageState extends State<InvitationCardPage> {
     });
   }
 
+
+
+
   @override
   Widget build(BuildContext context) {
     final screenSide= MediaQuery.of(context).size;
+
     return MaterialApp(
         home: Scaffold(
             appBar: AppBar(
@@ -64,7 +69,13 @@ class _InvitationCardPageState extends State<InvitationCardPage> {
                 IconButton(
                   icon: Icon(Icons.file_upload),
                   color: Colors.black,
-                  onPressed: takeScreenShot
+                  onPressed: (){
+                    takeScreenShot();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ChooseTemplatePage()),
+                    );
+                  }
                 ),
               ],
             ),
@@ -144,47 +155,13 @@ class _InvitationCardPageState extends State<InvitationCardPage> {
                             )
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(30, 60, 30, 100),
-                        child: Visibility(
-                            visible: template.name=='template3' ? true: false,
-                            child: Center(
-                              child: Column(
-                                children: <Widget>[
-                                  Text('Trận trong mời bạn đến',style: TextStyle(fontSize: 15,color: Colors.black),),
-                                  Text('dự tiệc cưới của chúng tôi',style: TextStyle(fontSize: 15,color: Colors.black),),
-                                  Padding(
-                                      padding: const EdgeInsets.fromLTRB(30,215, 40, 8),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: <Widget>[
-                                          Text (brideName,style: TextStyle(fontSize: (brideName.length>10 ? 13:24),color: Colors.black),),
-                                          Text(groomName,style: TextStyle(fontSize: (brideName.length>10 ? 15:24),color: Colors.black),),
-                                        ],
-                                      )
-                                  ),
-
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(dateTime,style: TextStyle(fontSize: 17,color: Colors.black)),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text('Tại '+place,style: TextStyle(fontSize: 17,color: Colors.black)),
-                                  ),
-                                  Text('Sự hiện diện của bạn',style: TextStyle(fontSize: 15,color: Colors.black)),
-                                  Text('là vinh hạnh của chúng tôi',style: TextStyle(fontSize: 15,color: Colors.black))
-                                ],
-                              ),
-                            )
-                        ),
-                      ),
                     ],
                   ),
                 ),
 
 
         ));
+
   }
 
 
@@ -203,8 +180,8 @@ class _InvitationCardPageState extends State<InvitationCardPage> {
     await storage.ref('invitation_card/$imgName').putFile(file);
     final String downloadUrl = await taskSnapshot.ref.getDownloadURL();
     await FirebaseFirestore.instance
-        .collection('wedding/$weddingId/invitation_card')
-        .add({"url": downloadUrl, "name": imgName});
+        .collection('wedding/$weddingId/invitation_card').doc('1')
+        .set({"url": downloadUrl, "name": imgName});
 
   }
 }

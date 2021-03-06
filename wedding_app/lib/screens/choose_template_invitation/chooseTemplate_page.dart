@@ -7,6 +7,7 @@ import 'package:wedding_app/bloc/invitation_card/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:wedding_app/bloc/template_card/bloc.dart';
+import 'package:wedding_app/model/Invitation_card.dart';
 import 'package:wedding_app/model/template_card.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -40,7 +41,7 @@ class _ChooseTemplateState extends State<ChooseTemplate> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-        length: 2,
+        length: 3,
         child: Scaffold(
             appBar: AppBar(
               backgroundColor: Colors.white,
@@ -51,9 +52,12 @@ class _ChooseTemplateState extends State<ChooseTemplate> {
               bottom: TabBar(
                 tabs: [
                   Tab(
-                    child: Text('Tạo Thiệp Mời',style: TextStyle(color: Colors.grey),),
+                    child: Center(child: Text('Thiệp mời của bạn',style: TextStyle(color: Colors.grey),)),
                   ),
-                  Tab(child: Text('Tải Lên Thiệp Có Sẵn',style: TextStyle(color: Colors.grey)),)
+                  Tab(
+                    child: Center(child: Text('Tạo Thiệp Mời',style: TextStyle(color: Colors.grey),)),
+                  ),
+                  Tab(child: Center(child: Text('Tải Lên Thiệp Có Sẵn',style: TextStyle(color: Colors.grey))),)
                 ],
               ),
               title: Padding(
@@ -66,6 +70,7 @@ class _ChooseTemplateState extends State<ChooseTemplate> {
             ),
             body: TabBarView(
               children: [
+                new MyCard(),
                 new CardList(),
                 Center(
                     child: Column(
@@ -167,11 +172,97 @@ class _ChooseTemplateState extends State<ChooseTemplate> {
       await storage.ref('invitation_card/$imgName').putFile(img);
       final String downloadUrl = await taskSnapshot.ref.getDownloadURL();
       await FirebaseFirestore.instance
-          .collection('wedding/$id/invitation_card')
-          .add({"url": downloadUrl, "name": imgName});
+          .collection('wedding/$id/invitation_card').doc('1')
+          .set({"url": downloadUrl, "name": imgName});
     }
   }
 }
+
+class MyCard extends StatefulWidget{
+  @override
+  State<StatefulWidget> createState(){
+    return new MyCardState();
+  }
+}
+class MyCardState extends State<MyCard>{
+  List<InvitationCard> _invitationCard = [];
+  String weddingId='';
+  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  SharedPreferences sharedPrefs;
+  @override
+  void initState(){
+    SharedPreferences.getInstance().then((prefs){
+      setState(() => sharedPrefs = prefs);
+      weddingId = prefs.getString('wedding_id');
+      print(weddingId);
+    });
+
+    _invitationCard = [];
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final screenSide= MediaQuery.of(context).size;
+    return new Scaffold(
+      body: new Container(
+        child: BlocBuilder(
+          cubit: BlocProvider.of<InvitationCardBloc>(context),
+          builder: (context,state){
+            BlocProvider.of<InvitationCardBloc>(context).add(LoadSuccess(weddingId));
+            if(state is InvitationCardLoaded){
+              _invitationCard = state.invitations;
+            }
+            if(_invitationCard.length == 0){
+              return Padding(
+                padding: const EdgeInsets.fromLTRB(30, 40, 30, 0),
+                child: Center(
+                  child: Column(
+                    children: <Widget>[
+                      Text(
+                        'Hiện tại bạn chưa tạo mẫu thiệp mời nào',style: (TextStyle(fontSize: 16)),textAlign: TextAlign.center,
+                      ),
+                      Text(
+                        'Hãy tạo thiệp mời theo mẫu hoặc tải lên từ bộ sưu tập của bạn',style: (TextStyle(fontSize: 18)),textAlign: TextAlign.center,
+                      ),
+                    ],
+                  )
+
+                ),
+              );
+            }else{
+            return ListView.builder(
+                itemCount: 1,
+                scrollDirection: Axis.horizontal,
+                shrinkWrap: true,
+                itemBuilder: (context,index){
+                  InvitationCard item = _invitationCard[index];
+                  print(index);
+
+                  return Stack(
+                    children: <Widget>[
+                      InkWell(
+                        onTap: (){
+                        },
+                        child: Container(
+                          margin: EdgeInsets.all(3),
+                          child: FadeInImage.memoryNetwork(
+                              width: screenSide.width,
+                              height: screenSide.height,
+                              placeholder: kTransparentImage,
+                              image: item.id),
+                        ) ,
+                      ),
+                    ],
+                  );
+                }
+            );}
+          },
+        ),
+    ),
+    );
+  }
+}
+
 class CardList extends StatefulWidget {
   @override
   State<StatefulWidget> createState(){
@@ -206,21 +297,37 @@ class CardListState extends State<CardList> {
                 itemBuilder: (context,index){
                   TemplateCard item = _templates[index];
                   print(index);
-                  return InkWell(
-                    onTap: (){
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => FillInfoPage(template: item),
-                      ));
-                    },
-                    child: Container(
-                      margin: EdgeInsets.all(3),
-                      child: FadeInImage.memoryNetwork(
-                          width: screenSide.width,
-                          height: screenSide.height,
-                          placeholder: kTransparentImage,
-                          image: item.url),
-                    ) ,
+                  return Stack(
+                    children: <Widget>[
+                       InkWell(
+                        onTap: (){
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => FillInfoPage(template: item),
+                              ));
+                        },
+                        child: Container(
+                          margin: EdgeInsets.all(3),
+                          child: FadeInImage.memoryNetwork(
+                              width: screenSide.width,
+                              height: screenSide.height,
+                              placeholder: kTransparentImage,
+                              image: item.url),
+                        ) ,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(340, 230, 0, 100),
+                        child: Visibility(
+                            visible: index<_templates.length-1 ? true: false,
+                            child: Icon(Icons.arrow_forward_ios))
+                        ),
+                      Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 230, 340, 100),
+                          child: Visibility(
+                              visible: index>0 ? true: false,
+                              child: Icon(Icons.arrow_back_ios))
+                      ),
+                    ],
                   );
                 });
           }

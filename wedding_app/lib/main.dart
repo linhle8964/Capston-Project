@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:wedding_app/bloc/invitation_card/bloc.dart';
+import 'package:wedding_app/firebase_repository/inviattion_card_firebase_repository.dart';
 import 'package:wedding_app/firebase_repository/invite_email_firebase_repository.dart';
 import 'package:wedding_app/firebase_repository/user_wedding_firebase_repository.dart';
 import 'package:wedding_app/firebase_repository/wedding_firebase_repository.dart';
@@ -48,6 +50,17 @@ class MyApp extends StatelessWidget {
           BlocProvider<TemplateCardBloc>(create: (context) {
             return TemplateCardBloc(
              templateCardRepository: FirebaseTemplateCardRepository()
+            );
+          }),
+          BlocProvider<InvitationCardBloc>(create: (context) {
+            return InvitationCardBloc(
+                invitationCardRepository: FirebaseInvitationCardRepository()
+            );
+          }),
+          BlocProvider<WeddingBloc>(create: (context) {
+            return WeddingBloc(
+                userWeddingRepository: FirebaseUserWeddingRepository(),
+                weddingRepository: FirebaseWeddingRepository(),
             );
           }),
         ],

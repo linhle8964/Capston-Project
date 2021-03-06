@@ -23,6 +23,8 @@ class InvitationCardBloc extends Bloc<InvitationCardEvent, InvitationCardState> 
       yield* _mapInvitationCardAddedToState(event);
     }else if(event is ToggleAll){
       yield* _mapToggleAllToState(event);
+    }else if(event is InvitationCardUpdated){
+      yield* _mapUpadteInvitationCardToState(event);
     }
   }
   Stream<InvitationCardState> _mapLoadSuccessToState(LoadSuccess event) async*{
@@ -30,6 +32,9 @@ class InvitationCardBloc extends Bloc<InvitationCardEvent, InvitationCardState> 
     _invitationCardSubscription = _invitationCardRepository.GetAllInvitationCard(event.weddingId).listen(
           (invitations) => add(InvitationCardUpdated(invitations)),
     );
+  }
+  Stream<InvitationCardState> _mapUpadteInvitationCardToState(InvitationCardUpdated event) async*{
+    yield InvitationCardLoaded(event.invitations);
   }
   Stream<InvitationCardState> _mapInvitationCardAddedToState(AddInvitationCard event) async*{
     _invitationCardRepository.addNewInvitationCard(event.invitationCard, event.weddingId);

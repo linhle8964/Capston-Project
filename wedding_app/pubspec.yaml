@@ -48,7 +48,7 @@ dev_dependencies:
     # For example, to use Firebase Authentication and Cloud Firestore
   firebase_auth: ^0.20.0+1
   image_picker:
-    # Add the dependency for the FlutterFire plugin for Google Analytics
+  # Add the dependency for the FlutterFire plugin for Google Analytics
   cloud_firestore: ^0.16.0
   firebase_core: "^0.7.0"
   firebase_storage:
