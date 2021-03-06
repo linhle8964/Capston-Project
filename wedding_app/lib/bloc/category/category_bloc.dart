@@ -25,7 +25,7 @@ class CateBloc extends Bloc<TodosEvent, TodosState> {
   Stream<TodosState> _mapLoadTodosToState() async* {
     _todosSubscription?.cancel();
     _todosSubscription = _todosRepository.GetallCategory().listen(
-          (cates) => add(TodosUpdated(cates)),
+      (cates) => add(TodosUpdated(cates)),
     );
   }
 

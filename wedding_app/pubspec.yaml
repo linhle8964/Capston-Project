@@ -45,9 +45,9 @@ dev_dependencies:
   intl: ^0.17.0
 
     # Add the dependencies for any other Firebase products you want to use in your app
-    # For example, to use Firebase Authentication and Cloud Firestore
+  # For example, to use Firebase Authentication and Cloud Firestore
   firebase_auth: ^1.0.0
-    # Add the dependency for the FlutterFire plugin for Google Analytics
+  # Add the dependency for the FlutterFire plugin for Google Analytics
 
   cloud_firestore: ^1.0.0
   firebase_core: ^1.0.0
@@ -58,6 +58,7 @@ dev_dependencies:
   shared_preferences: ^2.0.3
   mailer: ^4.0.0
   flutter_local_notifications: ^5.0.0-nullsafety.0
+  search_page: ^1.4.0
 
 
 # For information on the generic Dart part of this file, see the

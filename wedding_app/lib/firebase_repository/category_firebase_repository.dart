@@ -18,5 +18,6 @@ class FirebaseCategoryRepository implements CategoryRepository {
           .toList();
 
     });
+
   }
 }

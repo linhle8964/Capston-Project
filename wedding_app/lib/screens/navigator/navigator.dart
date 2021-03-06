@@ -61,6 +61,7 @@ class _NavigatorPageState extends State<NavigatorPage> {
               BottomNavigationBarItem(
                   icon: Icon(Icons.check_box), label: "CheckList"),
               BottomNavigationBarItem(
+
                   icon: Icon(Icons.account_balance_wallet_outlined),
                   label: "Kinh phí"),
               BottomNavigationBarItem(
