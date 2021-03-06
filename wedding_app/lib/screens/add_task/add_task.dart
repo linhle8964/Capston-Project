@@ -72,7 +72,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
               icon: Icon(
                 Icons.check,
                 size: 40,
-                color: Colors.blue,
+                color: Colors.white,
               ),
               onPressed: () {
                 showDialog(

@@ -83,7 +83,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
               icon: Icon(
                 Icons.check,
                 size: 40,
-                color: Colors.blue,
+                color: Colors.white,
               ),
               onPressed: () {
                 showDialog(
