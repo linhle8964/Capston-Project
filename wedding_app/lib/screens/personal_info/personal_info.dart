@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wedding_app/utils/hex_color.dart';
 
 class PersonalInfoPage extends StatefulWidget {
   @override
@@ -65,8 +66,10 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
               child: SizedBox(
                 width: double.infinity,
                 height: 50,
-                child: RaisedButton(
-                  color: Colors.blue,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: hexToColor("#d86a77"),
+                  ),
                   onPressed: onSaveClick,
                   child: Text(
                     'Lưu',

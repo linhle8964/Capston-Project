@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:wedding_app/bloc/budget/bloc.dart';
 import 'package:wedding_app/bloc/category/bloc.dart';
@@ -10,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wedding_app/screens/add_budget/addbudget.dart';
 import 'package:search_page/search_page.dart';
+import 'package:wedding_app/utils/hex_color.dart';
 
 class BudgetList extends StatefulWidget {
   @override
@@ -17,7 +16,6 @@ class BudgetList extends StatefulWidget {
 }
 
 class _BudgetListState extends State<BudgetList> {
-  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   bool isSearching = false;
   bool _isShow = false;
   List<Category> _categorys = [];
@@ -48,7 +46,7 @@ class _BudgetListState extends State<BudgetList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        backgroundColor: hexToColor("#d86a77"),
         bottomOpacity: 0.0,
         elevation: 0.0,
         title: Center(
@@ -84,8 +82,8 @@ class _BudgetListState extends State<BudgetList> {
                   onPressed: () => showSearch(
                       context: context,
                       delegate: SearchPage<Budget>(
-                        searchLabel: "Tim Kiem Kinh Phi",
-                        builder: (Budget) => InkWell(
+                        searchLabel: "Tìm Kiếm",
+                        builder: (Budget budget) => InkWell(
                             onTap: () {
                               Navigator.push(
                                 context,
@@ -99,7 +97,7 @@ class _BudgetListState extends State<BudgetList> {
                                                       context),
                                               child: AddBudget(
                                                 isEditing: true,
-                                                budget: Budget,
+                                                budget: budget,
                                               )),
                                         )),
                               );
@@ -111,14 +109,14 @@ class _BudgetListState extends State<BudgetList> {
                                 child: Row(
                                   children: [
                                     Container(
-                                      child: Text(Budget.BudgetName,
+                                      child: Text(budget.budgetName,
                                           style: TextStyle(
                                               color: Colors.black,
                                               fontSize: 20,
                                               fontWeight: FontWeight.bold)),
                                     ),
                                     Text(
-                                      Budget.money.toString() + "₫",
+                                      budget.money.toString() + "₫",
                                       style: TextStyle(
                                           color: Colors.black,
                                           fontSize: 20,
@@ -129,8 +127,8 @@ class _BudgetListState extends State<BudgetList> {
                               ),
                               //
                             )),
-                        filter: (Budget) =>
-                            [Budget.BudgetName, Budget.money.toString()],
+                        filter: (Budget budget) =>
+                            [budget.budgetName, budget.money.toString()],
                         items: _budgets,
                       )),
                 )
@@ -144,11 +142,6 @@ class _BudgetListState extends State<BudgetList> {
               child: ClipPath(
                 clipper: CustomShape(),
                 child: Container(
-                  decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                          begin: Alignment.topRight,
-                          end: Alignment.bottomLeft,
-                          colors: [Colors.blue, Colors.blue])),
                   width: MediaQuery.of(context).size.width,
                   height: 200,
                 ),
@@ -239,7 +232,7 @@ class _BudgetListState extends State<BudgetList> {
                             Category item = _categorys[index];
                             _cateSum = 0;
                             for (int i = 0; i < _budgets.length; i++) {
-                              if (item.id == _budgets[i].CateID) {
+                              if (item.id == _budgets[i].cateID) {
                                 _cateSum += _budgets[i].money;
                               }
                             }
@@ -273,7 +266,7 @@ class _BudgetListState extends State<BudgetList> {
                                           itemBuilder: (context, i) {
                                             Budget low =
                                                 Budget("", "", false, 1, 1, 1);
-                                            if (item.id == _budgets[i].CateID) {
+                                            if (item.id == _budgets[i].cateID) {
                                               low = _budgets[i];
                                               _isShow = true;
                                             } else {
@@ -317,7 +310,7 @@ class _BudgetListState extends State<BudgetList> {
                                                             Container(
                                                               child: Text(
                                                                   low
-                                                                      .BudgetName,
+                                                                      .budgetName,
                                                                   style: TextStyle(
                                                                       fontSize:
                                                                           20,
@@ -363,10 +356,11 @@ class _BudgetListState extends State<BudgetList> {
                                                                   ),
                                                                 )),
                                                             Text(
-                                                              low.isComplete?"0 ₫":
-                                                              low.money
-                                                                      .toString() +
-                                                                  "₫",
+                                                              low.isComplete
+                                                                  ? "0 ₫"
+                                                                  : low.money
+                                                                          .toString() +
+                                                                      "₫",
                                                               style: TextStyle(
                                                                   fontSize: 20,
                                                                   fontWeight:
@@ -413,10 +407,8 @@ class _BudgetListState extends State<BudgetList> {
                     )),
           );
         },
-
         child: Icon(Icons.add),
-        backgroundColor: Colors.blue,
-
+        backgroundColor: hexToColor("#d86a77"),
       ),
     );
   }

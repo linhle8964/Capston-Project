@@ -4,10 +4,8 @@ import 'package:wedding_app/bloc/category/bloc.dart';
 import 'package:wedding_app/bloc/checklist/bloc.dart';
 import 'package:wedding_app/bloc/checklist/checklist_bloc.dart';
 import 'package:wedding_app/model/task_model.dart';
-import 'package:wedding_app/screens/add_task/add_task.dart';
 import 'package:wedding_app/screens/edit_task/edit_task.dart';
 import 'package:wedding_app/widgets/confirm_dialog.dart';
-import 'package:wedding_app/widgets/loading_indicator.dart';
 
 class ListViewWidget extends StatefulWidget {
   List<Task> tasks;

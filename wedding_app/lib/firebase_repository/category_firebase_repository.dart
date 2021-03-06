@@ -8,7 +8,7 @@ class FirebaseCategoryRepository implements CategoryRepository {
   final cateCollection = FirebaseFirestore.instance.collection('category');
 
   @override
-  Stream<List<Category>> GetallCategory() {
+  Stream<List<Category>> getallCategory() {
     return cateCollection.snapshots().map((snapshot) {
       print(snapshot.docs
           .map((doc) => Category.fromEntity(CategoryEntity.fromSnapshot(doc)))
@@ -16,8 +16,6 @@ class FirebaseCategoryRepository implements CategoryRepository {
       return snapshot.docs
           .map((doc) => Category.fromEntity(CategoryEntity.fromSnapshot(doc)))
           .toList();
-
     });
-
   }
 }

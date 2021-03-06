@@ -1,11 +1,8 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wedding_app/bloc/budget/bloc.dart';
 import 'package:wedding_app/bloc/category/bloc.dart';
-import 'package:wedding_app/bloc/wedding/bloc.dart';
 import 'package:wedding_app/model/budget.dart';
 import 'package:wedding_app/model/category.dart';
 import 'package:wedding_app/widgets/loading_indicator.dart';
@@ -58,12 +55,12 @@ class _AddBudgetState extends State<AddBudget> {
       String weddingId = prefs.getString("wedding_id");
       print("test shared " + weddingId);
       id = weddingId;
-      budgetNameController.text = isEditing ? widget.budget.BudgetName : "";
+      budgetNameController.text = isEditing ? widget.budget.budgetName : "";
       moneyController.text = isEditing ? widget.budget.money.toString() : "";
       payMoneyController.text =
           isEditing ? widget.budget.payMoney.toString() : "";
       _checkboxListTile = isEditing ? widget.budget.isComplete : false;
-      initialCate = new Category(widget.budget.CateID, "");
+      initialCate = new Category(widget.budget.cateID, "");
     });
   }
 
@@ -223,7 +220,7 @@ class _AddBudgetState extends State<AddBudget> {
                               if (isEditing == true && state is TodosLoaded) {
                                 for (int i = 0; i < state.cates.length; i++) {
                                   if (state.cates[i].id ==
-                                      widget.budget.CateID) {
+                                      widget.budget.cateID) {
                                     initialCate = state.cates[i];
                                   }
                                 }

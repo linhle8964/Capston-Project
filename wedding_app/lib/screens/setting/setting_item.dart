@@ -14,8 +14,8 @@ class SettingItem extends StatelessWidget {
         children: [
           Expanded(
             flex: 9,
-            child: FlatButton(
-              color: Colors.white,
+            child: TextButton(
+              style: TextButton.styleFrom(primary: Colors.white),
               onPressed: () {
                 Navigator.pushNamed(context, url);
               },

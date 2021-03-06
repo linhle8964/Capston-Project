@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:intl/intl.dart';
 
 class TaskEntity extends Equatable {
   final String id;
@@ -10,32 +9,29 @@ class TaskEntity extends Equatable {
   final String note;
   final String category;
 
-
   @override
-  List<Object> get props =>[
-    id,
-    name,
-    dueDate,
-    status,
-    note,
-    category,
-  ];
+  List<Object> get props => [
+        id,
+        name,
+        dueDate,
+        status,
+        note,
+        category,
+      ];
 
   const TaskEntity(
-     this.id,
-     this.name,
-     this.dueDate,
-     this.status,
-     this.note,
-     this.category,
+    this.id,
+    this.name,
+    this.dueDate,
+    this.status,
+    this.note,
+    this.category,
   );
 
   @override
   String toString() {
     return 'TaskEntity{id: $id, name: $name, dueDate: $dueDate, status: $status, note: $note, category: $category}';
   }
-
-
 
   Map<String, Object> toJson() {
     return {

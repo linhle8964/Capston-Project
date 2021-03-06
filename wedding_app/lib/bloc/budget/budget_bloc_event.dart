@@ -1,7 +1,6 @@
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 import 'package:wedding_app/model/budget.dart';
-import 'package:wedding_app/model/wedding.dart';
 
 @immutable
 abstract class BudgetEvent extends Equatable {
@@ -9,35 +8,34 @@ abstract class BudgetEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
 class LoadBudget extends BudgetEvent {}
 
 class LoadBudgetbyCateId extends BudgetEvent {
   final String cateId;
   final String weddingId;
 
-  const LoadBudgetbyCateId(this.cateId,this.weddingId);
+  const LoadBudgetbyCateId(this.cateId, this.weddingId);
   @override
   List<Object> get props => [];
   @override
   String toString() {
     return 'LoadBudgetbyCateId{cateId: $cateId, weddingId: $weddingId}';
   }
-
 }
-class GetAllBudget extends BudgetEvent{
+
+class GetAllBudget extends BudgetEvent {
   final String weddingId;
 
-
   const GetAllBudget(this.weddingId);
-
 }
-class GetBudgetById extends BudgetEvent{
+
+class GetBudgetById extends BudgetEvent {
   final String budgetId;
   final String weddingId;
   GetBudgetById(this.budgetId, this.weddingId);
 
   List<Object> get props => [budgetId];
-
 }
 
 class CreateBudget extends BudgetEvent {
@@ -57,7 +55,6 @@ class UpdateBudget extends BudgetEvent {
   final Budget updatedBudget;
   final String weddingId;
 
-
   UpdateBudget(this.updatedBudget, this.weddingId);
 
   @override
@@ -70,12 +67,11 @@ class UpdateBudget extends BudgetEvent {
 }
 
 class DeleteBudget extends BudgetEvent {
- final String weddingId;
- final String budgetId;
+  final String weddingId;
+  final String budgetId;
 
- DeleteBudget(this.weddingId, this.budgetId);
+  DeleteBudget(this.weddingId, this.budgetId);
 }
-
 
 class BudgetUpdated extends BudgetEvent {
   final List<Budget> budgets;

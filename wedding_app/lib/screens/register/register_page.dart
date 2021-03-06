@@ -148,10 +148,12 @@ class _RegisterPageState extends State<RegisterPage> {
                               child: SizedBox(
                                 width: double.infinity,
                                 height: 30,
-                                child: RaisedButton(
-                                  color: isRegisterButtonEnabled(state)
-                                      ? Colors.blue
-                                      : Colors.grey,
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    primary: isRegisterButtonEnabled(state)
+                                        ? Colors.blue
+                                        : Colors.grey,
+                                  ),
                                   onPressed: () =>
                                       isRegisterButtonEnabled(state)
                                           ? _onFormSubmitted()

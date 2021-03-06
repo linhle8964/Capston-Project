@@ -212,8 +212,8 @@ class _AddTaskPageState extends State<AddTaskPage> {
                             if (state is TodosLoaded) {
                               categoryObjects = state.cates;
                               for (int i = 0; i < categoryObjects.length; i++) {
-                                categories
-                                    .add(categoryObjects[i].CateName.toString());
+                                categories.add(
+                                    categoryObjects[i].CateName.toString());
                               }
                               // widget.dropdownValue = categories.length !=0? categories[0].toString()
                               //    : widget.dropdownValue;
@@ -283,7 +283,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
       NotificationManagement.addNotification(task);
       Navigator.pop(context);
     } else {
-      Scaffold.of(context).showSnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('có lỗi xảy ra'),
         ),

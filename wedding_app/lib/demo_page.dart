@@ -10,7 +10,6 @@ import 'package:wedding_app/widgets/loading_indicator.dart';
 import 'package:wedding_app/widgets/notification.dart';
 import 'bloc/checklist/bloc.dart';
 import 'bloc/checklist/checklist_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class DemoPage extends StatefulWidget {
   @override
