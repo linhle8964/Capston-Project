@@ -235,7 +235,7 @@ class _AddBudgetState extends State<AddBudget> {
                                 items: _values2.map((Category cate) {
                                   return DropdownMenuItem<Category>(
                                     value: cate,
-                                    child: Text(cate.CateName),
+                                    child: Text(cate.cateName),
                                   );
                                 }).toList(),
                                 onChanged: (val) =>

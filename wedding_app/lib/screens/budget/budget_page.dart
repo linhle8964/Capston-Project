@@ -242,7 +242,7 @@ class _BudgetListState extends State<BudgetList> {
                               children: <Widget>[
                                 Container(
                                   child: ListTile(
-                                    title: Text(item.CateName +
+                                    title: Text(item.cateName +
                                         " | " +
                                         _cateSum.toString() +
                                         " ₫"),
@@ -256,7 +256,7 @@ class _BudgetListState extends State<BudgetList> {
                                       if (state is BudgetLoaded) {
                                         print("test index" + index.toString());
                                         _budgets = state.budgets;
-                                        print(item.CateName);
+                                        print(item.cateName);
                                       }
                                       if (state is BudgetNotLoaded) {}
 
