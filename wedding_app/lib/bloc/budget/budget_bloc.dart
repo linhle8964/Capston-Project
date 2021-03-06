@@ -11,8 +11,7 @@ class BudgetBloc extends Bloc<BudgetEvent, BudgetState> {
   final BudgetRepository _budgetRepository;
   StreamSubscription _streamSubscription;
 
-  BudgetBloc(
-      {@required String weddingId, @required BudgetRepository budgetRepository})
+  BudgetBloc({@required BudgetRepository budgetRepository})
       : assert(budgetRepository != null),
         _budgetRepository = budgetRepository,
         super(BudgetLoading());
