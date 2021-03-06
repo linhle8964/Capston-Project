@@ -1,58 +1,33 @@
-import 'package:flutter/cupertino.dart';
 import 'package:wedding_app/entity/category_entity.dart';
 
-
-@immutable
-class Category{
+class Category {
   final String id;
-  final String name;
+  final String cateName;
 
-//<editor-fold desc="Data Methods" defaultstate="collapsed">
-
-  const Category({
-    @required this.id,
-    @required this.name,
-  });
+  Category(this.id, this.cateName);
 
   Category copyWith({
     String id,
-    String name,
+    String cateName,
   }) {
-    if ((id == null || identical(id, this.id)) &&
-        (name == null || identical(name, this.name))) {
-      return this;
-    }
+    return Category(cateName ?? this.cateName, id ?? this.id);
+  }
 
-    return new Category(
-      id: id ?? this.id,
-      name: name ?? this.name,
-    );
+  CategoryEntity toEntity() {
+    return CategoryEntity(id, cateName);
   }
 
   @override
   String toString() {
-    return 'Category{id: $id, name: $name}';
+    return 'Category{id: $id, cateName: $cateName}';
   }
 
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is Category &&
-          runtimeType == other.runtimeType &&
-          id == other.id &&
-          name == other.name);
-
-  @override
-  int get hashCode => id.hashCode ^ name.hashCode;
-
-  CategoryEntity toEntity() {
-    return CategoryEntity(id, name);
-  }
+  bool operator ==(o) => o is Category && o.cateName == cateName && o.id == id;
 
   static Category fromEntity(CategoryEntity entity) {
     return Category(
-      id: entity.id,
-      name: entity.name,
+      entity.id,
+      entity.cateName,
     );
   }
 }

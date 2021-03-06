@@ -83,7 +83,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
               icon: Icon(
                 Icons.check,
                 size: 40,
-                color: Colors.blue,
+                color: Colors.white,
               ),
               onPressed: () {
                 showDialog(
@@ -228,8 +228,8 @@ class _EditTaskPageState extends State<EditTaskPage> {
                                 for (int i = 0;
                                     i < categoryObjects.length;
                                     i++) {
-                                  categories
-                                      .add(categoryObjects[i].name.toString());
+                                  categories.add(
+                                      categoryObjects[i].cateName.toString());
                                 }
                                 // widget.dropdownValue = categories.length !=0? categories[0].toString()
                                 //    : widget.dropdownValue;
@@ -328,7 +328,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
       //NotificationManagement.deleteNotification(widget.task);
       Navigator.pop(context);
     } else if (_task == null) {
-      Scaffold.of(context).showSnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Bạn chưa điền tên công việc'),
         ),
@@ -347,7 +347,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
         category: _category);
     if (_task != null && _task.trim().isNotEmpty) {
       if (task == widget.task) {
-        Scaffold.of(context).showSnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Bạn chưa thay đổi tên công việc!!!'),
           ),
@@ -359,7 +359,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
       //NotificationManagement.updateNotification(widget.task, task);
       Navigator.pop(context);
     } else {
-      Scaffold.of(context).showSnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('có lỗi xảy ra'),
         ),

@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 class PersonDetailsDialog extends StatefulWidget {
   final String message;
   final Function onPressedFunction;
-  PersonDetailsDialog({Key key,@required this.message,this.onPressedFunction}) : super(key: key);
+  PersonDetailsDialog({Key key, @required this.message, this.onPressedFunction})
+      : super(key: key);
 
   @override
   _PersonDetailsDialogState createState() {
@@ -24,14 +25,14 @@ class _PersonDetailsDialogState extends State<PersonDetailsDialog> {
         ),
       ),
       actions: <Widget>[
-        FlatButton(
+        TextButton(
           child: Text('Có'),
           onPressed: () {
             widget.onPressedFunction();
             Navigator.of(context).pop();
           },
         ),
-        FlatButton(
+        TextButton(
           child: Text('Hủy'),
           onPressed: () {
             Navigator.of(context).pop();

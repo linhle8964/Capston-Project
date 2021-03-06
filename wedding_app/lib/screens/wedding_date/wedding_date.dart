@@ -37,6 +37,7 @@ class _WeddingDateMainState extends State<WeddingDateMain> {
         selectedDate = picked;
       });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,14 +63,19 @@ class _WeddingDateMainState extends State<WeddingDateMain> {
                   padding: const EdgeInsets.fromLTRB(0, 70, 0, 0),
                   child: Center(
                     child: Container(
-                      child: Text('Ngày cưới dự định:',style: TextStyle(fontSize: 25),),
+                      child: Text(
+                        'Ngày cưới dự định:',
+                        style: TextStyle(fontSize: 25),
+                      ),
                     ),
-                  )
-              ),
+                  )),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                child:  Center(
-                  child: Image.asset('assets/calender.jpg',height: 200.0,),
+                child: Center(
+                  child: Image.asset(
+                    'assets/calender.jpg',
+                    height: 200.0,
+                  ),
                 ),
               ),
               Padding(
@@ -80,11 +86,16 @@ class _WeddingDateMainState extends State<WeddingDateMain> {
                     children: <Widget>[
                       Text(
                         "${selectedDate.toLocal()}".split(' ')[0],
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
                       ),
-                      FlatButton(
+                      TextButton(
                         onPressed: () => _selectDate(context),
-                        child: Image.asset('assets/edit.png',height: 50.0,),)
+                        child: Image.asset(
+                          'assets/edit.png',
+                          height: 50.0,
+                        ),
+                      )
                     ],
                   ),
                 ),
@@ -106,9 +117,8 @@ class _WeddingDateMainState extends State<WeddingDateMain> {
               ),
             ],
           ),
-        )
-    );
+        ));
   }
 }
 
-void onSaveClick(){}
+void onSaveClick() {}

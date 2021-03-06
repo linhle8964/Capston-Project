@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 void showFailedSnackbar(BuildContext context, String message) {
   FocusScope.of(context).unfocus();
-  Scaffold.of(context)
+  ScaffoldMessenger.of(context)
     ..hideCurrentSnackBar()
     ..showSnackBar(
       SnackBar(
@@ -21,7 +21,7 @@ void showFailedSnackbar(BuildContext context, String message) {
 
 void showProcessingSnackbar(BuildContext context, String message) {
   FocusScope.of(context).unfocus();
-  Scaffold.of(context)
+  ScaffoldMessenger.of(context)
     ..hideCurrentSnackBar()
     ..showSnackBar(
       SnackBar(
@@ -38,7 +38,7 @@ void showProcessingSnackbar(BuildContext context, String message) {
 
 void showSuccessSnackbar(BuildContext context, String message) {
   FocusScope.of(context).unfocus();
-  Scaffold.of(context)
+  ScaffoldMessenger.of(context)
     ..hideCurrentSnackBar()
     ..showSnackBar(
       SnackBar(

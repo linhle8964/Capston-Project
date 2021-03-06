@@ -5,64 +5,64 @@ class PickWeddingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: hexToColor("#d86a77"),
         title: Text('Chọn đám cưới'),
       ),
-      body: SizedBox.expand(
+      body: Center(
         child: Container(
           padding: EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Align(
-                alignment: Alignment.topCenter,
-                child: Container(
-                  alignment: Alignment.center,
-                  child: Text(
-                      "Bạn chưa có đám cưới. Hãy chọn một trong hai lựa chọn dưới đây",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold, fontSize: 20.0),
-                      textAlign: TextAlign.center),
-                ),
+              Container(
+                alignment: Alignment.center,
+                child: Text(
+                    "Bạn chưa có đám cưới. Hãy chọn một trong hai lựa chọn dưới đây",
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+                    textAlign: TextAlign.center),
               ),
-              Align(
-                alignment: Alignment.topCenter,
-                child: Column(
-                  children: [
-                    ButtonTheme(
-                      minWidth: width / 2,
-                      child: RaisedButton(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18.0),
-                              side: BorderSide(color: Colors.red)),
-                          child: Text(
-                            "Tạo đám cưới mới",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          color: hexToColor("#d86a77"),
-                          onPressed: () =>
-                              Navigator.pushNamed(context, "/create_wedding")),
+              SizedBox(
+                height: height / 15,
+              ),
+              SizedBox(
+                width: width / 2,
+                child: ElevatedButton(
+                    child: Text(
+                      "Tạo đám cưới mới",
+                      style: TextStyle(color: Colors.white),
                     ),
-                    ButtonTheme(
-                      minWidth: width / 2,
-                      child: RaisedButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, "/wedding_code");
-                        },
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                            side: BorderSide(color: Colors.red)),
-                        child: Text(
-                          "Nhập mã mời ",
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        color: hexToColor("#d86a77"),
-                      ),
-                    )
-                  ],
+                    style: ElevatedButton.styleFrom(
+                      primary: hexToColor("#d86a77"),
+                      onPrimary: Colors.white,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(18.0),
+                          side: BorderSide(color: Colors.red)),
+                    ),
+                    onPressed: () =>
+                        Navigator.pushNamed(context, "/create_wedding")),
+              ),
+              SizedBox(
+                width: width / 2,
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, "/wedding_code");
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: hexToColor("#d86a77"),
+                    onPrimary: Colors.white,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
+                        side: BorderSide(color: Colors.red)),
+                  ),
+                  child: Text(
+                    "Nhập mã mời ",
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
               )
             ],

@@ -66,17 +66,19 @@ class WeddingCodePage extends StatelessWidget {
               SizedBox(
                 height: 15.0,
               ),
-              ButtonTheme(
-                  minWidth: width / 2,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18.0),
-                      side: BorderSide(color: Colors.red)),
-                  child: RaisedButton(
+              SizedBox(
+                  width: width / 2,
+                  child: ElevatedButton(
                       child: Text("Gửi mã",
                           style: TextStyle(
                             color: Colors.white,
                           )),
-                      color: hexToColor("#d86a77"),
+                      style: ElevatedButton.styleFrom(
+                        primary: hexToColor("#d86a77"),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                            side: BorderSide(color: Colors.red)),
+                      ),
                       onPressed: () {
                         BlocProvider.of<InviteEmailBloc>(context).add(
                             SubmittedCode(_codeController.text.toString()));

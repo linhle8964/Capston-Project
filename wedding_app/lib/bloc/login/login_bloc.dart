@@ -5,7 +5,6 @@ import 'package:wedding_app/repository/user_repository.dart';
 import 'bloc.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:wedding_app/utils/validations.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final UserRepository _userRepository;

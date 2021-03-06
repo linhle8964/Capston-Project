@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:wedding_app/firebase_repository/firebase_task_repository.dart';
+import 'package:wedding_app/bloc/budget/bloc.dart';
+import 'package:wedding_app/firebase_repository/budget_firebase_repository.dart';
 import 'package:wedding_app/firebase_repository/invite_email_firebase_repository.dart';
 import 'package:wedding_app/firebase_repository/user_wedding_firebase_repository.dart';
 import 'package:wedding_app/firebase_repository/wedding_firebase_repository.dart';
@@ -15,10 +16,8 @@ import 'package:wedding_app/screens/pick_wedding/wedding_code.dart';
 import 'package:wedding_app/screens/register/register_page.dart';
 import 'package:wedding_app/screens/splash_page.dart';
 import 'package:wedding_app/widgets/loading_indicator.dart';
-import 'package:wedding_app/widgets/notification.dart';
 import 'bloc/authentication/bloc.dart';
 import 'bloc/category/category_bloc.dart';
-import 'bloc/checklist/bloc.dart';
 import 'bloc/login/bloc.dart';
 import 'bloc/register/bloc.dart';
 import 'bloc/wedding/bloc.dart';
@@ -44,12 +43,24 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
         providers: [
-          BlocProvider<AuthenticationBloc>(create: (context) {
-            return AuthenticationBloc(
-              userRepository: FirebaseUserRepository(),
-              userWeddingRepository: FirebaseUserWeddingRepository(),
-            )..add(AppStarted());
-          },),
+          BlocProvider<BudgetBloc>(
+            create: (BuildContext context) => BudgetBloc(
+              budgetRepository: FirebaseBudgetRepository(),
+            ),
+          ),
+          BlocProvider<CateBloc>(
+            create: (BuildContext context) => CateBloc(
+              todosRepository: FirebaseCategoryRepository(),
+            ),
+          ),
+          BlocProvider<AuthenticationBloc>(
+            create: (context) {
+              return AuthenticationBloc(
+                userRepository: FirebaseUserRepository(),
+                userWeddingRepository: FirebaseUserWeddingRepository(),
+              )..add(AppStarted());
+            },
+          ),
         ],
         child: MaterialApp(
           initialRoute: '/',
@@ -144,6 +155,4 @@ class MyApp extends StatelessWidget {
           ),
         ));
   }
-
-
 }

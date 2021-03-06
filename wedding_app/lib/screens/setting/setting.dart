@@ -105,7 +105,7 @@ class _SettingPageState extends State<SettingPage> {
                         BlocProvider.of<AuthenticationBloc>(context)
                             .add(LoggedOut());
                         NotificationManagement.ClearAllNotifications();
-                         var cancel= await AndroidAlarmManager.cancel(0);
+                        var cancel= await AndroidAlarmManager.cancel(0);
                       }, Colors.blue),
                       isAdmin(role)
                           ? CustomButtom("Xoá đám cưới",

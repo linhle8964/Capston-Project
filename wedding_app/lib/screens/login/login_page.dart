@@ -138,10 +138,12 @@ class _LoginPageState extends State<LoginPage> {
                       child: SizedBox(
                         width: double.infinity,
                         height: 30,
-                        child: RaisedButton(
-                          color: isLoginButtonEnabled(state)
-                              ? Colors.blue
-                              : Colors.grey,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: isLoginButtonEnabled(state)
+                                ? Colors.blue
+                                : Colors.grey,
+                          ),
                           onPressed: () => isLoginButtonEnabled(state)
                               ? _onFormSubmitted()
                               : null,
