@@ -3,8 +3,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:wedding_app/entity/task_entity.dart';
 import 'package:wedding_app/model/task_model.dart';
 import 'package:wedding_app/repository/task_repository.dart';
+import 'package:wedding_app/utils/get_data.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class FirebaseTaskRepository implements TaskRepository {
+import '../widgets/notification.dart';
+
+class FirebaseTaskRepository implements TaskRepository{
+
+  FirebaseTaskRepository();
+
   @override
   Future<void> addNewTask(Task task, String weddingID) {
     return FirebaseFirestore.instance

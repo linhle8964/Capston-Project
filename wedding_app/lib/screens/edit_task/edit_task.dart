@@ -325,7 +325,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
       _formKey.currentState.save();
       BlocProvider.of<ChecklistBloc>(context)
         ..add(DeleteTask(widget.task, widget.weddingID));
-      NotificationManagement.deleteNotification(widget.task);
+      //NotificationManagement.deleteNotification(widget.task);
       Navigator.pop(context);
     } else if (_task == null) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -356,7 +356,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
       }
       BlocProvider.of<ChecklistBloc>(context)
         ..add(UpdateTask(task, widget.weddingID));
-      NotificationManagement.updateNotification(widget.task, task);
+      //NotificationManagement.updateNotification(widget.task, task);
       Navigator.pop(context);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(

@@ -1,13 +1,18 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:wedding_app/entity/task_entity.dart';
 import 'package:wedding_app/model/task_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class NotificationManagement {
   static final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
   FlutterLocalNotificationsPlugin(); //Nang
   static Map<int, Task> notificationTime ={};
   static int mapKey = 1;
+  static bool isNotificationAllowed = false;
 
   NotificationManagement() {
     WidgetsFlutterBinding.ensureInitialized();
@@ -21,8 +26,6 @@ class NotificationManagement {
 
   static void addNotification(Task task) async {
     NotificationManagement();
-    var scheduledNotificationDateTime =
-        DateTime.now().add(Duration(seconds: 10));
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
         'channel id', 'channel NAME', 'CHANNEL DESCRIPTION',
         priority: Priority.high, importance: Importance.max);
@@ -33,70 +36,41 @@ class NotificationManagement {
         iOS: iOSPlatformChannelSpecifics);
     notificationTime.addAll({mapKey: task});
     mapKey++;
-    print("addNotification................: ${notificationTime.toString()}");
+    print("ADD ${notificationTime.toString()}");
     if (task.dueDate.isAfter(DateTime.now())) {
       await flutterLocalNotificationsPlugin.schedule((mapKey-1), 'Đã đến hạn công việc', task.name,
           task.dueDate, platformChannelSpecifics);
     }
   }
 
-  static void addExistingNotifications(List<Task> tasks) async {
-    NotificationManagement();
-    for(int i=0; i< tasks.length;i++){
-      addNotification(tasks[i]);
-    }
-    print("addAllNotification................: ${notificationTime.toString()}");
-  }
-
-  static void updateNotification(Task oldTask,Task newTask) async {
-    NotificationManagement();
-    var scheduledNotificationDateTime =
-    DateTime.now().add(Duration(seconds: 30));
-    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-        'channel id', 'channel NAME', 'CHANNEL DESCRIPTION',
-        priority: Priority.high, importance: Importance.max);
-    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
-    var platformChannelSpecifics = NotificationDetails(
-        android: androidPlatformChannelSpecifics,
-        iOS: iOSPlatformChannelSpecifics);
-    int key =-1;
-    for(int i=0; i< notificationTime.length; i++){
-      if(notificationTime.values.elementAt(i).isEqual(oldTask)){
-        key = notificationTime.keys.elementAt(i);
-        break;
-      }
-    }
-    if(key==-1){
-      key= mapKey;
-      mapKey++;
-    }
-    notificationTime.addAll({key: newTask});
-    print("updateNotification.............: ${notificationTime.toString()}");
-    if (newTask.dueDate.isAfter(DateTime.now())) {
-      await flutterLocalNotificationsPlugin.schedule(key, 'Thông báo', "Đã đến hạn công việc: ${newTask.name}",
-          newTask.dueDate, platformChannelSpecifics);
-    }
-  }
-
-  static void deleteNotification(Task task) async {
-    NotificationManagement();
-    int key =-1;
-    for(int i=0; i< notificationTime.length; i++){
-      if(notificationTime.values.elementAt(i).isEqual(task)){
-        key = notificationTime.keys.elementAt(i);
-        notificationTime.remove(key);
-        break;
-      }
-    }
-    print("DeleteNotification..............: ${notificationTime.toString()}");
-    await flutterLocalNotificationsPlugin.cancel(key);
-  }
 
   static void ClearAllNotifications() async {
     NotificationManagement();
     notificationTime.clear();
-    print("ClearAllNotification.............: ${notificationTime.toString()}");
+    print("CLEAR: ${notificationTime.toString()}");
     mapKey=1;
     await flutterLocalNotificationsPlugin.cancelAll();
+  }
+
+  static CollectionReference reference;
+  static StreamSubscription<QuerySnapshot> streamSub;
+  static void  executeAlarm(String weddingID) async {
+    if(reference == null){
+      reference = FirebaseFirestore.instance.collection('wedding')
+        .doc(weddingID).collection("task");
+    }
+      streamSub?.cancel();
+      streamSub = reference.snapshots().listen((querySnapshot) {
+          NotificationManagement.ClearAllNotifications();
+          querySnapshot.docs.forEach((change) {
+            // Do something with change
+            Task task = Task.fromEntity(TaskEntity.fromSnapshot(change));
+            NotificationManagement.addNotification(task);
+          });
+      });
+  }
+
+  static void cancelAlarm()  {
+     streamSub?.cancel();
   }
 }

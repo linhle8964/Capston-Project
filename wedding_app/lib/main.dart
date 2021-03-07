@@ -27,8 +27,11 @@ import 'bloc/user_wedding/bloc.dart';
 import 'bloc/simple_bloc_observer.dart';
 import 'firebase_repository/category_firebase_repository.dart';
 import 'firebase_repository/user_firebase_repository.dart';
+import 'package:android_alarm_manager/android_alarm_manager.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await AndroidAlarmManager.initialize();
   WidgetsFlutterBinding.ensureInitialized();
   Bloc.observer = SimpleBlocObserver();
   await Firebase.initializeApp().whenComplete(() => runApp(MyApp()));
