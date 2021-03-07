@@ -117,7 +117,6 @@ class FirebaseUserRepository extends UserRepository {
       throw Exception("Có lỗi xảy ra");
     }
 
-    return null;
   }
 
   @override
