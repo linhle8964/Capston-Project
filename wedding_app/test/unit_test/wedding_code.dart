@@ -1,4 +1,5 @@
 import 'package:wedding_app/bloc/invite_email/bloc.dart';
+import 'package:wedding_app/model/invite_email.dart';
 import 'package:wedding_app/repository/invite_email_repository.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:mockito/mockito.dart';
@@ -27,7 +28,11 @@ void main() {
     });
 
     blocTest("demo",
-        build: () => inviteEmailBloc,
+        build: () {
+          InviteEmail inviteEmail = new InviteEmail(id: "4Yj3S4Mz7cc5jQfZR2iT", code: "O60ymX", to: "nangld290498@gmail.comh");
+          when(mockInviteEmailRepository.getInviteEmailByCode("O60ymX")).thenAnswer((_) async => inviteEmail);
+          return InviteEmailBloc(inviteEmailRepository: mockInviteEmailRepository, userWeddingRepository: mockUserWeddingRepository);
+        },
         act: (InviteEmailBloc bloc) async => bloc.add(SubmittedCode("O60ymX")),
         expect: [
           InviteEmailProcessing(),

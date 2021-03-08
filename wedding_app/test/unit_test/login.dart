@@ -5,6 +5,8 @@ import 'package:wedding_app/bloc/login/bloc.dart';
 import 'package:wedding_app/firebase_repository/user_firebase_repository.dart';
 import 'package:wedding_app/repository/user_repository.dart';
 
+import 'authentication.dart';
+
 class MockLoginRepository extends Mock implements FirebaseUserRepository {}
 
 void main() {
@@ -63,7 +65,11 @@ void main() {
 
     group('submit login,', () {
       blocTest("emit [valid]",
-          build: () => loginBloc,
+          build: () {
+        final user = MockUser();
+            when(mockLoginRepository.signInWithCredentials("linhle8964@gmail.com", "linhle8964")).thenAnswer((_) async => user);
+            return LoginBloc(userRepository: mockLoginRepository);
+          },
           act: (bloc) => bloc.add(LoginWithCredentialsPressed(
               email: "linhle8964@gmail.com", password: "linhle8964")),
           seed: LoginState(
