@@ -93,10 +93,11 @@ class Task extends Equatable{
   }
 
   @override
-  List<Object> get props => [name,dueDate,status,note,category];
+  List<Object> get props => [id,name,dueDate,status,note,category];
 
   bool isEqual(Task task){
     if(this.name == task.name &&
+        this.id == task.id &&
         this.status== task.status &&
         this.note== task.note &&
         this.category == task.category &&

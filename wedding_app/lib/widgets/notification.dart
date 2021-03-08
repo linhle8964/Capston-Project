@@ -43,6 +43,22 @@ class NotificationManagement {
     }
   }
 
+  static void updateNotification(Task oldtask, Task newTask) async {
+    int key=-1;
+    for(int i=0; i<notificationTime.length; i++){
+      if(oldtask == notificationTime.values.elementAt(i)){
+        key = notificationTime.keys.elementAt(i);
+        break;
+      }
+    }
+    if(key==-1){
+      key= mapKey++;
+    }
+    deleteNotification(key, oldtask);
+    addNotification(newTask);
+  }
+
+
 
   static void ClearAllNotifications() async {
     NotificationManagement();
@@ -52,6 +68,14 @@ class NotificationManagement {
     await flutterLocalNotificationsPlugin.cancelAll();
   }
 
+  static void deleteNotification(int key,Task task) async {
+    NotificationManagement();
+    notificationTime.remove(key);
+    flutterLocalNotificationsPlugin.cancel(key);
+    print("DELETE: ${notificationTime.toString()}");
+  }
+
+  /// code for alarm
   static CollectionReference reference;
   static StreamSubscription<QuerySnapshot> streamSub;
   static void  executeAlarm(String weddingID) async {
@@ -60,13 +84,50 @@ class NotificationManagement {
         .doc(weddingID).collection("task");
     }
       streamSub?.cancel();
+      bool isEmpty = false;
       streamSub = reference.snapshots().listen((querySnapshot) {
-          NotificationManagement.ClearAllNotifications();
+        if(notificationTime.isEmpty){
           querySnapshot.docs.forEach((change) {
-            // Do something with change
-            Task task = Task.fromEntity(TaskEntity.fromSnapshot(change));
-            NotificationManagement.addNotification(task);
+            addNotification(Task.fromEntity(TaskEntity.fromSnapshot(change)));
           });
+        }else{
+          if(notificationTime.length < querySnapshot.docs.length){
+            querySnapshot.docs.forEach((change) {
+              Task task = Task.fromEntity(TaskEntity.fromSnapshot(change));
+              if(!notificationTime.containsValue(task)){
+                print("adding $task");
+                addNotification(task);
+              }
+            });
+          }else if(notificationTime.length == querySnapshot.docs.length){
+            querySnapshot.docs.forEach((change) {
+              Task task = Task.fromEntity(TaskEntity.fromSnapshot(change));
+              for(int i = 0; i<notificationTime.length;i++){
+                if(notificationTime.values.elementAt(i).id == task.id
+                    && notificationTime.values.elementAt(i)!= task){
+                  print("updating $task");
+                  updateNotification(notificationTime.values.elementAt(i), task);
+                }
+              }
+            });
+          }else{
+            for(int i=0; i< notificationTime.length; i++){
+              bool isDeletedItem = true;
+              Task deleted = notificationTime.values.elementAt(i);
+              querySnapshot.docs.forEach((element) {
+                Task task = Task.fromEntity(TaskEntity.fromSnapshot(element));
+                if(deleted==task){
+                  isDeletedItem = false;
+                }
+              });
+              if(isDeletedItem == true){
+                print("deleting $deleted");
+                int key = notificationTime.keys.elementAt(i);
+                deleteNotification(key, deleted);
+              }
+            }
+          }
+        }
       });
   }
 
