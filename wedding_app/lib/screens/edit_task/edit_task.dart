@@ -61,7 +61,22 @@ class _EditTaskPageState extends State<EditTaskPage> {
           "Chỉnh Sửa Công Việc",
           style: TextStyle(color: Colors.white),
         ),
-        leading: new IconButton(
+        leading: BackButton(
+          color: Colors.white,
+          onPressed: () {
+            showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (BuildContext context) => PersonDetailsDialog(
+                  message: "Bạn có muốn thoát",
+                  onPressedFunction: () {
+                    Navigator.of(context).pop();
+                  },
+                ));
+          },
+        ),
+
+        /*new IconButton(
           icon: new Icon(Icons.arrow_back),
           color: Colors.white,
           onPressed: () {
@@ -75,7 +90,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
                       },
                     ));
           },
-        ),
+        ),*/
         actions: [
           Builder(
             builder: (ctx) => IconButton(
@@ -355,7 +370,6 @@ class _EditTaskPageState extends State<EditTaskPage> {
       }
       BlocProvider.of<ChecklistBloc>(context)
         ..add(UpdateTask(task, widget.weddingID));
-      //NotificationManagement.updateNotification(widget.task, task);
       Navigator.pop(context);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(

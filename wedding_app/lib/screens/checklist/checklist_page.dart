@@ -3,6 +3,8 @@ import 'package:wedding_app/bloc/category/bloc.dart';
 import 'package:wedding_app/bloc/checklist/bloc.dart';
 import 'package:wedding_app/bloc/checklist/checklist_bloc.dart';
 import 'package:wedding_app/bloc/show_task/bloc.dart';
+import 'package:wedding_app/model/budget.dart';
+import 'package:wedding_app/screens/edit_task/edit_task.dart';
 import 'package:wedding_app/utils/get_data.dart';
 import 'package:wedding_app/utils/hex_color.dart';
 import 'package:wedding_app/firebase_repository/category_firebase_repository.dart';
@@ -11,7 +13,8 @@ import 'package:wedding_app/model/task_model.dart';
 import 'package:wedding_app/screens/add_task/add_task.dart';
 import 'package:wedding_app/screens/checklist/listview.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:wedding_app/screens/checklist/searching_page.dart';
+import 'package:search_page/search_page.dart';
+import 'package:wedding_app/widgets/confirm_dialog.dart';
 
 class ChecklistPage extends StatefulWidget {
   @override
@@ -33,58 +36,12 @@ class _ChecklistPageState extends State<ChecklistPage>
   @override
   void initState() {
     super.initState();
-    _searchQuery.addListener(_onSearchChanged);
   }
 
   @override
   void dispose() {
-    _searchQuery.removeListener(_onSearchChanged);
     _searchQuery.dispose();
     super.dispose();
-  }
-
-  _onSearchChanged() {
-    print(_searchQuery);
-    searchResultsList();
-  }
-
-  searchResultsList() {
-    List<Task> showResults = [];
-    if (_searchQuery.text.trim() != "") {
-      for (var task in tasks) {
-        var name = task.name.toLowerCase();
-        if (name.contains(_searchQuery.text.toLowerCase())) {
-          showResults.add(task);
-        }
-      }
-    } else {
-      showResults.clear();
-    }
-    setState(() {
-      searchList = showResults;
-    });
-  }
-
-  void _startSearch() {
-    ModalRoute.of(context)
-        .addLocalHistoryEntry(new LocalHistoryEntry(onRemove: _stopSearching));
-
-    setState(() {
-      _isSearching = true;
-    });
-  }
-
-  void _stopSearching() {
-    _clearSearchQuery();
-    setState(() {
-      _isSearching = false;
-    });
-  }
-
-  void _clearSearchQuery() {
-    setState(() {
-      _searchQuery.clear();
-    });
   }
 
   Widget _buildTitle(BuildContext context) {
@@ -121,7 +78,7 @@ class _ChecklistPageState extends State<ChecklistPage>
     );
   }
 
-  List<Widget> _buildActions(context) {
+  List<Widget> _buildActions(context,String weddingID) {
     if (_isSearching) {
       return <Widget>[
         new IconButton(
@@ -130,7 +87,7 @@ class _ChecklistPageState extends State<ChecklistPage>
             color: Colors.white,
           ),
           onPressed: () {
-            _clearSearchQuery();
+            _isSearching = false;
           },
         ),
       ];
@@ -143,8 +100,111 @@ class _ChecklistPageState extends State<ChecklistPage>
           color: Colors.white,
         ),
         onPressed: () {
-          BlocProvider.of<ChecklistBloc>(context)..add(SearchTasks());
-          _startSearch();
+          showSearch(
+              context: context,
+              delegate: SearchPage<Task>(
+                searchLabel: "Tìm Kiếm",
+                suggestion: Center(
+                  child: Text('Tìm kiếm theo tên công việc',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600),),
+                ),
+                failure: Center(
+                  child: Text(
+                    'Chưa có công việc tìm thấy',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600),
+                  ),
+                ),
+                builder: (Task task) => InkWell(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => BlocProvider.value(
+                              value: BlocProvider.of<CateBloc>(context),
+                              child: BlocProvider.value(
+                                  value: BlocProvider.of<ChecklistBloc>(context),
+                                  child: EditTaskPage(
+                                      task: task,
+                                      weddingID: weddingID)),
+                            )),
+                      );
+                    },
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      color: Colors.white,
+                      elevation: 5,
+                      child: ListTile(
+                        title: Text(
+                          task.name,
+                          key: UniqueKey(),
+                          style: TextStyle(
+                            fontSize: 17,
+                            color: task.dueDate.isBefore(DateTime.now())
+                                ? Colors.red
+                                : Colors.black,
+                          ),
+                        ),
+                        trailing: Theme(
+                          data: ThemeData(
+                            primarySwatch: Colors.red,
+                            unselectedWidgetColor:
+                            task.dueDate.isBefore(DateTime.now())
+                                ? Colors.red
+                                : Colors.black,
+                            // Your color
+                          ),
+                          child: Checkbox(
+                            activeColor: task.dueDate.isBefore(DateTime.now())
+                                ? Colors.red
+                                : Colors.blue,
+                            value: task.status,
+                            onChanged: (bool value) {
+                              showDialog(
+                                  context: context,
+                                  barrierDismissible: false,
+                                  builder: (BuildContext context) => PersonDetailsDialog(
+                                    message:
+                                    "Bạn đang thay đổi trạng thái của công việc",
+                                    onPressedFunction: () {
+                                      //updateStatus(index);
+                                    },
+                                  ));
+                            },
+                          ),
+                        ),
+                        onTap: () {
+                          var state = BlocProvider.of<ChecklistBloc>(context).state;
+                          if(state is TasksSearching){
+                            Navigator.pop(context);
+                          }
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => BlocProvider.value(
+                                  value: BlocProvider.of<CateBloc>(context),
+                                  child: BlocProvider.value(
+                                      value: BlocProvider.of<ChecklistBloc>(context),
+                                      child: EditTaskPage(
+                                          task: task,
+                                          weddingID: weddingID)),
+                                )),
+                          );
+                        },
+                      ),
+                    )),
+                filter: (Task task) => [task.name],
+                items: valuess,
+              ));
         },
       ),
     ];
@@ -181,7 +241,6 @@ class _ChecklistPageState extends State<ChecklistPage>
                     BlocProvider.of<ShowTaskBloc>(context)..add(DeleteMonth());
                     BlocProvider.of<ChecklistBloc>(context)
                       ..add(LoadSuccess(weddingID));
-                    _stopSearching();
                     ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
                         content: new Text("bạn đã xóa thành công")));
                   } else if (state is TaskAdded) {
@@ -192,59 +251,46 @@ class _ChecklistPageState extends State<ChecklistPage>
                   } else if (state is TaskUpdated) {
                     BlocProvider.of<ChecklistBloc>(context)
                       ..add(LoadSuccess(weddingID));
-                    _stopSearching();
                     ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
                         content: new Text("bạn đã chỉnh sửa thành công")));
                   }
                 },
-                child: Scaffold(
-                  key: scaffoldKey,
-                  appBar: new AppBar(
-                    centerTitle: true,
-                    backgroundColor: hexToColor("#d86a77"),
-                    leading: _isSearching
-                        ? BackButton(
-                            color: Colors.white,
-                            onPressed: () {
-                              setState(() {
-                                BlocProvider.of<ChecklistBloc>(context)
-                                  ..add(LoadSuccess(weddingID));
-                                _stopSearching();
-                              });
-                            },
-                          )
-                        : null,
-                    title: _isSearching
-                        ? _buildSearchField(context)
-                        : _buildTitle(context),
-                    actions: _buildActions(context),
-                  ),
-                  body: _body(weddingID),
-                  floatingActionButton: _isSearching
-                      ? null
-                      : FloatingActionButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (_) => BlocProvider.value(
-                                        value:
-                                            BlocProvider.of<CateBloc>(context),
-                                        child: BlocProvider.value(
-                                            value:
-                                                BlocProvider.of<ChecklistBloc>(
-                                                    context),
-                                            child: AddTaskPage(
-                                                weddingID: weddingID)),
-                                      )),
-                            );
-                          },
-                          child: Icon(Icons.add),
-                          backgroundColor: hexToColor("#d86a77"),
+                child:  Scaffold(
+                          key: scaffoldKey,
+                          appBar: AppBar(
+                              centerTitle: true,
+                              backgroundColor: hexToColor("#d86a77"),
+                              title: _isSearching
+                                  ? _buildSearchField(context)
+                                  : _buildTitle(context),
+                              actions: _buildActions(context,weddingID),
+                            ),
+                          body: _body(weddingID),
+                          floatingActionButton: _isSearching
+                              ? null
+                              : FloatingActionButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (_) => BlocProvider.value(
+                                                value:
+                                                    BlocProvider.of<CateBloc>(
+                                                        context),
+                                                child: BlocProvider.value(
+                                                    value: BlocProvider.of<
+                                                        ChecklistBloc>(context),
+                                                    child: AddTaskPage(
+                                                        weddingID: weddingID)),
+                                              )),
+                                    );
+                                  },
+                                  child: Icon(Icons.add),
+                                  backgroundColor: hexToColor("#d86a77"),
+                                ),
+                          floatingActionButtonLocation:
+                              FloatingActionButtonLocation.endFloat,
                         ),
-                  floatingActionButtonLocation:
-                      FloatingActionButtonLocation.endFloat,
-                ),
               ),
             ),
           );
@@ -350,8 +396,7 @@ class _ChecklistPageState extends State<ChecklistPage>
                                     ),
                                   ),
                                   IconButton(
-                                    icon: Icon(
-                                        Icons.arrow_forward_ios_outlined,
+                                    icon: Icon(Icons.arrow_forward_ios_outlined,
                                         color: Colors.white),
                                     onPressed: () {
                                       BlocProvider.of<ShowTaskBloc>(context)
@@ -386,23 +431,12 @@ class _ChecklistPageState extends State<ChecklistPage>
                             ),
                             Expanded(
                               child: Container(
-                                margin: EdgeInsets.only(top: 0,right:15, left:15, bottom: 50),
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.grey.withOpacity(0.5),
-                                      spreadRadius: 5,
-                                      blurRadius: 7,
-                                      offset: Offset(
-                                          0, 3), // changes position of shadow
-                                    ),
-                                  ],
-                                ),
+                                margin: EdgeInsets.only(
+                                    top: 0, right: 15, left: 15, bottom: 50),
                                 child: ListViewWidget(
                                     tasks: valuess, weddingID: weddingID),
                               ),
-                            )
+                            ),
                           ],
                         );
                       } else
@@ -414,8 +448,6 @@ class _ChecklistPageState extends State<ChecklistPage>
                   Expanded(child: Center(child: CircularProgressIndicator())),
                 ],
               );
-            } else if (state is TasksSearching) {
-              return SearchingResultPage(tasks: searchList);
             }
             return Container();
           }),
