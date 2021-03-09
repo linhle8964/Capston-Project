@@ -9,7 +9,6 @@ import 'package:wedding_app/utils/hex_color.dart';
 import 'package:wedding_app/utils/border.dart';
 import 'package:intl/intl.dart';
 import 'package:wedding_app/widgets/confirm_dialog.dart';
-import 'package:wedding_app/widgets/notification.dart';
 
 class EditTaskPage extends StatefulWidget {
   Task task;

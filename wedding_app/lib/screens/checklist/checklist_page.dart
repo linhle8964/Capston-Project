@@ -12,8 +12,6 @@ import 'package:wedding_app/screens/add_task/add_task.dart';
 import 'package:wedding_app/screens/checklist/listview.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wedding_app/screens/checklist/searching_page.dart';
-import 'package:wedding_app/widgets/loading_indicator.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ChecklistPage extends StatefulWidget {
   @override
@@ -308,87 +306,87 @@ class _ChecklistPageState extends State<ChecklistPage>
                   ],
                 );
               } else
-                return SingleChildScrollView(
-                  child: BlocBuilder(
-                      cubit: BlocProvider.of<ShowTaskBloc>(context),
-                      builder: (context, state) {
-                        if (state is MonthLoading ||
-                            state is MonthMovedPreviously ||
-                            state is MonthMovedToNext ||
-                            state is MonthDeleted) {
-                          int month = months[state.number].month;
-                          int year = months[state.number].year;
-                          //add tasks to list by month
-                          valuess.clear();
-                          for (int i = 0; i < tasks.length; i++) {
-                            if (tasks[i].dueDate.month == month &&
-                                tasks[i].dueDate.year == year) {
-                              valuess.add(tasks[i]);
-                            }
+                return BlocBuilder(
+                    cubit: BlocProvider.of<ShowTaskBloc>(context),
+                    builder: (context, state) {
+                      if (state is MonthLoading ||
+                          state is MonthMovedPreviously ||
+                          state is MonthMovedToNext ||
+                          state is MonthDeleted) {
+                        int month = months[state.number].month;
+                        int year = months[state.number].year;
+                        //add tasks to list by month
+                        valuess.clear();
+                        for (int i = 0; i < tasks.length; i++) {
+                          if (tasks[i].dueDate.month == month &&
+                              tasks[i].dueDate.year == year) {
+                            valuess.add(tasks[i]);
                           }
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                color: Colors.black26,
-                                padding: EdgeInsets.symmetric(vertical: 5.0),
-                                child: Row(
-                                  children: <Widget>[
-                                    IconButton(
-                                      icon: Icon(Icons.arrow_back_ios_outlined,
-                                          color: Colors.white),
-                                      onPressed: () {
-                                        BlocProvider.of<ShowTaskBloc>(context)
-                                            .add(ShowPrevious());
-                                      },
-                                    ),
-                                    Expanded(
-                                      child: Text(
-                                        'THÁNG $month, $year',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.w600),
-                                      ),
-                                    ),
-                                    IconButton(
-                                      icon: Icon(
-                                          Icons.arrow_forward_ios_outlined,
-                                          color: Colors.white),
-                                      onPressed: () {
-                                        BlocProvider.of<ShowTaskBloc>(context)
-                                            .add(ShowNext(months.length));
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Container(
-                                margin: EdgeInsets.all(15.0),
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      "Chưa đến hạn",
+                        }
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              color: Colors.black26,
+                              padding: EdgeInsets.symmetric(vertical: 5.0),
+                              child: Row(
+                                children: <Widget>[
+                                  IconButton(
+                                    icon: Icon(Icons.arrow_back_ios_outlined,
+                                        color: Colors.white),
+                                    onPressed: () {
+                                      BlocProvider.of<ShowTaskBloc>(context)
+                                          .add(ShowPrevious());
+                                    },
+                                  ),
+                                  Expanded(
+                                    child: Text(
+                                      'THÁNG $month, $year',
+                                      textAlign: TextAlign.center,
                                       style: TextStyle(
-                                        fontSize: 16,
-                                      ),
+                                          color: Colors.white,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w600),
                                     ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                      "Đã quá hạn",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Colors.red,
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                  ),
+                                  IconButton(
+                                    icon: Icon(
+                                        Icons.arrow_forward_ios_outlined,
+                                        color: Colors.white),
+                                    onPressed: () {
+                                      BlocProvider.of<ShowTaskBloc>(context)
+                                          .add(ShowNext(months.length));
+                                    },
+                                  ),
+                                ],
                               ),
-                              Container(
-                                margin: EdgeInsets.symmetric(horizontal: 15.0),
+                            ),
+                            Container(
+                              margin: EdgeInsets.all(15.0),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "Chưa đến hạn",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    "Đã quá hạn",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Expanded(
+                              child: Container(
+                                margin: EdgeInsets.only(top: 0,right:15, left:15, bottom: 50),
                                 decoration: BoxDecoration(
                                   color: Colors.white,
                                   boxShadow: [
@@ -403,13 +401,13 @@ class _ChecklistPageState extends State<ChecklistPage>
                                 ),
                                 child: ListViewWidget(
                                     tasks: valuess, weddingID: weddingID),
-                              )
-                            ],
-                          );
-                        } else
-                          return Text("có lỗi xảy ra");
-                      }),
-                );
+                              ),
+                            )
+                          ],
+                        );
+                      } else
+                        return Text("có lỗi xảy ra");
+                    });
             } else if (state is TasksLoading) {
               return Column(
                 children: [

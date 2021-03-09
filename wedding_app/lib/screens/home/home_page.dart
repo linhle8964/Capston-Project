@@ -1,17 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_countdown_timer/current_remaining_time.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:wedding_app/bloc/checklist/bloc.dart';
-import 'package:wedding_app/firebase_repository/firebase_task_repository.dart';
 import 'package:wedding_app/utils/get_data.dart';
 import 'package:wedding_app/widgets/notification.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:firebase_core/firebase_core.dart';
-
-import '../../widgets/notification.dart';
-import '../../widgets/notification.dart';
 import '../../widgets/notification.dart';
 
 class HomePage extends StatefulWidget {

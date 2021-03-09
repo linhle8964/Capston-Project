@@ -11,7 +11,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:wedding_app/widgets/confirm_dialog.dart';
 import 'package:wedding_app/utils/hex_color.dart';
-import 'package:wedding_app/widgets/notification.dart';
 
 class AddTaskPage extends StatefulWidget {
   String weddingID;
