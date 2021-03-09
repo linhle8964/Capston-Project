@@ -561,37 +561,32 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                         content: Form(
                           key: _formKey,
                           child: Container(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                Container(
-                                  child: ListView.builder(
-                                      shrinkWrap: true,
-                                      itemCount: listAvaiContacts.length,
-                                      itemBuilder: (context,index){
-                                        Contact contact = listAvaiContacts[index];
-                                        String phone = contact.phones.elementAt(0).value;
-                                        return Card(
-                                          child: ListTile(
-                                            title: Text("${contact.displayName}"),
-                                            subtitle: Text((contact.phones.length>0)?"${phone}":"No contact"),
-                                            trailing: Checkbox(value: isChecked(listAddGuests, phone), onChanged: (checked){
-                                              setState((){
-                                                Guest guest = new Guest(contact.displayName,"",0,phone);
-                                                if(!isChecked(listAddGuests, phone)){
-                                                  listAddGuests.add(guest);
-                                                }
-                                                else {
-                                                  listAddGuests.removeAt(listAddGuests.indexWhere((guest) => guest.phone == phone));
-                                                }
-                                              });
-                                            },),
-                                          ),
-                                        );
-                                      }
-                                  ),
-                                )
-                              ],
+                            height: MediaQuery.of(context).size.height - 100,
+                            width: 2000,
+                            child: ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: listAvaiContacts.length,
+                                itemBuilder: (context,index){
+                                  Contact contact = listAvaiContacts[index];
+                                  String phone = contact.phones.elementAt(0).value;
+                                  return Card(
+                                    child: ListTile(
+                                      title: Text("${contact.displayName}"),
+                                      subtitle: Text((contact.phones.length>0)?"${phone}":"No contact"),
+                                      trailing: Checkbox(value: isChecked(listAddGuests, phone), onChanged: (checked){
+                                        setState((){
+                                          Guest guest = new Guest(contact.displayName,"",0,phone);
+                                          if(!isChecked(listAddGuests, phone)){
+                                            listAddGuests.add(guest);
+                                          }
+                                          else {
+                                            listAddGuests.removeAt(listAddGuests.indexWhere((guest) => guest.phone == phone));
+                                          }
+                                        });
+                                      },),
+                                    ),
+                                  );
+                                }
                             ),
                           ),
                         ),
@@ -691,6 +686,8 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                                           content: Form(
                                             key: _formKey,
                                             child: Container(
+                                                height: MediaQuery.of(context).size.height - 100,
+                                                width: 2000,
                                                 child: Column(
                                                   mainAxisSize: MainAxisSize.min,
                                                     children: <Widget>[
