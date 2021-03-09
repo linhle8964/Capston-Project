@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wedding_app/utils/hex_color.dart';
 import 'package:wedding_app/utils/border.dart';
 import 'package:intl/intl.dart';
+import 'package:wedding_app/utils/show_snackbar.dart';
 import 'package:wedding_app/widgets/confirm_dialog.dart';
 
 class EditTaskPage extends StatefulWidget {
@@ -342,11 +343,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
       //NotificationManagement.deleteNotification(widget.task);
       Navigator.pop(context);
     } else if (_task == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Bạn chưa điền tên công việc'),
-        ),
-      );
+      showFailedSnackbar(context, 'Bạn chưa điền tên công việc');
     }
   }
 
@@ -361,22 +358,14 @@ class _EditTaskPageState extends State<EditTaskPage> {
         category: _category);
     if (_task != null && _task.trim().isNotEmpty) {
       if (task == widget.task) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Bạn chưa thay đổi tên công việc!!!'),
-          ),
-        );
+        showFailedSnackbar(context, "Bạn chưa thay đổi tên công việc!!!")
         return;
       }
       BlocProvider.of<ChecklistBloc>(context)
         ..add(UpdateTask(task, widget.weddingID));
       Navigator.pop(context);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('có lỗi xảy ra'),
-        ),
-      );
+      showFailedSnackbar(context, "Có lỗi xảy ra")
     }
   }
 }

@@ -3,7 +3,6 @@ import 'package:wedding_app/bloc/category/bloc.dart';
 import 'package:wedding_app/bloc/checklist/bloc.dart';
 import 'package:wedding_app/bloc/checklist/checklist_bloc.dart';
 import 'package:wedding_app/bloc/show_task/bloc.dart';
-import 'package:wedding_app/model/budget.dart';
 import 'package:wedding_app/screens/edit_task/edit_task.dart';
 import 'package:wedding_app/utils/get_data.dart';
 import 'package:wedding_app/utils/hex_color.dart';
@@ -14,7 +13,7 @@ import 'package:wedding_app/screens/add_task/add_task.dart';
 import 'package:wedding_app/screens/checklist/listview.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:search_page/search_page.dart';
-import 'package:wedding_app/widgets/confirm_dialog.dart';
+import 'package:wedding_app/utils/show_snackbar.dart';
 
 class ChecklistPage extends StatefulWidget {
   @override
@@ -31,7 +30,6 @@ class _ChecklistPageState extends State<ChecklistPage>
   List<Task> searchList = []; // searching
 
   TextEditingController _searchQuery = new TextEditingController();
-  bool _isSearching = false;
 
   @override
   void initState() {
@@ -78,21 +76,7 @@ class _ChecklistPageState extends State<ChecklistPage>
     );
   }
 
-  List<Widget> _buildActions(context,String weddingID) {
-    if (_isSearching) {
-      return <Widget>[
-        new IconButton(
-          icon: const Icon(
-            Icons.clear,
-            color: Colors.white,
-          ),
-          onPressed: () {
-            _isSearching = false;
-          },
-        ),
-      ];
-    }
-
+  List<Widget> _buildActions(context, String weddingID) {
     return <Widget>[
       new IconButton(
         icon: const Icon(
@@ -105,12 +89,14 @@ class _ChecklistPageState extends State<ChecklistPage>
               delegate: SearchPage<Task>(
                 searchLabel: "Tìm Kiếm",
                 suggestion: Center(
-                  child: Text('Tìm kiếm theo tên công việc',
+                  child: Text(
+                    'Tìm kiếm theo tên công việc',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Colors.grey,
                         fontSize: 20,
-                        fontWeight: FontWeight.w600),),
+                        fontWeight: FontWeight.w600),
+                  ),
                 ),
                 failure: Center(
                   child: Text(
@@ -124,17 +110,18 @@ class _ChecklistPageState extends State<ChecklistPage>
                 ),
                 builder: (Task task) => InkWell(
                     onTap: () {
+                      Navigator.pop(context);
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (_) => BlocProvider.value(
-                              value: BlocProvider.of<CateBloc>(context),
-                              child: BlocProvider.value(
-                                  value: BlocProvider.of<ChecklistBloc>(context),
-                                  child: EditTaskPage(
-                                      task: task,
-                                      weddingID: weddingID)),
-                            )),
+                                  value: BlocProvider.of<CateBloc>(context),
+                                  child: BlocProvider.value(
+                                      value: BlocProvider.of<ChecklistBloc>(
+                                          context),
+                                      child: EditTaskPage(
+                                          task: task, weddingID: weddingID)),
+                                )),
                       );
                     },
                     child: Card(
@@ -154,52 +141,6 @@ class _ChecklistPageState extends State<ChecklistPage>
                                 : Colors.black,
                           ),
                         ),
-                        trailing: Theme(
-                          data: ThemeData(
-                            primarySwatch: Colors.red,
-                            unselectedWidgetColor:
-                            task.dueDate.isBefore(DateTime.now())
-                                ? Colors.red
-                                : Colors.black,
-                            // Your color
-                          ),
-                          child: Checkbox(
-                            activeColor: task.dueDate.isBefore(DateTime.now())
-                                ? Colors.red
-                                : Colors.blue,
-                            value: task.status,
-                            onChanged: (bool value) {
-                              showDialog(
-                                  context: context,
-                                  barrierDismissible: false,
-                                  builder: (BuildContext context) => PersonDetailsDialog(
-                                    message:
-                                    "Bạn đang thay đổi trạng thái của công việc",
-                                    onPressedFunction: () {
-                                      //updateStatus(index);
-                                    },
-                                  ));
-                            },
-                          ),
-                        ),
-                        onTap: () {
-                          var state = BlocProvider.of<ChecklistBloc>(context).state;
-                          if(state is TasksSearching){
-                            Navigator.pop(context);
-                          }
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) => BlocProvider.value(
-                                  value: BlocProvider.of<CateBloc>(context),
-                                  child: BlocProvider.value(
-                                      value: BlocProvider.of<ChecklistBloc>(context),
-                                      child: EditTaskPage(
-                                          task: task,
-                                          weddingID: weddingID)),
-                                )),
-                          );
-                        },
                       ),
                     )),
                 filter: (Task task) => [task.name],
@@ -241,56 +182,48 @@ class _ChecklistPageState extends State<ChecklistPage>
                     BlocProvider.of<ShowTaskBloc>(context)..add(DeleteMonth());
                     BlocProvider.of<ChecklistBloc>(context)
                       ..add(LoadSuccess(weddingID));
-                    ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
-                        content: new Text("bạn đã xóa thành công")));
+                    showSuccessSnackbar(context, "bạn đã xóa thành công");
                   } else if (state is TaskAdded) {
                     BlocProvider.of<ChecklistBloc>(context)
                       ..add(LoadSuccess(weddingID));
-                    ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
-                        content: new Text("bạn đã thêm thành công")));
+                    showSuccessSnackbar(context, "bạn đã thêm thành công");
                   } else if (state is TaskUpdated) {
                     BlocProvider.of<ChecklistBloc>(context)
                       ..add(LoadSuccess(weddingID));
-                    ScaffoldMessenger.of(context).showSnackBar(new SnackBar(
-                        content: new Text("bạn đã chỉnh sửa thành công")));
+                    showSuccessSnackbar(context, "bạn đã chỉnh sửa thành công");
                   }
                 },
-                child:  Scaffold(
-                          key: scaffoldKey,
-                          appBar: AppBar(
-                              centerTitle: true,
-                              backgroundColor: hexToColor("#d86a77"),
-                              title: _isSearching
-                                  ? _buildSearchField(context)
-                                  : _buildTitle(context),
-                              actions: _buildActions(context,weddingID),
-                            ),
-                          body: _body(weddingID),
-                          floatingActionButton: _isSearching
-                              ? null
-                              : FloatingActionButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (_) => BlocProvider.value(
-                                                value:
-                                                    BlocProvider.of<CateBloc>(
-                                                        context),
-                                                child: BlocProvider.value(
-                                                    value: BlocProvider.of<
-                                                        ChecklistBloc>(context),
-                                                    child: AddTaskPage(
-                                                        weddingID: weddingID)),
-                                              )),
-                                    );
-                                  },
-                                  child: Icon(Icons.add),
-                                  backgroundColor: hexToColor("#d86a77"),
-                                ),
-                          floatingActionButtonLocation:
-                              FloatingActionButtonLocation.endFloat,
+                child: Scaffold(
+                  key: scaffoldKey,
+                  appBar: AppBar(
+                    centerTitle: true,
+                    backgroundColor: hexToColor("#d86a77"),
+                    title: _buildTitle(context),
+                    actions: _buildActions(context, weddingID),
+                  ),
+                  body: _body(weddingID),
+                  floatingActionButton: FloatingActionButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (_) => BlocProvider.value(
+                                        value:
+                                            BlocProvider.of<CateBloc>(context),
+                                        child: BlocProvider.value(
+                                            value:
+                                                BlocProvider.of<ChecklistBloc>(
+                                                    context),
+                                            child: AddTaskPage(
+                                                weddingID: weddingID)),
+                                      )),
+                            );
+                          },
+                          child: Icon(Icons.add),
+                          backgroundColor: hexToColor("#d86a77"),
                         ),
+                  floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+                ),
               ),
             ),
           );
