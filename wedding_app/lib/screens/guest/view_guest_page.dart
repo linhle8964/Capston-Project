@@ -561,29 +561,38 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                         content: Form(
                           key: _formKey,
                           child: Container(
-                              child: ListView.builder(
-                                  itemCount: listAvaiContacts.length,
-                                  itemBuilder: (context,index){
-                                    Contact contact = listAvaiContacts[index];
-                                    String phone = contact.phones.elementAt(0).value;
-                                    return Card(
-                                      child: ListTile(
-                                        title: Text("${contact.displayName}"),
-                                        subtitle: Text((contact.phones.length>0)?"${phone}":"No contact"),
-                                        trailing: Checkbox(value: isChecked(listAddGuests, phone), onChanged: (checked){
-                                          setState((){
-                                            Guest guest = new Guest(contact.displayName,"",0,phone);
-                                            if(!isChecked(listAddGuests, phone)){
-                                              listAddGuests.add(guest);
-                                            }
-                                            else {
-                                              listAddGuests.removeAt(listAddGuests.indexWhere((guest) => guest.phone == phone));
-                                            }
-                                          });
-                                        },),
-                                      ),
-                                    );
-                                  })
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Container(
+                                  child: ListView.builder(
+                                      shrinkWrap: true,
+                                      itemCount: listAvaiContacts.length,
+                                      itemBuilder: (context,index){
+                                        Contact contact = listAvaiContacts[index];
+                                        String phone = contact.phones.elementAt(0).value;
+                                        return Card(
+                                          child: ListTile(
+                                            title: Text("${contact.displayName}"),
+                                            subtitle: Text((contact.phones.length>0)?"${phone}":"No contact"),
+                                            trailing: Checkbox(value: isChecked(listAddGuests, phone), onChanged: (checked){
+                                              setState((){
+                                                Guest guest = new Guest(contact.displayName,"",0,phone);
+                                                if(!isChecked(listAddGuests, phone)){
+                                                  listAddGuests.add(guest);
+                                                }
+                                                else {
+                                                  listAddGuests.removeAt(listAddGuests.indexWhere((guest) => guest.phone == phone));
+                                                }
+                                              });
+                                            },),
+                                          ),
+                                        );
+                                      }
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         ),
                         actions: <Widget>[
@@ -625,6 +634,13 @@ class _ViewGuestPageState extends State<ViewGuestPage>
         builder: (context) {
           String _searchQuery = "";
           List<Guest> _listSearch = [];
+          for (var guest in _tempguests) {
+            var name = guest.name.toLowerCase();
+            var phone = guest.phone.toLowerCase();
+            if (name.contains(_searchQuery.toLowerCase()) || phone.contains(_searchQuery.toLowerCase())) {
+              _listSearch.add(guest);
+            }
+          }
           return MultiBlocProvider(
             providers: [
               BlocProvider<GuestsBloc>(
@@ -658,7 +674,6 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                                   var phone = guest.phone.toLowerCase();
                                   if (name.contains(_searchQuery.toLowerCase()) || phone.contains(_searchQuery.toLowerCase())) {
                                     _listSearch.add(guest);
-                                    print(guest);
                                   }
                                 }
                                 return SingleChildScrollView(
@@ -677,7 +692,8 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                                             key: _formKey,
                                             child: Container(
                                                 child: Column(
-                                                    children: [
+                                                  mainAxisSize: MainAxisSize.min,
+                                                    children: <Widget>[
                                                       TextFormField(
                                                         //controller: ,
                                                           initialValue: _searchQuery,
