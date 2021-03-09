@@ -75,7 +75,13 @@ class _HomePageState extends State<HomePage> {
                                 widgetBuilder:
                                     (_, CurrentRemainingTime time) {
                                   if (time == null) {
-                                    return Text('Game over');
+                                    return Text(
+                                        'Chúc 2 bạn hạnh phúc',
+                                      style: TextStyle(
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black38),
+                                    );
                                   }
                                   return Text(
                                     ' ${(time.days == null) ? '' : (time.days.toString() + ' ngày,')}  ${(time.hours == null) ? '0' : time.hours} :  ${(time.min == null) ? '0' : time.min} : ${time.sec}',
