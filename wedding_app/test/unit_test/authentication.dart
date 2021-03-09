@@ -20,6 +20,7 @@ void main() {
   setUpAll(() async{
     mockUserRepository = MockUserRepository();
     mockUserWeddingRepository = MockUserWeddingRepository();
+    mockFirebaseAuth = FirebaseAuth.instance;
     mockUser = await mockUserRepository.getUser();
   });
 

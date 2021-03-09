@@ -2,6 +2,10 @@ import 'package:wedding_app/repository/user_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+class EmailNotFoundException implements Exception{}
+class WrongPasswordException implements Exception{}
+class TooManyRequestException implements Exception{}
+
 class FirebaseUserRepository extends UserRepository {
   final FirebaseAuth _firebaseAuth;
   final GoogleSignIn _googleSignIn;
@@ -41,13 +45,13 @@ class FirebaseUserRepository extends UserRepository {
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         print(e.message);
-        throw Exception("user-not-found");
+        throw EmailNotFoundException;
       } else if (e.code == 'wrong-password') {
         print(e.message);
-        throw Exception("wrong-password");
+        throw WrongPasswordException();
       } else if (e.code == 'too-many-requests') {
         print(e.message);
-        throw Exception("too-many-requests");
+        throw TooManyRequestException();
       } else {
         print(e.code);
         throw Exception();

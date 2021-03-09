@@ -14,6 +14,7 @@ class MockUserWeddingRepository extends Mock implements UserWeddingRepository {}
 
 void main() {
   group("Invite Email Bloc", () {
+    final String code = "O60ymX";
     MockInviteEmailRepository mockInviteEmailRepository;
     MockUserWeddingRepository mockUserWeddingRepository;
     InviteEmailBloc inviteEmailBloc;
@@ -29,11 +30,11 @@ void main() {
 
     blocTest("demo",
         build: () {
-          InviteEmail inviteEmail = new InviteEmail(id: "4Yj3S4Mz7cc5jQfZR2iT", code: "O60ymX", to: "nangld290498@gmail.comh");
+          InviteEmail inviteEmail = new InviteEmail(id: "4Yj3S4Mz7cc5jQfZR2iT", code: code, to: "nangld290498@gmail.comh");
           when(mockInviteEmailRepository.getInviteEmailByCode("O60ymX")).thenAnswer((_) async => inviteEmail);
           return InviteEmailBloc(inviteEmailRepository: mockInviteEmailRepository, userWeddingRepository: mockUserWeddingRepository);
         },
-        act: (InviteEmailBloc bloc) async => bloc.add(SubmittedCode("O60ymX")),
+        act: (InviteEmailBloc bloc) async => bloc.add(SubmittedCode(code)),
         expect: [
           InviteEmailProcessing(),
           InviteEmailError(message: "Có lỗi xảy ra")

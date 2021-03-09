@@ -60,7 +60,6 @@ dev_dependencies:
   flutter_local_notifications: ^5.0.0-nullsafety.0
   search_page: ^1.4.0
 
-
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 flutter_icons:
