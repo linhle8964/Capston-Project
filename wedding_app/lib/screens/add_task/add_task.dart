@@ -282,7 +282,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
         ..add(AddTask(task, widget.weddingID));
       Navigator.pop(context);
     } else {
-      showFailedSnackbar(context, "Có lỗi xảy ra");
+      showFailedSnackbar(context, "Tên, loại công việc phải có dữ liệu");
     }
   }
 }
