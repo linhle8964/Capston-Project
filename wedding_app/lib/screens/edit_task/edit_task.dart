@@ -340,7 +340,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
         category: _category);
     if (_task != null && _task.trim().isNotEmpty) {
       if (task == widget.task) {
-        showFailedSnackbar(context, "Bạn chưa thay đổi tên công việc!!!")
+        showFailedSnackbar(context, "Bạn chưa thay đổi tên công việc!!!");
         return;
       }
       BlocProvider.of<ChecklistBloc>(context)
