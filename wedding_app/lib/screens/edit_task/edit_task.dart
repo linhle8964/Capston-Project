@@ -77,21 +77,6 @@ class _EditTaskPageState extends State<EditTaskPage> {
           },
         ),
 
-        /*new IconButton(
-          icon: new Icon(Icons.arrow_back),
-          color: Colors.white,
-          onPressed: () {
-            showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (BuildContext context) => PersonDetailsDialog(
-                      message: "Bạn có muốn thoát",
-                      onPressedFunction: () {
-                        Navigator.of(context).pop();
-                      },
-                    ));
-          },
-        ),*/
         actions: [
           Builder(
             builder: (ctx) => IconButton(
@@ -246,8 +231,6 @@ class _EditTaskPageState extends State<EditTaskPage> {
                                   categories.add(
                                       categoryObjects[i].cateName.toString());
                                 }
-                                // widget.dropdownValue = categories.length !=0? categories[0].toString()
-                                //    : widget.dropdownValue;
                               } else if (state is TodosLoading) {
                               } else if (state is TodosNotLoaded) {}
                               return DropdownButton<String>(
@@ -340,7 +323,6 @@ class _EditTaskPageState extends State<EditTaskPage> {
       _formKey.currentState.save();
       BlocProvider.of<ChecklistBloc>(context)
         ..add(DeleteTask(widget.task, widget.weddingID));
-      //NotificationManagement.deleteNotification(widget.task);
       Navigator.pop(context);
     } else if (_task == null) {
       showFailedSnackbar(context, 'Bạn chưa điền tên công việc');
@@ -365,7 +347,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
         ..add(UpdateTask(task, widget.weddingID));
       Navigator.pop(context);
     } else {
-      showFailedSnackbar(context, "Có lỗi xảy ra")
+      showFailedSnackbar(context, "Có lỗi xảy ra");
     }
   }
 }
