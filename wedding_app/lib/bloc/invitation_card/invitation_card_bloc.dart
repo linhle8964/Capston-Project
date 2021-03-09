@@ -29,7 +29,7 @@ class InvitationCardBloc extends Bloc<InvitationCardEvent, InvitationCardState> 
   }
   Stream<InvitationCardState> _mapLoadSuccessToState(LoadSuccess event) async*{
     _invitationCardSubscription?.cancel();
-    _invitationCardSubscription = _invitationCardRepository.GetAllInvitationCard(event.weddingId).listen(
+    _invitationCardSubscription = _invitationCardRepository.getAllInvitationCard(event.weddingId).listen(
           (invitations) => add(InvitationCardUpdated(invitations)),
     );
   }

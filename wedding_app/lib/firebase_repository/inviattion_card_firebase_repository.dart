@@ -7,7 +7,7 @@ class FirebaseInvitationCardRepository implements InvitationCardRepository{
   final templateCollection = FirebaseFirestore.instance.collection('cardTemplate');
 
   @override
-  Stream<List<InvitationCard>> GetAllInvitationCard(String weddingID) {
+  Stream<List<InvitationCard>> getAllInvitationCard(String weddingID) {
     return FirebaseFirestore.instance.collection('wedding')
         .doc(weddingID).collection('invitation_card')
         .snapshots().map((snapshot){

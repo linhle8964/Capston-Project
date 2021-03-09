@@ -43,8 +43,10 @@ class _FillInfoPageState extends State<FillInfoPage> {
             appBar: AppBar(
               backgroundColor: Colors.white,
               leading: IconButton(
-                icon: Icon(Icons.arrow_back),
-                onPressed: null,
+                icon: Icon(Icons.arrow_back,color: Colors.black,),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
               ),
               title: Padding(
                 padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),

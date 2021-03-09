@@ -55,8 +55,10 @@ class _InvitationCardPageState extends State<InvitationCardPage> {
             appBar: AppBar(
               backgroundColor: Colors.white,
               leading: IconButton(
-                icon: Icon(Icons.arrow_back),
-                onPressed: null,
+                icon: Icon(Icons.arrow_back,color: Colors.black,),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
               ),
               title: Padding(
                 padding: const EdgeInsets.fromLTRB(60, 0, 0, 0),
@@ -73,7 +75,7 @@ class _InvitationCardPageState extends State<InvitationCardPage> {
                     takeScreenShot();
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => ChooseTemplatePage()),
+                      MaterialPageRoute(builder: (context) => ChooseTemplatePage(isCreate: true,)),
                     );
                   }
                 ),
@@ -92,7 +94,7 @@ class _InvitationCardPageState extends State<InvitationCardPage> {
                             image: template.backgroundUrl),
                       ) ,
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(30, 135, 30, 100),
+                        padding: const EdgeInsets.fromLTRB(30, 140, 30, 100),
                         child: Visibility(
                             visible: template.name=='template4' ? true: false,
                             child: Center(

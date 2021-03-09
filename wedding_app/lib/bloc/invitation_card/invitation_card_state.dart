@@ -23,6 +23,6 @@ class InvitationCardLoaded extends InvitationCardState{
 
 
 }
-class TemplateCardNotLoaded extends InvitationCardState{}
+class InvitationCardNotLoaded extends InvitationCardState{}
 
 class InvitationCardAdded extends InvitationCardState{}
