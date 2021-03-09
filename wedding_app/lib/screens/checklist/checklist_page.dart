@@ -144,7 +144,7 @@ class _ChecklistPageState extends State<ChecklistPage>
                       ),
                     )),
                 filter: (Task task) => [task.name],
-                items: valuess,
+                items: tasks,
               ));
         },
       ),
