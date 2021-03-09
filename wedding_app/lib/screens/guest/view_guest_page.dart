@@ -629,13 +629,6 @@ class _ViewGuestPageState extends State<ViewGuestPage>
         builder: (context) {
           String _searchQuery = "";
           List<Guest> _listSearch = [];
-          for (var guest in _tempguests) {
-            var name = guest.name.toLowerCase();
-            var phone = guest.phone.toLowerCase();
-            if (name.contains(_searchQuery.toLowerCase()) || phone.contains(_searchQuery.toLowerCase())) {
-              _listSearch.add(guest);
-            }
-          }
           return MultiBlocProvider(
             providers: [
               BlocProvider<GuestsBloc>(
@@ -660,15 +653,17 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                           },
                           builder: (context, state) {
                             if(state is GuestsLoaded){
+                              _listSearch.clear();
+                              _guests = state.guests;
+                              _tempguests = _guests;
                               return StatefulBuilder(builder: (context, setState){
                                 _listSearch.clear();
-                                _guests = state.guests;
-                                _tempguests = _guests;
                                 for (var guest in _tempguests) {
                                   var name = guest.name.toLowerCase();
                                   var phone = guest.phone.toLowerCase();
                                   if (name.contains(_searchQuery.toLowerCase()) || phone.contains(_searchQuery.toLowerCase())) {
                                     _listSearch.add(guest);
+                                    print(guest);
                                   }
                                 }
                                 return SingleChildScrollView(
@@ -686,7 +681,7 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                                           content: Form(
                                             key: _formKey,
                                             child: Container(
-                                                height: MediaQuery.of(context).size.height - 100,
+                                                height: MediaQuery.of(context).size.height - 130,
                                                 width: 2000,
                                                 child: Column(
                                                   mainAxisSize: MainAxisSize.min,
