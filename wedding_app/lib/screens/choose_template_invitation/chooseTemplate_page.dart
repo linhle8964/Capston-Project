@@ -313,12 +313,7 @@ class CardListState extends State<CardList> {
             if(state is TemplateCardLoaded){
               _templates = state.template;
             }
-            return Scrollbar(
-              thickness: 10.0,
-              isAlwaysShown: true,
-              hoverThickness: 10.0,
-              showTrackOnHover: true,
-              child: ListView.builder(
+            return  ListView.builder(
                   itemCount: _templates.length,
                   scrollDirection: Axis.horizontal,
                   shrinkWrap: true,
@@ -345,8 +340,8 @@ class CardListState extends State<CardList> {
                         ),
                       ],
                     );
-                  }),
-            );
+                  });
+            ;
           }
         )
       ),
