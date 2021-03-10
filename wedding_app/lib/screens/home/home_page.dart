@@ -10,6 +10,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:firebase_core/firebase_core.dart';
 
+import '../../widgets/notification.dart';
+import '../../widgets/notification.dart';
+import '../../widgets/notification.dart';
+
 class HomePage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -19,7 +23,6 @@ class HomePage extends StatefulWidget {
 showprint() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String weddingID = prefs.getString("wedding_id");
-  print("CALLING ALARM");
   await Firebase.initializeApp();
   NotificationManagement.executeAlarm(weddingID);
 }
@@ -110,94 +113,87 @@ class _HomePageState extends State<HomePage> {
                                               style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                               ),
-                                            ),
-                                            decoration: BoxDecoration(
-                                                border: Border.all(
-                                                    color: main_color,
-                                                    width: 2)),
-                                          ),
-                                          onPressed: () {
-                                            print('Share');
-                                          },
-                                        )
-                                      ],
-                                    ),
+                                              onPressed: () {
+                                                print('Share');
+                                              },
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
+                                ),
+                                Container(
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      _buildButtonColumn(main_color,
+                                          Icons.add_rounded, 'KHÁCH MỜI'),
+                                      _buildButtonColumn(
+                                          main_color,
+                                          Icons.assignment_ind_outlined,
+                                          'THIỆP MỜI'),
+                                      _buildButtonColumn(main_color,
+                                          Icons.add_alarm, 'THÔNG BÁO'),
+                                    ],
+                                  ),
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.all(20),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      _buildInfoColumn(
+                                          main_color, 'Việc cần làm ', 0),
+                                      _buildInfoColumn(
+                                          main_color, 'Việc đã xong ', 0),
+                                    ],
+                                  ),
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.all(20),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      _buildInfoColumn(
+                                          main_color, 'Tổng ngân sách ', 0),
+                                      _buildInfoColumn(main_color, 'Đã dùng ', 0),
+                                    ],
+                                  ),
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.all(20),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      _buildInfoColumn(
+                                          main_color, 'Số khách dự kiến ', 0),
+                                      _buildInfoColumn(
+                                          main_color, 'Khách đã xác nhận ', 0),
+                                    ],
+                                  ),
+                                ),
+                                // Container(
+                                //   padding: const EdgeInsets.all(20),
+                                //   child: Row(
+                                //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                //     children: [
+                                //       _buildInfoColumn(main_color, 'Tổng dịch vụ ', 0),
+                                //       _buildInfoColumn(main_color, 'Đã đặt ', 0),
+                                //     ],
+                                //   ),
+                                // )
+                              ],
                             ),
-                            Container(
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  _buildButtonColumn(main_color,
-                                      Icons.add_rounded, 'KHÁCH MỜI'),
-                                  _buildButtonColumn(
-                                      main_color,
-                                      Icons.assignment_ind_outlined,
-                                      'THIỆP MỜI'),
-                                  _buildButtonColumn(main_color,
-                                      Icons.add_alarm, 'THÔNG BÁO'),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              padding: const EdgeInsets.all(20),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  _buildInfoColumn(
-                                      main_color, 'Việc cần làm ', 0),
-                                  _buildInfoColumn(
-                                      main_color, 'Việc đã xong ', 0),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              padding: const EdgeInsets.all(20),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  _buildInfoColumn(
-                                      main_color, 'Tổng ngân sách ', 0),
-                                  _buildInfoColumn(main_color, 'Đã dùng ', 0),
-                                ],
-                              ),
-                            ),
-                            Container(
-                              padding: const EdgeInsets.all(20),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  _buildInfoColumn(
-                                      main_color, 'Số khách dự kiến ', 0),
-                                  _buildInfoColumn(
-                                      main_color, 'Khách đã xác nhận ', 0),
-                                ],
-                              ),
-                            ),
-                            // Container(
-                            //   padding: const EdgeInsets.all(20),
-                            //   child: Row(
-                            //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            //     children: [
-                            //       _buildInfoColumn(main_color, 'Tổng dịch vụ ', 0),
-                            //       _buildInfoColumn(main_color, 'Đã đặt ', 0),
-                            //     ],
-                            //   ),
-                            // )
-                          ],
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                ),
-
-          );
+                    );}
+              );
         } else {
           return Center(
             child: CircularProgressIndicator(),

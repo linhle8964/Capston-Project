@@ -5,6 +5,7 @@ import 'package:wedding_app/bloc/budget/bloc.dart';
 import 'package:wedding_app/bloc/category/bloc.dart';
 import 'package:wedding_app/model/budget.dart';
 import 'package:wedding_app/model/category.dart';
+import 'package:wedding_app/widgets/confirm_dialog.dart';
 import 'package:wedding_app/widgets/loading_indicator.dart';
 
 class AddBudget extends StatefulWidget {
@@ -38,7 +39,7 @@ class _AddBudgetState extends State<AddBudget> {
   String weddingId = "";
   String id = "";
   bool _checkboxListTile = false;
-  Category initialCate = new Category("", "other");
+  Category initialCate = new Category("", "");
   TextEditingController budgetNameController = new TextEditingController();
   TextEditingController moneyController = new TextEditingController();
   TextEditingController payMoneyController = new TextEditingController();
@@ -55,12 +56,13 @@ class _AddBudgetState extends State<AddBudget> {
       String weddingId = prefs.getString("wedding_id");
       print("test shared " + weddingId);
       id = weddingId;
+      print("this is " + widget.budget.cateID);
       budgetNameController.text = isEditing ? widget.budget.budgetName : "";
       moneyController.text = isEditing ? widget.budget.money.toString() : "";
       payMoneyController.text =
           isEditing ? widget.budget.payMoney.toString() : "";
       _checkboxListTile = isEditing ? widget.budget.isComplete : false;
-      initialCate = new Category(widget.budget.cateID, "");
+      holder = Category(widget.budget.cateID, "");
     });
   }
 
@@ -95,21 +97,12 @@ class _AddBudgetState extends State<AddBudget> {
                         showDialog(
                             context: context,
                             barrierDismissible: false,
-                            builder: (BuildContext context) => AlertDialog(
-                                  title: Text("Xác nhận"),
-                                  content: SingleChildScrollView(
-                                    child: Text(isEditing
-                                        ? " cập nhật Thành Công"
-                                        : "Thêm thành công"),
-                                  ),
-                                  actions: <Widget>[
-                                    TextButton(
-                                        onPressed: () {
-                                          updateBudget();
-                                          Navigator.pop(context);
-                                        },
-                                        child: Text("OK"))
-                                  ],
+                            builder: (BuildContext context) =>
+                                PersonDetailsDialog(
+                                  message: "Bạn đang thêm Kinh Phi",
+                                  onPressedFunction: () {
+                                    updateBudget();
+                                  },
                                 ));
                       },
                     ),
@@ -144,16 +137,28 @@ class _AddBudgetState extends State<AddBudget> {
                           Container(
                             padding: EdgeInsets.only(
                                 left: 20, right: 20, bottom: 20),
-                            width: 250.0,
+                            width: queryData.size.width*2/3,
                             child: Form(
                                 key: _formkey,
                                 child: TextFormField(
                                     controller: moneyController,
                                     onSaved: (input) =>
                                         moneyController.text = input,
-                                    validator: (val) => double.parse(val) < 1000
-                                        ? "Tiền phải lớn hơn 1000 đồng"
-                                        : null,
+                                    validator: (val) {
+                                      try {
+                                        double.parse(val) < 1000;
+                                      } on FormatException {
+
+                                        ScaffoldMessenger.of(context).showSnackBar(
+                                          SnackBar(
+                                            content: Text('có lỗi xảy ra'),
+                                          ),
+                                        );
+                                        return "Tiền phải lớn hơn 1000 đồng";
+                                      } return null;
+
+
+                                    },
                                     decoration: new InputDecoration(
                                       labelText: 'Số tiền',
                                       focusedBorder: OutlineInputBorder(
@@ -169,7 +174,7 @@ class _AddBudgetState extends State<AddBudget> {
                           ),
                           Container(
                               padding: EdgeInsets.only(bottom: 20),
-                              width: 140.0,
+                              width:queryData.size.width*2/7,
                               child: Container(
                                   decoration: BoxDecoration(
                                       border: Border.all(
@@ -301,39 +306,53 @@ class _AddBudgetState extends State<AddBudget> {
         });
   }
 
-  void getDropDownItem() {
-    setState(() {
-      holder = selectedCate;
-    });
-  }
-
   void updateBudget() {
-    getDropDownItem();
     if (_formkey.currentState.validate()) {
       if (isEditing) {
         Budget budget = new Budget(
             budgetNameController.text,
-            holder.id,
+            selectedCate == null ? initialCate.id : selectedCate.id,
             _checkboxListTile,
             double.parse(moneyController.text),
             double.parse(payMoneyController.text),
             1,
             id: widget.budget.id);
         print(budget.toString());
-        BlocProvider.of<BudgetBloc>(context)..add(UpdateBudget(budget, id));
-        Navigator.pop(context);
+        if (budget != null && budgetNameController.text.trim().isNotEmpty) {
+          BlocProvider.of<BudgetBloc>(context)..add(UpdateBudget(budget, id));
+          Navigator.pop(context);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('có lỗi xảy ra'),
+            ),
+          );
+        }
       } else if (isEditing != true) {
-        Budget budget = new Budget(
-            budgetNameController.text,
-            holder.id,
-            _checkboxListTile,
-            double.parse(moneyController.text),
-            double.parse(payMoneyController.text),
-            1);
-        BlocProvider.of<BudgetBloc>(context).add(CreateBudget(id, budget));
-        Navigator.pop(context);
+        bool _isSet = false;
+        if (selectedCate != null &&
+            selectedCate.cateName.trim().isNotEmpty &&
+            budgetNameController.text.trim().isNotEmpty &&
+            moneyController.text.trim().isNotEmpty &&
+            payMoneyController.text.trim().isNotEmpty) {
+          Budget budget = new Budget(
+              budgetNameController.text,
+              selectedCate.id,
+              _checkboxListTile,
+              double.parse(moneyController.text),
+              double.parse(payMoneyController.text),
+              1);
+          BlocProvider.of<BudgetBloc>(context).add(CreateBudget(id, budget));
+          Navigator.pop(context);
+          _isSet = true;
+        } else if (_isSet == false) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('có lỗi xảy ra'),
+            ),
+          );
+        }
       }
     }
-    getDropDownItem();
   }
 }
