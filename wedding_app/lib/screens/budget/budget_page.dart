@@ -52,7 +52,7 @@ class _BudgetListState extends State<BudgetList> {
         title: Center(
           child: !isSearching
               ? Text(
-                  'KINH PHÍ',
+                  '     KINH PHÍ',
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 )
               : TextField(
@@ -82,6 +82,9 @@ class _BudgetListState extends State<BudgetList> {
                   onPressed: () => showSearch(
                       context: context,
                       delegate: SearchPage<Budget>(
+
+                        barTheme:ThemeData(
+                            splashColor: hexToColor("#d86a77") ) ,
                         searchLabel: "Tìm Kiếm",
                         builder: (Budget budget) => InkWell(
                             onTap: () {
@@ -115,6 +118,11 @@ class _BudgetListState extends State<BudgetList> {
                                               fontSize: 20,
                                               fontWeight: FontWeight.bold)),
                                     ),
+                                    Flexible(
+                                        fit: FlexFit
+                                            .tight,
+                                        child:
+                                        SizedBox()),
                                     Text(
                                       budget.money.toString() + "₫",
                                       style: TextStyle(
