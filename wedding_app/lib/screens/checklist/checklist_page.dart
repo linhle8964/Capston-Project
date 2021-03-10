@@ -88,6 +88,14 @@ class _ChecklistPageState extends State<ChecklistPage>
               context: context,
               delegate: SearchPage<Task>(
                 searchLabel: "Tìm Kiếm",
+                barTheme: ThemeData(
+                  textTheme: TextTheme(title: TextStyle( color: Colors.white, fontSize: 18,),),
+                  inputDecorationTheme: InputDecorationTheme(
+                    hintStyle:
+                    Theme.of(context).textTheme.title.copyWith(color: Colors.white70,fontSize: 18),
+                  ),
+                    appBarTheme: AppBarTheme(elevation: 0.0, color: hexToColor("#d86a77")),//elevation did work
+                ),
                 suggestion: Center(
                   child: Text(
                     'Tìm kiếm theo tên công việc',

@@ -34,7 +34,7 @@ class FirebaseTaskRepository implements TaskRepository{
         .collection('wedding')
         .doc(weddingID)
         .collection("task")
-        .orderBy("due_date", descending: true)
+        .orderBy("due_date", descending: false)
         .snapshots()
         .map((snapshot) {
       return snapshot.docs
