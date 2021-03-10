@@ -9,7 +9,7 @@ import 'package:wedding_app/model/category.dart';
 import 'package:wedding_app/utils/show_snackbar.dart';
 import 'package:wedding_app/widgets/confirm_dialog.dart';
 import 'package:wedding_app/widgets/loading_indicator.dart';
-
+import 'package:wedding_app/utils/hex_color.dart';
 class AddBudget extends StatefulWidget {
   final bool isEditing;
   final Budget budget;
@@ -81,7 +81,7 @@ class _AddBudgetState extends State<AddBudget> {
           print(ModalRoute.of(context).settings.name.toString());
           return Scaffold(
               appBar: AppBar(
-                backgroundColor: Colors.blue,
+                backgroundColor:  hexToColor("#d86a77"),
                 bottomOpacity: 0.0,
                 elevation: 0.0,
                 title: Padding(
