@@ -86,6 +86,7 @@ class _BudgetListState extends State<BudgetList> {
                         searchLabel: "Tìm Kiếm",
                         builder: (Budget budget) => InkWell(
                             onTap: () {
+                              Navigator.pop(context);
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(

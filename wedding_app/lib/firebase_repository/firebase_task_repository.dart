@@ -3,10 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:wedding_app/entity/task_entity.dart';
 import 'package:wedding_app/model/task_model.dart';
 import 'package:wedding_app/repository/task_repository.dart';
-import 'package:wedding_app/utils/get_data.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import '../widgets/notification.dart';
 
 class FirebaseTaskRepository implements TaskRepository{
 
@@ -37,7 +34,7 @@ class FirebaseTaskRepository implements TaskRepository{
         .collection('wedding')
         .doc(weddingID)
         .collection("task")
-        .orderBy("due_date", descending: true)
+        .orderBy("due_date", descending: false)
         .snapshots()
         .map((snapshot) {
       return snapshot.docs

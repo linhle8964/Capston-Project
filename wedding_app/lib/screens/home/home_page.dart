@@ -6,6 +6,8 @@ import 'package:wedding_app/widgets/notification.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:firebase_core/firebase_core.dart';
+import '../../widgets/notification.dart';
+
 
 class HomePage extends StatefulWidget {
   @override
