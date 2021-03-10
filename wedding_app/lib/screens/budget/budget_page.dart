@@ -82,9 +82,7 @@ class _BudgetListState extends State<BudgetList> {
                   onPressed: () => showSearch(
                       context: context,
                       delegate: SearchPage<Budget>(
-
-                        barTheme:ThemeData(
-                            splashColor: hexToColor("#d86a77") ) ,
+                        barTheme: ThemeData(splashColor: hexToColor("#d86a77")),
                         searchLabel: "Tìm Kiếm",
                         builder: (Budget budget) => InkWell(
                             onTap: () {
@@ -119,10 +117,7 @@ class _BudgetListState extends State<BudgetList> {
                                               fontWeight: FontWeight.bold)),
                                     ),
                                     Flexible(
-                                        fit: FlexFit
-                                            .tight,
-                                        child:
-                                        SizedBox()),
+                                        fit: FlexFit.tight, child: SizedBox()),
                                     Text(
                                       budget.money.toString() + "₫",
                                       style: TextStyle(
@@ -202,7 +197,8 @@ class _BudgetListState extends State<BudgetList> {
                                 sum = 0;
                                 _budgets = state.budgets;
                                 for (int i = 0; i < _budgets.length; i++) {
-                                  sum += _budgets[i].money;
+                                  sum += (_budgets[i].money -
+                                      _budgets[i].payMoney);
                                 }
                               }
                               return Text(sum.toString());
@@ -241,10 +237,10 @@ class _BudgetListState extends State<BudgetList> {
                             _cateSum = 0;
                             for (int i = 0; i < _budgets.length; i++) {
                               if (item.id == _budgets[i].cateID) {
-                                _cateSum += _budgets[i].money;
+                                _cateSum +=
+                                    _budgets[i].money - _budgets[i].payMoney;
                               }
                             }
-                            print("test" + _cateSum.toString());
 
                             return Column(
                               children: <Widget>[
@@ -364,11 +360,10 @@ class _BudgetListState extends State<BudgetList> {
                                                                   ),
                                                                 )),
                                                             Text(
-                                                              low.isComplete
-                                                                  ? "0 ₫"
-                                                                  : low.money
-                                                                          .toString() +
-                                                                      "₫",
+                                                              (low.money -
+                                                                          low.payMoney)
+                                                                      .toString() +
+                                                                  "₫",
                                                               style: TextStyle(
                                                                   fontSize: 20,
                                                                   fontWeight:
