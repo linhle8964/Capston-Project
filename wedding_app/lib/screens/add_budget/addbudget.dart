@@ -198,6 +198,9 @@ class _AddBudgetState extends State<AddBudget> {
                                     onChanged: (value) {
                                       setState(() {
                                         _checkboxListTile = !_checkboxListTile;
+                                        if(_checkboxListTile){
+                                          payMoneyController.text=moneyController.text.toString();
+                                        }
                                       });
                                     },
                                   ))),
@@ -372,11 +375,10 @@ Navigator.pop(context);
             selectedCate == null ? initialCate.id : selectedCate.id,
             _checkboxListTile,
             double.parse(moneyController.text),
-            double.parse(payMoneyController.text),
+            payMoneyController.text.isNotEmpty?double.parse(payMoneyController.text):double.parse("0"),
             1,
             id: widget.budget.id);
         if (
-            selectedCate.cateName.trim().isNotEmpty &&
             budgetNameController.text.trim().isNotEmpty &&
             moneyController.text.trim().isNotEmpty) {
           BlocProvider.of<BudgetBloc>(context)..add(UpdateBudget(budget, id));
@@ -394,14 +396,14 @@ Navigator.pop(context);
         if (selectedCate != null &&
             selectedCate.cateName.trim().isNotEmpty &&
             budgetNameController.text.trim().isNotEmpty &&
-            moneyController.text.trim().isNotEmpty &&
-            payMoneyController.text.trim().isNotEmpty) {
+            moneyController.text.trim().isNotEmpty
+           ) {
           Budget budget = new Budget(
               budgetNameController.text,
               selectedCate.id,
               _checkboxListTile,
               double.parse(moneyController.text),
-              double.parse(payMoneyController.text),
+              payMoneyController.text.isNotEmpty?double.parse(payMoneyController.text):double.parse("0"),
               1);
           BlocProvider.of<BudgetBloc>(context).add(CreateBudget(id, budget));
           showSuccessSnackbar(context, "Thêm thành công");
