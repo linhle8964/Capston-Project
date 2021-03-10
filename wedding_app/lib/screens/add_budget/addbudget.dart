@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wedding_app/bloc/budget/bloc.dart';
 import 'package:wedding_app/bloc/category/bloc.dart';
 import 'package:wedding_app/model/budget.dart';
 import 'package:wedding_app/model/category.dart';
+import 'package:wedding_app/utils/show_snackbar.dart';
 import 'package:wedding_app/widgets/confirm_dialog.dart';
 import 'package:wedding_app/widgets/loading_indicator.dart';
 
@@ -170,7 +172,12 @@ class _AddBudgetState extends State<AddBudget> {
                                             color: Colors.black, width: 2.0),
                                       ),
                                       hintText: 'Tiền',
-                                    ))),
+                                    ),
+                                  keyboardType: TextInputType.number,
+                               inputFormatters:<TextInputFormatter> [
+                                 FilteringTextInputFormatter.digitsOnly
+                               ],
+                                )),
                           ),
                           Container(
                               padding: EdgeInsets.only(bottom: 20),
@@ -208,7 +215,11 @@ class _AddBudgetState extends State<AddBudget> {
                                 borderSide:
                                     BorderSide(color: Colors.black, width: 2.0),
                               ),
-                              hintText: 'Trả theo phần 1')),
+                              hintText: 'Trả theo phần 1'),
+                        keyboardType: TextInputType.number,
+                        inputFormatters:<TextInputFormatter> [
+                          FilteringTextInputFormatter.digitsOnly
+                        ],),
                     ),
                     Padding(
                       padding: EdgeInsets.only(left: 20, right: 20),
@@ -320,6 +331,7 @@ class _AddBudgetState extends State<AddBudget> {
         print(budget.toString());
         if (budget != null && budgetNameController.text.trim().isNotEmpty) {
           BlocProvider.of<BudgetBloc>(context)..add(UpdateBudget(budget, id));
+          showSuccessSnackbar(context, "Cập nhât thành công");
           Navigator.pop(context);
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -343,6 +355,7 @@ class _AddBudgetState extends State<AddBudget> {
               double.parse(payMoneyController.text),
               1);
           BlocProvider.of<BudgetBloc>(context).add(CreateBudget(id, budget));
+          showSuccessSnackbar(context, "Thêm thành công");
           Navigator.pop(context);
           _isSet = true;
         } else if (_isSet == false) {
