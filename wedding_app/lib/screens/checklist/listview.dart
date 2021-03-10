@@ -21,70 +21,76 @@ class _ListViewWidgetState extends State<ListViewWidget> {
   @override
   Widget build(BuildContext context) {
     if (widget.tasks != null) {
-      return ListView.separated(
+      return ListView.builder(
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
         itemCount: widget.tasks.length,
         itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(
-              widget.tasks[index].name,
-              key: UniqueKey(),
-              style: TextStyle(
-                fontSize: 17,
-                color: widget.tasks[index].dueDate.isBefore(DateTime.now())
-                    ? Colors.red
-                    : Colors.black,
-              ),
+          return Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
             ),
-            trailing: Theme(
-              data: ThemeData(
-                primarySwatch: Colors.red,
-                unselectedWidgetColor:
-                    widget.tasks[index].dueDate.isBefore(DateTime.now())
-                        ? Colors.red
-                        : Colors.black,
-                // Your color
+            color: Colors.white,
+            elevation: 5,
+            child: ListTile(
+              title: Text(
+                widget.tasks[index].name,
+                key: UniqueKey(),
+                style: TextStyle(
+                  fontSize: 17,
+                  color: widget.tasks[index].dueDate.isBefore(DateTime.now())
+                      ? Colors.red
+                      : Colors.black,
+                ),
               ),
-              child: Checkbox(
-                activeColor:
-                    widget.tasks[index].dueDate.isBefore(DateTime.now())
-                        ? Colors.red
-                        : Colors.blue,
-                value: widget.tasks[index].status,
-                onChanged: (bool value) {
-                  showDialog(
-                      context: context,
-                      barrierDismissible: false,
-                      builder: (BuildContext context) => PersonDetailsDialog(
-                            message:
-                                "Bạn đang thay đổi trạng thái của công việc",
-                            onPressedFunction: () {
-                              updateStatus(index);
-                            },
-                          ));
-                },
+              trailing: Theme(
+                data: ThemeData(
+                  primarySwatch: Colors.red,
+                  unselectedWidgetColor:
+                      widget.tasks[index].dueDate.isBefore(DateTime.now())
+                          ? Colors.red
+                          : Colors.black,
+                  // Your color
+                ),
+                child: Checkbox(
+                  activeColor:
+                      widget.tasks[index].dueDate.isBefore(DateTime.now())
+                          ? Colors.red
+                          : Colors.blue,
+                  value: widget.tasks[index].status,
+                  onChanged: (bool value) {
+                    showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (BuildContext context) => PersonDetailsDialog(
+                              message:
+                                  "Bạn đang thay đổi trạng thái của công việc",
+                              onPressedFunction: () {
+                                updateStatus(index);
+                              },
+                            ));
+                  },
+                ),
               ),
+              onTap: () {
+                var state = BlocProvider.of<ChecklistBloc>(context).state;
+                if(state is TasksSearching){
+                  Navigator.pop(context);
+                }
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => BlocProvider.value(
+                            value: BlocProvider.of<CateBloc>(context),
+                            child: BlocProvider.value(
+                                value: BlocProvider.of<ChecklistBloc>(context),
+                                child: EditTaskPage(
+                                    task: widget.tasks[index],
+                                    weddingID: widget.weddingID)),
+                          )),
+                );
+              },
             ),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (_) => BlocProvider.value(
-                          value: BlocProvider.of<CateBloc>(context),
-                          child: BlocProvider.value(
-                              value: BlocProvider.of<ChecklistBloc>(context),
-                              child: EditTaskPage(
-                                  task: widget.tasks[index],
-                                  weddingID: widget.weddingID)),
-                        )),
-              );
-            },
-          );
-        },
-        separatorBuilder: (context, index) {
-          return Divider(
-            thickness: 2.0,
           );
         },
       );

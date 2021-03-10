@@ -4,8 +4,8 @@ import 'package:wedding_app/screens/checklist/listview.dart';
 
 class SearchingResultPage extends StatefulWidget {
   List<Task> tasks;
-
-  SearchingResultPage({Key key, @required this.tasks}) : super(key: key);
+  String weddingID;
+  SearchingResultPage({Key key, @required this.tasks, @required this.weddingID}) : super(key: key);
   @override
   _SearchingResultPageState createState() => _SearchingResultPageState();
 }
@@ -37,19 +37,7 @@ class _SearchingResultPageState extends State<SearchingResultPage> {
               ),
               Container(
                   margin: EdgeInsets.symmetric(horizontal: 15.0),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset: Offset(
-                            0, 3), // changes position of shadow
-                      ),
-                    ],
-                  ),
-                  child: ListViewWidget(tasks: widget.tasks)
+                  child: ListViewWidget(tasks: widget.tasks, weddingID: widget.weddingID,)
               ),
             ],
           ),
