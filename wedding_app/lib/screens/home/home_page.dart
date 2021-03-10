@@ -53,66 +53,65 @@ class _HomePageState extends State<HomePage> {
         if (snapshot.hasData) {
           final String weddingID = snapshot.data;
           return Builder(
-                builder: (context) {
-                  return MaterialApp(
-                      title: 'Home screen',
-                      home: Scaffold(
-                        appBar: AppBar(title: const Text('Cung hỉ')),
-                        body: SafeArea(
-                          minimum:
-                              const EdgeInsets.only(top: 5, left: 10, right: 10),
-                          child: SingleChildScrollView(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Container(
-                                  decoration: const BoxDecoration(
-                                    image: DecorationImage(
-                                        image: AssetImage(
-                                            'assets/image/home_top.jpg'),
-                                        fit: BoxFit.cover),
-                                  ),
-                                  height: 180,
-                                  alignment: Alignment.center,
-                                  child: CountdownTimer(
-                                    endTime: endTime,
-                                    widgetBuilder:
-                                        (_, CurrentRemainingTime time) {
-                                      if (time == null) {
-                                        return Text('Game over');
-                                      }
-                                      return Text(
-                                        ' ${(time.days == null) ? '' : (time.days.toString() + ' ngày,')}  ${(time.hours == null) ? '0' : time.hours} :  ${(time.min == null) ? '0' : time.min} : ${time.sec}',
-                                        style: TextStyle(
-                                            fontSize: 24,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black38),
-                                      );
-                                    },
-                                  ),
-                                ),
-                                Container(
-                                  padding: const EdgeInsets.all(20),
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            FlatButton(
-                                              child: Container(
-                                                padding: const EdgeInsets.all(5),
-                                                child: Text(
-                                                  'Chia sẻ quyền quản lý',
-                                                  style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                                decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                        color: main_color,
-                                                        width: 2)),
+            builder: (context) =>  MaterialApp(
+                  title: 'Home screen',
+                  home: Scaffold(
+                    appBar: AppBar(title: const Text('Cung hỉ')),
+                    body: SafeArea(
+                      minimum:
+                          const EdgeInsets.only(top: 5, left: 10, right: 10),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Container(
+                              decoration: const BoxDecoration(
+                                image: DecorationImage(
+                                    image: AssetImage(
+                                        'assets/image/home_top.jpg'),
+                                    fit: BoxFit.cover),
+                              ),
+                              height: 180,
+                              alignment: Alignment.center,
+                              child: CountdownTimer(
+                                endTime: endTime,
+                                widgetBuilder:
+                                    (_, CurrentRemainingTime time) {
+                                  if (time == null) {
+                                    return Text(
+                                        'Chúc 2 bạn hạnh phúc',
+                                      style: TextStyle(
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.black38),
+                                    );
+                                  }
+                                  return Text(
+                                    ' ${(time.days == null) ? '' : (time.days.toString() + ' ngày,')}  ${(time.hours == null) ? '0' : time.hours} :  ${(time.min == null) ? '0' : time.min} : ${time.sec}',
+                                    style: TextStyle(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black38),
+                                  );
+                                },
+                              ),
+                            ),
+                            Container(
+                              padding: const EdgeInsets.all(20),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        FlatButton(
+                                          child: Container(
+                                            padding: const EdgeInsets.all(5),
+                                            child: Text(
+                                              'Chia sẻ quyền quản lý',
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
                                               ),
                                               onPressed: () {
                                                 print('Share');

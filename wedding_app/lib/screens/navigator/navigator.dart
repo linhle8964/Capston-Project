@@ -21,7 +21,7 @@ class _NavigatorPageState extends State<NavigatorPage> {
     HomePage(),
     ChecklistPage(),
     BudgetList(),
-    ViewGuestPage(guests: []),
+    ViewGuestPage(),
     SettingPage(),
   ];
   void onTabTapped(int index) {
