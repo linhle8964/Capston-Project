@@ -88,6 +88,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       yield LoginState.failure(
           message:
           "Bạn đã đăng nhập quá nhiều lần. Hãy thử lại trong giây lát");
+    } on FirebaseException{
+      yield LoginState.failure(message: "Có lỗi xảy ra");
     }catch (e) {
       print("[ERROR] : $e");
       yield LoginState.failure(message: "Có lỗi xảy ra");

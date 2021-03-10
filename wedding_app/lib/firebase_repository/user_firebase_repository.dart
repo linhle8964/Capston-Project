@@ -5,6 +5,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 class EmailNotFoundException implements Exception{}
 class WrongPasswordException implements Exception{}
 class TooManyRequestException implements Exception{}
+class EmailAlreadyInUseException implements Exception{}
+class FirebaseException implements Exception{}
 
 class FirebaseUserRepository extends UserRepository {
   final FirebaseAuth _firebaseAuth;
@@ -54,7 +56,7 @@ class FirebaseUserRepository extends UserRepository {
         throw TooManyRequestException();
       } else {
         print(e.code);
-        throw Exception();
+        throw FirebaseException();
       }
     } catch (e) {
       print("Error: $e");
@@ -110,11 +112,10 @@ class FirebaseUserRepository extends UserRepository {
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {
-        print(e.message);
-        throw Exception("email-already-in-use");
+        throw EmailNotFoundException();
       } else {
         print(e.code);
-        throw Exception();
+        throw FirebaseException();
       }
     } catch (e) {
       print("Error: $e");
