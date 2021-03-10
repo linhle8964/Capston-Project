@@ -296,56 +296,30 @@ class _AddBudgetState extends State<AddBudget> {
                         children: [
                           Visibility(
                             visible: isEditing,
-                            child: Ink(
+                            child:  Ink(
                               decoration: const ShapeDecoration(
                                 color: Colors.red,
                                 shape: CircleBorder(),
                               ),
-                              child:  Builder(
+                              child: Builder(
                                 builder: (ctx) => IconButton(
-                                  icon: Icon(
-                                    Icons.delete_forever_outlined,
-                                    size: 40,
-                                    color: Colors.white,
-                                  ),
+                                  icon: Icon(Icons.delete_forever_outlined),
+                                  color: Colors.white,
+                                  iconSize: 40,
                                   onPressed: () {
                                     showDialog(
                                         context: context,
                                         barrierDismissible: false,
                                         builder: (BuildContext context) =>
                                             PersonDetailsDialog(
-                                              message: "bạn có chắc xóa kinh phí này không ?",
+                                              message: "Bạn đang xóa",
                                               onPressedFunction: () {
                                               deleteBudget();
                                               },
-
-                                            )
-                                    );
-                                
-                                    },
-
+                                            ));
+                                  },
                                 ),
-                              )
-                              // IconButton(
-                              //   icon: Icon(Icons.delete_forever_outlined),
-                              //   color: Colors.white,
-                              //   iconSize: 40,
-                              //   onPressed: () {
-                              //     showDialog(
-                              //         context: context,
-                              //         barrierDismissible: false,
-                              //         builder: (BuildContext context) =>
-                              //             PersonDetailsDialog(
-                              //               message: isEditing
-                              //                   ? "Bạn đang cập nhật Kinh Phi"
-                              //                   : "Bạn đang thêm Kinh Phi",
-                              //               onPressedFunction: () {
-                              //                 deleteBudget();
-                              //               },
-                              //             ));
-                              //
-                              //   },
-                              // ),
+                              ),
                             ),
                           )
                         ],
@@ -358,10 +332,8 @@ class _AddBudgetState extends State<AddBudget> {
   }
 
   void deleteBudget() {
-
       BlocProvider.of<BudgetBloc>(context)
         ..add(DeleteBudget(id, widget.budget.id));
-      showSuccessSnackbar(context, "Xóa thành công");
 Navigator.pop(context);
       
 
