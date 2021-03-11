@@ -58,6 +58,7 @@ class MyApp extends StatelessWidget {
               return AuthenticationBloc(
                 userRepository: FirebaseUserRepository(),
                 userWeddingRepository: FirebaseUserWeddingRepository(),
+                weddingRepository: FirebaseWeddingRepository(),
               )..add(AppStarted());
             },
           ),
@@ -90,7 +91,6 @@ class MyApp extends StatelessWidget {
                 } else if (state is Uninitialized) {
                   return SplashPage();
                 } else if (state is WeddingNull) {
-                  print("Wedding Null");
                   return PickWeddingPage();
                 }
                 return LoadingIndicator();

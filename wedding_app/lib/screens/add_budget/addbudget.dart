@@ -57,9 +57,7 @@ class _AddBudgetState extends State<AddBudget> {
     SharedPreferences.getInstance().then((prefs) {
       setState(() => sharedPrefs = prefs);
       String weddingId = prefs.getString("wedding_id");
-      print("test shared " + weddingId);
       id = weddingId;
-      print("this is " + widget.budget.cateID);
       budgetNameController.text = isEditing ? widget.budget.budgetName : "";
       moneyController.text = isEditing ? widget.budget.money.toString() : "";
       payMoneyController.text =
@@ -79,7 +77,6 @@ class _AddBudgetState extends State<AddBudget> {
     return BlocBuilder(
         cubit: BlocProvider.of<BudgetBloc>(context),
         builder: (context, state) {
-          print(ModalRoute.of(context).settings.name.toString());
           return Scaffold(
               appBar: AppBar(
                 backgroundColor: hexToColor("#d86a77"),
@@ -198,8 +195,9 @@ class _AddBudgetState extends State<AddBudget> {
                                     onChanged: (value) {
                                       setState(() {
                                         _checkboxListTile = !_checkboxListTile;
-                                        if(_checkboxListTile){
-                                          payMoneyController.text=moneyController.text.toString();
+                                        if (_checkboxListTile) {
+                                          payMoneyController.text =
+                                              moneyController.text.toString();
                                         }
                                       });
                                     },
@@ -238,7 +236,6 @@ class _AddBudgetState extends State<AddBudget> {
                           builder: (context, state) {
                             if (state is TodosLoaded) {
                               _values2 = state.cates;
-                              print(state.cates.toString());
                               if (isEditing == true && state is TodosLoaded) {
                                 for (int i = 0; i < state.cates.length; i++) {
                                   if (state.cates[i].id ==
@@ -296,7 +293,7 @@ class _AddBudgetState extends State<AddBudget> {
                         children: [
                           Visibility(
                             visible: isEditing,
-                            child:  Ink(
+                            child: Ink(
                               decoration: const ShapeDecoration(
                                 color: Colors.red,
                                 shape: CircleBorder(),
@@ -314,7 +311,7 @@ class _AddBudgetState extends State<AddBudget> {
                                             PersonDetailsDialog(
                                               message: "Bạn đang xóa",
                                               onPressedFunction: () {
-                                              deleteBudget();
+                                                deleteBudget();
                                               },
                                             ));
                                   },
@@ -332,11 +329,9 @@ class _AddBudgetState extends State<AddBudget> {
   }
 
   void deleteBudget() {
-      BlocProvider.of<BudgetBloc>(context)
-        ..add(DeleteBudget(id, widget.budget.id));
-Navigator.pop(context);
-      
-
+    BlocProvider.of<BudgetBloc>(context)
+      ..add(DeleteBudget(id, widget.budget.id));
+    Navigator.pop(context);
   }
 
   void updateBudget() {
@@ -347,11 +342,12 @@ Navigator.pop(context);
             selectedCate == null ? initialCate.id : selectedCate.id,
             _checkboxListTile,
             double.parse(moneyController.text),
-            payMoneyController.text.isNotEmpty?double.parse(payMoneyController.text):double.parse("0"),
+            payMoneyController.text.isNotEmpty
+                ? double.parse(payMoneyController.text)
+                : double.parse("0"),
             1,
             id: widget.budget.id);
-        if (
-            budgetNameController.text.trim().isNotEmpty &&
+        if (budgetNameController.text.trim().isNotEmpty &&
             moneyController.text.trim().isNotEmpty) {
           BlocProvider.of<BudgetBloc>(context)..add(UpdateBudget(budget, id));
           showSuccessSnackbar(context, "Cập nhât thành công");
@@ -368,14 +364,15 @@ Navigator.pop(context);
         if (selectedCate != null &&
             selectedCate.cateName.trim().isNotEmpty &&
             budgetNameController.text.trim().isNotEmpty &&
-            moneyController.text.trim().isNotEmpty
-           ) {
+            moneyController.text.trim().isNotEmpty) {
           Budget budget = new Budget(
               budgetNameController.text,
               selectedCate.id,
               _checkboxListTile,
               double.parse(moneyController.text),
-              payMoneyController.text.isNotEmpty?double.parse(payMoneyController.text):double.parse("0"),
+              payMoneyController.text.isNotEmpty
+                  ? double.parse(payMoneyController.text)
+                  : double.parse("0"),
               1);
           BlocProvider.of<BudgetBloc>(context).add(CreateBudget(id, budget));
           showSuccessSnackbar(context, "Thêm thành công");

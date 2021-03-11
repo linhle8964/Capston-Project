@@ -22,18 +22,19 @@ class UserWeddingEntity extends Equatable {
       "wedding_id": weddingId,
       "role": role,
       "email": email,
-      "join_date": joinDate
+      "join_date": joinDate.millisecondsSinceEpoch,
     };
   }
 
   static UserWeddingEntity fromJson(Map<String, Object> json) {
     return UserWeddingEntity(
-        json["id"] as String,
-        json["user_id"] as String,
-        json["wedding_id"] as String,
-        json["role"] as String,
-        json["email"] as String,
-        (json["join_date"] as Timestamp).toDate());
+      json["id"] as String,
+      json["user_id"] as String,
+      json["wedding_id"] as String,
+      json["role"] as String,
+      json["email"] as String,
+      DateTime.fromMillisecondsSinceEpoch(json["join_date"]),
+    );
   }
 
   static UserWeddingEntity fromSnapshot(DocumentSnapshot snapshot) {

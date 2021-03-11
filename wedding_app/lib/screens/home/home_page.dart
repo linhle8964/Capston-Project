@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_countdown_timer/current_remaining_time.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
-import 'package:wedding_app/utils/get_data.dart';
+import 'package:wedding_app/model/wedding.dart';
+import 'package:wedding_app/utils/get_share_preferences.dart';
 import 'package:wedding_app/widgets/notification.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:firebase_core/firebase_core.dart';
 import '../../widgets/notification.dart';
-
 
 class HomePage extends StatefulWidget {
   @override
@@ -46,10 +46,11 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: getWeddingID(),
+      future: getWeddingFromSharePreferences(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          final String weddingID = snapshot.data;
+          final Wedding wedding = snapshot.data;
+          print(wedding.toString());
           return Builder(
             builder: (context) => MaterialApp(
               title: 'Home screen',
@@ -70,7 +71,7 @@ class _HomePageState extends State<HomePage> {
                           height: 180,
                           alignment: Alignment.center,
                           child: CountdownTimer(
-                            endTime: endTime,
+                            endTime: wedding.weddingDate.millisecondsSinceEpoch,
                             widgetBuilder: (_, CurrentRemainingTime time) {
                               if (time == null) {
                                 return Text(
@@ -168,16 +169,6 @@ class _HomePageState extends State<HomePage> {
                             ],
                           ),
                         ),
-                        // Container(
-                        //   padding: const EdgeInsets.all(20),
-                        //   child: Row(
-                        //     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        //     children: [
-                        //       _buildInfoColumn(main_color, 'Tổng dịch vụ ', 0),
-                        //       _buildInfoColumn(main_color, 'Đã đặt ', 0),
-                        //     ],
-                        //   ),
-                        // )
                       ],
                     ),
                   ),

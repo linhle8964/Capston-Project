@@ -64,4 +64,9 @@ class Wedding {
               DateTime.now().year, DateTime.now().month, DateTime.now().day),
     );
   }
+
+  @override
+  String toString() {
+    return "Wedding: $id, $brideName, $groomName, $weddingDate, $image, $address, $budget";
+  }
 }

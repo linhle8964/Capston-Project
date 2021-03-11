@@ -4,10 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wedding_app/bloc/authentication/bloc.dart';
 import 'package:wedding_app/bloc/user_wedding/bloc.dart';
 import 'package:wedding_app/bloc/wedding/bloc.dart';
+import 'package:wedding_app/model/user_wedding.dart';
 import 'package:wedding_app/screens/setting/custom_button.dart';
 import 'package:wedding_app/screens/setting/setting_item.dart';
 import 'package:wedding_app/utils/alert_dialog.dart';
-import 'package:wedding_app/utils/get_role.dart';
+import 'package:wedding_app/utils/get_share_preferences.dart';
 import 'package:wedding_app/utils/hex_color.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:wedding_app/utils/show_snackbar.dart';
@@ -21,13 +22,13 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
-
   @override
   void dispose() {
     // TODO: implement dispose
     NotificationManagement.cancelAlarm();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,10 +78,10 @@ class _SettingPageState extends State<SettingPage> {
           )
         ],
         child: FutureBuilder(
-          future: getRole(),
+          future: getUserWedding(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              final String role = snapshot.data;
+              final UserWedding userWedding = snapshot.data;
               return SingleChildScrollView(
                 child: Container(
                   padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
@@ -90,7 +91,7 @@ class _SettingPageState extends State<SettingPage> {
                       SettingItem(null, "Thông tin mặc định"),
                       SettingItem(null, "Chi phí dự trù"),
                       SettingItem("/create_wedding", "Thông tin ngày cưới"),
-                      isAdmin(role)
+                      isAdmin(userWedding.role)
                           ? SettingItem(
                               "/invite_collaborator", "Kết nối với người ấy")
                           : Container(),
@@ -105,9 +106,9 @@ class _SettingPageState extends State<SettingPage> {
                         BlocProvider.of<AuthenticationBloc>(context)
                             .add(LoggedOut());
                         NotificationManagement.ClearAllNotifications();
-                        var cancel= await AndroidAlarmManager.cancel(0);
+                        var cancel = await AndroidAlarmManager.cancel(0);
                       }, Colors.blue),
-                      isAdmin(role)
+                      isAdmin(userWedding.role)
                           ? CustomButtom("Xoá đám cưới",
                               () => _onDeleteWeddingClick(context), Colors.grey)
                           : CustomButtom("Rời đám cưới",
