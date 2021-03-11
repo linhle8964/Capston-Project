@@ -7,6 +7,7 @@ import 'package:wedding_app/bloc/wedding/wedding_bloc.dart';
 import 'package:wedding_app/model/template_card.dart';
 import 'package:wedding_app/bloc/wedding/bloc.dart';
 import 'package:wedding_app/model/wedding.dart';
+import 'package:wedding_app/utils/hex_color.dart';
 import 'package:wedding_app/widgets/loading_indicator.dart';
 import 'invitation_card_page.dart';
 import 'package:intl/intl.dart';
@@ -41,7 +42,7 @@ class _FillInfoPageState extends State<FillInfoPage> {
     return MaterialApp(
         home: Scaffold(
             appBar: AppBar(
-              backgroundColor: Colors.white,
+              backgroundColor: hexToColor("#d86a77"),
               leading: IconButton(
                 icon: Icon(Icons.arrow_back,color: Colors.black,),
                 onPressed: () {
@@ -52,7 +53,7 @@ class _FillInfoPageState extends State<FillInfoPage> {
                 padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
                 child: Text(
                   "Thông Tin Trên Thiệp",
-                  style: TextStyle(color: Colors.grey),
+                  style: TextStyle(color: Colors.black),
                 ),
               ),
             ),
@@ -227,8 +228,7 @@ class _FillInfoPageState extends State<FillInfoPage> {
       }
 
       if(_brideNameInvalid == false && _groomNameInvalid == false && _placeInvalid == false && _dateTimeInvalid ==false){
-        Navigator.push(
-          context,
+        Navigator.of(context).push(
           MaterialPageRoute(builder: (context) => InvitationCardPage(template:template,brideName: _brideNameController.text,groomName: _groomNameController.text,dateTime: _dateTimeController.text,place: _placeController.text,)),
         );
       }

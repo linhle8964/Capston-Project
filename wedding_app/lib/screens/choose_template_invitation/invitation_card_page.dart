@@ -12,6 +12,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wedding_app/screens/choose_template_invitation/chooseTemplate_page.dart';
+import 'package:sizer/sizer.dart';
+import 'package:wedding_app/utils/hex_color.dart';
 class InvitationCardPage extends StatefulWidget {
   final TemplateCard template;
   final String brideName;
@@ -49,120 +51,125 @@ class _InvitationCardPageState extends State<InvitationCardPage> {
   @override
   Widget build(BuildContext context) {
     final screenSide= MediaQuery.of(context).size;
-
-    return MaterialApp(
-        home: Scaffold(
-            appBar: AppBar(
-              backgroundColor: Colors.white,
-              leading: IconButton(
-                icon: Icon(Icons.arrow_back,color: Colors.black,),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-              title: Padding(
-                padding: const EdgeInsets.fromLTRB(60, 0, 0, 0),
-                child: Text(
-                  "Thiệp Của Bạn",
-                  style: TextStyle(color: Colors.grey),
-                ),
-              ),
-              actions: <Widget>[
-                IconButton(
-                  icon: Icon(Icons.file_upload),
-                  color: Colors.black,
-                  onPressed: (){
-                    takeScreenShot();
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => ChooseTemplatePage(isCreate: true,)),
-                    );
-                  }
-                ),
-              ],
-            ),
-            body: RepaintBoundary(
-                  key: _containerKey,
-                  child: Stack(
-                    children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.all(3),
-                        child: FadeInImage.memoryNetwork(
-                            width: screenSide.width,
-                            height: screenSide.height,
-                            placeholder: kTransparentImage,
-                            image: template.backgroundUrl),
-                      ) ,
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(30, 140, 30, 100),
-                        child: Visibility(
-                            visible: template.name=='template4' ? true: false,
-                            child: Center(
-                              child: Column(
-                                children: <Widget>[
-                                  Text('Trận trong mời bạn đến',style: TextStyle(fontSize: 13),),
-                                  Text('dự tiệc cưới của chúng tôi',style: TextStyle(fontSize: 13),),
-                                  Padding(
-                                    padding: const EdgeInsets.fromLTRB(30, 10, 30, 10),
-                                    child: Text (brideName,style: TextStyle(fontSize: (brideName.length > 15)? 20:22),textAlign: TextAlign.center,),
-                                  ),
-                                  Text ('Và'),
-                                  Padding(
-                                    padding: const EdgeInsets.fromLTRB(30, 10, 30, 0),
-                                    child: Text(groomName,style: TextStyle(fontSize: (groomName.length > 15)? 20:22),textAlign: TextAlign.center),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text('Hôn lễ được cử hành vào lúc',style: TextStyle(fontSize: 15)),
-                                  ),
-                                  Text(dateTime,style: TextStyle(fontSize: 15)),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text('Tại '+place,style: TextStyle(fontSize: (groomName.length > 15)? 13:15),textAlign: TextAlign.center),
-                                  ),
-                                  Text('Sự hiện diện của bạn'),
-                                  Text('là vinh hạnh của chúng tôi')
-                                ],
-                              ),
-                            )
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(30, 170, 30, 100),
-                        child: Visibility(
-                            visible: template.name=='template1' ? true: false,
-                            child: Center(
-                              child: Column(
-                                children: <Widget>[
-                                  Text('Trận trong mời bạn đến',style: TextStyle(fontSize: 11,color: Colors.white),),
-                                  Text('dự tiệc cưới của chúng tôi',style: TextStyle(fontSize: 11,color: Colors.white),),
-                                  Padding(
-                                    padding: const EdgeInsets.fromLTRB(40, 8, 40, 8),
-                                    child: Text (brideName,style: TextStyle(fontSize: (brideName.length > 15)? 18:22,color: Colors.white),textAlign: TextAlign.center,),
-                                  ),
-                                  Text ('Và',style: TextStyle(fontSize: 11,color: Colors.white),),
-                                  Padding(
-                                    padding: const EdgeInsets.fromLTRB(40, 8, 40, 7),
-                                    child: Text(groomName,style: TextStyle(fontSize: (groomName.length > 15)? 18:22,color: Colors.white),textAlign: TextAlign.center),
-                                  ),
-                                  Text(dateTime,style: TextStyle(fontSize: 13,color: Colors.white)),
-                                  Padding(
-                                    padding: const EdgeInsets.all(5.0),
-                                    child: Text('Tại '+place,style: TextStyle(fontSize: 13,color: Colors.white)),
-                                  ),
-                                  Text('Sự hiện diện của bạn',style: TextStyle(fontSize: 11,color: Colors.white)),
-                                  Text('là vinh hạnh của chúng tôi',style: TextStyle(fontSize: 11,color: Colors.white))
-                                ],
-                              ),
-                            )
-                        ),
-                      ),
-                    ],
+    return LayoutBuilder(
+        builder: (context, constraints) {
+      return OrientationBuilder(
+          builder: (context, orientation) {
+            SizerUtil().init(constraints, orientation);
+        return MaterialApp(
+            home: Scaffold(
+                appBar: AppBar(
+                  backgroundColor: hexToColor("#d86a77"),
+                  leading: IconButton(
+                    icon: Icon(Icons.arrow_back,color: Colors.black,),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
                   ),
+                  title: Padding(
+                    padding: const EdgeInsets.fromLTRB(40, 0, 0, 0),
+                    child: Text(
+                      "Thiệp Của Bạn",
+                      style: TextStyle(color: Colors.black),
+                    ),
+                  ),
+                  actions: <Widget>[
+                    IconButton(
+                      icon: Icon(Icons.file_upload),
+                      color: Colors.black,
+                      onPressed: (){
+                        takeScreenShot();
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => ChooseTemplatePage(isCreate: true,)),
+                        );
+                      }
+                    ),
+                  ],
                 ),
+                body: RepaintBoundary(
+                      key: _containerKey,
+                      child: Stack(
+                        children: <Widget>[
+                          Container(
+                            margin: EdgeInsets.all(3),
+                            child: FadeInImage.memoryNetwork(
+                                width: screenSide.width,
+                                height: screenSide.height,
+                                placeholder: kTransparentImage,
+                                image: template.backgroundUrl),
+                          ) ,
+                          Padding(
+                            padding:  EdgeInsets.fromLTRB(20.0.w, 22.0.h, 20.0.w, 0),
+                            child: Visibility(
+                                visible: template.name=='template4' ? true: false,
+                                child: Center(
+                                  child: Column(
+                                    children: <Widget>[
+                                      Text('Trận trong mời bạn đến',style: TextStyle(fontSize: 11.0.sp),textAlign: TextAlign.center),
+                                      Text('dự tiệc cưới của chúng tôi',style: TextStyle(fontSize: 11.0.sp),textAlign: TextAlign.center),
+                                      Padding(
+                                        padding:  EdgeInsets.fromLTRB(0, 1.0.h, 0, 1.0.h),
+                                        child: Text (brideName,style: TextStyle(fontSize: (brideName.length > 15)? 17.0.sp:19.0.sp),textAlign: TextAlign.center,),
+                                      ),
+                                      Text ('Và'),
+                                      Padding(
+                                        padding:  EdgeInsets.fromLTRB(0, 1.0.h, 0, 1.0.h),
+                                        child: Text(groomName,style: TextStyle(fontSize: (groomName.length > 15)? 17.0.sp:19.0.sp),textAlign: TextAlign.center),
+                                      ),
+                                      Padding(
+                                        padding:  EdgeInsets.fromLTRB(0, 0.5.h, 0, 1.0.h),
+                                        child: Text('Hôn lễ được cử hành vào lúc',style: TextStyle(fontSize: 13.0.sp),textAlign: TextAlign.center),
+                                      ),
+                                      Text(dateTime,style: TextStyle(fontSize: 14.0.sp),textAlign: TextAlign.center),
+                                      Padding(
+                                        padding:  EdgeInsets.fromLTRB(0, 1.0.h, 0, 1.0.h),
+                                        child: Text('Tại '+place,style: TextStyle(fontSize: (place.length > 15)? 12.0.sp:14.0.sp),textAlign: TextAlign.center),
+                                      ),
+                                      Text('Sự hiện diện của bạn',style: TextStyle(fontSize: 11.0.sp),textAlign: TextAlign.center),
+                                      Text('là vinh hạnh của chúng tôi',style: TextStyle(fontSize: 11.0.sp),textAlign: TextAlign.center)
+                                    ],
+                                  ),
+                                )
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.fromLTRB(20.0.w, 27.0.h, 20.0.w, 0),
+                            child: Visibility(
+                                visible: template.name=='template1' ? true: false,
+                                child: Center(
+                                  child: Column(
+                                    children: <Widget>[
+                                      Text('Trận trong mời bạn đến',style: TextStyle(fontSize: 10.0.sp,color: Colors.white),textAlign: TextAlign.center),
+                                      Text('dự tiệc cưới của chúng tôi',style: TextStyle(fontSize: 10.0.sp,color: Colors.white),textAlign: TextAlign.center),
+                                      Padding(
+                                        padding:  EdgeInsets.fromLTRB(0, 0.8.h, 0, 0.8.h),
+                                        child: Text (brideName,style: TextStyle(fontSize: (brideName.length > 15)? 15.0.sp:17.0.sp,color: Colors.white),textAlign: TextAlign.center,),
+                                      ),
+                                      Text ('Và',style: TextStyle(fontSize: 10.0.sp,color: Colors.white),textAlign: TextAlign.center),
+                                      Padding(
+                                        padding:  EdgeInsets.fromLTRB(0,0.8.h, 0, 0.8.h),
+                                        child: Text(groomName,style: TextStyle(fontSize: (groomName.length > 15)? 15.0.sp:17.0.sp,color: Colors.white),textAlign: TextAlign.center),
+                                      ),
+                                      Text(dateTime,style: TextStyle(fontSize: 12.0.sp,color: Colors.white),textAlign: TextAlign.center),
+                                      Padding(
+                                        padding:  EdgeInsets.fromLTRB(0, 0.8.h, 0, 0.8.h),
+                                        child: Text('Tại '+place,style: TextStyle(fontSize: (place.length > 15)? 10.0.sp:12.0.sp,color: Colors.white),textAlign: TextAlign.center),
+                                      ),
+                                      Text('Sự hiện diện của bạn',style: TextStyle(fontSize: 10.0.sp,color: Colors.white),textAlign: TextAlign.center),
+                                      Text('là vinh hạnh của chúng tôi',style: TextStyle(fontSize: 10.0.sp,color: Colors.white),textAlign: TextAlign.center)
+                                    ],
+                                  ),
+                                )
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
 
 
-        ));
+            ));}
+      );}
+    );
 
   }
 
