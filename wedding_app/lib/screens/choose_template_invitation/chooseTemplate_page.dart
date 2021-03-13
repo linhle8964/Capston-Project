@@ -15,6 +15,7 @@ import 'package:transparent_image/transparent_image.dart';
 import 'package:wedding_app/screens/choose_template_invitation/fill_info_page.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:dio/dio.dart';
+import 'package:wedding_app/screens/home/home_page.dart';
 import 'package:wedding_app/utils/hex_color.dart';
 import '../../bloc/invitation_card/bloc.dart';
 import '../../widgets/loading_indicator.dart';
@@ -47,27 +48,29 @@ class _ChooseTemplatePageState extends State<ChooseTemplatePage> {
               appBar: AppBar(
                 backgroundColor: hexToColor("#d86a77"),
                 leading: IconButton(
-                  icon: Icon(Icons.arrow_back,color: Colors.black,),
+                  icon: Icon(Icons.arrow_back,color: Colors.white,),
                   onPressed: () {
-                    Navigator.pop(context);
+                    Navigator.of(context).push(
+                        MaterialPageRoute(builder: (context) => HomePage(),
+                        ));
                   },
                 ),
                 bottom: TabBar(
                   tabs: [
                     Tab(
-                      child: Center(child: Text('Thiệp mời của bạn',style: TextStyle(color: Colors.black),)),
+                      child: Center(child: Text('Thiệp mời của bạn',style: TextStyle(color: Colors.white),)),
                     ),
                     Tab(
-                      child: Center(child: Text('Tạo Thiệp Mời',style: TextStyle(color: Colors.black),)),
+                      child: Center(child: Text('Tạo Thiệp Mời',style: TextStyle(color: Colors.white),)),
                     ),
-                    Tab(child: Center(child: Text('Tải Lên Thiệp Có Sẵn',style: TextStyle(color: Colors.black))),)
+                    Tab(child: Center(child: Text('Tải Lên Thiệp Có Sẵn',style: TextStyle(color: Colors.white))),)
                   ],
                 ),
                 title: Padding(
                   padding: const EdgeInsets.fromLTRB(60, 0, 30, 0),
                   child: Text(
                     "THIỆP MỜI",
-                    style: TextStyle(color: Colors.black),
+                    style: TextStyle(color: Colors.white),
                   ),
                 ),
               ),
@@ -189,8 +192,9 @@ class _ChooseTemplatePageState extends State<ChooseTemplatePage> {
       title: Text("Lưu lại"),
       content: Text("Mẫu thiệp mới của bạn đã được lưu lại!"),
       actions: [
-        ElevatedButton(
-            child: Text("Done"),
+        FlatButton(
+            color: hexToColor("#d86a77"),
+            child: Text("Hoàn thành"),
             onPressed: (){
               uploading = false;
               Navigator.of(context).pop(); // Return value
@@ -297,11 +301,40 @@ class MyCardState extends State<MyCard>{
     } else {
       print("Problem Downloading File");
     }
+    if(progress==1){
+      showMyAlertDialog(context);
+    }
     setState(() {
       loading = false;
     });
   }
+  showMyAlertDialog(BuildContext context) {
+    // Create AlertDialog
+    GlobalKey _containerKey= GlobalKey();
+    AlertDialog dialog = AlertDialog(
+      key: _containerKey,
+      title: Text("Lưu lại"),
+      content: Text("Mẫu thiệp mới của bạn đã được lưu lại!"),
+      actions: [
+        FlatButton(
+          color: hexToColor("#d86a77"),
+            child: Text("Hoàn thành"),
+            onPressed: (){
+              Navigator.of(_containerKey.currentContext).pop();
+            }
+        ),
+      ],
+    );
 
+    // Call showDialog function to show dialog.
+    Future<String> futureValue = showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return dialog;
+        }
+    );
+
+  }
   @override
   void initState(){
     SharedPreferences.getInstance().then((prefs){

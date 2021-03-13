@@ -35,7 +35,7 @@ class _InvitationCardPageState extends State<InvitationCardPage> {
   String weddingId='';
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   SharedPreferences sharedPrefs;
-
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   void initState(){
     SharedPreferences.getInstance().then((prefs){
@@ -58,30 +58,28 @@ class _InvitationCardPageState extends State<InvitationCardPage> {
             SizerUtil().init(constraints, orientation);
         return MaterialApp(
             home: Scaffold(
+              key: _scaffoldKey,
                 appBar: AppBar(
                   backgroundColor: hexToColor("#d86a77"),
                   leading: IconButton(
-                    icon: Icon(Icons.arrow_back,color: Colors.black,),
+                    icon: Icon(Icons.arrow_back,color: Colors.white,),
                     onPressed: () {
                       Navigator.pop(context);
                     },
                   ),
                   title: Padding(
-                    padding: const EdgeInsets.fromLTRB(40, 0, 0, 0),
+                    padding: const EdgeInsets.fromLTRB(50, 0, 0, 0),
                     child: Text(
                       "Thiệp Của Bạn",
-                      style: TextStyle(color: Colors.black),
+                      style: TextStyle(color: Colors.white),
                     ),
                   ),
                   actions: <Widget>[
                     IconButton(
                       icon: Icon(Icons.file_upload),
-                      color: Colors.black,
+                      color: Colors.white,
                       onPressed: (){
-                        takeScreenShot();
-                        Navigator.of(context).push(
-                          MaterialPageRoute(builder: (context) => ChooseTemplatePage(isCreate: true,)),
-                        );
+                        showMyAlertDialog(_scaffoldKey.currentContext);
                       }
                     ),
                   ],
@@ -99,7 +97,7 @@ class _InvitationCardPageState extends State<InvitationCardPage> {
                                 image: template.backgroundUrl),
                           ) ,
                           Padding(
-                            padding:  EdgeInsets.fromLTRB(20.0.w, 22.0.h, 20.0.w, 0),
+                            padding:  EdgeInsets.fromLTRB(20.0.w, 24.0.h, 20.0.w, 0),
                             child: Visibility(
                                 visible: template.name=='template4' ? true: false,
                                 child: Center(
@@ -133,7 +131,7 @@ class _InvitationCardPageState extends State<InvitationCardPage> {
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.fromLTRB(20.0.w, 27.0.h, 20.0.w, 0),
+                            padding: EdgeInsets.fromLTRB(20.0.w, 29.0.h, 20.0.w, 0),
                             child: Visibility(
                                 visible: template.name=='template1' ? true: false,
                                 child: Center(
@@ -174,6 +172,44 @@ class _InvitationCardPageState extends State<InvitationCardPage> {
   }
 
 
+  showMyAlertDialog(BuildContext context) {
+    GlobalKey _containerKey= GlobalKey();
+    // Create AlertDialog
+    AlertDialog dialog = AlertDialog(
+      key: _containerKey,
+      title: Text("Lưu lại"),
+      content: Text("Bạn có muốn lưu lại mẫu thiệp này?"),
+      actions: [
+        FlatButton(
+            color: hexToColor("#d86a77"),
+            child: Text("Có"),
+            onPressed: (){
+              Navigator.of(_containerKey.currentContext).pop();
+              takeScreenShot();
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => ChooseTemplatePage(isCreate: true,)),
+              );
+            }
+        ),
+        FlatButton(
+            color: hexToColor("#d86a77"),
+            child: Text("Không"),
+            onPressed: (){
+              Navigator.of(_containerKey.currentContext).pop();
+            }
+        ),
+      ],
+    );
+
+    // Call showDialog function to show dialog.
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return dialog;
+        }
+    );
+
+  }
   Future<void> takeScreenShot() async{
     RenderRepaintBoundary renderRepaintBoundary = _containerKey.currentContext.findRenderObject();
     ui.Image boxImage = await renderRepaintBoundary.toImage(pixelRatio: 1);

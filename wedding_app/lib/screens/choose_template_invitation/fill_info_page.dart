@@ -31,10 +31,45 @@ class _FillInfoPageState extends State<FillInfoPage> {
   var _dateTimeInvalid = false;
   String _noInputBrideName ='';
   String _noInputGroomName ='';
-  String _noInputDateTime ='';
+  String _noInputDate ='';
+  String _noInputTime='';
   String _noInputPlace ='';
-  DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
+  DateFormat dateFormat = DateFormat("dd-MM-yyyy");
+  DateFormat timeFormat = DateFormat("hh:mm");
+  String _selectedDate = 'Chọn ngày: ';
+  String _selectedTime = 'Chọn giờ: ';
 
+   _selectDate(BuildContext context, DateTime selectedDate) async {
+     print(selectedDate);
+     String a =  dateFormat.format(selectedDate);
+
+    final DateTime d = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime.now(),
+      lastDate: DateTime(DateTime.now().year + 3),
+    );
+    if (d != null){
+      setState(() {
+        _selectedDate = dateFormat.format(d);
+      });
+    }
+
+
+  }
+
+  _selectTime(BuildContext context) async {
+    final TimeOfDay time = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(_selectedTime != 'Chọn giờ: '
+          ? new DateFormat("hh:mm").parse(_selectedTime)
+          : DateTime.now()),
+    );
+    if (time != null)
+      setState(() {
+        _selectedTime = time.toString().substring(10, 15);
+      });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +79,7 @@ class _FillInfoPageState extends State<FillInfoPage> {
             appBar: AppBar(
               backgroundColor: hexToColor("#d86a77"),
               leading: IconButton(
-                icon: Icon(Icons.arrow_back,color: Colors.black,),
+                icon: Icon(Icons.arrow_back,color: Colors.white,),
                 onPressed: () {
                   Navigator.pop(context);
                 },
@@ -53,7 +88,7 @@ class _FillInfoPageState extends State<FillInfoPage> {
                 padding: const EdgeInsets.fromLTRB(30, 0, 30, 0),
                 child: Text(
                   "Thông Tin Trên Thiệp",
-                  style: TextStyle(color: Colors.black),
+                  style: TextStyle(color: Colors.white),
                 ),
               ),
             ),
@@ -76,7 +111,8 @@ class _FillInfoPageState extends State<FillInfoPage> {
                               if (state is WeddingLoaded) {
                                 _noInputBrideName=state.wedding.brideName;
                                 _noInputGroomName=state.wedding.groomName;
-                                _noInputDateTime=dateFormat.format(state.wedding.weddingDate);
+                                _noInputDate=dateFormat.format(state.wedding.weddingDate);
+                                _noInputTime=timeFormat.format(state.wedding.weddingDate);
                                 _noInputPlace=state.wedding.address;
                                 return Column(
                                   children: [
@@ -104,18 +140,38 @@ class _FillInfoPageState extends State<FillInfoPage> {
                                               labelStyle: TextStyle(
                                                   color: Colors.grey, fontSize: 15)),
                                         )),
-                                    Padding(
-                                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                        child: TextField(
-                                          style: TextStyle(fontSize: 18, color: Colors.black),
-                                          controller: _dateTimeController,
-                                          decoration: InputDecoration(
-                                              labelText: 'Thời gian ',
-                                              hintText: dateFormat.format(state.wedding.weddingDate),
-                                              errorText: _dateTimeInvalid? _errorMess: null,
-                                              labelStyle: TextStyle(
-                                                  color: Colors.grey, fontSize: 15)),
-                                        )),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                      children: <Widget>[
+                                        Text(
+                                          _selectedDate,
+                                          style: new TextStyle(
+                                            fontSize: 18.0,
+                                          ),
+                                        ),
+                                        IconButton(
+                                          icon: Icon(Icons.calendar_today),
+                                          tooltip: 'Tap to open date picker',
+                                          onPressed: () {
+                                            _selectDate(context, state.wedding.weddingDate);
+                                          },
+                                        ),
+                                        Text(
+                                          _selectedTime,
+                                          style: new TextStyle(
+                                            fontSize: 18.0,
+                                          ),
+                                        ),
+                                        IconButton(
+                                          icon: Icon(Icons.access_time_outlined),
+                                          tooltip: 'Tap to open time picker',
+                                          onPressed: () {
+                                            _selectTime(context);
+                                          },
+                                        ),
+                                      ],
+                                    ),
+
                                     Padding(
                                         padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                                         child: TextField(
@@ -130,8 +186,9 @@ class _FillInfoPageState extends State<FillInfoPage> {
                                         )),
                                     Padding(
                                       padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-                                      child: ElevatedButton(
-                                        child: Text('Tạo thiệp mời'),
+                                      child: FlatButton(
+                                        color: hexToColor("#d86a77"),
+                                        child: Text('Tạo thiệp mời',style: TextStyle(color: Colors.white)),
                                         onPressed: onSaveClick,
                                       ),
                                     ),
@@ -159,10 +216,10 @@ class _FillInfoPageState extends State<FillInfoPage> {
       DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
       if (_brideNameController.text.length > 32  ){
         _brideNameInvalid = true;
-        _errorMess = 'Số lượng kí tự quá nhiều';
+        _errorMess = 'Số lượng kí tự quá 32 kí tự';
       }else if(_brideNameController.text.length < 2 && _brideNameController.text.length>0){
       _brideNameInvalid = true;
-      _errorMess= 'Số lượng kí tự quá ngắn';
+      _errorMess= 'Số lượng kí tự ít hơn 2 kí tự';
       }else if(!alpha.hasMatch(_brideNameController.text) && _brideNameController.text.length!=0){
         _brideNameInvalid = true;
         _errorMess= 'Tên người nhập không có số hay kí tự đặc biệt';
@@ -178,10 +235,10 @@ class _FillInfoPageState extends State<FillInfoPage> {
 
       if (_groomNameController.text.length > 32  ){
         _groomNameInvalid = true;
-        _errorMess = 'Số lượng kí tự quá nhiều';
+        _errorMess = 'Số lượng kí tự quá 32 kí tự';
       }else if(_groomNameController.text.length < 2 && _groomNameController.text.length>0){
         _groomNameInvalid = true;
-        _errorMess= 'Số lượng kí tự quá ngắn';
+        _errorMess= 'Số lượng kí tự ít hơn 2 kí tự';
       }else if(!alpha.hasMatch(_groomNameController.text) && _groomNameController.text.length!=0){
         _groomNameInvalid = true;
         _errorMess= 'Tên người nhập không có số hay kí tự đặc biệt';
@@ -197,10 +254,10 @@ class _FillInfoPageState extends State<FillInfoPage> {
 
       if (_placeController.text.length > 32  ){
         _placeInvalid = true;
-        _errorMess = 'Số lượng kí tự quá nhiều';
+        _errorMess = 'Số lượng kí tự quá 32 kí tự';
       }else if(_placeController.text.length < 2 && _placeController.text.length>0){
         _placeInvalid = true;
-        _errorMess= 'Số lượng kí tự quá ngắn';
+        _errorMess= 'Số lượng kí tự ít hơn 2 kí tự';
       }else if(!alphanum.hasMatch(_placeController.text) && _placeController.text.length!=0 ){
         _placeInvalid = true;
         _errorMess= 'Tên địa chỉ không có kí tự đặc biệt';
@@ -210,26 +267,21 @@ class _FillInfoPageState extends State<FillInfoPage> {
       }else {
         _placeInvalid = false;
       }
-
-      if (_dateTimeController.text.length > 20  ){
-        _dateTimeInvalid = true;
-        _errorMess = 'Số lượng kí tự quá nhiều';
-      }else if(_dateTimeController.text.length  < 20 && _dateTimeController.text.length>0){
-        _dateTimeInvalid = true;
-        _errorMess= 'Số lượng kí tự quá ngắn';
-      }else if(!date.hasMatch(_dateTimeController.text) && _dateTimeController.text.length!=0 ){
-        _dateTimeInvalid = true;
-        _errorMess= 'Ngày tháng nhập không có chữ cái hay kí tự đặc biệt';
-      }else if(_dateTimeController.text.length==0){
-        _dateTimeController.text=_noInputDateTime;
-        _dateTimeInvalid = false;
-      }else {
-        _dateTimeInvalid = false;
+      String dateTime ='';
+      if(_selectedDate == 'Chọn ngày: ' && _selectedTime != 'Chọn giờ: '){
+        dateTime = _noInputDate + ' ' + _selectedTime;
+      }else if( _selectedTime == 'Chọn giờ: ' && _selectedDate != 'Chọn ngày: '){
+        dateTime = _selectedDate + ' ' + _noInputTime;
+      }else if(_selectedDate == 'Chọn ngày: ' && _selectedTime == 'Chọn giờ: '){
+        dateTime = _noInputDate + ' ' + _noInputTime;
+      }
+      else{
+         dateTime = _selectedDate + ' ' + _selectedTime;
       }
 
-      if(_brideNameInvalid == false && _groomNameInvalid == false && _placeInvalid == false && _dateTimeInvalid ==false){
+      if(_brideNameInvalid == false && _groomNameInvalid == false && _placeInvalid == false ){
         Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => InvitationCardPage(template:template,brideName: _brideNameController.text,groomName: _groomNameController.text,dateTime: _dateTimeController.text,place: _placeController.text,)),
+          MaterialPageRoute(builder: (context) => InvitationCardPage(template:template,brideName: _brideNameController.text,groomName: _groomNameController.text,dateTime: dateTime,place: _placeController.text,)),
         );
       }
     });
