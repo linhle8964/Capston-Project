@@ -1,7 +1,8 @@
 import 'package:meta/meta.dart';
+import 'package:equatable/equatable.dart';
 
 @immutable
-class RegisterState {
+class RegisterState extends Equatable{
   final bool isEmailValid;
   final bool isPasswordValid;
   final bool isSubmitting;
@@ -107,4 +108,8 @@ class RegisterState {
       message: $message,
     }''';
   }
+
+  @override
+  // TODO: implement props
+  List<Object> get props => [isEmailValid, isPasswordValid, isSubmitting, isSuccess, isFailure, message];
 }

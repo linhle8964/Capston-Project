@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:wedding_app/bloc/login/bloc.dart';
 import 'package:wedding_app/firebase_repository/user_firebase_repository.dart';
 import '../mock_user.dart' as mock_user;
-class MockLoginRepository extends Mock implements FirebaseUserRepository {}
+class MockUserRepository extends Mock implements FirebaseUserRepository {}
 
 void main() {
   const invalidEmailString = "invalid";
@@ -22,14 +22,14 @@ void main() {
     emailVerified: true,
   );
   group("LoginBloc", () {
-    MockLoginRepository mockLoginRepository;
+    MockUserRepository mockUserRepository;
     LoginBloc loginBloc;
     setUp(() {
-      mockLoginRepository = MockLoginRepository();
-      loginBloc = LoginBloc(userRepository: mockLoginRepository);
+      mockUserRepository = MockUserRepository();
+      loginBloc = LoginBloc(userRepository: mockUserRepository);
     });
 
-    test('throws AssertionError when authenticationRepository is null', () {
+    test('throws AssertionError when userRepository is null', () {
       expect(() => LoginBloc(userRepository: null),
           throwsA(isA<AssertionError>()));
     });
@@ -99,8 +99,8 @@ void main() {
     group('submit login,', () {
       blocTest("emit [invalid] when email isn't verified",
           build: () {
-            when(mockLoginRepository.signInWithCredentials(validEmailString, validPasswordString)).thenAnswer((_) async => notVerifiedUser);
-            return LoginBloc(userRepository: mockLoginRepository);
+            when(mockUserRepository.signInWithCredentials(validEmailString, validPasswordString)).thenAnswer((_) async => notVerifiedUser);
+            return LoginBloc(userRepository: mockUserRepository);
           },
           act: (bloc) => bloc.add(LoginWithCredentialsPressed(
               email: validEmailString, password: validPasswordString)),
@@ -127,12 +127,11 @@ void main() {
                 isFailure: true,
                 message: "Bạn chưa xác nhận email"),
           ]);
-    });
 
     blocTest("emit [invalid] when wrong password",
         build: () {
-          when(mockLoginRepository.signInWithCredentials(validEmailString, validPasswordString)).thenThrow(EmailNotFoundException());
-          return LoginBloc(userRepository: mockLoginRepository);
+          when(mockUserRepository.signInWithCredentials(validEmailString, validPasswordString)).thenThrow(EmailNotFoundException());
+          return LoginBloc(userRepository: mockUserRepository);
         },
         act: (bloc) => bloc.add(LoginWithCredentialsPressed(
             email: validEmailString, password: validPasswordString)),
@@ -162,8 +161,8 @@ void main() {
 
     blocTest("emit [invalid] when wrong password",
         build: () {
-          when(mockLoginRepository.signInWithCredentials(validEmailString, validPasswordString)).thenThrow(WrongPasswordException());
-          return LoginBloc(userRepository: mockLoginRepository);
+          when(mockUserRepository.signInWithCredentials(validEmailString, validPasswordString)).thenThrow(WrongPasswordException());
+          return LoginBloc(userRepository: mockUserRepository);
         },
         act: (bloc) => bloc.add(LoginWithCredentialsPressed(
             email: validEmailString, password: validPasswordString)),
@@ -193,8 +192,8 @@ void main() {
 
     blocTest("emit [invalid] when too many request",
         build: () {
-          when(mockLoginRepository.signInWithCredentials(validEmailString, validPasswordString)).thenThrow(TooManyRequestException());
-          return LoginBloc(userRepository: mockLoginRepository);
+          when(mockUserRepository.signInWithCredentials(validEmailString, validPasswordString)).thenThrow(TooManyRequestException());
+          return LoginBloc(userRepository: mockUserRepository);
         },
         act: (bloc) => bloc.add(LoginWithCredentialsPressed(
             email: validEmailString, password: validPasswordString)),
@@ -221,5 +220,6 @@ void main() {
               isFailure: true,
               message: "Bạn đã đăng nhập quá nhiều lần. Hãy thử lại trong giây lát"),
         ]);
+    });
   });
 }

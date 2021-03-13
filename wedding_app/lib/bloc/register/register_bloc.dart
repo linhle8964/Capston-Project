@@ -1,3 +1,4 @@
+import 'package:wedding_app/firebase_repository/user_firebase_repository.dart';
 import 'package:wedding_app/repository/user_repository.dart';
 import 'package:wedding_app/repository/user_wedding_repository.dart';
 import 'package:wedding_app/utils/validations.dart';
@@ -70,15 +71,13 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         _userWeddingRepository.createUserWedding(user);
       });
       yield RegisterState.success("Đăng ký thành công");
-    } catch (e) {
+    } on EmailAlreadyInUseException{
+      yield RegisterState.failure("Email đã tồn tại");
+    } on FirebaseException{
+      yield RegisterState.failure("Có lỗi xảy ra");
+    }catch (e) {
       print("[ERROR] $e");
-      String message = "";
-      if (e.toString() == "Exception: email-already-in-use") {
-        message = "Email đã tồn tại";
-      } else {
-        message = "Có lỗi xảy ra";
-      }
-      yield RegisterState.failure(message);
+      yield RegisterState.failure("Có lỗi xảy ra");
     }
   }
 }
