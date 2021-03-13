@@ -120,7 +120,8 @@ class _ChooseTemplatePageState extends State<ChooseTemplatePage> {
                               child: SizedBox(
                                   width: double.infinity,
                                   height: 40,
-                                  child:ElevatedButton(
+                                  child:FlatButton(
+                                    color:hexToColor("#d86a77") ,
                                     onPressed: (){
                                       setState(() {
                                         uploading = true;
@@ -188,7 +189,9 @@ class _ChooseTemplatePageState extends State<ChooseTemplatePage> {
 
   showMyAlertDialog(BuildContext context) {
     // Create AlertDialog
+    GlobalKey _containerKey= GlobalKey();
     AlertDialog dialog = AlertDialog(
+      key: _containerKey,
       title: Text("Lưu lại"),
       content: Text("Mẫu thiệp mới của bạn đã được lưu lại!"),
       actions: [
@@ -197,7 +200,7 @@ class _ChooseTemplatePageState extends State<ChooseTemplatePage> {
             child: Text("Hoàn thành"),
             onPressed: (){
               uploading = false;
-              Navigator.of(context).pop(); // Return value
+              Navigator.of(_containerKey.currentContext).pop();
             }
         ),
       ],
