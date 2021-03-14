@@ -42,6 +42,8 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       yield* _mapPasswordChangedToState(event.password);
     } else if (event is Submitted) {
       yield* _mapFormSubmittedToState(event.email, event.password);
+    } else if(event is ShowSuccessMessage){
+      yield* _mapShowSuccessMessageToState();
     }
   }
 
@@ -68,9 +70,9 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       )
           .then((user) async {
         // tạo user wedding
-        _userWeddingRepository.createUserWedding(user);
+        await _userWeddingRepository.createUserWedding(user).then((value) async => add(ShowSuccessMessage()));
       });
-      yield RegisterState.success("Đăng ký thành công");
+
     } on EmailAlreadyInUseException{
       yield RegisterState.failure("Email đã tồn tại");
     } on FirebaseException{
@@ -79,5 +81,9 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       print("[ERROR] $e");
       yield RegisterState.failure("Có lỗi xảy ra");
     }
+  }
+
+  Stream<RegisterState> _mapShowSuccessMessageToState() async*{
+    yield RegisterState.success("Đăng ký thành công");
   }
 }

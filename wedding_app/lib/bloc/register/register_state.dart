@@ -110,6 +110,5 @@ class RegisterState extends Equatable{
   }
 
   @override
-  // TODO: implement props
   List<Object> get props => [isEmailValid, isPasswordValid, isSubmitting, isSuccess, isFailure, message];
 }

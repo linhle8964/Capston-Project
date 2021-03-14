@@ -1,7 +1,8 @@
 import 'package:meta/meta.dart';
+import 'package:equatable/equatable.dart';
 
 @immutable
-class ValidateWeddingState {
+class ValidateWeddingState extends Equatable{
   final bool isGroomNameValid;
   final bool isBrideNameValid;
   final bool isAddressValid;
@@ -39,7 +40,6 @@ class ValidateWeddingState {
     bool isGroomNameValid,
     bool isBrideNameValid,
     bool isAddressValid,
-    bool isSubmitEnabled,
   }) {
     return ValidateWeddingState(
       isGroomNameValid: isGroomNameValid ?? this.isGroomNameValid,
@@ -56,4 +56,7 @@ class ValidateWeddingState {
       isAddressValid : $isAddressValid,
     }''';
   }
+
+  @override
+  List<Object> get props => [isGroomNameValid, isBrideNameValid, isAddressValid];
 }

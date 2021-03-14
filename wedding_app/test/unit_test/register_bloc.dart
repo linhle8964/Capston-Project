@@ -119,6 +119,7 @@ void main(){
 
       blocTest("emit valid", build: (){
         when(mockUserRepository.signUp(email: validEmailString, password: validPasswordString)).thenAnswer((_) async => user);
+        when(mockUserWeddingRepository.createUserWedding(user)).thenAnswer((_) async => (){});
         return RegisterBloc(userRepository: mockUserRepository, userWeddingRepository: mockUserWeddingRepository);
       },
           act: (bloc) => bloc.add(Submitted(email: validEmailString, password: validPasswordString)),

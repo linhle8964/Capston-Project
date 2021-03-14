@@ -3,6 +3,16 @@ class Validation {
     return text != null && text.length >= length;
   }
 
+  static bool isNameValid(String name){
+    return RegExp(
+        r'^[a-zA-Z\s]+$')
+        .hasMatch(name);
+  }
+
+  static bool isAddressValid(String address){
+    return RegExp(r'[!@#<>?":_`~;[\]\\|=+)(*&^%\s-]').hasMatch(address);
+  }
+
   static bool isEmailValid(String email) {
     return RegExp(
             r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")

@@ -135,7 +135,7 @@ class _CreateWeddingPageState extends State<CreateWeddingPage> {
                               ),
                               hintText: 'TÊN CHÚ RỂ',
                               errorText: !state.isGroomNameValid
-                                  ? "Tên phải có tối thiểu 6 ký tự"
+                                  ? "Tên không được để trống và không chứa ký tự đặc biệt"
                                   : null,
                             ),
                           ),
@@ -149,7 +149,7 @@ class _CreateWeddingPageState extends State<CreateWeddingPage> {
                                 borderSide: new BorderSide(color: Colors.black),
                               ),
                               errorText: !state.isBrideNameValid
-                                  ? "Tên phải có tối thiểu 6 ký tự"
+                                  ? "Tên không được để trống và không chứa ký tự đặc biệt"
                                   : null,
                               hintText: 'TÊN CÔ DÂU',
                             ),
@@ -198,7 +198,7 @@ class _CreateWeddingPageState extends State<CreateWeddingPage> {
                                 borderSide: new BorderSide(color: Colors.black),
                               ),
                               errorText: !state.isAddressValid
-                                  ? "Địa chỉ không được rỗng"
+                                  ? "Địa chỉ không được trống"
                                   : null,
                               hintText: 'ĐỊA CHỈ',
                             ),

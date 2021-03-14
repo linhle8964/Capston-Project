@@ -4,12 +4,13 @@ import 'bloc.dart';
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 
-class ValidateWeddingBloc extends Bloc<ValidateWeddingEvent, ValidateWeddingState> {
+class ValidateWeddingBloc
+    extends Bloc<ValidateWeddingEvent, ValidateWeddingState> {
   ValidateWeddingBloc() : super(ValidateWeddingState.empty());
 
   @override
-  Stream<Transition<ValidateWeddingEvent, ValidateWeddingState>> transformEvents(
-      Stream<ValidateWeddingEvent> events, transitionFn) {
+  Stream<Transition<ValidateWeddingEvent, ValidateWeddingState>>
+      transformEvents(Stream<ValidateWeddingEvent> events, transitionFn) {
     final observableStream = events;
     final nonDebounceStream = observableStream.where((event) {
       return (event is! BrideNameChanged &&
@@ -26,7 +27,8 @@ class ValidateWeddingBloc extends Bloc<ValidateWeddingEvent, ValidateWeddingStat
   }
 
   @override
-  Stream<ValidateWeddingState> mapEventToState(ValidateWeddingEvent event) async* {
+  Stream<ValidateWeddingState> mapEventToState(
+      ValidateWeddingEvent event) async* {
     if (event is GroomNameChanged) {
       yield* _mapGroomNameChangedToState(event.groomName);
     } else if (event is BrideNameChanged) {
@@ -38,17 +40,16 @@ class ValidateWeddingBloc extends Bloc<ValidateWeddingEvent, ValidateWeddingStat
 
   Stream<ValidateWeddingState> _mapBrideNameChangedToState(
       String brideName) async* {
-    yield state.update(
-        isBrideNameValid: Validation.isStringValid(brideName, 6));
+    yield state.update(isBrideNameValid: Validation.isNameValid(brideName));
   }
 
   Stream<ValidateWeddingState> _mapGroomNameChangedToState(
       String groomName) async* {
-    yield state.update(
-        isGroomNameValid: Validation.isStringValid(groomName, 6));
+    yield state.update(isGroomNameValid: Validation.isNameValid(groomName));
   }
 
-  Stream<ValidateWeddingState> _mapAddressChangedToState(String address) async* {
-    yield state.update(isAddressValid: Validation.isStringValid(address, 6));
+  Stream<ValidateWeddingState> _mapAddressChangedToState(
+      String address) async* {
+    yield state.update(isAddressValid: Validation.isAddressValid(address));
   }
 }
