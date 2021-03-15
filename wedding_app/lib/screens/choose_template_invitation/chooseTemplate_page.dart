@@ -50,9 +50,8 @@ class _ChooseTemplatePageState extends State<ChooseTemplatePage> {
                 leading: IconButton(
                   icon: Icon(Icons.arrow_back,color: Colors.white,),
                   onPressed: () {
-                    Navigator.of(context).push(
-                        MaterialPageRoute(builder: (context) => HomePage(),
-                        ));
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, "/", (route) => false);
                   },
                 ),
                 bottom: TabBar(
@@ -122,13 +121,14 @@ class _ChooseTemplatePageState extends State<ChooseTemplatePage> {
                                   height: 40,
                                   child:FlatButton(
                                     color:hexToColor("#d86a77") ,
-                                    onPressed: (){
-                                      setState(() {
-                                        uploading = true;
-                                      });
-                                      uploadFile();
-                                      
-                                    },
+                                    onPressed: _image.length>0? (){
+
+                                        setState(() {
+                                          uploading = true;
+                                        });
+                                        uploadFile();
+                                        _image=[];
+                                    }:null,
                                     child: Text('Tải ảnh lên',style: TextStyle(color: Colors.white,fontSize: 20),),
                                   )
                               ),
@@ -143,12 +143,14 @@ class _ChooseTemplatePageState extends State<ChooseTemplatePage> {
       );
   }
   chooseImage() async{
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
-    setState(() {
-      _image.add(File(pickedFile?.path));
+    if (await _requestPermission(Permission.storage)) {
+      final pickedFile = await picker.getImage(source: ImageSource.gallery);
+      setState(() {
+        _image.add(File(pickedFile?.path));
 
-    });
-    if (pickedFile.path == null) retriverLostData();
+      });
+      if (pickedFile.path == null) retriverLostData();
+    }
   }
   Future<void> retriverLostData () async {
     final LostData response = await picker.getLostData();
@@ -186,6 +188,45 @@ class _ChooseTemplatePageState extends State<ChooseTemplatePage> {
           .set({"url": downloadUrl, "name": imgName}).whenComplete(() => showMyAlertDialog(context));
     }
   }
+  Future<bool> _requestPermission(Permission permission) async {
+    if (await permission.isGranted) {
+      return true;
+    } else {
+      var result = await permission.request();
+      if (result == PermissionStatus.granted) {
+        return true;
+      }
+    }
+    showMyErrorDialog(context);
+    return false;
+  }
+  showMyErrorDialog(BuildContext context) {
+    // Create AlertDialog
+    GlobalKey _containerKey= GlobalKey();
+    AlertDialog dialog = AlertDialog(
+      key: _containerKey,
+      title: Text("Ứng dụng chưa được cấp quyền"),
+      content: Text("Bạn cần cấp quyền cho ứng dụng để thực hiện chức năng này!"),
+      actions: [
+        FlatButton(
+            color: hexToColor("#d86a77"),
+            child: Text("Đóng"),
+            onPressed: (){
+              Navigator.of(_containerKey.currentContext).pop();
+            }
+        ),
+      ],
+    );
+
+    // Call showDialog function to show dialog.
+    Future<String> futureValue = showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return dialog;
+        }
+    );
+
+  }
 
   showMyAlertDialog(BuildContext context) {
     // Create AlertDialog
@@ -200,6 +241,7 @@ class _ChooseTemplatePageState extends State<ChooseTemplatePage> {
             child: Text("Hoàn thành"),
             onPressed: (){
               uploading = false;
+
               Navigator.of(_containerKey.currentContext).pop();
             }
         ),
@@ -288,6 +330,7 @@ class MyCardState extends State<MyCard>{
         return true;
       }
     }
+    showMyErrorDialog(context);
     return false;
   }
 
@@ -311,6 +354,33 @@ class MyCardState extends State<MyCard>{
       loading = false;
     });
   }
+  showMyErrorDialog(BuildContext context) {
+    // Create AlertDialog
+    GlobalKey _containerKey= GlobalKey();
+    AlertDialog dialog = AlertDialog(
+      key: _containerKey,
+      title: Text("Ứng dụng chưa được cấp quyền"),
+      content: Text("Bạn cần cấp quyền cho ứng dụng để thực hiện chức năng này!"),
+      actions: [
+        FlatButton(
+          color: hexToColor("#d86a77"),
+            child: Text("Đóng"),
+            onPressed: (){
+              Navigator.of(_containerKey.currentContext).pop();
+            }
+        ),
+      ],
+    );
+
+    // Call showDialog function to show dialog.
+    Future<String> futureValue = showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return dialog;
+        }
+    );
+
+  }
   showMyAlertDialog(BuildContext context) {
     // Create AlertDialog
     GlobalKey _containerKey= GlobalKey();
@@ -320,7 +390,7 @@ class MyCardState extends State<MyCard>{
       content: Text("Mẫu thiệp mới của bạn đã được lưu lại!"),
       actions: [
         FlatButton(
-          color: hexToColor("#d86a77"),
+            color: hexToColor("#d86a77"),
             child: Text("Hoàn thành"),
             onPressed: (){
               Navigator.of(_containerKey.currentContext).pop();

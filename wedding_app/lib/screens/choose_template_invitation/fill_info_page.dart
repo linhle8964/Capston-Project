@@ -38,7 +38,8 @@ class _FillInfoPageState extends State<FillInfoPage> {
   DateFormat timeFormat = DateFormat("hh:mm");
   String _selectedDate = 'Chọn ngày: ';
   String _selectedTime = 'Chọn giờ: ';
-
+  bool _isClickDate = false;
+  bool _isClickTime = false;
    _selectDate(BuildContext context, DateTime selectedDate) async {
      print(selectedDate);
      String a =  dateFormat.format(selectedDate);
@@ -46,12 +47,13 @@ class _FillInfoPageState extends State<FillInfoPage> {
     final DateTime d = await showDatePicker(
       context: context,
       initialDate: selectedDate,
-      firstDate: DateTime.now(),
+      firstDate: DateTime(DateTime.now().year - 3),
       lastDate: DateTime(DateTime.now().year + 3),
     );
     if (d != null){
       setState(() {
         _selectedDate = dateFormat.format(d);
+        _isClickDate = true;
       });
     }
 
@@ -68,6 +70,7 @@ class _FillInfoPageState extends State<FillInfoPage> {
     if (time != null)
       setState(() {
         _selectedTime = time.toString().substring(10, 15);
+        _isClickTime = true;
       });
   }
 
@@ -114,6 +117,14 @@ class _FillInfoPageState extends State<FillInfoPage> {
                                 _noInputDate=dateFormat.format(state.wedding.weddingDate);
                                 _noInputTime=timeFormat.format(state.wedding.weddingDate);
                                 _noInputPlace=state.wedding.address;
+                                if(_isClickDate == false){
+                                  _selectedDate = _noInputDate;
+                                };
+                                if(_isClickTime == false){
+                                  _selectedTime = _noInputTime;
+                                }
+
+
                                 return Column(
                                   children: [
                                     Padding(
@@ -268,11 +279,11 @@ class _FillInfoPageState extends State<FillInfoPage> {
         _placeInvalid = false;
       }
       String dateTime ='';
-      if(_selectedDate == 'Chọn ngày: ' && _selectedTime != 'Chọn giờ: '){
-        dateTime = _noInputDate + ' ' + _selectedTime;
-      }else if( _selectedTime == 'Chọn giờ: ' && _selectedDate != 'Chọn ngày: '){
+      if(_isClickDate == true && _isClickTime == false){
         dateTime = _selectedDate + ' ' + _noInputTime;
-      }else if(_selectedDate == 'Chọn ngày: ' && _selectedTime == 'Chọn giờ: '){
+      }else if( _isClickDate == false && _isClickTime == true){
+        dateTime = _noInputDate + ' ' + _selectedTime;
+      }else if(_isClickDate == false && _isClickTime == false){
         dateTime = _noInputDate + ' ' + _noInputTime;
       }
       else{
