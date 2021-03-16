@@ -47,7 +47,7 @@ void showSuccessSnackbar(BuildContext context, String message) {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(message),
-            Icon(Icons.check),
+            Icon(Icons.check, color: Colors.white,),
           ],
         ),
         backgroundColor: Colors.green,

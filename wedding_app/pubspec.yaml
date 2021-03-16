@@ -50,8 +50,8 @@ dev_dependencies:
   firebase_auth: ^1.0.0
   # Add the dependency for the FlutterFire plugin for Google Analytics
 
-  cloud_firestore: ^1.0.0
-  firebase_core: ^1.0.0
+  cloud_firestore: ^1.0.1
+  firebase_core: ^1.0.1
 
   rxdart: ^0.26.0
   equatable: ^2.0.0
@@ -62,7 +62,6 @@ dev_dependencies:
   android_alarm_manager: ^0.4.5+14
   firebase_messaging: ^9.0.0
   search_page: ^1.4.0
-
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

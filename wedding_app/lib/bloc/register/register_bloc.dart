@@ -1,3 +1,4 @@
+import 'package:wedding_app/firebase_repository/user_firebase_repository.dart';
 import 'package:wedding_app/repository/user_repository.dart';
 import 'package:wedding_app/repository/user_wedding_repository.dart';
 import 'package:wedding_app/utils/validations.dart';
@@ -41,6 +42,8 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       yield* _mapPasswordChangedToState(event.password);
     } else if (event is Submitted) {
       yield* _mapFormSubmittedToState(event.email, event.password);
+    } else if(event is ShowSuccessMessage){
+      yield* _mapShowSuccessMessageToState();
     }
   }
 
@@ -67,18 +70,20 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       )
           .then((user) async {
         // tạo user wedding
-        _userWeddingRepository.createUserWedding(user);
+        await _userWeddingRepository.createUserWedding(user).then((value) async => add(ShowSuccessMessage()));
       });
-      yield RegisterState.success("Đăng ký thành công");
-    } catch (e) {
+
+    } on EmailAlreadyInUseException{
+      yield RegisterState.failure("Email đã tồn tại");
+    } on FirebaseException{
+      yield RegisterState.failure("Có lỗi xảy ra");
+    }catch (e) {
       print("[ERROR] $e");
-      String message = "";
-      if (e.toString() == "Exception: email-already-in-use") {
-        message = "Email đã tồn tại";
-      } else {
-        message = "Có lỗi xảy ra";
-      }
-      yield RegisterState.failure(message);
+      yield RegisterState.failure("Có lỗi xảy ra");
     }
+  }
+
+  Stream<RegisterState> _mapShowSuccessMessageToState() async*{
+    yield RegisterState.success("Đăng ký thành công");
   }
 }

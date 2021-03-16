@@ -48,3 +48,5 @@ class Submitted extends RegisterEvent {
     return 'Submitted { email: $email, password: $password }';
   }
 }
+
+class ShowSuccessMessage extends RegisterEvent{}

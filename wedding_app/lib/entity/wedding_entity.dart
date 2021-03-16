@@ -25,16 +25,16 @@ class WeddingEntity extends Equatable {
 
   @override
   List<Object> get props => [
-        id,
-        brideName,
-        groomName,
-        weddingDate,
-        budget,
-        image,
-        dateCreated,
-        address,
-        modifiedDate,
-      ];
+    id,
+    brideName,
+    groomName,
+    weddingDate,
+    budget,
+    image,
+    dateCreated,
+    address,
+    modifiedDate,
+  ];
 
   Map<String, Object> toJson() {
     return {

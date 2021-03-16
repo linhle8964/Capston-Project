@@ -48,7 +48,7 @@ class AuthenticationBloc
         if (isEmailVerified) {
           final user = await _userRepository.getUser();
           final UserWedding userWedding =
-              await _userWeddingRepository.getUserWeddingByUser(user);
+          await _userWeddingRepository.getUserWeddingByUser(user);
           if (userWedding.weddingId == null) {
             yield Unauthenticated();
           } else {
@@ -69,12 +69,11 @@ class AuthenticationBloc
   Stream<AuthenticationState> _mapLoggedInToState() async* {
     final user = await _userRepository.getUser();
     final UserWedding userWedding =
-        await _userWeddingRepository.getUserWeddingByUser(user);
+    await _userWeddingRepository.getUserWeddingByUser(user);
     if (userWedding.weddingId == null) {
       yield WeddingNull(user);
     } else {
-      Wedding wedding =
-          await _weddingRepository.getWeddingById(userWedding.weddingId);
+      Wedding wedding = await _weddingRepository.getWeddingById(userWedding.weddingId);
       SharedPreferences preferences = await SharedPreferences.getInstance();
       await preferences.setString("wedding_id", userWedding.weddingId);
       await preferences.setString(

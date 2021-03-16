@@ -70,3 +70,4 @@ class Wedding {
     return "Wedding: $id, $brideName, $groomName, $weddingDate, $image, $address, $budget";
   }
 }
+

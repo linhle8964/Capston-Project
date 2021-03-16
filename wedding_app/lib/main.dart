@@ -4,6 +4,7 @@ import 'package:wedding_app/firebase_repository/budget_firebase_repository.dart'
 import 'package:wedding_app/firebase_repository/invite_email_firebase_repository.dart';
 import 'package:wedding_app/firebase_repository/user_wedding_firebase_repository.dart';
 import 'package:wedding_app/firebase_repository/wedding_firebase_repository.dart';
+import 'package:wedding_app/screens/create_wedding/create_wedding_argument.dart';
 import 'package:wedding_app/screens/create_wedding/create_wedding_page.dart';
 import 'package:wedding_app/screens/invite_collaborator/invite_collaborator.dart';
 import 'package:wedding_app/screens/login/login_page.dart';
@@ -65,6 +66,29 @@ class MyApp extends StatelessWidget {
         ],
         child: MaterialApp(
           initialRoute: '/',
+          onGenerateRoute: (settings) {
+            if (settings.name == "/create_wedding") {
+              final CreateWeddingArguments args = settings.arguments;
+              return MaterialPageRoute(
+                builder: (context) {
+                  return MultiBlocProvider(
+                    providers: [
+                      BlocProvider<WeddingBloc>(
+                        create: (context) => WeddingBloc(
+                          weddingRepository: FirebaseWeddingRepository(),
+                          userWeddingRepository: FirebaseUserWeddingRepository(),
+                        ),
+                      ),
+                      BlocProvider<ValidateWeddingBloc>(
+                        create: (context) => ValidateWeddingBloc(),
+                      ),
+                    ],
+                    child: CreateWeddingPage(isEditing: args.isEditing, wedding: args.wedding,),
+                  );
+                },
+              );
+            }
+          } ,
           routes: {
             '/register': (context) {
               return BlocProvider(
@@ -131,22 +155,6 @@ class MyApp extends StatelessWidget {
                 child: WeddingCodePage(),
               );
             },
-            "/create_wedding": (context) {
-              return MultiBlocProvider(
-                providers: [
-                  BlocProvider<WeddingBloc>(
-                    create: (context) => WeddingBloc(
-                      weddingRepository: FirebaseWeddingRepository(),
-                      userWeddingRepository: FirebaseUserWeddingRepository(),
-                    ),
-                  ),
-                  BlocProvider<ValidateWeddingBloc>(
-                    create: (context) => ValidateWeddingBloc(),
-                  ),
-                ],
-                child: CreateWeddingPage(),
-              );
-            }
           },
           title: 'Wedding App',
           theme: ThemeData(

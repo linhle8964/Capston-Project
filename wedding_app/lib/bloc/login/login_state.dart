@@ -2,7 +2,7 @@ import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
 @immutable
-class LoginState extends Equatable {
+class LoginState extends Equatable{
   final bool isEmailValid;
   final bool isPasswordValid;
   final bool isSubmitting;
