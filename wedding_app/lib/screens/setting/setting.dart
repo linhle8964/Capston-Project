@@ -4,14 +4,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wedding_app/bloc/authentication/bloc.dart';
 import 'package:wedding_app/bloc/user_wedding/bloc.dart';
 import 'package:wedding_app/bloc/wedding/bloc.dart';
+import 'package:wedding_app/model/user_wedding.dart';
+import 'package:wedding_app/screens/create_wedding/create_wedding_argument.dart';
 import 'package:wedding_app/screens/setting/custom_button.dart';
 import 'package:wedding_app/screens/setting/setting_item.dart';
 import 'package:wedding_app/utils/alert_dialog.dart';
-import 'package:wedding_app/utils/get_role.dart';
+import 'package:wedding_app/utils/get_share_preferences.dart';
 import 'package:wedding_app/utils/hex_color.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:wedding_app/utils/show_snackbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wedding_app/widgets/confirm_dialog.dart';
 
 class SettingPage extends StatefulWidget {
   @override
@@ -68,22 +71,31 @@ class _SettingPageState extends State<SettingPage> {
           )
         ],
         child: FutureBuilder(
-          future: getRole(),
+          future: getUserWedding(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              final String role = snapshot.data;
+              final UserWedding userWedding = snapshot.data;
               return SingleChildScrollView(
                 child: Container(
                   padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                   child: Column(
                     children: <Widget>[
                       SettingItem(null, "Thông tin cá nhân"),
-                      SettingItem(null, "Thông tin mặc định"),
+                      SettingItem(
+                          () async => Navigator.pushNamed(
+                              context, "/create_wedding",
+                              arguments: CreateWeddingArguments(
+                                  isEditing: true,
+                                  wedding:
+                                      await getWeddingFromSharePreferences())),
+                          "Thông tin đám cưới"),
                       SettingItem(null, "Chi phí dự trù"),
-                      SettingItem("/create_wedding", "Thông tin ngày cưới"),
-                      isAdmin(role)
-                          ? SettingItem(
-                              "/invite_collaborator", "Kết nối với người ấy")
+                      SettingItem(null, "Thông tin ngày cưới"),
+                      isAdmin(userWedding.role)
+                          ? SettingItem(() {
+                              Navigator.pushNamed(
+                                  context, "/invite_collaborator");
+                            }, "Kết nối với người ấy")
                           : Container(),
                       SettingItem(null, "Ngôn ngữ"),
                       SettingItem(null, "Chính sách bảo mật"),
@@ -96,7 +108,7 @@ class _SettingPageState extends State<SettingPage> {
                         BlocProvider.of<AuthenticationBloc>(context)
                             .add(LoggedOut());
                       }, Colors.blue),
-                      isAdmin(role)
+                      isAdmin(userWedding.role)
                           ? CustomButtom("Xoá đám cưới",
                               () => _onDeleteWeddingClick(context), Colors.grey)
                           : CustomButtom("Rời đám cưới",
@@ -116,15 +128,32 @@ class _SettingPageState extends State<SettingPage> {
     );
   }
 
-  void _onLeftWeddingClick(BuildContext context) {
-    final User user = FirebaseAuth.instance.currentUser;
-    BlocProvider.of<UserWeddingBloc>(context)
-        .add(RemoveUserFromUserWedding(user));
+  void _onLeftWeddingClick(BuildContext ctx) {
+    showDialog(
+        context: ctx,
+        barrierDismissible: false,
+        builder: (BuildContext context) => PersonDetailsDialog(
+              message: "Bạn có muốn rời đám cưới?",
+              onPressedFunction: () async {
+                final User user = FirebaseAuth.instance.currentUser;
+                BlocProvider.of<UserWeddingBloc>(ctx)
+                    .add(RemoveUserFromUserWedding(user));
+              },
+            ));
   }
 
-  void _onDeleteWeddingClick(BuildContext context) async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    String weddingId = preferences.getString("wedding_id");
-    BlocProvider.of<WeddingBloc>(context).add(DeleteWedding(weddingId));
+  void _onDeleteWeddingClick(BuildContext ctx) async {
+    showDialog(
+        context: ctx,
+        barrierDismissible: false,
+        builder: (context) => PersonDetailsDialog(
+              message: "Bạn có muốn xóa đám cưới?",
+              onPressedFunction: () async {
+                SharedPreferences preferences =
+                    await SharedPreferences.getInstance();
+                String weddingId = preferences.getString("wedding_id");
+                BlocProvider.of<WeddingBloc>(ctx).add(DeleteWedding(weddingId));
+              },
+            ));
   }
 }

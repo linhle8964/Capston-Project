@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:bloc/bloc.dart';
 import 'package:wedding_app/model/user_wedding.dart';
@@ -6,6 +7,7 @@ import 'package:wedding_app/repository/user_wedding_repository.dart';
 import 'package:wedding_app/repository/wedding_repository.dart';
 import 'bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class WeddingBloc extends Bloc<WeddingEvent, WeddingState> {
   final WeddingRepository _weddingRepository;
@@ -70,7 +72,17 @@ class WeddingBloc extends Bloc<WeddingEvent, WeddingState> {
   }
 
   Stream<WeddingState> _mapUpdateWeddingToState(UpdateWedding event) async* {
-    _weddingRepository.updateWedding(event.wedding);
+    yield Loading("Đang xử lý dữ liệu");
+    try {
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      _weddingRepository.updateWedding(event.wedding).then((value) async =>
+          preferences.setString(
+              "wedding", jsonEncode(event.wedding.toEntity().toJson())));
+      yield Success("Chỉnh sửa thành công");
+    } catch (e) {
+      print("[ERROR]" + e);
+      yield Failed("Có lỗi xảy ra");
+    }
   }
 
   Stream<WeddingState> _mapDeleteWeddingToState(DeleteWedding event) async* {

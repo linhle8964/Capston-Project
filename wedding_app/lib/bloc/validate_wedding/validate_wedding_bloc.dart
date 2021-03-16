@@ -20,7 +20,7 @@ class ValidateWeddingBloc
     final debounceStream = observableStream.where((event) {
       return (event is BrideNameChanged ||
           event is GroomNameChanged ||
-          event is! AddressChanged);
+          event is AddressChanged);
     }).debounceTime(Duration(milliseconds: 300));
     return super.transformEvents(
         nonDebounceStream.mergeWith([debounceStream]), transitionFn);
@@ -35,6 +35,8 @@ class ValidateWeddingBloc
       yield* _mapBrideNameChangedToState(event.brideName);
     } else if (event is AddressChanged) {
       yield* _mapAddressChangedToState(event.address);
+    } else if(event is BudgetChanged){
+      yield* _mapBudgetChangedToState(event.budget);
     }
   }
 
@@ -51,5 +53,10 @@ class ValidateWeddingBloc
   Stream<ValidateWeddingState> _mapAddressChangedToState(
       String address) async* {
     yield state.update(isAddressValid: Validation.isAddressValid(address));
+  }
+
+  Stream<ValidateWeddingState> _mapBudgetChangedToState(
+      String budget) async* {
+    yield state.update(isBudgetValid: Validation.isBudgetValid(budget));
   }
 }

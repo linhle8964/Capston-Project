@@ -22,4 +22,9 @@ class Validation {
   static bool isPasswordValid(String password) {
     return RegExp(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$').hasMatch(password);
   }
+
+  static bool isBudgetValid(String budget) {
+    double budgetDouble = double.parse(budget.replaceAll(",", ""));
+    return budgetDouble > 100000 && budgetDouble % 1000 == 0;
+  }
 }

@@ -36,6 +36,15 @@ class AddressChanged extends ValidateWeddingEvent {
   List<Object> get props => [address];
 }
 
+class BudgetChanged extends ValidateWeddingEvent {
+  final String budget;
+
+  const BudgetChanged({this.budget});
+
+  @override
+  List<Object> get props => [budget];
+}
+
 class WeddingDateChanged extends ValidateWeddingEvent {
   final DateTime weddingDate;
 
