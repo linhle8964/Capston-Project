@@ -15,6 +15,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:wedding_app/utils/show_snackbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wedding_app/widgets/confirm_dialog.dart';
+import 'package:android_alarm_manager/android_alarm_manager.dart';
+import 'package:wedding_app/widgets/notification.dart';
+
 
 class SettingPage extends StatefulWidget {
   @override
@@ -22,6 +25,13 @@ class SettingPage extends StatefulWidget {
 }
 
 class _SettingPageState extends State<SettingPage> {
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    NotificationManagement.cancelAlarm();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -96,6 +106,7 @@ class _SettingPageState extends State<SettingPage> {
                               Navigator.pushNamed(
                                   context, "/invite_collaborator");
                             }, "Kết nối với người ấy")
+
                           : Container(),
                       SettingItem(null, "Ngôn ngữ"),
                       SettingItem(null, "Chính sách bảo mật"),
@@ -104,9 +115,11 @@ class _SettingPageState extends State<SettingPage> {
                         padding: const EdgeInsets.fromLTRB(0, 40, 0, 0),
                         child: Text('App version 1.0.25'),
                       ),
-                      CustomButtom("Đăng xuất", () {
+                      CustomButtom("Đăng xuất", () async {
                         BlocProvider.of<AuthenticationBloc>(context)
                             .add(LoggedOut());
+                        NotificationManagement.ClearAllNotifications();
+                        var cancel = await AndroidAlarmManager.cancel(0);
                       }, Colors.blue),
                       isAdmin(userWedding.role)
                           ? CustomButtom("Xoá đám cưới",

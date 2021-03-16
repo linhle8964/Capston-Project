@@ -8,8 +8,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wedding_app/utils/hex_color.dart';
 import 'package:wedding_app/utils/border.dart';
 import 'package:intl/intl.dart';
+import 'package:wedding_app/utils/show_snackbar.dart';
 import 'package:wedding_app/widgets/confirm_dialog.dart';
-import 'package:wedding_app/widgets/notification.dart';
 
 class EditTaskPage extends StatefulWidget {
   Task task;
@@ -62,21 +62,21 @@ class _EditTaskPageState extends State<EditTaskPage> {
           "Chỉnh Sửa Công Việc",
           style: TextStyle(color: Colors.white),
         ),
-        leading: new IconButton(
-          icon: new Icon(Icons.arrow_back),
+        leading: BackButton(
           color: Colors.white,
           onPressed: () {
             showDialog(
                 context: context,
                 barrierDismissible: false,
                 builder: (BuildContext context) => PersonDetailsDialog(
-                      message: "Bạn có muốn thoát",
-                      onPressedFunction: () {
-                        Navigator.of(context).pop();
-                      },
-                    ));
+                  message: "Bạn có muốn thoát",
+                  onPressedFunction: () {
+                    Navigator.of(context).pop();
+                  },
+                ));
           },
         ),
+
         actions: [
           Builder(
             builder: (ctx) => IconButton(
@@ -90,7 +90,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
                     context: context,
                     barrierDismissible: false,
                     builder: (BuildContext context) => PersonDetailsDialog(
-                          message: "Bạn đang thêm công việc",
+                          message: "Bạn đang chỉnh sửa công việc",
                           onPressedFunction: () {
                             updateTask(ctx);
                           },
@@ -231,8 +231,6 @@ class _EditTaskPageState extends State<EditTaskPage> {
                                   categories.add(
                                       categoryObjects[i].cateName.toString());
                                 }
-                                // widget.dropdownValue = categories.length !=0? categories[0].toString()
-                                //    : widget.dropdownValue;
                               } else if (state is TodosLoading) {
                               } else if (state is TodosNotLoaded) {}
                               return DropdownButton<String>(
@@ -325,14 +323,9 @@ class _EditTaskPageState extends State<EditTaskPage> {
       _formKey.currentState.save();
       BlocProvider.of<ChecklistBloc>(context)
         ..add(DeleteTask(widget.task, widget.weddingID));
-      NotificationManagement.deleteNotification(widget.task);
       Navigator.pop(context);
     } else if (_task == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Bạn chưa điền tên công việc'),
-        ),
-      );
+      showFailedSnackbar(context, 'Bạn chưa điền tên công việc');
     }
   }
 
@@ -347,23 +340,14 @@ class _EditTaskPageState extends State<EditTaskPage> {
         category: _category);
     if (_task != null && _task.trim().isNotEmpty) {
       if (task == widget.task) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Bạn chưa thay đổi tên công việc!!!'),
-          ),
-        );
+        showFailedSnackbar(context, "Bạn chưa thay đổi tên công việc!!!");
         return;
       }
       BlocProvider.of<ChecklistBloc>(context)
         ..add(UpdateTask(task, widget.weddingID));
-      NotificationManagement.updateNotification(widget.task, task);
       Navigator.pop(context);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('có lỗi xảy ra'),
-        ),
-      );
+      showFailedSnackbar(context, "Có lỗi xảy ra");
     }
   }
 }

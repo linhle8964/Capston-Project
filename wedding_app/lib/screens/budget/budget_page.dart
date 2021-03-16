@@ -52,7 +52,7 @@ class _BudgetListState extends State<BudgetList> {
         title: Center(
           child: !isSearching
               ? Text(
-                  'KINH PHÍ',
+                  '     KINH PHÍ',
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 )
               : TextField(
@@ -82,9 +82,13 @@ class _BudgetListState extends State<BudgetList> {
                   onPressed: () => showSearch(
                       context: context,
                       delegate: SearchPage<Budget>(
+                        barTheme: ThemeData(
+                            appBarTheme: AppBarTheme(
+                                elevation: 0.0, color: hexToColor("#d86a77"))),
                         searchLabel: "Tìm Kiếm",
                         builder: (Budget budget) => InkWell(
                             onTap: () {
+                              Navigator.pop(context);
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -111,14 +115,37 @@ class _BudgetListState extends State<BudgetList> {
                                     Container(
                                       child: Text(budget.budgetName,
                                           style: TextStyle(
-                                              color: Colors.black,
                                               fontSize: 20,
                                               fontWeight: FontWeight.bold)),
                                     ),
+                                    Flexible(
+                                        fit: FlexFit.tight, child: SizedBox()),
+                                    Visibility(
+                                        visible: budget.isComplete,
+                                        child: SizedBox(
+                                          child: Container(
+                                            padding: EdgeInsets.only(
+                                                left: 5,
+                                                right: 5,
+                                                top: 3,
+                                                bottom: 3),
+                                            decoration: new BoxDecoration(
+                                              color: Colors.greenAccent,
+                                              borderRadius:
+                                                  BorderRadius.circular(16),
+                                            ),
+                                            child: Text(" Hoàn Thành ",
+                                                style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 15,
+                                                    fontWeight:
+                                                        FontWeight.normal)),
+                                          ),
+                                        )),
                                     Text(
-                                      budget.money.toString() + "₫",
+                                      (budget.money - budget.payMoney).toString() +
+                                          "₫",
                                       style: TextStyle(
-                                          color: Colors.black,
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold),
                                     )
@@ -194,7 +221,8 @@ class _BudgetListState extends State<BudgetList> {
                                 sum = 0;
                                 _budgets = state.budgets;
                                 for (int i = 0; i < _budgets.length; i++) {
-                                  sum += _budgets[i].money;
+                                  sum += (_budgets[i].money -
+                                      _budgets[i].payMoney);
                                 }
                               }
                               return Text(sum.toString());
@@ -233,10 +261,10 @@ class _BudgetListState extends State<BudgetList> {
                             _cateSum = 0;
                             for (int i = 0; i < _budgets.length; i++) {
                               if (item.id == _budgets[i].cateID) {
-                                _cateSum += _budgets[i].money;
+                                _cateSum +=
+                                    _budgets[i].money - _budgets[i].payMoney;
                               }
                             }
-                            print("test" + _cateSum.toString());
 
                             return Column(
                               children: <Widget>[
@@ -356,11 +384,10 @@ class _BudgetListState extends State<BudgetList> {
                                                                   ),
                                                                 )),
                                                             Text(
-                                                              low.isComplete
-                                                                  ? "0 ₫"
-                                                                  : low.money
-                                                                          .toString() +
-                                                                      "₫",
+                                                              (low.money -
+                                                                          low.payMoney)
+                                                                      .toString() +
+                                                                  "₫",
                                                               style: TextStyle(
                                                                   fontSize: 20,
                                                                   fontWeight:

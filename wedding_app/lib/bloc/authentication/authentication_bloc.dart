@@ -18,8 +18,8 @@ class AuthenticationBloc
 
   AuthenticationBloc(
       {@required UserRepository userRepository,
-        @required UserWeddingRepository userWeddingRepository,
-        @required WeddingRepository weddingRepository})
+      @required UserWeddingRepository userWeddingRepository,
+      @required WeddingRepository weddingRepository})
       : assert(userRepository != null),
         assert(userWeddingRepository != null),
         assert(weddingRepository != null),
@@ -73,8 +73,7 @@ class AuthenticationBloc
     if (userWedding.weddingId == null) {
       yield WeddingNull(user);
     } else {
-      Wedding wedding =
-      await _weddingRepository.getWeddingById(userWedding.weddingId);
+      Wedding wedding = await _weddingRepository.getWeddingById(userWedding.weddingId);
       SharedPreferences preferences = await SharedPreferences.getInstance();
       await preferences.setString("wedding_id", userWedding.weddingId);
       await preferences.setString(

@@ -4,7 +4,11 @@ import 'package:wedding_app/entity/task_entity.dart';
 import 'package:wedding_app/model/task_model.dart';
 import 'package:wedding_app/repository/task_repository.dart';
 
-class FirebaseTaskRepository implements TaskRepository {
+
+class FirebaseTaskRepository implements TaskRepository{
+
+  FirebaseTaskRepository();
+
   @override
   Future<void> addNewTask(Task task, String weddingID) {
     return FirebaseFirestore.instance
@@ -30,7 +34,7 @@ class FirebaseTaskRepository implements TaskRepository {
         .collection('wedding')
         .doc(weddingID)
         .collection("task")
-        .orderBy("due_date", descending: true)
+        .orderBy("due_date", descending: false)
         .snapshots()
         .map((snapshot) {
       return snapshot.docs
