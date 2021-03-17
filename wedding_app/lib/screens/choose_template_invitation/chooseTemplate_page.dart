@@ -220,6 +220,7 @@ class _ChooseTemplatePageState extends State<ChooseTemplatePage> {
             color: hexToColor("#d86a77"),
             child: Text("Đóng"),
             onPressed: (){
+              uploading = false;
               Navigator.of(_containerKey.currentContext).pop();
             }
         ),
@@ -247,6 +248,7 @@ class _ChooseTemplatePageState extends State<ChooseTemplatePage> {
             color: hexToColor("#d86a77"),
             child: Text("Đóng"),
             onPressed: (){
+              uploading = false;
               Navigator.of(_containerKey.currentContext).pop();
             }
         ),
@@ -522,6 +524,7 @@ class MyCardState extends State<MyCard>{
                       imageUrl = item.id;
 
                       return Stack(
+                        alignment: Alignment.bottomRight,
                         children: <Widget>[
                           InkWell(
                             onTap: (){
@@ -535,7 +538,17 @@ class MyCardState extends State<MyCard>{
                                   image: item.id),
                             ) ,
                           ),
-
+                          Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Container(
+                              child: FloatingActionButton.extended(
+                                  onPressed: ()=> downloadFile(imageUrl),
+                                  label: Text('Tải xuống'),
+                                icon: Icon(Icons.download_outlined),
+                                backgroundColor: hexToColor("#d86a77"),
+                              ),
+                            ),
+                          )
                         ],
                       );
                     }
@@ -545,12 +558,7 @@ class MyCardState extends State<MyCard>{
           },
         ),
     ),
-      floatingActionButton: hasCard? FloatingActionButton.extended(
-        onPressed: ()=> downloadFile(imageUrl),
-        label: Text('Tải xuống'),
-        icon: Icon(Icons.download_outlined),
-        backgroundColor: hexToColor("#d86a77"),
-      ): null
+
     );
   }
 }
