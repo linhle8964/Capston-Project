@@ -174,8 +174,8 @@ class _ChooseTemplatePageState extends State<ChooseTemplatePage> {
       String weddingId = prefs.getString('wedding_id');
       id = weddingId;
     });
-    for (var img in _image){
 
+      var img = _image[_image.length-1];
       int bytes = await img.length();
       print ('legth: ' +bytes.toString());
       if(bytes > 5242880 ){
@@ -194,7 +194,7 @@ class _ChooseTemplatePageState extends State<ChooseTemplatePage> {
             .collection('wedding/$id/invitation_card').doc('1')
             .set({"url": downloadUrl, "name": imgName}).whenComplete(() => showMyAlertDialog(context));
       }
-    }
+
   }
   Future<bool> _requestPermission(Permission permission) async {
     if (await permission.isGranted) {
