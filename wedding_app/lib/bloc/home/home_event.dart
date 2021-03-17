@@ -9,7 +9,7 @@ abstract class HomeEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class LoadHome extends Equatable {
+class LoadHome extends HomeEvent {
   final String weddingId;
 
   LoadHome(this.weddingId);
@@ -17,3 +17,5 @@ class LoadHome extends Equatable {
   @override
   List<Object> get props => [weddingId];
 }
+
+class HomeLoading extends HomeEvent{}

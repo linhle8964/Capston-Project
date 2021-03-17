@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wedding_app/bloc/checklist/bloc.dart';
+import 'package:wedding_app/bloc/guests/bloc.dart';
 import 'package:wedding_app/bloc/user_wedding/bloc.dart';
 import 'package:wedding_app/bloc/wedding/bloc.dart';
+import 'package:wedding_app/firebase_repository/firebase_task_repository.dart';
+import 'package:wedding_app/firebase_repository/guest_firebase_repository.dart';
 import 'package:wedding_app/screens/budget/budget_page.dart';
 import 'package:wedding_app/screens/checklist/checklist_page.dart';
 import 'package:wedding_app/screens/guest/view_guest_page.dart';
@@ -43,6 +47,16 @@ class _NavigatorPageState extends State<NavigatorPage> {
         BlocProvider<UserWeddingBloc>(
           create: (BuildContext context) => UserWeddingBloc(
             userWeddingRepository: FirebaseUserWeddingRepository(),
+          ),
+        ),
+        BlocProvider<ChecklistBloc>(
+          create: (BuildContext context) => ChecklistBloc(
+            taskRepository: FirebaseTaskRepository(),
+          ),
+        ),
+        BlocProvider<GuestsBloc>(
+          create: (BuildContext context) => GuestsBloc(
+            guestsRepository: FirebaseGuestRepository(),
           ),
         )
       ],
