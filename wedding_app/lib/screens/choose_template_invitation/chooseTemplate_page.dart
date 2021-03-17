@@ -38,7 +38,7 @@ class _ChooseTemplatePageState extends State<ChooseTemplatePage> {
   bool uploading = false;
   List<File> _image=[];
   final picker = ImagePicker();
-
+  bool loading = false;
   @override
   Widget build(BuildContext context) {
     return
@@ -79,7 +79,7 @@ class _ChooseTemplatePageState extends State<ChooseTemplatePage> {
                   new MyCard(isCreate: isCreate,),
                   new CardList(),
                   SingleChildScrollView(
-                    child: Center(
+                    child: loading == false ? Center(
                         child: Column(
                           children: <Widget>[
                             Padding(
@@ -136,6 +136,11 @@ class _ChooseTemplatePageState extends State<ChooseTemplatePage> {
                             )
                           ],
                         )
+                    ):Padding(
+                      padding: const EdgeInsets.fromLTRB(100, 180, 90, 0),
+                      child: Container(
+                          child: LoadingIndicator()
+                      ),
                     ),
                   ),
                 ],
@@ -146,11 +151,17 @@ class _ChooseTemplatePageState extends State<ChooseTemplatePage> {
   chooseImage() async{
     if (await _requestPermission(Permission.storage)) {
       final pickedFile = await picker.getImage(source: ImageSource.gallery);
-      setState(() {
-        _image.add(File(pickedFile?.path));
+      int bytes = await File(pickedFile?.path).length();
+      if(bytes > 5242880 ){
+        showMyError2Dialog(context);
+      }else{
+        setState(() {
+          _image.add(File(pickedFile?.path));
+        });
+        if (pickedFile.path == null) retriverLostData();
+      }
 
-      });
-      if (pickedFile.path == null) retriverLostData();
+
     }
   }
   Future<void> retriverLostData () async {
@@ -167,6 +178,10 @@ class _ChooseTemplatePageState extends State<ChooseTemplatePage> {
     }
   }
   Future uploadFile() async{
+    setState(() {
+      loading = true;
+
+    });
     int i=1;
     String id = '';
     SharedPreferences.getInstance().then((prefs){
@@ -176,24 +191,20 @@ class _ChooseTemplatePageState extends State<ChooseTemplatePage> {
     });
 
       var img = _image[_image.length-1];
-      int bytes = await img.length();
-      print ('legth: ' +bytes.toString());
-      if(bytes > 5242880 ){
-        showMyError2Dialog(context);
-      }else{
-        var storage = FirebaseStorage.instance;
-
-        final Directory systemTempDir = Directory.systemTemp;
-        final file = File('${systemTempDir.path}/demo.jpeg');
-        String imgName = 'IMG_${DateTime.now().microsecondsSinceEpoch}';
-
-        TaskSnapshot taskSnapshot =
-        await storage.ref('invitation_card/$imgName').putFile(img);
-        final String downloadUrl = await taskSnapshot.ref.getDownloadURL();
-        await FirebaseFirestore.instance
+      var storage = FirebaseStorage.instance;
+      final Directory systemTempDir = Directory.systemTemp;
+      final file = File('${systemTempDir.path}/demo.jpeg');
+      String imgName = 'IMG_${DateTime.now().microsecondsSinceEpoch}';
+      TaskSnapshot taskSnapshot =
+      await storage.ref('invitation_card/$imgName').putFile(img);
+      final String downloadUrl = await taskSnapshot.ref.getDownloadURL();
+      await FirebaseFirestore.instance
             .collection('wedding/$id/invitation_card').doc('1')
             .set({"url": downloadUrl, "name": imgName}).whenComplete(() => showMyAlertDialog(context));
-      }
+    setState(() {
+      loading = false;
+
+    });
 
   }
   Future<bool> _requestPermission(Permission permission) async {

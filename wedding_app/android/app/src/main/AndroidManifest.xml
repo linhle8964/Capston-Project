@@ -13,6 +13,7 @@
     <application
         android:name="io.flutter.app.FlutterApplication"
         android:label="wedding_app"
+        android:largeHeap="true"
         android:requestLegacyExternalStorage="true"
         android:icon="@mipmap/ic_launcher">
         <activity
