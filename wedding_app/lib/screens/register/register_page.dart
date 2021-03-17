@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:wedding_app/bloc/register/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wedding_app/utils/alert_dialog.dart';
+import 'package:wedding_app/utils/hex_color.dart';
 import 'package:wedding_app/utils/show_snackbar.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -135,7 +136,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                           ? "Ẩn Mật khẩu"
                                           : "Hiện Mật Khẩu",
                                       style: TextStyle(
-                                          color: Colors.blue,
+                                          color: hexToColor("#d86a77"),
                                           fontSize: 13,
                                           fontWeight: FontWeight.bold),
                                     ),
@@ -151,7 +152,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
                                     primary: isRegisterButtonEnabled(state)
-                                        ? Colors.blue
+                                        ? hexToColor("#d86a77")
                                         : Colors.grey,
                                   ),
                                   onPressed: () =>
@@ -181,7 +182,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                       Text(
                                         'Đã có tài khoản? Đăng Nhập ngay',
                                         style: TextStyle(
-                                            color: Colors.blue, fontSize: 16),
+                                            color: hexToColor("#d86a77"),
+                                            fontSize: 16),
                                       ),
                                     ],
                                   ),

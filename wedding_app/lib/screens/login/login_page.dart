@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wedding_app/bloc/login/bloc.dart';
 import 'package:wedding_app/bloc/authentication/bloc.dart';
 import 'package:wedding_app/utils/alert_dialog.dart';
+import 'package:wedding_app/utils/hex_color.dart';
 import 'package:wedding_app/utils/show_snackbar.dart';
 
 class LoginPage extends StatefulWidget {
@@ -125,7 +126,7 @@ class _LoginPageState extends State<LoginPage> {
                             child: Text(
                               _showPass ? "Ẩn Mật khẩu" : "Hiện Mật Khẩu",
                               style: TextStyle(
-                                  color: Colors.blue,
+                                  color: hexToColor("#d86a77"),
                                   fontSize: 13,
                                   fontWeight: FontWeight.bold),
                             ),
@@ -141,7 +142,7 @@ class _LoginPageState extends State<LoginPage> {
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             primary: isLoginButtonEnabled(state)
-                                ? Colors.blue
+                                ? hexToColor("#d86a77")
                                 : Colors.grey,
                           ),
                           onPressed: () => isLoginButtonEnabled(state)
@@ -168,8 +169,8 @@ class _LoginPageState extends State<LoginPage> {
                             children: [
                               Text(
                                 'Chưa có tài khoản? Đăng Kí ngay',
-                                style:
-                                    TextStyle(color: Colors.blue, fontSize: 16),
+                                style: TextStyle(
+                                    color: hexToColor("#d86a77"), fontSize: 16),
                               ),
                             ],
                           ),
@@ -186,8 +187,8 @@ class _LoginPageState extends State<LoginPage> {
                           children: <Widget>[
                             Text(
                               "Quên Mật Khẩu?",
-                              style:
-                                  TextStyle(fontSize: 15, color: Colors.blue),
+                              style: TextStyle(
+                                  fontSize: 15, color: hexToColor("#d86a77")),
                             ),
                           ],
                         ),
