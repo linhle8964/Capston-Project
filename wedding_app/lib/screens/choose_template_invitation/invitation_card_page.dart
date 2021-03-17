@@ -89,7 +89,7 @@ class _InvitationCardPageState extends State<InvitationCardPage> {
                       child: Stack(
                         children: <Widget>[
                           Container(
-                            margin: EdgeInsets.all(3),
+                            margin: EdgeInsets.all(0),
                             child: FadeInImage.memoryNetwork(
                                 width: screenSide.width,
                                 height: screenSide.height,

@@ -49,6 +49,16 @@ class _FillInfoPageState extends State<FillInfoPage> {
       initialDate: selectedDate,
       firstDate: DateTime(DateTime.now().year - 3),
       lastDate: DateTime(DateTime.now().year + 3),
+        builder: (BuildContext context, Widget child) {
+          return Theme(
+            data: ThemeData.light().copyWith(
+              colorScheme: ColorScheme.light().copyWith(
+                primary: hexToColor("#d86a77"),
+              ),
+            ),
+            child: child,
+          );
+        }
     );
     if (d != null){
       setState(() {
@@ -66,6 +76,16 @@ class _FillInfoPageState extends State<FillInfoPage> {
       initialTime: TimeOfDay.fromDateTime(_selectedTime != 'Chọn giờ: '
           ? new DateFormat("hh:mm").parse(_selectedTime)
           : DateTime.now()),
+        builder: (BuildContext context, Widget child) {
+          return Theme(
+            data: ThemeData.light().copyWith(
+              colorScheme: ColorScheme.light().copyWith(
+                primary: hexToColor("#d86a77"),
+              ),
+            ),
+            child: child,
+          );
+        }
     );
     if (time != null)
       setState(() {
@@ -225,9 +245,9 @@ class _FillInfoPageState extends State<FillInfoPage> {
       final alphanum = RegExp(r'^[^\,!@#$%^&*()_+=-]+$');
       final date = RegExp(r'^[^\,!@#$%^&*()_+=]+$');
       DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
-      if (_brideNameController.text.length > 32  ){
+      if (_brideNameController.text.length > 20  ){
         _brideNameInvalid = true;
-        _errorMess = 'Số lượng kí tự quá 32 kí tự';
+        _errorMess = 'Số lượng kí tự quá 20 kí tự';
       }else if(_brideNameController.text.length < 2 && _brideNameController.text.length>0){
       _brideNameInvalid = true;
       _errorMess= 'Số lượng kí tự ít hơn 2 kí tự';
@@ -244,9 +264,9 @@ class _FillInfoPageState extends State<FillInfoPage> {
         _brideNameInvalid = false;
       }
 
-      if (_groomNameController.text.length > 32  ){
+      if (_groomNameController.text.length > 20  ){
         _groomNameInvalid = true;
-        _errorMess = 'Số lượng kí tự quá 32 kí tự';
+        _errorMess = 'Số lượng kí tự quá 20 kí tự';
       }else if(_groomNameController.text.length < 2 && _groomNameController.text.length>0){
         _groomNameInvalid = true;
         _errorMess= 'Số lượng kí tự ít hơn 2 kí tự';
@@ -263,9 +283,9 @@ class _FillInfoPageState extends State<FillInfoPage> {
         _groomNameInvalid = false;
       }
 
-      if (_placeController.text.length > 32  ){
+      if (_placeController.text.length > 20  ){
         _placeInvalid = true;
-        _errorMess = 'Số lượng kí tự quá 32 kí tự';
+        _errorMess = 'Số lượng kí tự quá 20 kí tự';
       }else if(_placeController.text.length < 2 && _placeController.text.length>0){
         _placeInvalid = true;
         _errorMess= 'Số lượng kí tự ít hơn 2 kí tự';

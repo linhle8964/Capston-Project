@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
@@ -174,18 +175,25 @@ class _ChooseTemplatePageState extends State<ChooseTemplatePage> {
       id = weddingId;
     });
     for (var img in _image){
-      print(id);
-      var storage = FirebaseStorage.instance;
-      final Directory systemTempDir = Directory.systemTemp;
-      final file = File('${systemTempDir.path}/demo.jpeg');
-      String imgName = 'IMG_${DateTime.now().microsecondsSinceEpoch}';
 
-      TaskSnapshot taskSnapshot =
-      await storage.ref('invitation_card/$imgName').putFile(img);
-      final String downloadUrl = await taskSnapshot.ref.getDownloadURL();
-      await FirebaseFirestore.instance
-          .collection('wedding/$id/invitation_card').doc('1')
-          .set({"url": downloadUrl, "name": imgName}).whenComplete(() => showMyAlertDialog(context));
+      int bytes = await img.length();
+      print ('legth: ' +bytes.toString());
+      if(bytes > 5242880 ){
+        showMyError2Dialog(context);
+      }else{
+        var storage = FirebaseStorage.instance;
+
+        final Directory systemTempDir = Directory.systemTemp;
+        final file = File('${systemTempDir.path}/demo.jpeg');
+        String imgName = 'IMG_${DateTime.now().microsecondsSinceEpoch}';
+
+        TaskSnapshot taskSnapshot =
+        await storage.ref('invitation_card/$imgName').putFile(img);
+        final String downloadUrl = await taskSnapshot.ref.getDownloadURL();
+        await FirebaseFirestore.instance
+            .collection('wedding/$id/invitation_card').doc('1')
+            .set({"url": downloadUrl, "name": imgName}).whenComplete(() => showMyAlertDialog(context));
+      }
     }
   }
   Future<bool> _requestPermission(Permission permission) async {
@@ -227,7 +235,33 @@ class _ChooseTemplatePageState extends State<ChooseTemplatePage> {
     );
 
   }
+  showMyError2Dialog(BuildContext context) {
+    // Create AlertDialog
+    GlobalKey _containerKey= GlobalKey();
+    AlertDialog dialog = AlertDialog(
+      key: _containerKey,
+      title: Text("Ảnh có dung lượng quá lớn"),
+      content: Text("Bạn cần chọn ảnh có dung lượng nhỏ hơn 5MB"),
+      actions: [
+        FlatButton(
+            color: hexToColor("#d86a77"),
+            child: Text("Đóng"),
+            onPressed: (){
+              Navigator.of(_containerKey.currentContext).pop();
+            }
+        ),
+      ],
+    );
 
+    // Call showDialog function to show dialog.
+    Future<String> futureValue = showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return dialog;
+        }
+    );
+
+  }
   showMyAlertDialog(BuildContext context) {
     // Create AlertDialog
     GlobalKey _containerKey= GlobalKey();
@@ -277,6 +311,7 @@ class MyCardState extends State<MyCard>{
   final Dio dio = Dio();
   bool loading = false;
   double progress = 0;
+  bool hasCard = true;
 
   Future<bool> saveImage(String url, String fileName) async {
     Directory directory;
@@ -442,6 +477,7 @@ class MyCardState extends State<MyCard>{
               _invitationCard = state.invitations;
 
               if(_invitationCard.length == 0 && isCreate == false){
+                hasCard = false;
                 return Padding(
                   padding: const EdgeInsets.fromLTRB(30, 40, 30, 0),
                   child: Center(
@@ -509,12 +545,12 @@ class MyCardState extends State<MyCard>{
           },
         ),
     ),
-      floatingActionButton: FloatingActionButton.extended(
+      floatingActionButton: hasCard? FloatingActionButton.extended(
         onPressed: ()=> downloadFile(imageUrl),
         label: Text('Tải xuống'),
         icon: Icon(Icons.download_outlined),
         backgroundColor: hexToColor("#d86a77"),
-      )
+      ): null
     );
   }
 }
