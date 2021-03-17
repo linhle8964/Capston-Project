@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="f3e24abf-ec34-481a-919d-25be2615c827" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/assets/B&amp;G.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/favicon-32x32.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/thanks.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/wedding_background_1.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/weddingcard.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/bloc/guests/bloc.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/bloc/guests/guests_bloc.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/bloc/guests/guests_event.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/bloc/guests/guests_state.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/bloc/simple_bloc_observer.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/bloc/wedding/bloc.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/bloc/wedding/wedding_bloc.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/bloc/wedding/wedding_event.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/bloc/wedding/wedding_state.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/entity/guest_entity.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/entity/user_wedding_entity.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/entity/wedding_entity.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/firebase_repository/guest_firebase_repository.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/firebase_repository/wedding_firebase_repository.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/model/guest.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/model/user_wedding.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/model/wedding.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/repository/guests_repository.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/repository/wedding_repository.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/screen/views/error/error_page.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/screen/views/home/home_view.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/screen/views/home/home_view_desktop.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/screen/views/home/home_view_tablet_mobile.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/screen/views/input_details/choose_to_come.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/screen/views/input_details/input_detail_desktop.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/screen/views/input_details/input_details.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/screen/views/input_details/input_details_mobile_tablet.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/screen/views/success/success_page.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/screen/widgets/centered_view/centered_view.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/screen/widgets/details_input/details_input.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/screen/widgets/details_input/drop_down.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/screen/widgets/details_input/people_number_field.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/screen/widgets/details_input/submit_button.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/screen/widgets/details_input/text_field.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/screen/widgets/image_show/image_show.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/screen/widgets/phone_input/phone_input.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/util/globle_variable.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/util/validation.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/util/wedding_guest_router_delegate.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/util/wedding_route_information_parser.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/util/wedding_route_path.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/diary_card.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/diary_entry_button.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/diary_entry_model.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/diary_entry_page.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/emoji_helpers.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/pop_up_menu.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/top_bar_title.dart" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/index.html" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1pWA1Xkl20uAvgRNmU9VpfeHd1Z" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="android.sdk.path" value="$USER_HOME$/AppData/Local/Android/Sdk" />
+    <property name="dart.analysis.tool.window.visible" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="show.migrate.to.gradle.popup" value="false" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\GIT\wedding_response\lib" />
+      <recent name="E:\GIT\wedding_response\lib\screen\widgets\details_input" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\GIT\wedding_response\lib\bloc" />
+      <recent name="E:\GIT\wedding_response\lib\repository" />
+      <recent name="E:\GIT\wedding_response\lib\firebase_repository" />
+      <recent name="E:\GIT\wedding_response\lib\entity" />
+      <recent name="E:\GIT\wedding_response\lib\model" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="main.dart" type="FlutterRunConfigurationType" factoryName="Flutter">
+      <option name="filePath" value="$PROJECT_DIR$/lib/main.dart" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="f3e24abf-ec34-481a-919d-25be2615c827" name="Default Changelist" comment="" />
+      <created>1615288257480</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1615288257480</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="240" y="165" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1615801456188">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="240" y="165" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1366.728@0.0.1366.728" timestamp="1615801456188" />
+    <state x="488" y="79" key="#com.intellij.ide.util.MemberChooser" timestamp="1615984014324">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="488" y="79" key="#com.intellij.ide.util.MemberChooser/0.0.1366.728@0.0.1366.728" timestamp="1615984014324" />
+    <state x="413" y="110" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1615827611837">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="413" y="110" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1366.728@0.0.1366.728" timestamp="1615827611837" />
+    <state x="100" y="100" width="777" height="528" key="AVDManager" timestamp="1615642929247">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="100" y="100" width="777" height="528" key="AVDManager/0.0.1366.728@0.0.1366.728" timestamp="1615642929247" />
+    <state x="463" y="118" key="FileChooserDialogImpl" timestamp="1615955473089">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="463" y="118" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1615955473089" />
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1615828606285">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1615828606285" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="Dart">
+          <url>file://$PROJECT_DIR$/lib/screen/views/home/home_view.dart</url>
+          <line>61</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>
