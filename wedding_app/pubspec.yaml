@@ -36,7 +36,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
     # Add Sign in method for google and facebook
-  google_sign_in: ^5.0.0
+  google_sign_in: ^4.5.9
   # bloc dependencies
   flutter_bloc: ^6.1.3
   bloc: ^6.1.3
