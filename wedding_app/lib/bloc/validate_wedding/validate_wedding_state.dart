@@ -1,50 +1,66 @@
 import 'package:meta/meta.dart';
+import 'package:equatable/equatable.dart';
 
 @immutable
-class CreateWeddingState {
+class ValidateWeddingState extends Equatable{
   final bool isGroomNameValid;
   final bool isBrideNameValid;
   final bool isAddressValid;
+  final bool isBudgetValid;
 
   bool get isFormValid =>
-      isGroomNameValid && isBrideNameValid && isAddressValid;
+      isGroomNameValid && isBrideNameValid && isAddressValid && isBudgetValid;
 
-  CreateWeddingState({
+  ValidateWeddingState({
     @required this.isGroomNameValid,
     @required this.isBrideNameValid,
     @required this.isAddressValid,
+    @required this.isBudgetValid,
   });
 
-  factory CreateWeddingState.empty() {
-    return CreateWeddingState(
+  factory ValidateWeddingState.empty() {
+    return ValidateWeddingState(
       isGroomNameValid: true,
       isBrideNameValid: true,
       isAddressValid: true,
+      isBudgetValid: true,
     );
   }
 
-  CreateWeddingState update({
+  factory ValidateWeddingState.submitting() {
+    return ValidateWeddingState(
+      isGroomNameValid: true,
+      isBrideNameValid: true,
+      isAddressValid: true,
+      isBudgetValid: true,
+    );
+  }
+
+  ValidateWeddingState update({
     bool isGroomNameValid,
     bool isBrideNameValid,
     bool isAddressValid,
+    bool isBudgetValid,
   }) {
     return copyWith(
       isGroomNameValid: isGroomNameValid,
       isBrideNameValid: isBrideNameValid,
       isAddressValid: isAddressValid,
+      isBudgetValid: isBudgetValid,
     );
   }
 
-  CreateWeddingState copyWith({
+  ValidateWeddingState copyWith({
     bool isGroomNameValid,
     bool isBrideNameValid,
     bool isAddressValid,
-    bool isSubmitEnabled,
+    bool isBudgetValid,
   }) {
-    return CreateWeddingState(
+    return ValidateWeddingState(
       isGroomNameValid: isGroomNameValid ?? this.isGroomNameValid,
       isBrideNameValid: isBrideNameValid ?? this.isBrideNameValid,
       isAddressValid: isAddressValid ?? this.isAddressValid,
+      isBudgetValid: isBudgetValid ?? this.isBudgetValid,
     );
   }
 
@@ -54,6 +70,10 @@ class CreateWeddingState {
       isGroomNameValid: $isGroomNameValid,
       isBrideNameValid: $isBrideNameValid,
       isAddressValid : $isAddressValid,
+      isBudgetValid : $isBudgetValid,
     }''';
   }
+
+  @override
+  List<Object> get props => [isGroomNameValid, isBrideNameValid, isAddressValid, isBudgetValid];
 }

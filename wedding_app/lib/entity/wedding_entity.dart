@@ -25,28 +25,28 @@ class WeddingEntity extends Equatable {
 
   @override
   List<Object> get props => [
-        id,
-        brideName,
-        groomName,
-        weddingDate,
-        budget,
-        image,
-        dateCreated,
-        address,
-        modifiedDate,
-      ];
+    id,
+    brideName,
+    groomName,
+    weddingDate,
+    budget,
+    image,
+    dateCreated,
+    address,
+    modifiedDate,
+  ];
 
   Map<String, Object> toJson() {
     return {
       "id": id,
       "bride_name": brideName,
       "groom_name": groomName,
-      "wedding_date": weddingDate,
+      "wedding_date": weddingDate.millisecondsSinceEpoch,
       "budget": budget,
       "image": image,
-      "date_created": dateCreated,
+      "date_created": dateCreated.millisecondsSinceEpoch,
       "address": address,
-      "modified_date": modifiedDate,
+      "modified_date": modifiedDate.millisecondsSinceEpoch,
     };
   }
 
@@ -60,12 +60,12 @@ class WeddingEntity extends Equatable {
       json["id"] as String,
       json["bride_name"] as String,
       json["groom_name"] as String,
-      (json["wedding_date"] as Timestamp).toDate(),
+      DateTime.fromMillisecondsSinceEpoch((json["wedding_date"])),
       json["budget"] as double,
       json["image"] as String,
-      (json["date_created"] as Timestamp).toDate(),
+      DateTime.fromMillisecondsSinceEpoch((json["date_created"])),
       json["address"] as String,
-      (json["modified_date"] as Timestamp).toDate(),
+      DateTime.fromMillisecondsSinceEpoch((json["modified_date"])),
     );
   }
 

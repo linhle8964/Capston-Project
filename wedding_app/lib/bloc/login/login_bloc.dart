@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:wedding_app/firebase_repository/user_firebase_repository.dart';
 import 'package:wedding_app/repository/user_repository.dart';
 import 'bloc.dart';
 import 'package:rxdart/rxdart.dart';
@@ -58,8 +59,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       await _userRepository.signInWithGoogle();
       yield LoginState.success();
     } catch (e) {
-      print("[ERROR]" + e);
-      yield LoginState.failure();
+      print("[ERROR] : $e");
+      yield LoginState.failure(message: "Có lỗi xảy ra");
     }
   }
 
@@ -69,11 +70,29 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }) async* {
     yield LoginState.loading();
     try {
-      await _userRepository.signInWithCredentials(email, password);
-      yield LoginState.success();
-    } catch (e) {
-      print("[ERROR]" + e);
-      yield LoginState.failure();
+      final user = await _userRepository.signInWithCredentials(email, password);
+      if (user == null) {
+        yield LoginState.failure(message: "Có lỗi xảy ra");
+      } else {
+        if (!user.emailVerified) {
+          yield LoginState.failure(message: "Bạn chưa xác nhận email");
+        } else {
+          yield LoginState.success();
+        }
+      }
+    } on EmailNotFoundException{
+      yield LoginState.failure(message: "Tài khoản không tồn tại");
+    } on WrongPasswordException{
+      yield LoginState.failure(message: "Sai mật khẩu");
+    } on TooManyRequestException{
+      yield LoginState.failure(
+          message:
+          "Bạn đã đăng nhập quá nhiều lần. Hãy thử lại trong giây lát");
+    } on FirebaseException{
+      yield LoginState.failure(message: "Có lỗi xảy ra");
+    }catch (e) {
+      print("[ERROR] : $e");
+      yield LoginState.failure(message: "Có lỗi xảy ra");
     }
   }
 }

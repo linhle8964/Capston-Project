@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:bloc/bloc.dart';
 import 'package:wedding_app/model/user_wedding.dart';
@@ -6,6 +7,7 @@ import 'package:wedding_app/repository/user_wedding_repository.dart';
 import 'package:wedding_app/repository/wedding_repository.dart';
 import 'bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class WeddingBloc extends Bloc<WeddingEvent, WeddingState> {
   final WeddingRepository _weddingRepository;
@@ -33,6 +35,8 @@ class WeddingBloc extends Bloc<WeddingEvent, WeddingState> {
       yield* _mapWeddingUpdatedToState(event);
     } else if (event is LoadWeddingByUser) {
       yield* _mapLoadWeddingByUserToState(event);
+    } else if (event is LoadWeddingById) {
+      yield* _mapLoadWeddingByIdToState(event);
     }
   }
 
@@ -68,7 +72,17 @@ class WeddingBloc extends Bloc<WeddingEvent, WeddingState> {
   }
 
   Stream<WeddingState> _mapUpdateWeddingToState(UpdateWedding event) async* {
-    _weddingRepository.updateWedding(event.wedding);
+    yield Loading("Đang xử lý dữ liệu");
+    try {
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      _weddingRepository.updateWedding(event.wedding).then((value) async =>
+          preferences.setString(
+              "wedding", jsonEncode(event.wedding.toEntity().toJson())));
+      yield Success("Chỉnh sửa thành công");
+    } catch (e) {
+      print("[ERROR]" + e);
+      yield Failed("Có lỗi xảy ra");
+    }
   }
 
   Stream<WeddingState> _mapDeleteWeddingToState(DeleteWedding event) async* {
@@ -77,7 +91,7 @@ class WeddingBloc extends Bloc<WeddingEvent, WeddingState> {
       _weddingRepository.deleteWedding(event.weddingId).then((value) async {
         _userWeddingRepository.deleteAllUserWeddingByWedding(event.weddingId);
       });
-      yield Success("Xoá thành công thành công");
+      yield Success("Xoá thành công");
     } catch (e) {
       print("[ERROR]" + e);
       yield Failed("Có lỗi xảy ra");
@@ -86,6 +100,19 @@ class WeddingBloc extends Bloc<WeddingEvent, WeddingState> {
 
   Stream<WeddingState> _mapWeddingUpdatedToState(WeddingUpdated event) async* {
     yield WeddingLoaded(event.wedding);
+  }
+
+  Stream<WeddingState> _mapLoadWeddingByIdToState(
+      LoadWeddingById event) async* {
+    String weddingId = event.weddingId;
+    if (weddingId == null || weddingId == "") {
+      yield Failed("Có lỗi xảy ra");
+    } else {
+      _streamSubscription?.cancel();
+      _streamSubscription = _weddingRepository
+          .getWedding(event.weddingId)
+          .listen((wedding) => add(WeddingUpdated(wedding)));
+    }
   }
 
   @override

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 showSuccessAlertDialog(
     BuildContext context, String title, String message, Function function) {
   // set up the button
-  Widget okButton = FlatButton(
+  Widget okButton = TextButton(
     child: Text("OK"),
     onPressed: function,
   );

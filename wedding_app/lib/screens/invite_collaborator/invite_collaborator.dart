@@ -142,11 +142,13 @@ class InviteCollaboratorPage extends StatelessWidget {
                       child: SizedBox(
                         width: double.infinity,
                         height: 30,
-                        child: RaisedButton(
-                          color: hexToColor("#d86a77"),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18.0),
-                              side: BorderSide(color: Colors.red)),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary: hexToColor("#d86a77"),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18.0),
+                                side: BorderSide(color: Colors.red)),
+                          ),
                           onPressed: () => _submit(context, role),
                           child: Text(
                             'Gửi lời mời ',

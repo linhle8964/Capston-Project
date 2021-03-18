@@ -2,6 +2,12 @@ import 'package:wedding_app/repository/user_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+class EmailNotFoundException implements Exception{}
+class WrongPasswordException implements Exception{}
+class TooManyRequestException implements Exception{}
+class EmailAlreadyInUseException implements Exception{}
+class FirebaseException implements Exception{}
+
 class FirebaseUserRepository extends UserRepository {
   final FirebaseAuth _firebaseAuth;
   final GoogleSignIn _googleSignIn;
@@ -27,15 +33,36 @@ class FirebaseUserRepository extends UserRepository {
 
   @override
   Future<User> signInWithCredentials(String email, String password) async {
-    final UserCredential userCredential = await _firebaseAuth
-        .signInWithEmailAndPassword(email: email, password: password)
-        .catchError((onError) => {print('[Firebase Log In Error] : $onError')});
+    try {
+      final UserCredential userCredential = await _firebaseAuth
+          .signInWithEmailAndPassword(email: email, password: password);
 
-    final User user = userCredential.user;
-
-    if (user != null) {
-      return user;
+      final user = userCredential.user;
+      if (user != null) {
+        if (!user.emailVerified) {
+          user.sendEmailVerification();
+        }
+        return user;
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        print(e.message);
+        throw EmailNotFoundException;
+      } else if (e.code == 'wrong-password') {
+        print(e.message);
+        throw WrongPasswordException();
+      } else if (e.code == 'too-many-requests') {
+        print(e.message);
+        throw TooManyRequestException();
+      } else {
+        print(e.code);
+        throw FirebaseException();
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception("Có lỗi xảy ra");
     }
+
     return null;
   }
 
@@ -59,6 +86,7 @@ class FirebaseUserRepository extends UserRepository {
     final User user = userCredential.user;
 
     if (user != null) {
+      if (!user.emailVerified) user.sendEmailVerification();
       return user;
     }
 
@@ -72,16 +100,38 @@ class FirebaseUserRepository extends UserRepository {
 
   @override
   Future<User> signUp({String email, String password}) async {
-    final UserCredential userCredential = await _firebaseAuth
-        .createUserWithEmailAndPassword(email: email, password: password)
-        .catchError(
-            (onError) => {print('[Firebase Sign Up Error] : $onError')});
+    try {
+      final UserCredential userCredential = await _firebaseAuth
+          .createUserWithEmailAndPassword(email: email, password: password);
 
-    final User user = userCredential.user;
+      final User user = userCredential.user;
 
-    if (user != null) {
-      return user;
+      if (user != null) {
+        user.sendEmailVerification();
+        return user;
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'email-already-in-use') {
+        throw EmailNotFoundException();
+      } else {
+        print(e.code);
+        throw FirebaseException();
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception("Có lỗi xảy ra");
     }
-    return null;
+
+  }
+
+  @override
+  Future<bool> isEmailVerified() async {
+    final currentUser = _firebaseAuth.currentUser;
+    return currentUser.emailVerified;
+  }
+
+  @override
+  Future<void> resetPassword(String email) async {
+    await _firebaseAuth.sendPasswordResetEmail(email: email);
   }
 }
