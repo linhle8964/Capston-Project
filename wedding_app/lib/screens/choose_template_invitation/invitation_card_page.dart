@@ -59,8 +59,7 @@ class _InvitationCardPageState extends State<InvitationCardPage> {
     return LayoutBuilder(builder: (context, constraints) {
       return OrientationBuilder(builder: (context, orientation) {
         SizerUtil().init(constraints, orientation);
-        return MaterialApp(
-            home: Scaffold(
+        return Scaffold(
           key: _scaffoldKey,
           appBar: AppBar(
             backgroundColor: hexToColor("#d86a77"),
@@ -233,7 +232,7 @@ class _InvitationCardPageState extends State<InvitationCardPage> {
               ],
             ),
           ),
-        ));
+        );
       });
     });
   }
@@ -246,8 +245,8 @@ class _InvitationCardPageState extends State<InvitationCardPage> {
       title: Text("Lưu lại"),
       content: Text("Bạn có muốn lưu lại mẫu thiệp này?"),
       actions: [
-        FlatButton(
-            color: hexToColor("#d86a77"),
+        TextButton(
+            style: TextButton.styleFrom(primary: hexToColor("#d86a77")),
             child: Text("Có"),
             onPressed: () {
               Navigator.of(_containerKey.currentContext).pop();
@@ -260,8 +259,10 @@ class _InvitationCardPageState extends State<InvitationCardPage> {
                   ),
                   (Route<dynamic> route) => false);
             }),
-        FlatButton(
-            color: hexToColor("#d86a77"),
+        TextButton(
+            style: TextButton.styleFrom(
+              primary: hexToColor("#d86a77"),
+            ),
             child: Text("Không"),
             onPressed: () {
               Navigator.of(_containerKey.currentContext).pop();

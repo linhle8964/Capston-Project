@@ -17,22 +17,24 @@ void main() {
     final String code = "O60ymX";
     MockInviteEmailRepository mockInviteEmailRepository;
     MockUserWeddingRepository mockUserWeddingRepository;
-    InviteEmailBloc inviteEmailBloc;
     setupFirebaseAuthMocks();
     setUpAll(() async {
       await Firebase.initializeApp();
       mockInviteEmailRepository = MockInviteEmailRepository();
       mockUserWeddingRepository = MockUserWeddingRepository();
-      inviteEmailBloc = InviteEmailBloc(
-          inviteEmailRepository: mockInviteEmailRepository,
-          userWeddingRepository: mockUserWeddingRepository);
     });
 
     blocTest("demo",
         build: () {
-          InviteEmail inviteEmail = new InviteEmail(id: "4Yj3S4Mz7cc5jQfZR2iT", code: code, to: "nangld290498@gmail.comh");
-          when(mockInviteEmailRepository.getInviteEmailByCode("O60ymX")).thenAnswer((_) async => inviteEmail);
-          return InviteEmailBloc(inviteEmailRepository: mockInviteEmailRepository, userWeddingRepository: mockUserWeddingRepository);
+          InviteEmail inviteEmail = new InviteEmail(
+              id: "4Yj3S4Mz7cc5jQfZR2iT",
+              code: code,
+              to: "nangld290498@gmail.comh");
+          when(mockInviteEmailRepository.getInviteEmailByCode("O60ymX"))
+              .thenAnswer((_) async => inviteEmail);
+          return InviteEmailBloc(
+              inviteEmailRepository: mockInviteEmailRepository,
+              userWeddingRepository: mockUserWeddingRepository);
         },
         act: (InviteEmailBloc bloc) async => bloc.add(SubmittedCode(code)),
         expect: [

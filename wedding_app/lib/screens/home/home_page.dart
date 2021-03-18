@@ -116,7 +116,7 @@ class _HomePageState extends State<HomePage> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  FlatButton(
+                                  TextButton(
                                     child: Container(
                                       padding: const EdgeInsets.all(5),
                                       child: Text(

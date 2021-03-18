@@ -116,7 +116,7 @@ class FirebaseUserRepository extends UserRepository {
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {
-        throw EmailNotFoundException();
+        throw EmailAlreadyInUseException();
       } else {
         print(e.code);
         throw FirebaseException();

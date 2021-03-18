@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-FlatButton buildButtonColumn(
+TextButton buildButtonColumn(
     Color color, IconData icon, String label, Function function) {
-  return FlatButton(
+  return TextButton(
     child: Column(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,

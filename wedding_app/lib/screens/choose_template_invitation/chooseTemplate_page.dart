@@ -40,148 +40,140 @@ class _ChooseTemplatePageState extends State<ChooseTemplatePage> {
   bool loading = false;
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: DefaultTabController(
-          length: 3,
-          child: Scaffold(
-              appBar: AppBar(
-                backgroundColor: hexToColor("#d86a77"),
-                leading: IconButton(
-                  icon: Icon(
-                    Icons.arrow_back,
-                    color: Colors.white,
-                  ),
-                  onPressed: () {
-                    Navigator.pushNamedAndRemoveUntil(
-                        context, "/", (route) => false);
-                  },
-                ),
-                bottom: TabBar(
-                  tabs: [
-                    Tab(
-                      child: Center(
-                          child: Text(
-                        'Thiệp mời của bạn',
-                        style: TextStyle(color: Colors.white),
-                      )),
-                    ),
-                    Tab(
-                      child: Center(
-                          child: Text(
-                        'Tạo Thiệp Mời',
-                        style: TextStyle(color: Colors.white),
-                      )),
-                    ),
-                    Tab(
-                      child: Center(
-                          child: Text('Tải Lên Thiệp Có Sẵn',
-                              style: TextStyle(color: Colors.white))),
-                    )
-                  ],
-                ),
-                title: Padding(
-                  padding: const EdgeInsets.fromLTRB(60, 0, 30, 0),
-                  child: Text(
-                    "THIỆP MỜI",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: hexToColor("#d86a77"),
+            leading: IconButton(
+              icon: Icon(
+                Icons.arrow_back,
+                color: Colors.white,
               ),
-              body: TabBarView(
-                children: [
-                  new MyCard(
-                    isCreate: isCreate,
-                  ),
-                  new CardList(),
-                  SingleChildScrollView(
-                    child: loading == false
-                        ? Center(
-                            child: Column(
-                            children: <Widget>[
-                              Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(0, 20, 0, 10),
-                                child: Text(
-                                  'Tải lên từ bộ sưu tập của bạn',
-                                  style: TextStyle(fontSize: 20),
-                                ),
-                              ),
-                              Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(0, 0, 0, 10),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: _image.length == 0
-                                        ? Container(
-                                            width: 250,
-                                            height: 350,
-                                            decoration: new BoxDecoration(
-                                              color: Colors.white,
-                                              border: new Border.all(
-                                                  color: Colors.black,
-                                                  width: 2.0),
-                                              borderRadius:
-                                                  new BorderRadius.circular(
-                                                      10.0),
-                                            ),
-                                            child: IconButton(
-                                              icon: Icon(Icons.add),
-                                              iconSize: 100,
-                                              onPressed: () => !uploading
-                                                  ? chooseImage()
-                                                  : null,
-                                            ),
-                                          )
-                                        : Container(
-                                            width: 250,
-                                            height: 350,
-                                            decoration: new BoxDecoration(
-                                                image: DecorationImage(
-                                                    image: FileImage(_image[
-                                                        _image.length - 1]),
-                                                    fit: BoxFit.cover)),
-                                            child: IconButton(
-                                              icon: Icon(Icons.add),
-                                              iconSize: 0,
-                                              onPressed: () => !uploading
-                                                  ? chooseImage()
-                                                  : null,
-                                            ),
-                                          ),
-                                  )),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(50, 10, 50, 0),
-                                child: SizedBox(
-                                    width: double.infinity,
-                                    height: 40,
-                                    child: FlatButton(
-                                      color: hexToColor("#d86a77"),
-                                      onPressed: _image.length > 0
-                                          ? () {
-                                              setState(() {
-                                                uploading = true;
-                                              });
-                                              uploadFile();
-                                              _image = [];
-                                            }
-                                          : null,
-                                      child: Text(
-                                        'Tải ảnh lên',
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 20),
-                                      ),
-                                    )),
-                              )
-                            ],
-                          ))
-                        : Padding(
-                            padding: const EdgeInsets.fromLTRB(100, 180, 90, 0),
-                            child: Container(child: LoadingIndicator()),
+              onPressed: () {
+                Navigator.pushNamedAndRemoveUntil(
+                    context, "/", (route) => false);
+              },
+            ),
+            bottom: TabBar(
+              tabs: [
+                Tab(
+                  child: Center(
+                      child: Text(
+                    'Thiệp mời của bạn',
+                    style: TextStyle(color: Colors.white),
+                  )),
+                ),
+                Tab(
+                  child: Center(
+                      child: Text(
+                    'Tạo Thiệp Mời',
+                    style: TextStyle(color: Colors.white),
+                  )),
+                ),
+                Tab(
+                  child: Center(
+                      child: Text('Tải Lên Thiệp Có Sẵn',
+                          style: TextStyle(color: Colors.white))),
+                )
+              ],
+            ),
+            title: Padding(
+              padding: const EdgeInsets.fromLTRB(60, 0, 30, 0),
+              child: Text(
+                "THIỆP MỜI",
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ),
+          body: TabBarView(
+            children: [
+              new MyCard(
+                isCreate: isCreate,
+              ),
+              new CardList(),
+              SingleChildScrollView(
+                child: loading == false
+                    ? Center(
+                        child: Column(
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 20, 0, 10),
+                            child: Text(
+                              'Tải lên từ bộ sưu tập của bạn',
+                              style: TextStyle(fontSize: 20),
+                            ),
                           ),
-                  ),
-                ],
-              ))),
+                          Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: _image.length == 0
+                                    ? Container(
+                                        width: 250,
+                                        height: 350,
+                                        decoration: new BoxDecoration(
+                                          color: Colors.white,
+                                          border: new Border.all(
+                                              color: Colors.black, width: 2.0),
+                                          borderRadius:
+                                              new BorderRadius.circular(10.0),
+                                        ),
+                                        child: IconButton(
+                                          icon: Icon(Icons.add),
+                                          iconSize: 100,
+                                          onPressed: () =>
+                                              !uploading ? chooseImage() : null,
+                                        ),
+                                      )
+                                    : Container(
+                                        width: 250,
+                                        height: 350,
+                                        decoration: new BoxDecoration(
+                                            image: DecorationImage(
+                                                image: FileImage(
+                                                    _image[_image.length - 1]),
+                                                fit: BoxFit.cover)),
+                                        child: IconButton(
+                                          icon: Icon(Icons.add),
+                                          iconSize: 0,
+                                          onPressed: () =>
+                                              !uploading ? chooseImage() : null,
+                                        ),
+                                      ),
+                              )),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(50, 10, 50, 0),
+                            child: SizedBox(
+                                width: double.infinity,
+                                height: 40,
+                                child: FlatButton(
+                                  color: hexToColor("#d86a77"),
+                                  onPressed: _image.length > 0
+                                      ? () {
+                                          setState(() {
+                                            uploading = true;
+                                          });
+                                          uploadFile();
+                                          _image = [];
+                                        }
+                                      : null,
+                                  child: Text(
+                                    'Tải ảnh lên',
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 20),
+                                  ),
+                                )),
+                          )
+                        ],
+                      ))
+                    : Padding(
+                        padding: const EdgeInsets.fromLTRB(100, 180, 90, 0),
+                        child: Container(child: LoadingIndicator()),
+                      ),
+              ),
+            ],
+          )),
     );
   }
 
@@ -292,8 +284,8 @@ class _ChooseTemplatePageState extends State<ChooseTemplatePage> {
       title: Text("Ảnh có dung lượng quá lớn"),
       content: Text("Bạn cần chọn ảnh có dung lượng nhỏ hơn 5MB"),
       actions: [
-        FlatButton(
-            color: hexToColor("#d86a77"),
+        TextButton(
+            style: TextButton.styleFrom(primary: hexToColor("#d86a77")),
             child: Text("Đóng"),
             onPressed: () {
               uploading = false;
@@ -318,8 +310,8 @@ class _ChooseTemplatePageState extends State<ChooseTemplatePage> {
       title: Text("Lưu lại"),
       content: Text("Mẫu thiệp mới của bạn đã được lưu lại!"),
       actions: [
-        FlatButton(
-            color: hexToColor("#d86a77"),
+        TextButton(
+            style: TextButton.styleFrom(primary: hexToColor("#d86a77")),
             child: Text("Hoàn thành"),
             onPressed: () {
               uploading = false;
@@ -444,8 +436,10 @@ class MyCardState extends State<MyCard> {
       content:
           Text("Bạn cần cấp quyền cho ứng dụng để thực hiện chức năng này!"),
       actions: [
-        FlatButton(
-            color: hexToColor("#d86a77"),
+        TextButton(
+            style: TextButton.styleFrom(
+              primary: hexToColor("#d86a77"),
+            ),
             child: Text("Đóng"),
             onPressed: () {
               Navigator.of(_containerKey.currentContext).pop();
@@ -469,8 +463,8 @@ class MyCardState extends State<MyCard> {
       title: Text("Lưu lại"),
       content: Text("Mẫu thiệp mới của bạn đã được lưu lại!"),
       actions: [
-        FlatButton(
-            color: hexToColor("#d86a77"),
+        TextButton(
+            style: TextButton.styleFrom(primary: hexToColor("#d86a77")),
             child: Text("Hoàn thành"),
             onPressed: () {
               Navigator.of(_containerKey.currentContext).pop();
@@ -656,7 +650,6 @@ class CardListState extends State<CardList> {
                         ],
                       );
                     });
-                ;
               })),
     );
   }

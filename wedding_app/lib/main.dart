@@ -56,7 +56,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
         providers: [
-
           BlocProvider<AuthenticationBloc>(create: (context) {
             return AuthenticationBloc(
               userRepository: FirebaseUserRepository(),
@@ -65,21 +64,18 @@ class MyApp extends StatelessWidget {
           }),
           BlocProvider<TemplateCardBloc>(create: (context) {
             return TemplateCardBloc(
-             templateCardRepository: FirebaseTemplateCardRepository()
-            );
+                templateCardRepository: FirebaseTemplateCardRepository());
           }),
           BlocProvider<InvitationCardBloc>(create: (context) {
             return InvitationCardBloc(
-                invitationCardRepository: FirebaseInvitationCardRepository()
-            );
+                invitationCardRepository: FirebaseInvitationCardRepository());
           }),
           BlocProvider<WeddingBloc>(create: (context) {
             return WeddingBloc(
-                userWeddingRepository: FirebaseUserWeddingRepository(),
-                weddingRepository: FirebaseWeddingRepository(),
+              userWeddingRepository: FirebaseUserWeddingRepository(),
+              weddingRepository: FirebaseWeddingRepository(),
             );
           }),
-
           BlocProvider<BudgetBloc>(
             create: (BuildContext context) => BudgetBloc(
               budgetRepository: FirebaseBudgetRepository(),
@@ -99,7 +95,6 @@ class MyApp extends StatelessWidget {
               )..add(AppStarted());
             },
           ),
-
         ],
         child: MaterialApp(
           initialRoute: '/',
@@ -151,7 +146,6 @@ class MyApp extends StatelessWidget {
               return BlocBuilder<AuthenticationBloc, AuthenticationState>(
                   builder: (context, state) {
                 if (state is Authenticated) {
-                  print("Authenticated");
                   return NavigatorPage();
                 } else if (state is Unauthenticated) {
                   return BlocProvider<LoginBloc>(
