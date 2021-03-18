@@ -18,7 +18,6 @@ import 'package:wedding_app/widgets/confirm_dialog.dart';
 import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:wedding_app/widgets/notification.dart';
 
-
 class SettingPage extends StatefulWidget {
   @override
   _SettingPageState createState() => _SettingPageState();
@@ -105,8 +104,7 @@ class _SettingPageState extends State<SettingPage> {
                           ? SettingItem(() {
                               Navigator.pushNamed(
                                   context, "/invite_collaborator");
-                            }, "Kết nối với người ấy")
-
+                            }, "Chia sẻ quyền quản lý")
                           : Container(),
                       SettingItem(null, "Ngôn ngữ"),
                       SettingItem(null, "Chính sách bảo mật"),
