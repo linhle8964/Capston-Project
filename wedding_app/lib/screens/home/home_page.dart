@@ -5,8 +5,10 @@ import 'package:wedding_app/bloc/budget/bloc.dart';
 import 'package:wedding_app/bloc/guests/bloc.dart';
 import 'package:wedding_app/bloc/checklist/bloc.dart';
 import 'package:wedding_app/bloc/guests/guests_bloc.dart';
+import 'package:wedding_app/screens/choose_template_invitation/chooseTemplate_page.dart';
 import 'package:wedding_app/model/wedding.dart';
 import 'package:wedding_app/utils/count_home_item.dart';
+import 'package:wedding_app/utils/format_number.dart';
 import 'package:wedding_app/utils/get_share_preferences.dart';
 import 'package:wedding_app/utils/hex_color.dart';
 import 'package:wedding_app/widgets/notification.dart';
@@ -34,7 +36,7 @@ showprint() async {
 }
 
 class _HomePageState extends State<HomePage> {
-  final Color main_color = Colors.black26;
+  final Color main_color = Colors.black;
   int endTime = DateTime(2021, 3, 1, 7, 30, 00).millisecondsSinceEpoch;
 
   @override
@@ -63,185 +65,207 @@ class _HomePageState extends State<HomePage> {
           BlocProvider.of<ChecklistBloc>(context).add(LoadSuccess(wedding.id));
           BlocProvider.of<GuestsBloc>(context).add(LoadGuests(wedding.id));
           return Builder(
-            builder: (context) => MaterialApp(
-              title: 'Home screen',
-              home: Scaffold(
-                appBar: AppBar(
-                  title: const Text('Cung hỉ'),
-                  centerTitle: true,
-                  backgroundColor: hexToColor("#d86a77"),
-                ),
-                body: SafeArea(
-                  minimum: const EdgeInsets.only(top: 5, left: 10, right: 10),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        Container(
-                          decoration: const BoxDecoration(
-                            image: DecorationImage(
-                                image: AssetImage('assets/image/home_top.jpg'),
-                                fit: BoxFit.cover),
-                          ),
-                          height: 180,
-                          alignment: Alignment.center,
-                          child: CountdownTimer(
-                            endTime: wedding.weddingDate.millisecondsSinceEpoch,
-                            widgetBuilder: (_, CurrentRemainingTime time) {
-                              if (time == null) {
-                                return Text(
-                                  'Chúc 2 bạn hạnh phúc',
-                                  style: TextStyle(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black38),
-                                );
-                              }
+            builder: (context) => Scaffold(
+              appBar: AppBar(
+                title: const Text('Cung hỉ'),
+                centerTitle: true,
+                backgroundColor: hexToColor("#d86a77"),
+              ),
+              backgroundColor: Colors.white,
+              body: SafeArea(
+                minimum: const EdgeInsets.only(top: 5, left: 10, right: 10),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage('assets/image/home_top.jpg'),
+                              fit: BoxFit.cover),
+                        ),
+                        height: 180,
+                        alignment: Alignment.center,
+                        child: CountdownTimer(
+                          endTime: wedding.weddingDate.millisecondsSinceEpoch,
+                          widgetBuilder: (_, CurrentRemainingTime time) {
+                            if (time == null) {
                               return Text(
-                                ' ${(time.days == null) ? '' : (time.days.toString() + ' ngày,')}  ${(time.hours == null) ? '0' : time.hours} :  ${(time.min == null) ? '0' : time.min} : ${time.sec}',
+                                'Chúc 2 bạn hạnh phúc',
                                 style: TextStyle(
                                     fontSize: 24,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.white),
+                                    color: Colors.black38),
                               );
-                            },
-                          ),
+                            }
+                            return Text(
+                              ' ${(time.days == null) ? '' : (time.days.toString() + ' ngày,')}  ${(time.hours == null) ? '0' : time.hours} :  ${(time.min == null) ? '0' : time.min} : ${time.sec}',
+                              style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            );
+                          },
                         ),
-                        Container(
-                          padding: const EdgeInsets.all(20),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    FlatButton(
-                                      child: Container(
-                                        padding: const EdgeInsets.all(5),
-                                        child: Text(
-                                          'Chia sẻ quyền quản lý',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(20),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  FlatButton(
+                                    child: Container(
+                                      padding: const EdgeInsets.all(5),
+                                      child: Text(
+                                        'Chia sẻ quyền quản lý',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
                                         ),
-                                        decoration: BoxDecoration(
-                                            border: Border.all(
-                                                color: main_color, width: 2)),
                                       ),
-                                      onPressed: () {
-                                        print('Share');
-                                      },
-                                    )
-                                  ],
-                                ),
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: main_color, width: 2)),
+                                    ),
+                                    onPressed: () {
+                                      print('Share');
+                                    },
+                                  )
+                                ],
                               ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
-                        Container(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              buildButtonColumn(
-                                  main_color, Icons.add_rounded, 'KHÁCH MỜI'),
-                              buildButtonColumn(main_color,
-                                  Icons.assignment_ind_outlined, 'THIỆP MỜI'),
-                              buildButtonColumn(
-                                  main_color, Icons.add_alarm, 'THÔNG BÁO'),
-                            ],
-                          ),
+                      ),
+                      Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            buildButtonColumn(Colors.blue, Icons.add_rounded,
+                                'KHÁCH MỜI', () {}),
+                            buildButtonColumn(
+                              Colors.pink[400],
+                              Icons.assignment_ind_outlined,
+                              'THIỆP MỜI',
+                              () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ChooseTemplatePage(
+                                            isCreate: false,
+                                          )),
+                                );
+                              },
+                            ),
+                            buildButtonColumn(Colors.green, Icons.add_alarm,
+                                'THÔNG BÁO', () {}),
+                          ],
                         ),
-                        BlocBuilder(
-                          cubit: BlocProvider.of<ChecklistBloc>(context),
-                          builder: (context, state) {
-                            if (state is TasksLoaded) {
-                              return Container(
-                                padding: const EdgeInsets.all(20),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    buildInfoColumn(context,
-                                        main_color,
-                                        'Việc cần làm ',
-                                        state.tasks.isEmpty
-                                            ? 0
-                                            : state.tasks.length),
-                                    buildInfoColumn(context,
-                                        main_color,
-                                        'Việc đã xong ',
-                                        state.tasks.isEmpty
-                                            ? 0
-                                            : countFinisedTask(state.tasks)),
-                                  ],
-                                ),
-                              );
-                            } else {
-                              return CircularProgressIndicator();
-                            }
-                          },
-                        ),
-                        BlocBuilder(
-                          cubit: BlocProvider.of<BudgetBloc>(context),
-                          builder: (context, state) {
-                            if (state is BudgetLoaded) {
-                              return Container(
-                                padding: const EdgeInsets.all(20),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    buildInfoColumn(context,
-                                        main_color,
-                                        'Tổng ngân sách ',
-                                        wedding.budget.toInt()),
-                                    buildInfoColumn(context,
-                                        main_color,
-                                        'Đã dùng ',
-                                        state.budgets.length == 0
-                                            ? 0
-                                            : countBudget(state.budgets)),
-                                  ],
-                                ),
-                              );
-                            } else {
-                              return CircularProgressIndicator();
-                            }
-                          },
-                        ),
-                        BlocBuilder(
-                          cubit: BlocProvider.of<GuestsBloc>(context),
-                          builder: (context, state) {
-                            if (state is GuestsLoaded) {
-                              return Container(
-                                padding: const EdgeInsets.all(20.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                  MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    buildInfoColumn(context,
-                                        main_color,
-                                        'Số khách dự kiến ',
-                                        state.guests.isEmpty
-                                            ? 0
-                                            : state.guests.length),
-                                    buildInfoColumn(context,
-                                        main_color,
-                                        'Khách đã xác nhận ',
-                                        state.guests.isEmpty
-                                            ? 0
-                                            : countConfirmedGuest(
-                                                state.guests)),
-                                  ],
-                                ),
-                              );
-                            } else {
-                              return CircularProgressIndicator();
-                            }
-                          },
-                        ),
-                      ],
-                    ),
+                      ),
+                      BlocBuilder(
+                        cubit: BlocProvider.of<ChecklistBloc>(context),
+                        builder: (context, state) {
+                          if (state is TasksLoaded) {
+                            return Container(
+                              padding: const EdgeInsets.all(20),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  buildInfoColumn(
+                                      context,
+                                      main_color,
+                                      'Việc cần làm ',
+                                      state.tasks.isEmpty
+                                          ? "0"
+                                          : state.tasks.length.toString()),
+                                  buildInfoColumn(
+                                      context,
+                                      main_color,
+                                      'Việc đã xong ',
+                                      state.tasks.isEmpty
+                                          ? "0"
+                                          : countFinisedTask(state.tasks)
+                                              .toString()),
+                                ],
+                              ),
+                            );
+                          } else {
+                            return Container();
+                          }
+                        },
+                      ),
+                      BlocBuilder(
+                        cubit: BlocProvider.of<BudgetBloc>(context),
+                        builder: (context, state) {
+                          if (state is BudgetLoaded) {
+                            return Container(
+                              padding: const EdgeInsets.all(20),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  buildInfoColumn(
+                                      context,
+                                      main_color,
+                                      'Tổng ngân sách ',
+                                      formatNumber(
+                                          wedding.budget.toInt().toString())),
+                                  buildInfoColumn(
+                                      context,
+                                      main_color,
+                                      'Đã dùng ',
+                                      state.budgets.length == 0
+                                          ? "0"
+                                          : formatNumber(
+                                              countBudget(state.budgets)
+                                                  .toString())),
+                                ],
+                              ),
+                            );
+                          } else {
+                            return Container();
+                          }
+                        },
+                      ),
+                      BlocBuilder(
+                        cubit: BlocProvider.of<GuestsBloc>(context),
+                        builder: (context, state) {
+                          if (state is GuestsLoaded) {
+                            return Container(
+                              padding: const EdgeInsets.all(20.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  buildInfoColumn(
+                                      context,
+                                      main_color,
+                                      'Số khách dự kiến ',
+                                      state.guests.isEmpty
+                                          ? "0"
+                                          : state.guests.length.toString()),
+                                  buildInfoColumn(
+                                      context,
+                                      main_color,
+                                      'Khách đã xác nhận ',
+                                      state.guests.isEmpty
+                                          ? "0"
+                                          : countConfirmedGuest(state.guests)
+                                              .toString()),
+                                ],
+                              ),
+                            );
+                          } else {
+                            return Center(
+                              child: Container(),
+                            );
+                          }
+                        },
+                      ),
+                    ],
                   ),
                 ),
               ),
