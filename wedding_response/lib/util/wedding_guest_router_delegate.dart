@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_web_diary/bloc/login/login_bloc.dart';
+import 'package:flutter_web_diary/firebase_repository/user_firebase_repository.dart';
 import 'package:flutter_web_diary/firebase_repository/wedding_firebase_repository.dart';
 import 'package:flutter_web_diary/model/guest.dart';
 import 'package:flutter_web_diary/model/wedding.dart';
@@ -50,46 +53,56 @@ class WeddingGuestRouterDelegate extends RouterDelegate<WeddingGuestRoutePath>
 
   @override
   Widget build(BuildContext context) {
-    return Navigator(
-      key: navigatorKey,
-      pages: [
-
-        MaterialPage(key: ValueKey('UnknownPage'), child: LoginPage()),
-        if(login)
-          MaterialPage(key: ValueKey('login'), child: LoginPage()),
-        if (show404)
-          MaterialPage(key: ValueKey('UnknownPage'), child: LoginPage())
-        else if (showDone)
-          MaterialPage(key: ValueKey('donePage'), child: SuccessPage())
-        else if (_selectedWedding != null && _selectedGuestID == null)
-          MaterialPage(
-            key: ValueKey('Register'),
-            child: HomeView(
-              selectedWedding: _selectedWedding,
-              onTapped: _handleTap,
-            ),
-          )
-        else if (_selectedWedding != null && _selectedGuestID != null)
-          MaterialPage(
-            key: ValueKey('InputDetails'),
-            child: InputDetailsPage(
-              selectedWedding: _selectedWedding,
-              selectedGuestID: _selectedGuestID,
-              onTapped: _tapSubmitSuccess,
-            ),
-          ),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<LoginBloc>(
+            create: (BuildContext context) => LoginBloc(
+              userRepository: FirebaseUserRepository(),
+            )),
       ],
-      onPopPage: (route, result) {
-        if (!route.didPop(result)) {
-          return false;
-        }
-        _selectedWedding = null;
-        _selectedGuestID = null;
-        show404 = false;
-        showDone = false;
-        notifyListeners();
-        return true;
-      },
+      child: Navigator(
+        key: navigatorKey,
+        pages: [
+
+          MaterialPage(key: ValueKey('UnknownPage'), child: LoginPage()),
+          if(login)
+            MaterialPage(key: ValueKey('login'), child: LoginPage()),
+          if (show404)
+            MaterialPage(key: ValueKey('UnknownPage'), child: LoginPage())
+          else if (showDone)
+            MaterialPage(key: ValueKey('donePage'), child: SuccessPage())
+          else if (_selectedWedding != null && _selectedGuestID == null)
+              MaterialPage(
+                key: ValueKey('Register'),
+                child: HomeView(
+                  selectedWedding: _selectedWedding,
+                  onTapped: _handleTap,
+                ),
+              )
+            else if (_selectedWedding != null && _selectedGuestID != null)
+                MaterialPage(
+                  key: ValueKey('InputDetails'),
+                  child: InputDetailsPage(
+                    selectedWedding: _selectedWedding,
+                    selectedGuestID: _selectedGuestID,
+                    onTapped: _tapSubmitSuccess,
+                  ),
+                ),
+        ],
+        onPopPage: (route, result) {
+          if (!route.didPop(result)) {
+            return false;
+          }
+          _selectedWedding = null;
+          _selectedGuestID = null;
+          show404 = false;
+          showDone = false;
+          notifyListeners();
+          return true;
+        },
+      ),
+
+
     );
   }
 

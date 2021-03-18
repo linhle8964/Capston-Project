@@ -20,36 +20,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f3e24abf-ec34-481a-919d-25be2615c827" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/lib/bloc/authentication/authentication_bloc.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/bloc/authentication/authentication_event.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/bloc/authentication/authentication_state.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/bloc/authentication/bloc.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/bloc/login/bloc.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/bloc/login/login_bloc.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/bloc/login/login_event.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/bloc/login/login_state.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/firebase_repository/user_firebase_repository.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/firebase_repository/user_wedding_firebase_repository.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/repository/user_repository.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/repository/user_wedding_repository.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/screen/views/login/login_page.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/util/admin_login_route_path.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/util/alert_dialog.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/util/show_snackbar.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/util/validations.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../wedding_app/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../wedding_app/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.flutter-plugins" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/wedding_response.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/wedding_response.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../wedding_app/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/../wedding_app/.flutter-plugins-dependencies" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/generated_plugin_registrant.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/generated_plugin_registrant.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/screen/views/login/login_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screen/views/login/login_page.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/util/wedding_guest_router_delegate.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/util/wedding_guest_router_delegate.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/util/wedding_route_information_parser.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/util/wedding_route_information_parser.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/util/wedding_route_path.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/util/wedding_route_path.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -143,26 +117,27 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="100" y="100" width="777" height="528" key="AVDManager/0.0.1366.728@0.0.1366.728" timestamp="1615642929247" />
-    <state x="463" y="118" key="FileChooserDialogImpl" timestamp="1615955473089">
-      <screen x="0" y="0" width="1366" height="728" />
+    <state x="651" y="169" key="FileChooserDialogImpl" timestamp="1616070159947">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="463" y="118" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1615955473089" />
-    <state width="1860" height="279" key="GridCell.Tab.0.bottom" timestamp="1616055466649">
+    <state x="651" y="169" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1616070159947" />
+    <state width="1860" height="279" key="GridCell.Tab.0.bottom" timestamp="1616071709416">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1860" height="279" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1616055466649" />
-    <state width="1860" height="279" key="GridCell.Tab.0.center" timestamp="1616055466648">
+    <state width="1860" height="279" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1616071709416" />
+    <state width="1860" height="279" key="GridCell.Tab.0.center" timestamp="1616071709416">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1860" height="279" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1616055466648" />
-    <state width="1860" height="279" key="GridCell.Tab.0.left" timestamp="1616055466648">
+    <state width="1860" height="279" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1616071709416" />
+    <state width="1860" height="279" key="GridCell.Tab.0.left" timestamp="1616071709416">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1860" height="279" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1616055466648" />
-    <state width="1860" height="279" key="GridCell.Tab.0.right" timestamp="1616055466648">
+    <state width="1860" height="279" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1616071709416" />
+    <state width="1860" height="279" key="GridCell.Tab.0.right" timestamp="1616071709416">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1860" height="279" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1616055466648" />
+    <state width="1860" height="279" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1616071709416" />
     <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1615828606285">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
