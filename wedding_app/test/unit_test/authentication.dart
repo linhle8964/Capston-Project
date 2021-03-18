@@ -5,10 +5,16 @@ import 'package:wedding_app/bloc/authentication/bloc.dart';
 import 'package:wedding_app/firebase_repository/user_firebase_repository.dart';
 import 'package:wedding_app/firebase_repository/user_wedding_firebase_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:wedding_app/firebase_repository/wedding_firebase_repository.dart';
 
 class MockUserRepository extends Mock implements FirebaseUserRepository {}
-class MockUser extends Mock implements User{}
-class MockFirebaseAuth extends Mock implements FirebaseAuth{}
+
+class MockWeddingRepository extends Mock implements FirebaseWeddingRepository {}
+
+class MockUser extends Mock implements User {}
+
+class MockFirebaseAuth extends Mock implements FirebaseAuth {}
+
 class MockUserWeddingRepository extends Mock
     implements FirebaseUserWeddingRepository {}
 
@@ -17,10 +23,12 @@ void main() {
   MockUserWeddingRepository mockUserWeddingRepository;
   MockUser mockUser;
   MockFirebaseAuth mockFirebaseAuth;
-  setUpAll(() async{
+  MockWeddingRepository mockWeddingRepository;
+  setUpAll(() async {
     mockUserRepository = MockUserRepository();
     mockUserWeddingRepository = MockUserWeddingRepository();
     mockFirebaseAuth = FirebaseAuth.instance;
+    mockWeddingRepository = MockWeddingRepository();
     mockUser = await mockUserRepository.getUser();
   });
 
@@ -29,7 +37,8 @@ void main() {
       expect(
         () => AuthenticationBloc(
             userRepository: null,
-            userWeddingRepository: mockUserWeddingRepository),
+            userWeddingRepository: mockUserWeddingRepository,
+            weddingRepository: mockWeddingRepository),
         throwsAssertionError,
       );
     });
@@ -37,13 +46,26 @@ void main() {
     test('throws when userWeddingRepository is null', () {
       expect(
         () => AuthenticationBloc(
-            userRepository: mockUserRepository, userWeddingRepository: null),
+            weddingRepository: mockWeddingRepository,
+            userRepository: mockUserRepository,
+            userWeddingRepository: null),
+        throwsAssertionError,
+      );
+    });
+
+    test('throws when weddingRepository is null', () {
+      expect(
+        () => AuthenticationBloc(
+            weddingRepository: null,
+            userRepository: mockUserRepository,
+            userWeddingRepository: mockUserWeddingRepository),
         throwsAssertionError,
       );
     });
 
     test('initial state is AuthenticationState.Uninitialized', () {
       final authenticationBloc = AuthenticationBloc(
+        weddingRepository: mockWeddingRepository,
         userRepository: mockUserRepository,
         userWeddingRepository: mockUserWeddingRepository,
       );
@@ -53,13 +75,19 @@ void main() {
 
     blocTest("'subscribes to user stream',",
         build: () {
-          return AuthenticationBloc(userRepository: mockUserRepository, userWeddingRepository: mockUserWeddingRepository);
+          return AuthenticationBloc(
+              userRepository: mockUserRepository,
+              weddingRepository: mockWeddingRepository,
+              userWeddingRepository: mockUserWeddingRepository);
         },
         act: (bloc) => bloc.add(LoggedIn()),
-        expect: [WeddingNull(mockUser),]);
+        expect: [
+          WeddingNull(mockUser),
+        ]);
 
     blocTest("Log out",
         build: () => AuthenticationBloc(
+            weddingRepository: mockWeddingRepository,
             userRepository: mockUserRepository,
             userWeddingRepository: mockUserWeddingRepository),
         act: (bloc) => bloc.add(LoggedOut()),

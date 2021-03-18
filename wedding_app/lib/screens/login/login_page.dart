@@ -182,15 +182,19 @@ class _LoginPageState extends State<LoginPage> {
                       child: Container(
                         height: 20,
                         width: double.infinity,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
-                              "Quên Mật Khẩu?",
-                              style: TextStyle(
-                                  fontSize: 15, color: hexToColor("#d86a77")),
-                            ),
-                          ],
+                        child: InkWell(
+                          onTap: () =>
+                              Navigator.pushNamed(context, "/reset_password"),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
+                                "Quên Mật Khẩu?",
+                                style: TextStyle(
+                                    fontSize: 15, color: hexToColor("#d86a77")),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
