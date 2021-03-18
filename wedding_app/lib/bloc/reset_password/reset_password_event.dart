@@ -1,7 +1,7 @@
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
-abstract class ResetPasswordEvent extends Equatable{
+abstract class ResetPasswordEvent extends Equatable {
   const ResetPasswordEvent();
 
   @override
@@ -33,4 +33,13 @@ class Submitted extends ResetPasswordEvent {
   }
 }
 
-class ShowSuccessMessage extends ResetPasswordEvent{}
+class ShowSuccessMessage extends ResetPasswordEvent {
+  final String message;
+
+  ShowSuccessMessage({@required this.message});
+
+  @override
+  String toString() {
+    return 'ShowSuccessMessage { message: $message}';
+  }
+}

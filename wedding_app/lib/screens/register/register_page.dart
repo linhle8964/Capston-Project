@@ -41,7 +41,7 @@ class _RegisterPageState extends State<RegisterPage> {
           listener: (BuildContext context, RegisterState state) {
             if (state.isSubmitting) {
               FocusScope.of(context).unfocus();
-              showProcessingSnackbar(context, "Đang xử lý dữ liệu");
+              showProcessingSnackbar(context, state.message);
             }
             if (state.isSuccess) {
               FocusScope.of(context).unfocus();
