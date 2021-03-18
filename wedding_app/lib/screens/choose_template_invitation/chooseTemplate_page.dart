@@ -17,6 +17,7 @@ import 'package:wedding_app/screens/choose_template_invitation/fill_info_page.da
 import 'package:permission_handler/permission_handler.dart';
 import 'package:dio/dio.dart';
 import 'package:wedding_app/screens/home/home_page.dart';
+import 'package:wedding_app/screens/navigator/navigator.dart';
 import 'package:wedding_app/utils/hex_color.dart';
 import '../../bloc/invitation_card/bloc.dart';
 import '../../widgets/loading_indicator.dart';
@@ -51,8 +52,10 @@ class _ChooseTemplatePageState extends State<ChooseTemplatePage> {
                 leading: IconButton(
                   icon: Icon(Icons.arrow_back,color: Colors.white,),
                   onPressed: () {
-                    Navigator.pushNamedAndRemoveUntil(
-                        context, "/", (route) => false);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => NavigatorPage()),
+                    );
                   },
                 ),
                 bottom: TabBar(
