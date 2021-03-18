@@ -29,8 +29,9 @@ class WeddingGuestRouteInformationParser extends RouteInformationParser<WeddingG
 
   @override
   RouteInformation restoreRouteInformation(WeddingGuestRoutePath path) {
+
     if (path.isUnknown) {
-      return RouteInformation(location: '/404');
+      return RouteInformation(location: '/login');
     }
     if (path.isRegisterPage) {
       return RouteInformation(location: '/${path.weddingID}');
@@ -41,6 +42,7 @@ class WeddingGuestRouteInformationParser extends RouteInformationParser<WeddingG
     if (path.isDone) {
       return RouteInformation(location: '/done');
     }
+
 
     return null;
   }

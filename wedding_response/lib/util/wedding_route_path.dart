@@ -4,6 +4,7 @@ class WeddingGuestRoutePath {
   final bool isUnknown;
   final bool isDone;
 
+
   WeddingGuestRoutePath.register(this.weddingID)
       : guestID = null,
         isUnknown = false,
@@ -22,6 +23,11 @@ class WeddingGuestRoutePath {
         guestID = null,
         isUnknown = false,
         isDone= true;
+  WeddingGuestRoutePath.Login()
+      : weddingID = null,
+        guestID = null,
+        isUnknown = false,
+        isDone= false;
 
   bool get isRegisterPage => weddingID != null && guestID == null;
 

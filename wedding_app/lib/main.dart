@@ -40,6 +40,7 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   DateTime _alarmTime;
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -76,19 +77,23 @@ class MyApp extends StatelessWidget {
                       BlocProvider<WeddingBloc>(
                         create: (context) => WeddingBloc(
                           weddingRepository: FirebaseWeddingRepository(),
-                          userWeddingRepository: FirebaseUserWeddingRepository(),
+                          userWeddingRepository:
+                              FirebaseUserWeddingRepository(),
                         ),
                       ),
                       BlocProvider<ValidateWeddingBloc>(
                         create: (context) => ValidateWeddingBloc(),
                       ),
                     ],
-                    child: CreateWeddingPage(isEditing: args.isEditing, wedding: args.wedding,),
+                    child: CreateWeddingPage(
+                      isEditing: args.isEditing,
+                      wedding: args.wedding,
+                    ),
                   );
                 },
               );
             }
-          } ,
+          },
           routes: {
             '/register': (context) {
               return BlocProvider(

@@ -6,7 +6,9 @@ import 'package:flutter_web_diary/model/wedding.dart';
 import 'package:flutter_web_diary/screen/views/error/error_page.dart';
 import 'package:flutter_web_diary/screen/views/home/home_view.dart';
 import 'package:flutter_web_diary/screen/views/input_details/input_details.dart';
+import 'package:flutter_web_diary/screen/views/login/login_page.dart';
 import 'package:flutter_web_diary/screen/views/success/success_page.dart';
+import 'package:flutter_web_diary/util/admin_login_route_path.dart';
 import 'package:flutter_web_diary/util/globle_variable.dart';
 import 'package:flutter_web_diary/util/wedding_route_path.dart';
 
@@ -18,6 +20,7 @@ class WeddingGuestRouterDelegate extends RouterDelegate<WeddingGuestRoutePath>
   String _selectedGuestID;
   bool show404 = false;
   bool showDone = false;
+  bool login = false;
 
   void _handleTap(Guest guest) {
     _selectedGuestID = guest.id;
@@ -36,7 +39,6 @@ class WeddingGuestRouterDelegate extends RouterDelegate<WeddingGuestRoutePath>
   WeddingGuestRoutePath get currentConfiguration {
     if (show404) return WeddingGuestRoutePath.unknown();
     if (showDone) return WeddingGuestRoutePath.Done();
-
     if (_selectedWedding == null) return WeddingGuestRoutePath.unknown();
 
     if (_selectedWedding != null && _selectedGuestID != null)
@@ -51,10 +53,13 @@ class WeddingGuestRouterDelegate extends RouterDelegate<WeddingGuestRoutePath>
     return Navigator(
       key: navigatorKey,
       pages: [
-        MaterialPage(key: ValueKey('UnknownPage'), child: UnknownScreen()),
+
+        MaterialPage(key: ValueKey('UnknownPage'), child: LoginPage()),
+        if(login)
+          MaterialPage(key: ValueKey('login'), child: LoginPage()),
         if (show404)
-          MaterialPage(key: ValueKey('UnknownPage'), child: UnknownScreen())
-        else if(showDone)
+          MaterialPage(key: ValueKey('UnknownPage'), child: LoginPage())
+        else if (showDone)
           MaterialPage(key: ValueKey('donePage'), child: SuccessPage())
         else if (_selectedWedding != null && _selectedGuestID == null)
           MaterialPage(
@@ -67,7 +72,11 @@ class WeddingGuestRouterDelegate extends RouterDelegate<WeddingGuestRoutePath>
         else if (_selectedWedding != null && _selectedGuestID != null)
           MaterialPage(
             key: ValueKey('InputDetails'),
-            child: InputDetailsPage(selectedWedding: _selectedWedding,selectedGuestID: _selectedGuestID,onTapped: _tapSubmitSuccess,),
+            child: InputDetailsPage(
+              selectedWedding: _selectedWedding,
+              selectedGuestID: _selectedGuestID,
+              onTapped: _tapSubmitSuccess,
+            ),
           ),
       ],
       onPopPage: (route, result) {
