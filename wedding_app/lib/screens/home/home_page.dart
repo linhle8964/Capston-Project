@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_countdown_timer/current_remaining_time.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
+
+import 'package:wedding_app/screens/choose_template_invitation/chooseTemplate_page.dart';
+
+
 import 'package:wedding_app/model/wedding.dart';
 import 'package:wedding_app/utils/get_share_preferences.dart';
 import 'package:wedding_app/widgets/notification.dart';
@@ -8,6 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:firebase_core/firebase_core.dart';
 import '../../widgets/notification.dart';
+
 
 class HomePage extends StatefulWidget {
   @override
@@ -123,6 +128,7 @@ class _HomePageState extends State<HomePage> {
                             ],
                           ),
                         ),
+
                         Container(
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -133,6 +139,15 @@ class _HomePageState extends State<HomePage> {
                                   Icons.assignment_ind_outlined, 'THIỆP MỜI'),
                               _buildButtonColumn(
                                   main_color, Icons.add_alarm, 'THÔNG BÁO'),
+                                ElevatedButton(
+                                  child: Text('Open route'),
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => ChooseTemplatePage(isCreate: false,)),
+                                    );
+                                  },
+                                ),
                             ],
                           ),
                         ),
