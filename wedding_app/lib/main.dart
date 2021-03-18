@@ -5,6 +5,7 @@ import 'package:wedding_app/firebase_repository/inviattion_card_firebase_reposit
 import 'package:wedding_app/screens/choose_template_invitation/chooseTemplate_page.dart';
 
 import 'package:wedding_app/bloc/budget/bloc.dart';
+import 'package:wedding_app/bloc/reset_password/bloc.dart';
 import 'package:wedding_app/firebase_repository/budget_firebase_repository.dart';
 import 'package:wedding_app/firebase_repository/invite_email_firebase_repository.dart';
 import 'package:wedding_app/firebase_repository/user_wedding_firebase_repository.dart';
@@ -21,6 +22,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:wedding_app/screens/pick_wedding/pick_wedding_screen.dart';
 import 'package:wedding_app/screens/pick_wedding/wedding_code.dart';
 import 'package:wedding_app/screens/register/register_page.dart';
+import 'package:wedding_app/screens/reset_password/reset_password.dart';
 import 'package:wedding_app/screens/splash_page.dart';
 import 'package:wedding_app/widgets/loading_indicator.dart';
 import 'bloc/authentication/bloc.dart';
@@ -50,12 +52,10 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  DateTime _alarmTime;
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
         providers: [
-
           BlocProvider<AuthenticationBloc>(create: (context) {
             return AuthenticationBloc(
               userRepository: FirebaseUserRepository(),
@@ -64,21 +64,18 @@ class MyApp extends StatelessWidget {
           }),
           BlocProvider<TemplateCardBloc>(create: (context) {
             return TemplateCardBloc(
-             templateCardRepository: FirebaseTemplateCardRepository()
-            );
+                templateCardRepository: FirebaseTemplateCardRepository());
           }),
           BlocProvider<InvitationCardBloc>(create: (context) {
             return InvitationCardBloc(
-                invitationCardRepository: FirebaseInvitationCardRepository()
-            );
+                invitationCardRepository: FirebaseInvitationCardRepository());
           }),
           BlocProvider<WeddingBloc>(create: (context) {
             return WeddingBloc(
-                userWeddingRepository: FirebaseUserWeddingRepository(),
-                weddingRepository: FirebaseWeddingRepository(),
+              userWeddingRepository: FirebaseUserWeddingRepository(),
+              weddingRepository: FirebaseWeddingRepository(),
             );
           }),
-
           BlocProvider<BudgetBloc>(
             create: (BuildContext context) => BudgetBloc(
               budgetRepository: FirebaseBudgetRepository(),
@@ -98,7 +95,6 @@ class MyApp extends StatelessWidget {
               )..add(AppStarted());
             },
           ),
-
         ],
         child: MaterialApp(
           initialRoute: '/',
@@ -112,19 +108,23 @@ class MyApp extends StatelessWidget {
                       BlocProvider<WeddingBloc>(
                         create: (context) => WeddingBloc(
                           weddingRepository: FirebaseWeddingRepository(),
-                          userWeddingRepository: FirebaseUserWeddingRepository(),
+                          userWeddingRepository:
+                              FirebaseUserWeddingRepository(),
                         ),
                       ),
                       BlocProvider<ValidateWeddingBloc>(
                         create: (context) => ValidateWeddingBloc(),
                       ),
                     ],
-                    child: CreateWeddingPage(isEditing: args.isEditing, wedding: args.wedding,),
+                    child: CreateWeddingPage(
+                      isEditing: args.isEditing,
+                      wedding: args.wedding,
+                    ),
                   );
                 },
               );
             }
-          } ,
+          },
           routes: {
             '/register': (context) {
               return BlocProvider(
@@ -146,7 +146,6 @@ class MyApp extends StatelessWidget {
               return BlocBuilder<AuthenticationBloc, AuthenticationState>(
                   builder: (context, state) {
                 if (state is Authenticated) {
-                  print("Authenticated");
                   return NavigatorPage();
                 } else if (state is Unauthenticated) {
                   return BlocProvider<LoginBloc>(
@@ -198,6 +197,13 @@ class MyApp extends StatelessWidget {
                 child: WeddingCodePage(),
               );
             },
+            "/reset_password": (context) {
+              return BlocProvider(
+                create: (BuildContext context) =>
+                    ResetPasswordBloc(userRepository: FirebaseUserRepository()),
+                child: ResetPasswordPage(),
+              );
+            }
           },
           title: 'Wedding App',
           theme: ThemeData(

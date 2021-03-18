@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'dart:ui';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
@@ -16,15 +15,15 @@ import 'package:transparent_image/transparent_image.dart';
 import 'package:wedding_app/screens/choose_template_invitation/fill_info_page.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:dio/dio.dart';
-import 'package:wedding_app/screens/home/home_page.dart';
-import 'package:wedding_app/screens/navigator/navigator.dart';
 import 'package:wedding_app/utils/hex_color.dart';
 import '../../bloc/invitation_card/bloc.dart';
 import '../../widgets/loading_indicator.dart';
 import 'package:path_provider/path_provider.dart';
+
 class ChooseTemplatePage extends StatefulWidget {
   final bool isCreate;
-  const ChooseTemplatePage({Key key, @required this.isCreate}): super (key: key);
+  const ChooseTemplatePage({Key key, @required this.isCreate})
+      : super(key: key);
   @override
   _ChooseTemplatePageState createState() => _ChooseTemplatePageState();
 }
@@ -35,181 +34,208 @@ class _ChooseTemplatePageState extends State<ChooseTemplatePage> {
 
   SharedPreferences sharedPrefs;
 
-
   bool uploading = false;
-  List<File> _image=[];
+  List<File> _image = [];
   final picker = ImagePicker();
   bool loading = false;
   @override
   Widget build(BuildContext context) {
-    return
-      MaterialApp(
-        home: DefaultTabController(
-          length: 3,
-          child: Scaffold(
-              appBar: AppBar(
-                backgroundColor: hexToColor("#d86a77"),
-                leading: IconButton(
-                  icon: Icon(Icons.arrow_back,color: Colors.white,),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => NavigatorPage()),
-                    );
-                  },
-                ),
-                bottom: TabBar(
-                  tabs: [
-                    Tab(
-                      child: Center(child: Text('Thiệp mời của bạn',style: TextStyle(color: Colors.white),)),
-                    ),
-                    Tab(
-                      child: Center(child: Text('Tạo Thiệp Mời',style: TextStyle(color: Colors.white),)),
-                    ),
-                    Tab(child: Center(child: Text('Tải Lên Thiệp Có Sẵn',style: TextStyle(color: Colors.white))),)
-                  ],
-                ),
-                title: Padding(
-                  padding: const EdgeInsets.fromLTRB(60, 0, 30, 0),
-                  child: Text(
-                    "THIỆP MỜI",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
+    return DefaultTabController(
+      length: 3,
+      child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: hexToColor("#d86a77"),
+            leading: IconButton(
+              icon: Icon(
+                Icons.arrow_back,
+                color: Colors.white,
               ),
-              body: TabBarView(
-                children: [
-                  new MyCard(isCreate: isCreate,),
-                  new CardList(),
-                  SingleChildScrollView(
-                    child: loading == false ? Center(
+              onPressed: () {
+                Navigator.pushNamedAndRemoveUntil(
+                    context, "/", (route) => false);
+              },
+            ),
+            bottom: TabBar(
+              tabs: [
+                Tab(
+                  child: Center(
+                      child: Text(
+                    'Thiệp mời của bạn',
+                    style: TextStyle(color: Colors.white),
+                  )),
+                ),
+                Tab(
+                  child: Center(
+                      child: Text(
+                    'Tạo Thiệp Mời',
+                    style: TextStyle(color: Colors.white),
+                  )),
+                ),
+                Tab(
+                  child: Center(
+                      child: Text('Tải Lên Thiệp Có Sẵn',
+                          style: TextStyle(color: Colors.white))),
+                )
+              ],
+            ),
+            title: Padding(
+              padding: const EdgeInsets.fromLTRB(60, 0, 30, 0),
+              child: Text(
+                "THIỆP MỜI",
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ),
+          body: TabBarView(
+            children: [
+              new MyCard(
+                isCreate: isCreate,
+              ),
+              new CardList(),
+              SingleChildScrollView(
+                child: loading == false
+                    ? Center(
                         child: Column(
-                          children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 20, 0, 10),
-                              child: Text('Tải lên từ bộ sưu tập của bạn',style: TextStyle(fontSize: 20),),
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 20, 0, 10),
+                            child: Text(
+                              'Tải lên từ bộ sưu tập của bạn',
+                              style: TextStyle(fontSize: 20),
                             ),
-                            Padding(
-                                padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: _image.length ==0 ?
-                                  Container(
-                                    width: 250,
-                                    height: 350,
-                                    decoration: new BoxDecoration(
-                                      color: Colors.white,
-                                      border: new Border.all(color: Colors.black, width: 2.0),
-                                      borderRadius: new BorderRadius.circular(10.0),
-                                    ),
-                                    child: IconButton(icon: Icon(Icons.add),iconSize: 100,onPressed: ()=>
-                                      !uploading ? chooseImage() : null,),
-                                  ): Container(
-                                    width: 250,
-                                      height: 350,
-                                    decoration: new BoxDecoration(
-                                      image: DecorationImage(
-                                        image: FileImage(_image[_image.length -1]),
-                                        fit: BoxFit.cover
+                          ),
+                          Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 10),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: _image.length == 0
+                                    ? Container(
+                                        width: 250,
+                                        height: 350,
+                                        decoration: new BoxDecoration(
+                                          color: Colors.white,
+                                          border: new Border.all(
+                                              color: Colors.black, width: 2.0),
+                                          borderRadius:
+                                              new BorderRadius.circular(10.0),
+                                        ),
+                                        child: IconButton(
+                                          icon: Icon(Icons.add),
+                                          iconSize: 100,
+                                          onPressed: () =>
+                                              !uploading ? chooseImage() : null,
+                                        ),
                                       )
-                                    ),
-                                    child: IconButton(icon: Icon(Icons.add),iconSize: 0,onPressed: ()=>
-                                    !uploading ? chooseImage() : null,),
+                                    : Container(
+                                        width: 250,
+                                        height: 350,
+                                        decoration: new BoxDecoration(
+                                            image: DecorationImage(
+                                                image: FileImage(
+                                                    _image[_image.length - 1]),
+                                                fit: BoxFit.cover)),
+                                        child: IconButton(
+                                          icon: Icon(Icons.add),
+                                          iconSize: 0,
+                                          onPressed: () =>
+                                              !uploading ? chooseImage() : null,
+                                        ),
+                                      ),
+                              )),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(50, 10, 50, 0),
+                            child: SizedBox(
+                                width: double.infinity,
+                                height: 40,
+                                child: FlatButton(
+                                  color: hexToColor("#d86a77"),
+                                  onPressed: _image.length > 0
+                                      ? () {
+                                          setState(() {
+                                            uploading = true;
+                                          });
+                                          uploadFile();
+                                          _image = [];
+                                        }
+                                      : null,
+                                  child: Text(
+                                    'Tải ảnh lên',
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 20),
                                   ),
-                                )
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(50, 10, 50, 0),
-                              child: SizedBox(
-                                  width: double.infinity,
-                                  height: 40,
-                                  child:FlatButton(
-                                    color:hexToColor("#d86a77") ,
-                                    onPressed: _image.length>0? (){
-
-                                        setState(() {
-                                          uploading = true;
-                                        });
-                                        uploadFile();
-                                        _image=[];
-                                    }:null,
-                                    child: Text('Tải ảnh lên',style: TextStyle(color: Colors.white,fontSize: 20),),
-                                  )
-                              ),
-                            )
-                          ],
-                        )
-                    ):Padding(
-                      padding: const EdgeInsets.fromLTRB(100, 180, 90, 0),
-                      child: Container(
-                          child: LoadingIndicator()
+                                )),
+                          )
+                        ],
+                      ))
+                    : Padding(
+                        padding: const EdgeInsets.fromLTRB(100, 180, 90, 0),
+                        child: Container(child: LoadingIndicator()),
                       ),
-                    ),
-                  ),
-                ],
-              )
+              ),
+            ],
           )),
-      );
+    );
   }
-  chooseImage() async{
+
+  chooseImage() async {
     if (await _requestPermission(Permission.storage)) {
       final pickedFile = await picker.getImage(source: ImageSource.gallery);
       int bytes = await File(pickedFile?.path).length();
-      if(bytes > 5242880 ){
+      if (bytes > 5242880) {
         showMyError2Dialog(context);
-      }else{
+      } else {
         setState(() {
           _image.add(File(pickedFile?.path));
         });
         if (pickedFile.path == null) retriverLostData();
       }
-
-
     }
   }
-  Future<void> retriverLostData () async {
+
+  Future<void> retriverLostData() async {
     final LostData response = await picker.getLostData();
-    if(response.isEmpty){
+    if (response.isEmpty) {
       return;
     }
-    if(response.file != null){
+    if (response.file != null) {
       setState(() {
         _image.add(File(response.file.path));
       });
-    }else{
+    } else {
       print(response.file);
     }
   }
-  Future uploadFile() async{
+
+  Future uploadFile() async {
     setState(() {
       loading = true;
-
     });
-    int i=1;
+    int i = 1;
     String id = '';
-    SharedPreferences.getInstance().then((prefs){
+    SharedPreferences.getInstance().then((prefs) {
       setState(() => sharedPrefs = prefs);
       String weddingId = prefs.getString('wedding_id');
       id = weddingId;
     });
 
-      var img = _image[_image.length-1];
-      var storage = FirebaseStorage.instance;
-      final Directory systemTempDir = Directory.systemTemp;
-      final file = File('${systemTempDir.path}/demo.jpeg');
-      String imgName = 'IMG_${DateTime.now().microsecondsSinceEpoch}';
-      TaskSnapshot taskSnapshot =
-      await storage.ref('invitation_card/$imgName').putFile(img);
-      final String downloadUrl = await taskSnapshot.ref.getDownloadURL();
-      await FirebaseFirestore.instance
-            .collection('wedding/$id/invitation_card').doc('1')
-            .set({"url": downloadUrl, "name": imgName}).whenComplete(() => showMyAlertDialog(context));
+    var img = _image[_image.length - 1];
+    var storage = FirebaseStorage.instance;
+    final Directory systemTempDir = Directory.systemTemp;
+    final file = File('${systemTempDir.path}/demo.jpeg');
+    String imgName = 'IMG_${DateTime.now().microsecondsSinceEpoch}';
+    TaskSnapshot taskSnapshot =
+        await storage.ref('invitation_card/$imgName').putFile(img);
+    final String downloadUrl = await taskSnapshot.ref.getDownloadURL();
+    await FirebaseFirestore.instance
+        .collection('wedding/$id/invitation_card')
+        .doc('1')
+        .set({"url": downloadUrl, "name": imgName}).whenComplete(
+            () => showMyAlertDialog(context));
     setState(() {
       loading = false;
-
     });
-
   }
+
   Future<bool> _requestPermission(Permission permission) async {
     if (await permission.isGranted) {
       return true;
@@ -222,22 +248,23 @@ class _ChooseTemplatePageState extends State<ChooseTemplatePage> {
     showMyErrorDialog(context);
     return false;
   }
+
   showMyErrorDialog(BuildContext context) {
     // Create AlertDialog
-    GlobalKey _containerKey= GlobalKey();
+    GlobalKey _containerKey = GlobalKey();
     AlertDialog dialog = AlertDialog(
       key: _containerKey,
       title: Text("Ứng dụng chưa được cấp quyền"),
-      content: Text("Bạn cần cấp quyền cho ứng dụng để thực hiện chức năng này!"),
+      content:
+          Text("Bạn cần cấp quyền cho ứng dụng để thực hiện chức năng này!"),
       actions: [
         FlatButton(
             color: hexToColor("#d86a77"),
             child: Text("Đóng"),
-            onPressed: (){
+            onPressed: () {
               uploading = false;
               Navigator.of(_containerKey.currentContext).pop();
-            }
-        ),
+            }),
       ],
     );
 
@@ -246,26 +273,24 @@ class _ChooseTemplatePageState extends State<ChooseTemplatePage> {
         context: context,
         builder: (BuildContext context) {
           return dialog;
-        }
-    );
-
+        });
   }
+
   showMyError2Dialog(BuildContext context) {
     // Create AlertDialog
-    GlobalKey _containerKey= GlobalKey();
+    GlobalKey _containerKey = GlobalKey();
     AlertDialog dialog = AlertDialog(
       key: _containerKey,
       title: Text("Ảnh có dung lượng quá lớn"),
       content: Text("Bạn cần chọn ảnh có dung lượng nhỏ hơn 5MB"),
       actions: [
-        FlatButton(
-            color: hexToColor("#d86a77"),
+        TextButton(
+            style: TextButton.styleFrom(primary: hexToColor("#d86a77")),
             child: Text("Đóng"),
-            onPressed: (){
+            onPressed: () {
               uploading = false;
               Navigator.of(_containerKey.currentContext).pop();
-            }
-        ),
+            }),
       ],
     );
 
@@ -274,27 +299,25 @@ class _ChooseTemplatePageState extends State<ChooseTemplatePage> {
         context: context,
         builder: (BuildContext context) {
           return dialog;
-        }
-    );
-
+        });
   }
+
   showMyAlertDialog(BuildContext context) {
     // Create AlertDialog
-    GlobalKey _containerKey= GlobalKey();
+    GlobalKey _containerKey = GlobalKey();
     AlertDialog dialog = AlertDialog(
       key: _containerKey,
       title: Text("Lưu lại"),
       content: Text("Mẫu thiệp mới của bạn đã được lưu lại!"),
       actions: [
-        FlatButton(
-            color: hexToColor("#d86a77"),
+        TextButton(
+            style: TextButton.styleFrom(primary: hexToColor("#d86a77")),
             child: Text("Hoàn thành"),
-            onPressed: (){
+            onPressed: () {
               uploading = false;
 
               Navigator.of(_containerKey.currentContext).pop();
-            }
-        ),
+            }),
       ],
     );
 
@@ -303,24 +326,23 @@ class _ChooseTemplatePageState extends State<ChooseTemplatePage> {
         context: context,
         builder: (BuildContext context) {
           return dialog;
-        }
-    );
-
+        });
   }
 }
 
-class MyCard extends StatefulWidget{
+class MyCard extends StatefulWidget {
   final bool isCreate;
-  const MyCard({Key key, @required this.isCreate}): super (key: key);
+  const MyCard({Key key, @required this.isCreate}) : super(key: key);
   @override
-  State<StatefulWidget> createState(){
+  State<StatefulWidget> createState() {
     return new MyCardState();
   }
 }
-class MyCardState extends State<MyCard>{
+
+class MyCardState extends State<MyCard> {
   bool get isCreate => widget.isCreate;
   List<InvitationCard> _invitationCard = [];
-  String weddingId='';
+  String weddingId = '';
   Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   SharedPreferences sharedPrefs;
 
@@ -359,10 +381,10 @@ class MyCardState extends State<MyCard>{
       if (await directory.exists()) {
         await dio.download(url, saveFile.path,
             onReceiveProgress: (value1, value2) {
-              setState(() {
-                progress = value1 / value2;
-              });
-            });
+          setState(() {
+            progress = value1 / value2;
+          });
+        });
         return true;
       }
       return false;
@@ -385,41 +407,43 @@ class MyCardState extends State<MyCard>{
     return false;
   }
 
-   downloadFile(String url) async {
+  downloadFile(String url) async {
     setState(() {
       loading = true;
       progress = 0;
     });
     bool downloaded = await saveImage(
-        url,
-        'IMG_${DateTime.now().microsecondsSinceEpoch}.jpg');
+        url, 'IMG_${DateTime.now().microsecondsSinceEpoch}.jpg');
     if (downloaded) {
       print("File Downloaded");
     } else {
       print("Problem Downloading File");
     }
-    if(progress==1){
+    if (progress == 1) {
       showMyAlertDialog(context);
     }
     setState(() {
       loading = false;
     });
   }
+
   showMyErrorDialog(BuildContext context) {
     // Create AlertDialog
-    GlobalKey _containerKey= GlobalKey();
+    GlobalKey _containerKey = GlobalKey();
     AlertDialog dialog = AlertDialog(
       key: _containerKey,
       title: Text("Ứng dụng chưa được cấp quyền"),
-      content: Text("Bạn cần cấp quyền cho ứng dụng để thực hiện chức năng này!"),
+      content:
+          Text("Bạn cần cấp quyền cho ứng dụng để thực hiện chức năng này!"),
       actions: [
-        FlatButton(
-          color: hexToColor("#d86a77"),
+        TextButton(
+            style: TextButton.styleFrom(
+              primary: hexToColor("#d86a77"),
+            ),
             child: Text("Đóng"),
-            onPressed: (){
+            onPressed: () {
               Navigator.of(_containerKey.currentContext).pop();
-            }
-        ),
+            }),
       ],
     );
 
@@ -428,25 +452,23 @@ class MyCardState extends State<MyCard>{
         context: context,
         builder: (BuildContext context) {
           return dialog;
-        }
-    );
-
+        });
   }
+
   showMyAlertDialog(BuildContext context) {
     // Create AlertDialog
-    GlobalKey _containerKey= GlobalKey();
+    GlobalKey _containerKey = GlobalKey();
     AlertDialog dialog = AlertDialog(
       key: _containerKey,
       title: Text("Lưu lại"),
       content: Text("Mẫu thiệp mới của bạn đã được lưu lại!"),
       actions: [
-        FlatButton(
-            color: hexToColor("#d86a77"),
+        TextButton(
+            style: TextButton.styleFrom(primary: hexToColor("#d86a77")),
             child: Text("Hoàn thành"),
-            onPressed: (){
+            onPressed: () {
               Navigator.of(_containerKey.currentContext).pop();
-            }
-        ),
+            }),
       ],
     );
 
@@ -455,13 +477,12 @@ class MyCardState extends State<MyCard>{
         context: context,
         builder: (BuildContext context) {
           return dialog;
-        }
-    );
-
+        });
   }
+
   @override
-  void initState(){
-    SharedPreferences.getInstance().then((prefs){
+  void initState() {
+    SharedPreferences.getInstance().then((prefs) {
       setState(() => sharedPrefs = prefs);
       weddingId = prefs.getString('wedding_id');
       print(weddingId);
@@ -472,76 +493,150 @@ class MyCardState extends State<MyCard>{
 
   @override
   Widget build(BuildContext context) {
-    final screenSide= MediaQuery.of(context).size;
+    final screenSide = MediaQuery.of(context).size;
     String imageUrl = '';
     return new Scaffold(
       body: new Container(
         child: BlocBuilder(
           cubit: BlocProvider.of<InvitationCardBloc>(context),
-          builder: (context,state){
-            if(weddingId != ''){
-              BlocProvider.of<InvitationCardBloc>(context).add(LoadSuccess(weddingId));
+          builder: (context, state) {
+            if (weddingId != '') {
+              BlocProvider.of<InvitationCardBloc>(context)
+                  .add(LoadSuccess(weddingId));
             }
             if (state is InvitationCardLoading) {
-              return  Padding(
+              return Padding(
                 padding: const EdgeInsets.fromLTRB(140, 200, 50, 0),
-                child: Container(
-                    child: LoadingIndicator()
-                ),
+                child: Container(child: LoadingIndicator()),
               );
-            } else if(state is InvitationCardLoaded){
+            } else if (state is InvitationCardLoaded) {
               _invitationCard = state.invitations;
 
-              if(_invitationCard.length == 0 && isCreate == false){
+              if (_invitationCard.length == 0 && isCreate == false) {
                 hasCard = false;
                 return Padding(
                   padding: const EdgeInsets.fromLTRB(30, 40, 30, 0),
                   child: Center(
                       child: Column(
-                        children: <Widget>[
-                          Text(
-                            'Hiện tại bạn chưa tạo mẫu thiệp mời nào',style: (TextStyle(fontSize: 16)),textAlign: TextAlign.center,
-                          ),
-                          Text(
-                            'Hãy tạo thiệp mời theo mẫu hoặc tải lên từ bộ sưu tập của bạn',style: (TextStyle(fontSize: 18)),textAlign: TextAlign.center,
-                          ),
-                        ],
-                      )
-
-                  ),
+                    children: <Widget>[
+                      Text(
+                        'Hiện tại bạn chưa tạo mẫu thiệp mời nào',
+                        style: (TextStyle(fontSize: 16)),
+                        textAlign: TextAlign.center,
+                      ),
+                      Text(
+                        'Hãy tạo thiệp mời theo mẫu hoặc tải lên từ bộ sưu tập của bạn',
+                        style: (TextStyle(fontSize: 18)),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  )),
                 );
-              }else if(_invitationCard.length == 0 && isCreate == true){
+              } else if (_invitationCard.length == 0 && isCreate == true) {
                 return Padding(
                   padding: const EdgeInsets.fromLTRB(140, 200, 50, 0),
-                  child: Container(
-                     child: LoadingIndicator()
-                  ),
+                  child: Container(child: LoadingIndicator()),
                 );
-              }
-              else{
+              } else {
                 return loading
                     ? Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: LinearProgressIndicator(
-                      minHeight: 10,
-                      value: progress,
-                    ),
-                  ),
-                ):
-                  ListView.builder(
-                    itemCount: 1,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: LinearProgressIndicator(
+                            minHeight: 10,
+                            value: progress,
+                          ),
+                        ),
+                      )
+                    : ListView.builder(
+                        itemCount: 1,
+                        scrollDirection: Axis.horizontal,
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          InvitationCard item = _invitationCard[index];
+                          imageUrl = item.id;
+
+                          return Stack(
+                            alignment: Alignment.bottomRight,
+                            children: <Widget>[
+                              InkWell(
+                                onTap: () {},
+                                child: Container(
+                                  margin: EdgeInsets.all(3),
+                                  child: FadeInImage.memoryNetwork(
+                                      width: screenSide.width,
+                                      height: screenSide.height,
+                                      placeholder: kTransparentImage,
+                                      image: item.id),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Container(
+                                  child: FloatingActionButton.extended(
+                                    onPressed: () => downloadFile(imageUrl),
+                                    label: Text('Tải xuống'),
+                                    icon: Icon(Icons.download_outlined),
+                                    backgroundColor: hexToColor("#d86a77"),
+                                  ),
+                                ),
+                              )
+                            ],
+                          );
+                        });
+              }
+            }
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class CardList extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return new CardListState();
+  }
+}
+
+class CardListState extends State<CardList> {
+  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  List<TemplateCard> _templates = [];
+  SharedPreferences sharedPrefs;
+
+  @override
+  void initState() {
+    BlocProvider.of<TemplateCardBloc>(context).add(LoadTemplateCard());
+    _templates = [];
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final screenSide = MediaQuery.of(context).size;
+    return new Scaffold(
+      body: new Container(
+          child: BlocBuilder(
+              cubit: BlocProvider.of<TemplateCardBloc>(context),
+              builder: (context, state) {
+                if (state is TemplateCardLoaded) {
+                  _templates = state.template;
+                }
+                return ListView.builder(
+                    itemCount: _templates.length,
                     scrollDirection: Axis.horizontal,
                     shrinkWrap: true,
-                    itemBuilder: (context,index){
-                      InvitationCard item = _invitationCard[index];
-                      imageUrl = item.id;
-
+                    itemBuilder: (context, index) {
+                      TemplateCard item = _templates[index];
+                      print(index);
                       return Stack(
-                        alignment: Alignment.bottomRight,
                         children: <Widget>[
                           InkWell(
-                            onTap: (){
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) =>
+                                    FillInfoPage(template: item),
+                              ));
                             },
                             child: Container(
                               margin: EdgeInsets.all(3),
@@ -549,94 +644,16 @@ class MyCardState extends State<MyCard>{
                                   width: screenSide.width,
                                   height: screenSide.height,
                                   placeholder: kTransparentImage,
-                                  image: item.id),
-                            ) ,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(15.0),
-                            child: Container(
-                              child: FloatingActionButton.extended(
-                                  onPressed: ()=> downloadFile(imageUrl),
-                                  label: Text('Tải xuống'),
-                                icon: Icon(Icons.download_outlined),
-                                backgroundColor: hexToColor("#d86a77"),
-                              ),
+                                  image: item.url),
                             ),
-                          )
+                          ),
                         ],
                       );
-                    }
-                );}
-            }
-
-          },
-        ),
-    ),
-
+                    });
+              })),
     );
   }
 }
 
-class CardList extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState(){
-    return new CardListState();
-  }
-}
-class CardListState extends State<CardList> {
-  Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-  List<TemplateCard> _templates = [];
-  SharedPreferences sharedPrefs;
-
-  @override
-  void initState(){
-    BlocProvider.of<TemplateCardBloc>(context).add(LoadTemplateCard());
-    _templates = [];
-  }
-  @override
-  Widget build(BuildContext context) {
-    final screenSide= MediaQuery.of(context).size;
-    return new Scaffold(
-      body: new Container(
-        child: BlocBuilder(
-          cubit: BlocProvider.of<TemplateCardBloc>(context),
-          builder: (context,state){
-            if(state is TemplateCardLoaded){
-              _templates = state.template;
-            }
-            return  ListView.builder(
-                  itemCount: _templates.length,
-                  scrollDirection: Axis.horizontal,
-                  shrinkWrap: true,
-                  itemBuilder: (context,index){
-                    TemplateCard item = _templates[index];
-                    print(index);
-                    return Stack(
-                      children: <Widget>[
-                         InkWell(
-                          onTap: (){
-                            Navigator.of(context).push(
-                                MaterialPageRoute(builder: (context) => FillInfoPage(template: item),
-                                ));
-                          },
-                          child: Container(
-                            margin: EdgeInsets.all(3),
-                            child: FadeInImage.memoryNetwork(
-                                width: screenSide.width,
-                                height: screenSide.height,
-                                placeholder: kTransparentImage,
-                                image: item.url),
-                          ) ,
-                        ),
-                      ],
-                    );
-                  });
-            ;
-          }
-        )
-      ),
-    );
-  }
-}
-void onUploadClick(){}
-void onAddClick(){}
+void onUploadClick() {}
+void onAddClick() {}

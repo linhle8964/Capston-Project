@@ -21,18 +21,15 @@ void main() {
   const invalidName = "linh1";
   const validName = "linh le";
 
-  final Wedding wedding =
-      new Wedding(validName, validName, DateTime.now(), "default", "address", id: "dasd");
+  final Wedding wedding = new Wedding(
+      validName, validName, DateTime.now(), "default", "address",
+      id: "dasd");
   final user = mock_user.MockUser(
     uid: "uid",
     email: "linhle8964@gmail.com",
   );
   group("valid wedding field", () {
-    ValidateWeddingBloc validateWeddingBloc;
-
-    setUp(() {
-      validateWeddingBloc = ValidateWeddingBloc();
-    });
+    setUp(() {});
     test("initial state is empty", () {
       expect(ValidateWeddingBloc().state, ValidateWeddingState.empty());
     });
@@ -47,7 +44,8 @@ void main() {
             ValidateWeddingState(
                 isGroomNameValid: false,
                 isBrideNameValid: true,
-                isAddressValid: true)
+                isAddressValid: true,
+                isBudgetValid: true)
           ]);
 
       blocTest("emit [invalid] when name contain number or symbol",
@@ -59,7 +57,8 @@ void main() {
             ValidateWeddingState(
                 isGroomNameValid: false,
                 isBrideNameValid: true,
-                isAddressValid: true)
+                isAddressValid: true,
+                isBudgetValid: true)
           ]);
 
       blocTest("emit [valid] name",
@@ -69,12 +68,14 @@ void main() {
           seed: ValidateWeddingState(
               isGroomNameValid: false,
               isBrideNameValid: true,
-              isAddressValid: true),
+              isAddressValid: true,
+              isBudgetValid: true),
           expect: [
             ValidateWeddingState(
                 isGroomNameValid: true,
                 isBrideNameValid: true,
-                isAddressValid: true)
+                isAddressValid: true,
+                isBudgetValid: true)
           ]);
 
       blocTest("emit [invalid] when address is empty",
@@ -86,7 +87,8 @@ void main() {
             ValidateWeddingState(
                 isGroomNameValid: true,
                 isBrideNameValid: true,
-                isAddressValid: false)
+                isAddressValid: false,
+                isBudgetValid: true)
           ]);
     });
   });
@@ -102,12 +104,18 @@ void main() {
     });
 
     test('throws AssertionError when weddingRepository is null', () {
-      expect(() => WeddingBloc(weddingRepository: null),
+      expect(
+          () => WeddingBloc(
+              weddingRepository: null,
+              userWeddingRepository: mockUserWeddingRepository),
           throwsA(isA<AssertionError>()));
     });
 
     test('throws AssertionError when userWeddingRepository is null', () {
-      expect(() => WeddingBloc(userWeddingRepository: null),
+      expect(
+          () => WeddingBloc(
+              userWeddingRepository: null,
+              weddingRepository: mockWeddingRepository),
           throwsA(isA<AssertionError>()));
     });
 

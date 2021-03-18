@@ -105,8 +105,11 @@ class _WeddingDateMainState extends State<WeddingDateMain> {
                 child: SizedBox(
                   width: double.infinity,
                   height: 50,
-                  child: RaisedButton(
-                    color: Colors.blue,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: Colors.blue,
+                      onPrimary: Colors.white,
+                    ),
                     onPressed: onSaveClick,
                     child: Text(
                       'Lưu',
