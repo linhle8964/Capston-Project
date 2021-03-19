@@ -1,13 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_web_diary/firebase_repository/wedding_firebase_repository.dart';
 import 'package:flutter_web_diary/model/guest.dart';
 import 'package:flutter_web_diary/model/wedding.dart';
 import 'package:flutter_web_diary/screen/views/error/error_page.dart';
 import 'package:flutter_web_diary/screen/views/home/home_view.dart';
 import 'package:flutter_web_diary/screen/views/input_details/input_details.dart';
 import 'package:flutter_web_diary/screen/views/success/success_page.dart';
-import 'package:flutter_web_diary/util/globle_variable.dart';
 import 'package:flutter_web_diary/util/wedding_route_path.dart';
 
 class WeddingGuestRouterDelegate extends RouterDelegate<WeddingGuestRoutePath>

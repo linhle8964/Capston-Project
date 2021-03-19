@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class PersonDetailsDialog extends StatefulWidget {
@@ -16,7 +17,7 @@ class _PersonDetailsDialogState extends State<PersonDetailsDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Thông báo: '),
+      title: Text('Thông báo: ', style: TextStyle(fontWeight: FontWeight.bold),),
       content: SingleChildScrollView(
         child: ListBody(
           children: <Widget>[

@@ -8,7 +8,7 @@ class SuccessPage extends StatelessWidget {
     return  Scaffold(
       backgroundColor: Colors.grey[100],
       body: CenteredView(
-        child: ShowImage(src: "/thanks.jpg"),
+        child: ShowImage(src: "assets/thanks.jpg", isFromAssets: true,),
         ),
     );
   }

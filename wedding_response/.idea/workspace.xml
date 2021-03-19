@@ -20,61 +20,40 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f3e24abf-ec34-481a-919d-25be2615c827" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/assets/B&amp;G.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/favicon-32x32.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/thanks.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/wedding_background_1.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/weddingcard.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/bloc/guests/bloc.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/bloc/guests/guests_bloc.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/bloc/guests/guests_event.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/bloc/guests/guests_state.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/bloc/simple_bloc_observer.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/bloc/wedding/bloc.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/bloc/wedding/wedding_bloc.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/bloc/wedding/wedding_event.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/bloc/wedding/wedding_state.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/entity/guest_entity.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/entity/user_wedding_entity.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/entity/wedding_entity.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/firebase_repository/guest_firebase_repository.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/firebase_repository/wedding_firebase_repository.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/model/guest.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/model/user_wedding.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/model/wedding.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/repository/guests_repository.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/repository/wedding_repository.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/screen/views/error/error_page.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/screen/views/home/home_view.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/screen/views/home/home_view_desktop.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/screen/views/home/home_view_tablet_mobile.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/screen/views/input_details/choose_to_come.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/screen/views/input_details/input_detail_desktop.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/screen/views/input_details/input_details.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/screen/views/input_details/input_details_mobile_tablet.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/screen/views/success/success_page.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/screen/widgets/centered_view/centered_view.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/screen/widgets/details_input/details_input.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/screen/widgets/details_input/drop_down.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/screen/widgets/details_input/people_number_field.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/screen/widgets/details_input/submit_button.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/screen/widgets/details_input/text_field.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/screen/widgets/image_show/image_show.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/screen/widgets/phone_input/phone_input.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/util/globle_variable.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/util/validation.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/util/wedding_guest_router_delegate.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/util/wedding_route_information_parser.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/util/wedding_route_path.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/diary_card.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/diary_entry_button.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/diary_entry_model.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/diary_entry_page.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/emoji_helpers.dart" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/bloc/invitation/bloc.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/bloc/invitation/invitation_bloc.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/bloc/invitation/invitation_event.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/bloc/invitation/invitation_state.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/entity/invitation_entity.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/firebase_repository/invitation_firebase_repository.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/model/invitation.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/repository/invitation_repository.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/util/confirm_dialog.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.firebase/hosting.YnVpbGRcd2Vi.cache" beforeDir="false" afterPath="$PROJECT_DIR$/.firebase/hosting.YnVpbGRcd2Vi.cache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/pop_up_menu.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/top_bar_title.dart" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/model/guest.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/model/guest.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/screen/views/error/error_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screen/views/error/error_page.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/screen/views/home/home_view.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screen/views/home/home_view.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/screen/views/home/home_view_desktop.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screen/views/home/home_view_desktop.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/screen/views/home/home_view_tablet_mobile.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screen/views/home/home_view_tablet_mobile.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/screen/views/input_details/choose_to_come.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screen/widgets/details_input/choose_to_come.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/screen/views/input_details/input_detail_desktop.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screen/views/input_details/input_detail_desktop.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/screen/views/input_details/input_details.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screen/views/input_details/input_details.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/screen/views/input_details/input_details_mobile_tablet.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screen/views/input_details/input_details_mobile_tablet.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/screen/views/success/success_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screen/views/success/success_page.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/screen/widgets/details_input/details_input.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screen/widgets/details_input/details_input.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/screen/widgets/details_input/drop_down.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screen/widgets/details_input/drop_down.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/screen/widgets/details_input/people_number_field.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screen/widgets/details_input/people_number_field.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/screen/widgets/details_input/submit_button.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screen/widgets/details_input/submit_button.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/screen/widgets/details_input/text_field.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screen/widgets/details_input/text_field.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/screen/widgets/image_show/image_show.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screen/widgets/image_show/image_show.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/screen/widgets/phone_input/phone_input.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screen/widgets/phone_input/phone_input.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/util/globle_variable.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/util/globle_variable.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/util/wedding_guest_router_delegate.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/util/wedding_guest_router_delegate.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/util/wedding_route_information_parser.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/util/wedding_route_information_parser.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/index.html" afterDir="false" />
     </list>
@@ -84,9 +63,10 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="ProjectId" id="1pWA1Xkl20uAvgRNmU9VpfeHd1Z" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -96,20 +76,22 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="android.sdk.path" value="$USER_HOME$/AppData/Local/Android/Sdk" />
     <property name="dart.analysis.tool.window.visible" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/lib/util" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\nangl\Capston-Project\wedding_response\lib\bloc\invitation" />
+      <recent name="C:\Users\nangl\Capston-Project\wedding_response\lib\screen\widgets\details_input" />
       <recent name="E:\GIT\wedding_response\lib" />
       <recent name="E:\GIT\wedding_response\lib\screen\widgets\details_input" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\nangl\Capston-Project\wedding_response\lib\util" />
       <recent name="E:\GIT\wedding_response\lib\bloc" />
       <recent name="E:\GIT\wedding_response\lib\repository" />
       <recent name="E:\GIT\wedding_response\lib\firebase_repository" />
       <recent name="E:\GIT\wedding_response\lib\entity" />
-      <recent name="E:\GIT\wedding_response\lib\model" />
     </key>
   </component>
   <component name="RunManager">
@@ -174,7 +156,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="Dart">
           <url>file://$PROJECT_DIR$/lib/screen/views/home/home_view.dart</url>
-          <line>61</line>
+          <line>69</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
       </breakpoints>

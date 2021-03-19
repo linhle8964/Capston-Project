@@ -8,19 +8,22 @@ class WeddingGuestRouteInformationParser extends RouteInformationParser<WeddingG
     final uri = Uri.parse(routeInfo.location);
 
     // Handle '/:weddingID'
-    if (uri.pathSegments.length == 1) {
-      final weddingID = uri.pathSegments.first;
+    if (uri.pathSegments.length == 2) {
+      if (uri.pathSegments.first != 'guest') return WeddingGuestRoutePath.unknown();
+      final weddingID = uri.pathSegments.elementAt(1);
+      print(weddingID);
       if (weddingID == null) return WeddingGuestRoutePath.unknown();
       if(weddingID == "done") return WeddingGuestRoutePath.Done();
       return WeddingGuestRoutePath.register(weddingID);
     }
     // Handle '/:weddingID/:guestID'
-    if (uri.pathSegments.length == 2) {
-      final weddingID = uri.pathSegments.first;
-      final guestID = uri.pathSegments.elementAt(1);
-      if (weddingID != null && guestID !=null) return WeddingGuestRoutePath.inputDetails(weddingID,guestID);
-      else if (weddingID != null && guestID ==null) return WeddingGuestRoutePath.register(weddingID);
-
+    if (uri.pathSegments.length == 3) {
+      if (uri.pathSegments.first != 'guest') return WeddingGuestRoutePath.unknown();
+      final weddingID = uri.pathSegments.elementAt(1);
+      final guestID = uri.pathSegments.elementAt(2);
+      print(weddingID + "-" + guestID);
+      if (weddingID != null && guestID !=null) {return WeddingGuestRoutePath.inputDetails(weddingID,guestID);}
+      if (weddingID != null && guestID == null) {return WeddingGuestRoutePath.register(weddingID);}
       return WeddingGuestRoutePath.unknown();
     }
 
@@ -30,16 +33,16 @@ class WeddingGuestRouteInformationParser extends RouteInformationParser<WeddingG
   @override
   RouteInformation restoreRouteInformation(WeddingGuestRoutePath path) {
     if (path.isUnknown) {
-      return RouteInformation(location: '/404');
+      return RouteInformation(location: '/guest/404');
     }
     if (path.isRegisterPage) {
-      return RouteInformation(location: '/${path.weddingID}');
+      return RouteInformation(location: '/guest/${path.weddingID}');
     }
     if (path.isInputDetailsPage) {
-      return RouteInformation(location: '/${path.weddingID}/${path.guestID}');
+      return RouteInformation(location: '/guest/${path.weddingID}/${path.guestID}');
     }
     if (path.isDone) {
-      return RouteInformation(location: '/done');
+      return RouteInformation(location: '/guest/done');
     }
 
     return null;

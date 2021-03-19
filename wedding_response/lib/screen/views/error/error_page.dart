@@ -7,7 +7,7 @@ class UnknownScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Text('404'),
+        child: Text('Nhập đúng đường dẫn mà bạn được gửi để tiếp tục trả lời lời mời đám cưới'),
       ),
     );
   }

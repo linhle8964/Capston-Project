@@ -2,17 +2,13 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_web_diary/entity/wedding_entity.dart';
-import 'package:flutter_web_diary/model/wedding.dart';
+import 'package:url_strategy/url_strategy.dart';
 import 'package:flutter_web_diary/util/wedding_guest_router_delegate.dart';
 import 'package:flutter_web_diary/util/wedding_route_information_parser.dart';
-import 'bloc/wedding/bloc.dart';
-import 'bloc/wedding/wedding_bloc.dart';
-import 'bloc/wedding/wedding_event.dart';
-import 'firebase_repository/wedding_firebase_repository.dart';
+
 
 void main() async {
+  setPathUrlStrategy();
   return runApp(MyApp());
 }
 

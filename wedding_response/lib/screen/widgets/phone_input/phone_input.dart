@@ -2,12 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_web_diary/bloc/guests/bloc.dart';
-import 'package:flutter_web_diary/bloc/wedding/bloc.dart';
 import 'package:flutter_web_diary/firebase_repository/guest_firebase_repository.dart';
 import 'package:flutter_web_diary/model/guest.dart';
-import 'package:flutter_web_diary/model/wedding.dart';
-import 'package:flutter_web_diary/screen/views/input_details/input_details.dart';
-import 'package:flutter_web_diary/util/globle_variable.dart';
 
 class GoToDetailsButton extends StatelessWidget {
   String _phone = "";
@@ -104,7 +100,8 @@ class GoToDetailsButton extends StatelessWidget {
         barrierDismissible: false,
         builder: (context) =>
         new AlertDialog(
-          title: Text("Số điện thoại chưa đúng"),
+          title: Text('Thông báo: ', style: TextStyle(fontWeight: FontWeight.bold),),
+          content: Text("Số điện thoại không đúng"),
           actions: [
             FlatButton(
                 child: Text('Quay Lại'),

@@ -1,18 +1,32 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:flutter_web_diary/model/invitation.dart';
+import 'package:flutter_web_diary/repository/invitation_repository.dart';
 import 'package:meta/meta.dart';
 
-part 'invitation_event.dart';
-part 'invitation_state.dart';
+import 'bloc.dart';
+
 
 class InvitationBloc extends Bloc<InvitationEvent, InvitationState> {
-  InvitationBloc() : super(InvitationInitial());
+  InvitationCardRepository _invitationRepository;
+
+  InvitationBloc({@required InvitationCardRepository invitationCardRepository})
+      :assert(invitationCardRepository != null),
+        _invitationRepository =invitationCardRepository,
+        super(InvitationCardLoading());
 
   @override
   Stream<InvitationState> mapEventToState(
     InvitationEvent event,
   ) async* {
-    // TODO: implement mapEventToState
+    if(event is LoadInvitationCard){
+      yield* _mapLoadInvitationToState(event);
+    }
+  }
+
+  Stream<InvitationState> _mapLoadInvitationToState(LoadInvitationCard event) async* {
+    InvitationCard invitationCard = await _invitationRepository.getInvitationCardById(event.weddingID);
+    yield InvitationCardLoaded(invitationCard);
   }
 }

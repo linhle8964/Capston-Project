@@ -27,45 +27,46 @@ class InputDetailsPage extends StatelessWidget {
     return BlocProvider(
       create: (BuildContext context) => GuestsBloc(
         guestsRepository: FirebaseGuestRepository(),
-      )..add(LoadGuestByID(selectedWedding.id, selectedGuestID)),
+      )..add(LoadGuests(selectedWedding.id)),
       child: Builder(
         builder: (context) => BlocBuilder(
-          buildWhen: (privous, current){
-            if(privous == CompanionChose || current == CompanionChose) return false;
-            return true;
-          },
           cubit: BlocProvider.of<GuestsBloc>(context),
           builder: (context, state) {
-            if (state is GuestsLoadedByID) {
-              Guest guest = state.guest;
-              if (guest.id == selectedGuestID) {
-                return Scaffold(
-                  backgroundColor: Colors.white12,
-                  body: CenteredView(
-                    child: Column(
-                      children: <Widget>[
-                        Expanded(
-                          child: ScreenTypeLayout(
-                            mobile: InputDetailsMobileTablet(onTapped: onTapped,guest: guest,),
-                            tablet: InputDetailsMobileTablet(onTapped: onTapped,guest: guest,),
-                            desktop: InputDetailsDesktop(onTapped: onTapped,guest: guest,),
-                          ),
-                        )
-                      ],
+            if(globleweddingID != selectedWedding.id) return UnknownScreen();
+            if (state is GuestsLoaded) {
+              List<Guest> guests = state.guests;
+              for(int i=0; i<guests.length;i++){
+                Guest guest = guests[i];
+                if (guest.id == selectedGuestID) {
+                  return Scaffold(
+                    backgroundColor: Colors.white12,
+                    body: CenteredView(
+                      child: Column(
+                        children: <Widget>[
+                          Expanded(
+                            child: ScreenTypeLayout(
+                              mobile: InputDetailsMobileTablet(onTapped: onTapped,guest: guest,weddingID: selectedWedding.id,),
+                              tablet: InputDetailsMobileTablet(onTapped: onTapped,guest: guest,weddingID: selectedWedding.id,),
+                              desktop: InputDetailsDesktop(onTapped: onTapped,guest: guest,weddingID: selectedWedding.id,),
+                            ),
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                );
+                  );
+                }
               }
               return UnknownScreen();
             }
-            return Container(
-              color: Colors.grey[100],
-              child: Center(
-                child: Image.asset(
-                  "/favicon-32x32.png",
+              return Container(
+                color: Colors.grey[100],
+                child: Center(
+                  child: Image.asset(
+                    "assets/favicon-32x32.png",
+                  ),
                 ),
-              ),
-            );
+              );
+
           },
         ),
       ),
