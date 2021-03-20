@@ -10,6 +10,7 @@ showSuccessAlertDialog(
 
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
+    key: Key("alert_dialog"),
     title: Text(title),
     content: Text(message),
     actions: [

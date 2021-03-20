@@ -94,6 +94,7 @@ class _LoginPageState extends State<LoginPage> {
                     Padding(
                         padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                         child: TextField(
+                          key: Key("email_text_field"),
                           style: TextStyle(fontSize: 18, color: Colors.black),
                           controller: _emailController,
                           decoration: InputDecoration(
@@ -110,6 +111,7 @@ class _LoginPageState extends State<LoginPage> {
                         alignment: AlignmentDirectional.centerEnd,
                         children: <Widget>[
                           TextField(
+                            key: Key("password_text_field"),
                             style: TextStyle(fontSize: 18, color: Colors.black),
                             controller: _passController,
                             obscureText: !_showPass,
@@ -140,6 +142,7 @@ class _LoginPageState extends State<LoginPage> {
                         width: double.infinity,
                         height: 30,
                         child: ElevatedButton(
+                          key: Key("login_button"),
                           style: ElevatedButton.styleFrom(
                             primary: isLoginButtonEnabled(state)
                                 ? hexToColor("#d86a77")

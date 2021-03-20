@@ -6,6 +6,7 @@ void showFailedSnackbar(BuildContext context, String message) {
     ..hideCurrentSnackBar()
     ..showSnackBar(
       SnackBar(
+        key: Key("fail_snackbar"),
         duration: Duration(seconds: 2),
         content: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -25,6 +26,7 @@ void showProcessingSnackbar(BuildContext context, String message) {
     ..hideCurrentSnackBar()
     ..showSnackBar(
       SnackBar(
+        key: Key("loading_snackbar"),
         content: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -42,12 +44,16 @@ void showSuccessSnackbar(BuildContext context, String message) {
     ..hideCurrentSnackBar()
     ..showSnackBar(
       SnackBar(
+        key: Key("success_snackbar"),
         duration: Duration(seconds: 2),
         content: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(message),
-            Icon(Icons.check, color: Colors.white,),
+            Icon(
+              Icons.check,
+              color: Colors.white,
+            ),
           ],
         ),
         backgroundColor: Colors.green,
