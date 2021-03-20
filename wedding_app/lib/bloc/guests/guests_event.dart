@@ -12,6 +12,9 @@ class LoadGuests extends GuestsEvent{
   String weddingId;
 
   LoadGuests(this.weddingId);
+
+  @override
+  List<Object> get props => [weddingId];
 }
 
 class SearchGuests extends GuestsEvent{}
@@ -58,7 +61,7 @@ class DeleteGuest extends GuestsEvent{
 class ClearCompleted extends GuestsEvent{}
 
 class ToggleAll extends GuestsEvent{
-  final List<Guest>guests;
+  final List<Guest> guests;
 
   ToggleAll(this.guests);
 

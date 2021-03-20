@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wedding_app/bloc/authentication/bloc.dart';
 import 'package:wedding_app/bloc/wedding/bloc.dart';
 import 'package:wedding_app/model/wedding.dart';
-import 'package:wedding_app/utils/get_data.dart';
 import 'package:wedding_app/utils/get_share_preferences.dart';
 import 'package:wedding_app/utils/hex_color.dart';
 import 'package:wedding_app/widgets/loading_indicator.dart';

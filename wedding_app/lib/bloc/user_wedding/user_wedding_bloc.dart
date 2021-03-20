@@ -29,13 +29,11 @@ class UserWeddingBloc extends Bloc<UserWeddingEvent, UserWeddingState> {
   Stream<UserWeddingState> _mapLoadUserWeddingsToState() async* {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String weddingId = prefs.getString("wedding_id");
-    print("Wedding ID : $weddingId");
     _userWeddingSubscription?.cancel();
     _userWeddingSubscription =
         _userWeddingRepository.getAllUserWedding(weddingId).listen(
       (userWeddings) {
         add(UserWeddingUpdated(userWeddings));
-        print(userWeddings.length);
       },
     );
   }
