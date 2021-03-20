@@ -9,6 +9,7 @@ import 'package:wedding_app/screens/home/home_page.dart';
 import 'package:wedding_app/firebase_repository/user_wedding_firebase_repository.dart';
 import 'package:wedding_app/firebase_repository/wedding_firebase_repository.dart';
 import 'package:wedding_app/screens/setting/setting.dart';
+import 'package:wedding_app/screens/vendor/vendor_list.dart';
 
 class NavigatorPage extends StatefulWidget {
   @override
@@ -20,7 +21,7 @@ class _NavigatorPageState extends State<NavigatorPage> {
   final List<Widget> _children = [
     HomePage(),
     ChecklistPage(),
-    BudgetList(),
+    Search(),
     ViewGuestPage(),
     SettingPage(),
   ];
