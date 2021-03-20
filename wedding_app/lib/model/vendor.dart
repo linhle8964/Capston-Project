@@ -78,5 +78,10 @@ class Vendor {
         entity.description, entity.frontImage, entity.ownerImage,
         id: entity.id);
   }
+
+  @override
+  String toString() {
+    return 'Vendor{id: $id, label: $label, name: $name, cateID: $cateID, location: $location, description: $description, frontImage: $frontImage, ownerImage: $ownerImage}';
+  }
 }
 

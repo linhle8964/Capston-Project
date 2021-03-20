@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wedding_app/bloc/category/bloc.dart';
+import 'package:wedding_app/bloc/vendor/bloc.dart';
 import 'package:wedding_app/model/category.dart';
 import 'package:wedding_app/model/vendor.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,9 +14,11 @@ class Search extends StatefulWidget {
 
 class _SearchState extends State<Search> {
   List<Vendor> properties = [];
-  List< Category> _categorys = [];
+  List<Category> _categorys = [];
+
   void initState() {
     BlocProvider.of<CateBloc>(context).add(LoadTodos());
+    BlocProvider.of<VendorBloc>(context).add(LoadVendor());
   }
 
   @override
@@ -73,25 +76,19 @@ class _SearchState extends State<Search> {
                         BlocBuilder(
                           cubit: BlocProvider.of<CateBloc>(context),
                           builder: (context, state) {
-
-                            if(state is TodosLoaded){
-                              _categorys= state.cates;
+                            if (state is TodosLoaded) {
+                              _categorys = state.cates;
                             }
                             return ListView.builder(
                                 physics: BouncingScrollPhysics(),
                                 scrollDirection: Axis.horizontal,
                                 itemCount: _categorys.length,
                                 itemBuilder: (context, index) {
-
-                                  return buildFilter(_categorys[index].cateName);
-                                }
-
-                            );
-                          }
-
-                          ,
+                                  return buildFilter(
+                                      _categorys[index].cateName);
+                                });
+                          },
                         ),
-
                         Align(
                           alignment: Alignment.centerRight,
                           child: Container(
@@ -101,11 +98,8 @@ class _SearchState extends State<Search> {
                                 begin: Alignment.centerRight,
                                 end: Alignment.centerLeft,
                                 colors: [
-                                  Theme
-                                      .of(context)
-                                      .scaffoldBackgroundColor,
-                                  Theme
-                                      .of(context)
+                                  Theme.of(context).scaffoldBackgroundColor,
+                                  Theme.of(context)
                                       .scaffoldBackgroundColor
                                       .withOpacity(0.0),
                                 ],
@@ -138,18 +132,29 @@ class _SearchState extends State<Search> {
           Padding(
             padding: EdgeInsets.only(right: 24, left: 24, top: 24, bottom: 12),
             child: Row(
-              children: [
-
-              ],
+              children: [],
             ),
           ),
           Expanded(
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 24),
-              child: ListView(
-                physics: BouncingScrollPhysics(),
-                scrollDirection: Axis.vertical,
-                children: buildProperties(),
+              child: BlocBuilder(
+                cubit: BlocProvider.of<VendorBloc>(context),
+                builder: (context, state) {
+                  BlocProvider.of<VendorBloc>(context).add(LoadVendor());
+                  if(state is VendorLoaded){
+                    properties= state.vendors;
+                    print("this is" + properties.toString());
+                  }
+                  if(state is VendorLoading){
+                    return  CircularProgressIndicator();
+                  }
+                  return ListView(
+                    physics: BouncingScrollPhysics(),
+                    scrollDirection: Axis.vertical,
+                    children: buildProperties(),
+                  );
+                },
               ),
             ),
           ),

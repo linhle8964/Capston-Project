@@ -256,7 +256,7 @@ class Detail extends StatelessWidget {
                                 children: [
 
                                   Text(
-                                    "James Milner",
+                                   property.name,
                                     style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
@@ -268,7 +268,7 @@ class Detail extends StatelessWidget {
                                   ),
 
                                   Text(
-                                    "Property Owner",
+                                    property.cateID,
                                     style: TextStyle(
                                       fontSize: 18,
                                       color: Colors.grey[500],
@@ -281,47 +281,7 @@ class Detail extends StatelessWidget {
                             ],
                           ),
 
-                          Row(
-                            children: [
 
-                              Container(
-                                height: 50,
-                                width: 50,
-                                decoration: BoxDecoration(
-                                  color: Colors.yellow[700].withOpacity(0.1),
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Center(
-                                  child: Icon(
-                                    Icons.phone,
-                                    color: Colors.yellow[700],
-                                    size: 20,
-                                  ),
-                                ),
-                              ),
-
-                              SizedBox(
-                                width: 16,
-                              ),
-
-                              Container(
-                                height: 50,
-                                width: 50,
-                                decoration: BoxDecoration(
-                                  color: Colors.yellow[700].withOpacity(0.1),
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Center(
-                                  child: Icon(
-                                    Icons.message,
-                                    color: Colors.yellow[700],
-                                    size: 20,
-                                  ),
-                                ),
-                              ),
-
-                            ],
-                          ),
 
                         ],
                       ),
@@ -333,10 +293,10 @@ class Detail extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
 
-                          buildFeature(Icons.hotel, "3 Bedroom"),
-                          buildFeature(Icons.wc, "2 Bathroom"),
-                          buildFeature(Icons.kitchen, "1 Kitchen"),
-                          buildFeature(Icons.local_parking, "2 Parking"),
+                          buildFeature(Icons.hotel, "Chuẩn 3 sao"),
+                          buildFeature(Icons.event, "2 phòng event lớn"),
+                          buildFeature(Icons.kitchen, "thực đơn "),
+                          buildFeature(Icons.local_parking, "có ô tô"),
 
                         ],
                       ),

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:wedding_app/bloc/budget/bloc.dart';
+import 'package:wedding_app/bloc/vendor/bloc.dart';
 import 'package:wedding_app/firebase_repository/budget_firebase_repository.dart';
 import 'package:wedding_app/firebase_repository/invite_email_firebase_repository.dart';
 import 'package:wedding_app/firebase_repository/user_wedding_firebase_repository.dart';
+import 'package:wedding_app/firebase_repository/vendor_firebase_repository.dart';
 import 'package:wedding_app/firebase_repository/wedding_firebase_repository.dart';
 import 'package:wedding_app/screens/create_wedding/create_wedding_argument.dart';
 import 'package:wedding_app/screens/create_wedding/create_wedding_page.dart';
@@ -48,6 +50,11 @@ class MyApp extends StatelessWidget {
           BlocProvider<BudgetBloc>(
             create: (BuildContext context) => BudgetBloc(
               budgetRepository: FirebaseBudgetRepository(),
+            ),
+          ),
+          BlocProvider<VendorBloc>(
+            create: (BuildContext context) => VendorBloc(
+              todosRepository: FirebaseVendorRepository(),
             ),
           ),
           BlocProvider<CateBloc>(
