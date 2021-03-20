@@ -60,7 +60,6 @@ class _ViewGuestPageState extends State<ViewGuestPage>
               providers: [
                 BlocProvider<GuestsBloc>(
                   create: (context) {
-                    print("2");
                     return GuestsBloc(
                       guestsRepository: FirebaseGuestRepository(),
                     )..add(LoadGuests(weddingId));
@@ -702,9 +701,15 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                 List<Contact> listContacts = snapshot.data;
                 List<Guest> listAddGuests = [];
                 List<Contact> listAvaiContacts = [];
-                for(int i = 0; i< listContacts.length; i++){
-                  if(!isChecked(guests, listContacts[i].phones.elementAt(0).value)){
+                if(guests.isEmpty){
+                  for(int i = 0; i< listContacts.length; i++){
                     listAvaiContacts.add(listContacts[i]);
+                  }
+                }else{
+                  for(int i = 0; i< listContacts.length; i++){
+                    if(!isChecked(guests, listContacts[i].phones.elementAt(0).value)){
+                      listAvaiContacts.add(listContacts[i]);
+                    }
                   }
                 }
                 return StatefulBuilder(builder: (context, setState){
