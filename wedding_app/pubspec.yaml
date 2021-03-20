@@ -68,6 +68,7 @@ dev_dependencies:
   sizer: ^1.1.8
   dio: ^4.0.0-beta7
   permission_handler: ^6.0.1+1
+  share: ^2.0.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
