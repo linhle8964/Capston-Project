@@ -27,6 +27,8 @@ class _ViewGuestPageState extends State<ViewGuestPage>
   List<Guest> _tempguests = [];
   int statusPage = -1;
   int c1 = 0, c2 = 0, c0 = 0;
+  int _selectedTypeItem = 3;
+  List<String> _typeItems = ["Chưa sắp xếp", "Nhà trai", "Nhà gái", "Tất cả"];
 
   @override
   void initState() {
@@ -73,10 +75,18 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                     child: Scaffold(
                       key: scaffoldKey,
                       appBar: new AppBar(
-                        centerTitle: true,
                         backgroundColor: hexToColor("#d86a77"),
                         title: const Text("Khách mời"),
                         actions: <Widget>[
+                          IconButton(
+                            icon: const Icon(
+                              Icons.download_outlined,
+                              color: Colors.white,
+                            ),
+                            onPressed: () {
+                              print("Excel");
+                            },
+                          ),
                           IconButton(
                             icon: const Icon(
                               Icons.search,
@@ -84,6 +94,22 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                             ),
                             onPressed: () {
                               SearchGuest(context, weddingId);
+                            },
+                          ),
+                          PopupMenuButton<String>(
+                            itemBuilder: (context){
+                              return _typeItems.map((String choice){
+                                return PopupMenuItem<String>(
+                                  value: _typeItems.indexOf(choice).toString(),
+                                  child: Text(choice),
+                                );
+                              }).toList();
+                            },
+                            onSelected: (choice){
+                              _selectedTypeItem = int.parse(choice);
+                              statusPage = -1;
+                              print(_selectedTypeItem);
+                              BlocProvider.of<GuestsBloc>(context).add(LoadGuests(weddingId));
                             },
                           ),
                         ]
@@ -136,14 +162,23 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                             cubit: BlocProvider.of<GuestsBloc>(context),
                             builder: (context, state){
                               _data.clear();
-                              if(statusPage == -1){
-                                for(int i = 0; i < _tempguests.length; i++){
-                                  _data.add(_tempguests[i]);
-                                }
-                              }else {
-                                for(int i = 0; i < _tempguests.length; i++){
-                                  if(_tempguests[i].status == statusPage)
+                              for(int i = 0; i < _tempguests.length; i++){
+                                if(statusPage == -1){
+                                  if(_selectedTypeItem == 3){
                                     _data.add(_tempguests[i]);
+                                  }else{
+                                    if (_tempguests[i].type == _selectedTypeItem && (_tempguests[i].status == 1 || _tempguests[i].status == 0))
+                                      _data.add(_tempguests[i]);
+                                  }
+                                }else {
+                                  if (_tempguests[i].status == statusPage){
+                                    if(_selectedTypeItem == 3){
+                                      _data.add(_tempguests[i]);
+                                    }else{
+                                      if (_tempguests[i].type == _selectedTypeItem && (_tempguests[i].status == 1 || _tempguests[i].status == 0))
+                                        _data.add(_tempguests[i]);
+                                    }
+                                  }
                                 }
                               }
                               return Column(
@@ -154,8 +189,26 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                                       Expanded(
                                           child: FlatButton(
                                             child: Column(
-                                                mainAxisAlignment: MainAxisAlignment.center,
                                                 children: [
+                                                  Row(
+                                                    mainAxisAlignment: MainAxisAlignment.end,
+                                                    children: <Widget>[
+                                                      Container(
+                                                        child: Row(
+                                                          children: <Widget>[
+                                                            Text(
+                                                              countCompanion(),
+                                                              style: TextStyle(fontSize: 12),
+                                                            ),
+                                                            Icon(
+                                                              Icons.accessibility,
+                                                              size: 12,
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
                                                   Text(
                                                     '$c1',
                                                     style: TextStyle(fontSize: 20),
@@ -256,6 +309,17 @@ class _ViewGuestPageState extends State<ViewGuestPage>
     );
   }
 
+  String countCompanion(){
+    int count = 0;
+    for (int i = 0; i < _tempguests.length; i++){
+      if(_tempguests[i].status == 1){
+        count++;
+        count += _tempguests[i].companion;
+      }
+    }
+    return count.toString();
+  }
+
   Future<void> AddGuestDialog(BuildContext context, String weddingId) async{
     return await showDialog(context: context,
         builder: (context){
@@ -350,7 +414,12 @@ class _ViewGuestPageState extends State<ViewGuestPage>
           String _description = "";
           String _phone = "";
           int _status = 0;
-          int group = _status;
+          int groupStt = _status;
+          int _type = 0;
+          int groupType = _type;
+          int _companion = 0;
+          String _congrat = "";
+          int _money = 0;
           return StatefulBuilder(builder: (context, setState){
             return SingleChildScrollView(
                 child: MultiBlocProvider(
@@ -395,11 +464,11 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                                     children: [
                                       Radio(
                                           value: 0,
-                                          groupValue: group,
+                                          groupValue: groupStt,
                                           onChanged: (T){
                                             _status = T;
                                             setState(() {
-                                              group = T;
+                                              groupStt = T;
                                             });
                                           }
                                       ),
@@ -412,11 +481,11 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                                     children: [
                                       Radio(
                                           value: 1,
-                                          groupValue: group,
+                                          groupValue: groupStt,
                                           onChanged: (T){
                                             _status = T;
                                             setState(() {
-                                              group = T;
+                                              groupStt = T;
                                             });
                                           }
                                       ),
@@ -429,11 +498,11 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                                     children: [
                                       Radio(
                                           value: 2,
-                                          groupValue: group,
+                                          groupValue: groupStt,
                                           onChanged: (T){
                                             _status = T;
                                             setState(() {
-                                              group = T;
+                                              groupStt = T;
                                             });
                                           }
                                       ),
@@ -442,6 +511,95 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                                   )
                               ),
                             ],
+                          ),
+                          Builder(
+                              builder: (context){
+                                if(groupStt == 1){
+                                  return Column(
+                                    children: [
+                                      TextFormField(
+                                        initialValue: _companion.toString(),
+                                        keyboardType: TextInputType.number,
+                                        decoration: InputDecoration(
+                                          labelText: "Số người đi cùng",
+                                          fillColor: Colors.white,
+                                          filled: true,
+                                        ),
+                                        onSaved: (input) => _companion = int.parse(input),
+                                      ),
+                                    ],
+                                  );
+                                }else{
+                                  return SizedBox.shrink();
+                                }
+                              }
+                          ),
+                          Builder(
+                            builder: (context){
+                              if(groupStt == 1 || groupStt == 0){
+                                return Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                            child: Column(
+                                              children: [
+                                                Radio(
+                                                    value: 0,
+                                                    groupValue: groupType,
+                                                    onChanged: (T){
+                                                      _type = T;
+                                                      setState(() {
+                                                        groupType = T;
+                                                      });
+                                                    }
+                                                ),
+                                                Text("Chưa xếp"),
+                                              ],
+                                            )
+                                        ),
+                                        Expanded(
+                                            child: Column(
+                                              children: [
+                                                Radio(
+                                                    value: 1,
+                                                    groupValue: groupType,
+                                                    onChanged: (T){
+                                                      _type = T;
+                                                      setState(() {
+                                                        groupType = T;
+                                                      });
+                                                    }
+                                                ),
+                                                Text("Nhà trai"),
+                                              ],
+                                            )
+                                        ),
+                                        Expanded(
+                                            child: Column(
+                                              children: [
+                                                Radio(
+                                                    value: 2,
+                                                    groupValue: groupType,
+                                                    onChanged: (T){
+                                                      _type = T;
+                                                      setState(() {
+                                                        groupType = T;
+                                                      });
+                                                    }
+                                                ),
+                                                Text("Nhà gái"),
+                                              ],
+                                            )
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                );
+                              }else{
+                                return SizedBox.shrink();
+                              }
+                            },
                           ),
                           TextFormField(
                             initialValue: _phone,
@@ -476,7 +634,7 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                           onPressed: (){
                             if(_formKey.currentState.validate()){
                               _formKey.currentState.save();
-                              Guest _guest = new Guest(_name, _description, _status, _phone);
+                              Guest _guest = new Guest(_name, _description, _status, _phone, _type, _companion, _congrat, _money);
                               addGuest(context, _guest, weddingId);
                               Navigator.of(context).pop();
                               AddGuestDialog(context, weddingId);
@@ -500,11 +658,14 @@ class _ViewGuestPageState extends State<ViewGuestPage>
     );
   }
 
-  getContacts() async
+  Future<List<Contact>> getContacts() async
   {
     final PermissionStatus permissionStatus = await _getPermission();
     List<Contact> listContacts = [];
     print(permissionStatus.toString());
+    if (permissionStatus == PermissionStatus.permanentlyDenied) {
+      await openAppSettings();
+    }
     if (permissionStatus == PermissionStatus.granted) {
       Iterable<Contact> contacts = await ContactsService.getContacts(withThumbnails: false);
       listContacts = contacts.toList();
@@ -575,7 +736,7 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                                       subtitle: Text((contact.phones.length>0)?"${phone}":"No contact"),
                                       trailing: Checkbox(value: isChecked(listAddGuests, phone), onChanged: (checked){
                                         setState((){
-                                          Guest guest = new Guest(contact.displayName,"",0,phone);
+                                          Guest guest = new Guest(contact.displayName,"",0,phone,0,0,"",0);
                                           if(!isChecked(listAddGuests, phone)){
                                             listAddGuests.add(guest);
                                           }
