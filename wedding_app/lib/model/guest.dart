@@ -7,27 +7,40 @@ class Guest{
   String description;
   int status;
   String phone;
+  int type;
+  int companion;
+  String congrat;
+  int money;
 
-  Guest(this.name, this.description, this.status, this.phone, {this.id});
+  Guest(this.name, this.description, this.status, this.phone, this.type, this.companion, this.congrat, this.money,
+      {this.id});
 
   Guest copyWith({
     String id,
     String name,
     String description,
     int status,
-    String phone
+    String phone,
+    int type,
+    int companion,
+    String congrat,
+    int money,
   }){
     return Guest(
       name ?? this.name,
       description ?? this.description,
       status ?? this.status,
       phone ?? this.phone,
-      id: id ?? this.id
+      type ?? this.type,
+      companion ?? this.companion,
+      congrat ?? this.congrat,
+      money ?? this.money,
+      id: id ?? this.id,
     );
   }
 
   GuestEntity toEntity(){
-    return GuestEntity(id, name, description, status, phone);
+    return GuestEntity(id, name, description, status, phone, type, companion, congrat, money);
   }
 
   static Guest fromEntity(GuestEntity entity){
@@ -36,6 +49,10 @@ class Guest{
         entity.description,
         entity.status,
         entity.phone,
+        entity.type,
+        entity.companion,
+        entity.congrat,
+        entity.money,
         id: entity.id,
     );
   }
