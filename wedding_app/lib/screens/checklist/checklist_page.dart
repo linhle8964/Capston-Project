@@ -3,6 +3,7 @@ import 'package:wedding_app/bloc/category/bloc.dart';
 import 'package:wedding_app/bloc/checklist/bloc.dart';
 import 'package:wedding_app/bloc/checklist/checklist_bloc.dart';
 import 'package:wedding_app/bloc/show_task/bloc.dart';
+import 'package:wedding_app/screens/checklist/download_excel.dart';
 import 'package:wedding_app/screens/edit_task/edit_task.dart';
 import 'package:wedding_app/utils/get_data.dart';
 import 'package:wedding_app/utils/hex_color.dart';
@@ -78,7 +79,13 @@ class _ChecklistPageState extends State<ChecklistPage>
 
   List<Widget> _buildActions(context, String weddingID) {
     return <Widget>[
-      new IconButton(
+      new
+      IconButton(
+        icon: Icon(Icons.arrow_downward),
+        onPressed: () {
+          showMyAlertDialog(context);
+        },
+      ),IconButton(
         icon: const Icon(
           Icons.search,
           color: Colors.white,
@@ -157,6 +164,40 @@ class _ChecklistPageState extends State<ChecklistPage>
         },
       ),
     ];
+  }
+
+  showMyAlertDialog(BuildContext context) {
+    GlobalKey _containerKey = GlobalKey();
+    // Create AlertDialog
+    AlertDialog dialog = AlertDialog(
+      key: _containerKey,
+      title: Text("Lưu lại"),
+      content: Text("Bạn có muốn lưu lại danh sách công việc dưới dạng file excel?"),
+      actions: [
+        TextButton(
+            style: TextButton.styleFrom(primary: hexToColor("#d86a77")),
+            child: Text("Có"),
+            onPressed: () {
+              Navigator.of(_containerKey.currentContext).pop();
+              downloadFile(tasks,context);
+            }),
+        TextButton(
+            style: TextButton.styleFrom(
+              primary: hexToColor("#d86a77"),
+            ),
+            child: Text("Không"),
+            onPressed: () {
+              Navigator.of(_containerKey.currentContext).pop();
+            }),
+      ],
+    );
+
+    // Call showDialog function to show dialog.
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return dialog;
+        });
   }
 
   @override
