@@ -203,8 +203,8 @@ showErrorUnAuthorDialog(BuildContext context) {
     content:
     Text("Bạn cần cấp quyền cho ứng dụng để thực hiện chức năng này!"),
     actions: [
-      FlatButton(
-          color: hexToColor("#d86a77"),
+      TextButton(
+          style: TextButton.styleFrom(primary: hexToColor("#d86a77")),
           child: Text("Đóng"),
           onPressed: () {
             Navigator.of(_containerKey.currentContext).pop();

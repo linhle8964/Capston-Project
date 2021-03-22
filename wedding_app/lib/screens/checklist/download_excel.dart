@@ -13,7 +13,7 @@ downloadFile(List<Task> tasks, BuildContext context) async {
   if(tasks.length==0){
     showErrorEmtyDialog(context);
   }else{
-    
+
     var excel = Excel.createExcel();
     Sheet sheetObject = excel['Công việc'];
     excel.delete('Sheet1');
@@ -210,8 +210,8 @@ showErrorUnAuthorDialog(BuildContext context) {
     content:
     Text("Bạn cần cấp quyền cho ứng dụng để thực hiện chức năng này!"),
     actions: [
-      FlatButton(
-          color: hexToColor("#d86a77"),
+      TextButton(
+          style: TextButton.styleFrom(primary: hexToColor("#d86a77")),
           child: Text("Đóng"),
           onPressed: () {
             Navigator.of(_containerKey.currentContext).pop();
