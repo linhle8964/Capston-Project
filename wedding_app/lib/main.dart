@@ -60,6 +60,7 @@ class MyApp extends StatelessWidget {
             return AuthenticationBloc(
               userRepository: FirebaseUserRepository(),
               userWeddingRepository: FirebaseUserWeddingRepository(),
+              weddingRepository: FirebaseWeddingRepository()
             )..add(AppStarted());
           }),
           BlocProvider<TemplateCardBloc>(create: (context) {
@@ -85,15 +86,6 @@ class MyApp extends StatelessWidget {
             create: (BuildContext context) => CateBloc(
               todosRepository: FirebaseCategoryRepository(),
             ),
-          ),
-          BlocProvider<AuthenticationBloc>(
-            create: (context) {
-              return AuthenticationBloc(
-                userRepository: FirebaseUserRepository(),
-                userWeddingRepository: FirebaseUserWeddingRepository(),
-                weddingRepository: FirebaseWeddingRepository(),
-              )..add(AppStarted());
-            },
           ),
         ],
         child: MaterialApp(

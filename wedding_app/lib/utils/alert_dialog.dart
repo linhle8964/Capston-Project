@@ -4,6 +4,7 @@ showSuccessAlertDialog(
     BuildContext context, String title, String message, Function function) {
   // set up the button
   Widget okButton = TextButton(
+    key: Key("alert_ok_button"),
     child: Text("OK"),
     onPressed: function,
   );

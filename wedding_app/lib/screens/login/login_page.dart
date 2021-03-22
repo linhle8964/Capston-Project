@@ -164,6 +164,7 @@ class _LoginPageState extends State<LoginPage> {
                         height: 20,
                         width: double.infinity,
                         child: new InkWell(
+                          key: Key("go_to_register_button"),
                           onTap: () {
                             Navigator.pushNamed(context, '/register');
                           },
