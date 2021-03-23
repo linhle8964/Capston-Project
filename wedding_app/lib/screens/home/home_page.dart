@@ -13,6 +13,7 @@ import 'package:wedding_app/utils/count_home_item.dart';
 import 'package:wedding_app/utils/format_number.dart';
 import 'package:wedding_app/utils/get_share_preferences.dart';
 import 'package:wedding_app/utils/hex_color.dart';
+import 'package:wedding_app/utils/share_guest_response_link.dart';
 import 'package:wedding_app/widgets/notification.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:android_alarm_manager/android_alarm_manager.dart';
@@ -139,7 +140,7 @@ class _HomePageState extends State<HomePage> {
                                                   padding:
                                                       const EdgeInsets.all(5),
                                                   child: Text(
-                                                    'Chia sẻ quyền quản lý',
+                                                    'Gửi link đám cưới cho khách',
                                                     style: TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold,
@@ -150,9 +151,9 @@ class _HomePageState extends State<HomePage> {
                                                           color: main_color,
                                                           width: 2)),
                                                 ),
-                                                onPressed: () {
-                                                  Navigator.pushNamed(context,
-                                                      "/invite_collaborator");
+                                                onPressed: () async {
+                                                  shareGuestResponseLink(
+                                                      context, wedding.id);
                                                 },
                                               )
                                             : Container()
