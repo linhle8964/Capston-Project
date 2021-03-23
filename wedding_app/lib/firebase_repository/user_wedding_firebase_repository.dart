@@ -112,4 +112,10 @@ class FirebaseUserWeddingRepository extends UserWeddingRepository {
       }
     });
   }
+
+  @override
+  Future<List<UserWedding>> getAllWeddingAdminByWedding(String weddingId) {
+    // TODO: implement getAllWeddingAdminByWedding
+    throw UnimplementedError();
+  }
 }
