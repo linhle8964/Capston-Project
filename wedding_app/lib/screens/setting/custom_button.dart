@@ -8,10 +8,10 @@ class CustomButtom extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),
+      padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
       child: SizedBox(
         width: double.infinity,
-        height: 50,
+        height: 40,
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(primary: color),
           onPressed: function,

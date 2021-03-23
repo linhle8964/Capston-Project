@@ -49,7 +49,7 @@ class _SettingPageState extends State<SettingPage> {
               bottomNavigationBar: Wrap(
                 children: [
                   Center(
-                    child: Text('App version 1.0.25'),
+                    child: Text('App version 1.0.00'),
                   ),
                   CustomButtom("Đăng xuất", () async {
                     showDialog(
@@ -62,11 +62,12 @@ class _SettingPageState extends State<SettingPage> {
                               },
                             ));
                   }, Colors.blue),
+                  CustomButtom("Rời đám cưới",
+                      () => _onLeftWeddingClick(context), Colors.grey),
                   isAdmin(userWedding.role)
                       ? CustomButtom("Xoá đám cưới",
-                          () => _onDeleteWeddingClick(context), Colors.grey)
-                      : CustomButtom("Rời đám cưới",
-                          () => _onLeftWeddingClick(context), Colors.grey),
+                          () => _onDeleteWeddingClick(context), Colors.black54)
+                      : Container(),
                 ],
               ),
               body: MultiBlocListener(
@@ -74,9 +75,6 @@ class _SettingPageState extends State<SettingPage> {
                   BlocListener<UserWeddingBloc, UserWeddingState>(
                     listener: (context, state) {
                       if (state is UserWeddingProcessing) {
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
                       } else if (state is UserWeddingFailed) {
                         showFailedSnackbar(context, state.message);
                       } else if (state is UserWeddingSuccess) {
@@ -85,15 +83,28 @@ class _SettingPageState extends State<SettingPage> {
                           Navigator.pop(context);
                           _logOut();
                         });
+                      } else if (state is UserWeddingEmpty) {
+                        showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (ctx) => PersonDetailsDialog(
+                                  message:
+                                      "Bạn là người dùng còn lại duy nhất trong đám cưới. Nếu bạn rời thì đám cưới sẽ bị xóa. Bạn có muốn rời?",
+                                  onPressedFunction: () async {
+                                    SharedPreferences preferences =
+                                        await SharedPreferences.getInstance();
+                                    String weddingId =
+                                        preferences.getString("wedding_id");
+                                    BlocProvider.of<WeddingBloc>(context)
+                                        .add(DeleteWedding(weddingId));
+                                  },
+                                ));
                       }
                     },
                   ),
                   BlocListener<WeddingBloc, WeddingState>(
                     listener: (context, state) {
                       if (state is Loading) {
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
                       } else if (state is Failed) {
                         showFailedSnackbar(context, state.message);
                       } else if (state is Success) {
@@ -154,31 +165,32 @@ class _SettingPageState extends State<SettingPage> {
         });
   }
 
-  void _onLeftWeddingClick(BuildContext ctx) {
+  void _onLeftWeddingClick(BuildContext context) {
     showDialog(
-        context: ctx,
+        context: context,
         barrierDismissible: false,
-        builder: (BuildContext context) => PersonDetailsDialog(
+        builder: (BuildContext ctx) => PersonDetailsDialog(
               message: "Bạn có muốn rời đám cưới?",
               onPressedFunction: () async {
                 final User user = FirebaseAuth.instance.currentUser;
-                BlocProvider.of<UserWeddingBloc>(ctx)
+                BlocProvider.of<UserWeddingBloc>(context)
                     .add(RemoveUserFromUserWedding(user));
               },
             ));
   }
 
-  void _onDeleteWeddingClick(BuildContext ctx) async {
+  void _onDeleteWeddingClick(BuildContext context) async {
     showDialog(
-        context: ctx,
+        context: context,
         barrierDismissible: false,
-        builder: (context) => PersonDetailsDialog(
+        builder: (ctx) => PersonDetailsDialog(
               message: "Bạn có muốn xóa đám cưới?",
               onPressedFunction: () async {
                 SharedPreferences preferences =
                     await SharedPreferences.getInstance();
                 String weddingId = preferences.getString("wedding_id");
-                BlocProvider.of<WeddingBloc>(ctx).add(DeleteWedding(weddingId));
+                BlocProvider.of<WeddingBloc>(context)
+                    .add(DeleteWedding(weddingId));
               },
             ));
   }

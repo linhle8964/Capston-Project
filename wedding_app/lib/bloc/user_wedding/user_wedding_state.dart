@@ -39,3 +39,5 @@ class UserWeddingFailed extends UserWeddingState {
 }
 
 class UserWeddingProcessing extends UserWeddingState {}
+
+class UserWeddingEmpty extends UserWeddingState {}

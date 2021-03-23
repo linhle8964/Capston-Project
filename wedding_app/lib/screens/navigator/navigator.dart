@@ -6,6 +6,7 @@ import 'package:wedding_app/bloc/user_wedding/bloc.dart';
 import 'package:wedding_app/bloc/wedding/bloc.dart';
 import 'package:wedding_app/firebase_repository/firebase_task_repository.dart';
 import 'package:wedding_app/firebase_repository/guest_firebase_repository.dart';
+import 'package:wedding_app/firebase_repository/invite_email_firebase_repository.dart';
 import 'package:wedding_app/screens/budget/budget_page.dart';
 import 'package:wedding_app/screens/checklist/checklist_page.dart';
 import 'package:wedding_app/screens/guest/view_guest_page.dart';
@@ -40,9 +41,9 @@ class _NavigatorPageState extends State<NavigatorPage> {
       providers: [
         BlocProvider<WeddingBloc>(
           create: (BuildContext context) => WeddingBloc(
-            userWeddingRepository: FirebaseUserWeddingRepository(),
-            weddingRepository: FirebaseWeddingRepository(),
-          ),
+              userWeddingRepository: FirebaseUserWeddingRepository(),
+              weddingRepository: FirebaseWeddingRepository(),
+              inviteEmailRepository: FirebaseInviteEmailRepository()),
         ),
         BlocProvider<UserWeddingBloc>(
           create: (BuildContext context) => UserWeddingBloc(

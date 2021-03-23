@@ -58,10 +58,10 @@ class MyApp extends StatelessWidget {
         providers: [
           BlocProvider<AuthenticationBloc>(create: (context) {
             return AuthenticationBloc(
-              userRepository: FirebaseUserRepository(),
-              userWeddingRepository: FirebaseUserWeddingRepository(),
-              weddingRepository: FirebaseWeddingRepository()
-            )..add(AppStarted());
+                userRepository: FirebaseUserRepository(),
+                userWeddingRepository: FirebaseUserWeddingRepository(),
+                weddingRepository: FirebaseWeddingRepository())
+              ..add(AppStarted());
           }),
           BlocProvider<TemplateCardBloc>(create: (context) {
             return TemplateCardBloc(
@@ -75,6 +75,7 @@ class MyApp extends StatelessWidget {
             return WeddingBloc(
               userWeddingRepository: FirebaseUserWeddingRepository(),
               weddingRepository: FirebaseWeddingRepository(),
+              inviteEmailRepository: FirebaseInviteEmailRepository(),
             );
           }),
           BlocProvider<BudgetBloc>(
@@ -99,10 +100,11 @@ class MyApp extends StatelessWidget {
                     providers: [
                       BlocProvider<WeddingBloc>(
                         create: (context) => WeddingBloc(
-                          weddingRepository: FirebaseWeddingRepository(),
-                          userWeddingRepository:
-                              FirebaseUserWeddingRepository(),
-                        ),
+                            weddingRepository: FirebaseWeddingRepository(),
+                            userWeddingRepository:
+                                FirebaseUserWeddingRepository(),
+                            inviteEmailRepository:
+                                FirebaseInviteEmailRepository()),
                       ),
                       BlocProvider<ValidateWeddingBloc>(
                         create: (context) => ValidateWeddingBloc(),
