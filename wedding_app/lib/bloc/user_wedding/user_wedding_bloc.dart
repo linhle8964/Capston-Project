@@ -49,14 +49,22 @@ class UserWeddingBloc extends Bloc<UserWeddingEvent, UserWeddingState> {
     try {
       UserWedding userWedding =
           await _userWeddingRepository.getUserWeddingByUser(event.user);
-      _userWeddingRepository.updateUserWedding(new UserWedding(
-          userWedding.email,
-          id: userWedding.id,
-          userId: userWedding.userId,
-          role: null,
-          joinDate: userWedding.joinDate,
-          weddingId: null));
-      yield UserWeddingSuccess("Thành công");
+
+      List<UserWedding> listUserWedding = await _userWeddingRepository
+          .getAllWeddingAdminByWedding(userWedding.weddingId);
+
+      if (listUserWedding.length <= 1) {
+        yield UserWeddingEmpty();
+      } else {
+        _userWeddingRepository.updateUserWedding(new UserWedding(
+            userWedding.email,
+            id: userWedding.id,
+            userId: userWedding.userId,
+            role: null,
+            joinDate: userWedding.joinDate,
+            weddingId: null));
+        yield UserWeddingSuccess("Thành công");
+      }
     } catch (e) {
       print("[ERROR]" + e);
       yield UserWeddingFailed("Có lỗi xảy ra");

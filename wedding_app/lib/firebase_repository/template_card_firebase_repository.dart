@@ -8,7 +8,7 @@ class FirebaseTemplateCardRepository implements TemplateCardRepository {
       FirebaseFirestore.instance.collection('cardTemplate');
 
   @override
-  Stream<List<TemplateCard>> GetAllTemplate() {
+  Stream<List<TemplateCard>> getAllTemplate() {
     return templateCollection.snapshots().map((snapshot) {
       print(snapshot.docs
           .map((doc) =>

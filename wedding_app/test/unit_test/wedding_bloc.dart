@@ -4,6 +4,7 @@ import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wedding_app/bloc/validate_wedding/bloc.dart';
 import 'package:wedding_app/bloc/wedding/bloc.dart';
+import 'package:wedding_app/firebase_repository/invite_email_firebase_repository.dart';
 import 'package:wedding_app/firebase_repository/user_wedding_firebase_repository.dart';
 import 'package:wedding_app/firebase_repository/wedding_firebase_repository.dart';
 import 'package:wedding_app/model/wedding.dart';
@@ -13,6 +14,9 @@ class MockWeddingRepository extends Mock implements FirebaseWeddingRepository {}
 
 class MockUserWeddingRepository extends Mock
     implements FirebaseUserWeddingRepository {}
+
+class MockInviteEmailRepository extends Mock
+    implements FirebaseInviteEmailRepository {}
 
 class MockFirebaseAuth extends Mock implements FirebaseAuth {}
 
@@ -96,18 +100,19 @@ void main() {
   group("crud wedding", () {
     MockWeddingRepository mockWeddingRepository;
     MockUserWeddingRepository mockUserWeddingRepository;
-    MockFirebaseAuth mockFirebaseAuth;
+    MockInviteEmailRepository mockInviteEmailRepository;
     setUp(() {
       mockWeddingRepository = MockWeddingRepository();
       mockUserWeddingRepository = MockUserWeddingRepository();
-      mockFirebaseAuth = MockFirebaseAuth();
+      mockInviteEmailRepository = MockInviteEmailRepository();
     });
 
     test('throws AssertionError when weddingRepository is null', () {
       expect(
           () => WeddingBloc(
               weddingRepository: null,
-              userWeddingRepository: mockUserWeddingRepository),
+              userWeddingRepository: mockUserWeddingRepository,
+              inviteEmailRepository: mockInviteEmailRepository),
           throwsA(isA<AssertionError>()));
     });
 
@@ -115,7 +120,8 @@ void main() {
       expect(
           () => WeddingBloc(
               userWeddingRepository: null,
-              weddingRepository: mockWeddingRepository),
+              weddingRepository: mockWeddingRepository,
+              inviteEmailRepository: mockInviteEmailRepository),
           throwsA(isA<AssertionError>()));
     });
 
@@ -124,7 +130,8 @@ void main() {
           //when(mockFirebaseAuth.currentUser).thenAnswer((_) => user);
           return WeddingBloc(
               weddingRepository: mockWeddingRepository,
-              userWeddingRepository: mockUserWeddingRepository);
+              userWeddingRepository: mockUserWeddingRepository,
+              inviteEmailRepository: mockInviteEmailRepository);
         },
         act: (bloc) => bloc.add(CreateWedding(wedding)),
         expect: [

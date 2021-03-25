@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:bloc/bloc.dart';
 import 'package:wedding_app/model/user_wedding.dart';
+import 'package:wedding_app/repository/invite_email_repository.dart';
 import 'package:wedding_app/repository/user_wedding_repository.dart';
 import 'package:wedding_app/repository/wedding_repository.dart';
 import 'bloc.dart';
@@ -12,15 +13,19 @@ import 'package:shared_preferences/shared_preferences.dart';
 class WeddingBloc extends Bloc<WeddingEvent, WeddingState> {
   final WeddingRepository _weddingRepository;
   final UserWeddingRepository _userWeddingRepository;
+  final InviteEmailRepository _inviteEmailRepository;
   StreamSubscription _streamSubscription;
 
   WeddingBloc(
       {@required WeddingRepository weddingRepository,
-      @required UserWeddingRepository userWeddingRepository})
+      @required UserWeddingRepository userWeddingRepository,
+      @required InviteEmailRepository inviteEmailRepository})
       : assert(weddingRepository != null),
         assert(userWeddingRepository != null),
+        assert(inviteEmailRepository != null),
         _weddingRepository = weddingRepository,
         _userWeddingRepository = userWeddingRepository,
+        _inviteEmailRepository = inviteEmailRepository,
         super(WeddingLoading());
 
   @override
@@ -90,6 +95,7 @@ class WeddingBloc extends Bloc<WeddingEvent, WeddingState> {
     try {
       _weddingRepository.deleteWedding(event.weddingId).then((value) async {
         _userWeddingRepository.deleteAllUserWeddingByWedding(event.weddingId);
+        _inviteEmailRepository.deleteInviteEmailByWedding(event.weddingId);
       });
       yield Success("Xoá thành công");
     } catch (e) {
