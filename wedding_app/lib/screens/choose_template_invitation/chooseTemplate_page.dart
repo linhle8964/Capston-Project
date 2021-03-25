@@ -147,8 +147,8 @@ class _ChooseTemplatePageState extends State<ChooseTemplatePage> {
                             child: SizedBox(
                                 width: double.infinity,
                                 height: 40,
-                                child: FlatButton(
-                                  color: hexToColor("#d86a77"),
+                                child: TextButton(
+                                  style: TextButton.styleFrom(primary: hexToColor("#d86a77")),
                                   onPressed: _image.length > 0
                                       ? () {
                                           setState(() {
@@ -258,8 +258,8 @@ class _ChooseTemplatePageState extends State<ChooseTemplatePage> {
       content:
           Text("Bạn cần cấp quyền cho ứng dụng để thực hiện chức năng này!"),
       actions: [
-        FlatButton(
-            color: hexToColor("#d86a77"),
+        TextButton(
+            style: TextButton.styleFrom(primary: hexToColor("#d86a77")),
             child: Text("Đóng"),
             onPressed: () {
               uploading = false;

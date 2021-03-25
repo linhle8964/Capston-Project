@@ -70,8 +70,10 @@ dev_dependencies:
   sizer: ^1.1.8
   dio: ^4.0.0-beta7
   permission_handler: ^6.0.1+1
+  excel: ^1.1.5
   share: ^2.0.1
   integration_test: ^1.0.2+2
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
