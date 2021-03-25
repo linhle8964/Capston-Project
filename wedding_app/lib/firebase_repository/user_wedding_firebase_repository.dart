@@ -114,7 +114,6 @@ class FirebaseUserWeddingRepository extends UserWeddingRepository {
   }
 
   @override
-<<<<<<< HEAD
   Future<List<UserWedding>> getAllWeddingAdminByWedding(
       String weddingId) async {
     QuerySnapshot querySnapshot = await userWeddingCollection
@@ -124,10 +123,5 @@ class FirebaseUserWeddingRepository extends UserWeddingRepository {
     return querySnapshot.docs.map((snapshot) {
       return UserWedding.fromEntity(UserWeddingEntity.fromSnapshot(snapshot));
     }).toList();
-=======
-  Future<List<UserWedding>> getAllWeddingAdminByWedding(String weddingId) {
-    // TODO: implement getAllWeddingAdminByWedding
-    throw UnimplementedError();
->>>>>>> main
   }
 }
