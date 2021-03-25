@@ -35,6 +35,9 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_driver:
+    sdk: flutter
+  test: any
     # Add Sign in method for google and facebook
   google_sign_in: ^4.5.9
   # bloc dependencies
@@ -58,7 +61,7 @@ dev_dependencies:
   path_provider:
   rxdart: ^0.26.0
   equatable: ^2.0.0
-  shared_preferences: ^2.0.3
+  shared_preferences: ^2.0.5
   mailer: ^4.0.0
   flutter_local_notifications: ^5.0.0-nullsafety.0
   android_alarm_manager: ^0.4.5+14

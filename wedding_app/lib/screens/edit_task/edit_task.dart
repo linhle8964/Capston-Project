@@ -186,7 +186,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
                                 activeColor: Colors.blue,
                                 controlAffinity:
                                     ListTileControlAffinity.leading,
-                                title: Text('Chưa hoàn thành'),
+                                title: Text('Hoàn thành'),
                                 value: _checkboxListTile,
                                 onChanged: (value) {
                                   setState(() {

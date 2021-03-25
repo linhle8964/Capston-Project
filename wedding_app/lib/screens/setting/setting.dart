@@ -17,6 +17,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wedding_app/widgets/confirm_dialog.dart';
 import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:wedding_app/widgets/notification.dart';
+import 'package:wedding_app/widgets/widget_key.dart';
 
 class SettingPage extends StatefulWidget {
   @override
@@ -51,7 +52,7 @@ class _SettingPageState extends State<SettingPage> {
                   Center(
                     child: Text('App version 1.0.00'),
                   ),
-                  CustomButtom("Đăng xuất", () async {
+                  CustomButtom(Key(WidgetKey.logoutButtonKey),"Đăng xuất", () async {
                     showDialog(
                         context: context,
                         barrierDismissible: false,
@@ -62,10 +63,10 @@ class _SettingPageState extends State<SettingPage> {
                               },
                             ));
                   }, Colors.blue),
-                  CustomButtom("Rời đám cưới",
+                  CustomButtom(Key(WidgetKey.leaveWeddingButton), "Rời đám cưới",
                       () => _onLeftWeddingClick(context), Colors.grey),
                   isAdmin(userWedding.role)
-                      ? CustomButtom("Xoá đám cưới",
+                      ? CustomButtom(Key(WidgetKey.deleteWeddingButton), "Xoá đám cưới",
                           () => _onDeleteWeddingClick(context), Colors.black54)
                       : Container(),
                 ],

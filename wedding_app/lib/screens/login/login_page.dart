@@ -6,6 +6,7 @@ import 'package:wedding_app/bloc/authentication/bloc.dart';
 import 'package:wedding_app/utils/alert_dialog.dart';
 import 'package:wedding_app/utils/hex_color.dart';
 import 'package:wedding_app/utils/show_snackbar.dart';
+import 'package:wedding_app/widgets/widget_key.dart';
 
 class LoginPage extends StatefulWidget {
   // This widget is the root of your application.
@@ -94,7 +95,7 @@ class _LoginPageState extends State<LoginPage> {
                     Padding(
                         padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                         child: TextField(
-                          key: Key("email_text_field"),
+                          key: Key(WidgetKey.loginEmailTextFieldKey),
                           style: TextStyle(fontSize: 18, color: Colors.black),
                           controller: _emailController,
                           decoration: InputDecoration(
@@ -111,7 +112,7 @@ class _LoginPageState extends State<LoginPage> {
                         alignment: AlignmentDirectional.centerEnd,
                         children: <Widget>[
                           TextField(
-                            key: Key("password_text_field"),
+                            key: Key(WidgetKey.loginPasswordTextFieldKey),
                             style: TextStyle(fontSize: 18, color: Colors.black),
                             controller: _passController,
                             obscureText: !_showPass,
@@ -124,6 +125,7 @@ class _LoginPageState extends State<LoginPage> {
                                     color: Colors.grey, fontSize: 15)),
                           ),
                           GestureDetector(
+                            key: Key(WidgetKey.loginShowPasswordButtonKey),
                             onTap: onToggleShowPass,
                             child: Text(
                               _showPass ? "Ẩn Mật khẩu" : "Hiện Mật Khẩu",
@@ -142,7 +144,7 @@ class _LoginPageState extends State<LoginPage> {
                         width: double.infinity,
                         height: 30,
                         child: ElevatedButton(
-                          key: Key("login_button"),
+                          key: Key(WidgetKey.loginButtonKey),
                           style: ElevatedButton.styleFrom(
                             primary: isLoginButtonEnabled(state)
                                 ? hexToColor("#d86a77")
@@ -164,7 +166,7 @@ class _LoginPageState extends State<LoginPage> {
                         height: 20,
                         width: double.infinity,
                         child: new InkWell(
-                          key: Key("go_to_register_button"),
+                          key: Key(WidgetKey.toRegisterPageButtonKey),
                           onTap: () {
                             Navigator.pushNamed(context, '/register');
                           },

@@ -282,9 +282,7 @@ class _BudgetListState extends State<BudgetList> {
                                       BlocProvider.of<BudgetBloc>(context)
                                         ..add(GetAllBudget(id));
                                       if (state is BudgetLoaded) {
-                                        print("test index" + index.toString());
                                         _budgets = state.budgets;
-                                        print(item.cateName);
                                       }
                                       if (state is BudgetNotLoaded) {}
 
