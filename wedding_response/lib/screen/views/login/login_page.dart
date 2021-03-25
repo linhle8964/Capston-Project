@@ -80,7 +80,7 @@ class _LoginPageState extends State<LoginPage> {
                         child: Container(
                           child: Image(
                               image: AssetImage(
-                                  'assets/app_icon/favicon-32x32.png')),
+                                  'assets/favicon-32x32.png')),
                           width: 70,
                           height: 70,
                           padding: EdgeInsets.all(15),

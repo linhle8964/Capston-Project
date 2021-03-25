@@ -19,7 +19,42 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f3e24abf-ec34-481a-919d-25be2615c827" name="Default Changelist" comment="" />
+    <list default="true" id="f3e24abf-ec34-481a-919d-25be2615c827" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/lib/bloc/category/bloc.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/bloc/category/category_bloc.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/bloc/category/category_bloc_event.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/bloc/category/category_bloc_state.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/bloc/category/category_event.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/bloc/category/category_state.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/bloc/vendor/bloc.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/bloc/vendor/vendor_bloc.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/bloc/vendor/vendor_bloc_event.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/bloc/vendor/vendor_bloc_state.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/entity/category_entity.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/entity/vendor_entity.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/firebase_repository/category_firebase_repository.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/firebase_repository/vendor_firebase_repository.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/model/category.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/model/vendor.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/repository/category_repository.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/repository/vendor_repository.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/screen/vendor/detail.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/screen/vendor/filter.dart" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/lib/screen/vendor/vendor_list.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.flutter-plugins" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_SDK.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Flutter_Plugins.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/firebase_repository/user_wedding_firebase_repository.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/firebase_repository/user_wedding_firebase_repository.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/generated_plugin_registrant.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/generated_plugin_registrant.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/model/user_wedding.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/model/user_wedding.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/screen/views/login/login_page.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screen/views/login/login_page.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/util/wedding_guest_router_delegate.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/util/wedding_guest_router_delegate.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/util/wedding_route_information_parser.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/util/admin_vendor_route_information_parser.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/util/wedding_route_path.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/util/admin_vendor_route_path.dart" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -47,21 +82,21 @@
     <property name="android.sdk.path" value="$USER_HOME$/AppData/Local/Android/Sdk" />
     <property name="dart.analysis.tool.window.visible" value="false" />
     <property name="io.flutter.reload.alreadyRun" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/lib/firebase_repository" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../wedding_app" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
   <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\BRUH\Desktop\New folder\Capston-Project\wedding_response\lib\firebase_repository" />
-      <recent name="C:\Users\BRUH\Desktop\New folder\Capston-Project\wedding_response\lib\repository" />
-      <recent name="C:\Users\BRUH\Desktop\New folder\Capston-Project\wedding_response\lib\util" />
-      <recent name="C:\Users\BRUH\Desktop\New folder\Capston-Project\wedding_response\lib" />
-      <recent name="C:\Users\BRUH\Desktop\New folder\Capston-Project\wedding_response\lib\bloc" />
-    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\BRUH\Desktop\New folder\Capston-Project\wedding_response\lib\bloc" />
       <recent name="E:\GIT\wedding_response\lib" />
       <recent name="E:\GIT\wedding_response\lib\screen\widgets\details_input" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Do an\Capston-Project\wedding_response\lib\screen" />
+      <recent name="D:\Do an\Capston-Project\wedding_response\lib\bloc" />
+      <recent name="D:\Do an\Capston-Project\wedding_response\lib\firebase_repository" />
+      <recent name="D:\Do an\Capston-Project\wedding_response\lib\repository" />
+      <recent name="D:\Do an\Capston-Project\wedding_response\lib\model" />
     </key>
   </component>
   <component name="RunManager">
@@ -112,27 +147,31 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="100" y="100" width="777" height="528" key="AVDManager/0.0.1366.728@0.0.1366.728" timestamp="1615642929247" />
-    <state x="651" y="169" key="FileChooserDialogImpl" timestamp="1616070159947">
+    <state width="397" height="466" key="DebuggerActiveHint" timestamp="1616645621672">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="397" height="466" key="DebuggerActiveHint/0.0.1920.1040@0.0.1920.1040" timestamp="1616645621672" />
+    <state x="651" y="169" key="FileChooserDialogImpl" timestamp="1616643065205">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="463" y="118" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1615955473089" />
-    <state x="651" y="169" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1616070159947" />
-    <state width="1860" height="279" key="GridCell.Tab.0.bottom" timestamp="1616075053909">
+    <state x="651" y="169" key="FileChooserDialogImpl/0.0.1920.1040@0.0.1920.1040" timestamp="1616643065205" />
+    <state width="1877" height="200" key="GridCell.Tab.0.bottom" timestamp="1616648845393">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1860" height="279" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1616075053909" />
-    <state width="1860" height="279" key="GridCell.Tab.0.center" timestamp="1616075053909">
+    <state width="1877" height="200" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1616648845393" />
+    <state width="1877" height="200" key="GridCell.Tab.0.center" timestamp="1616648845393">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1860" height="279" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1616075053909" />
-    <state width="1860" height="279" key="GridCell.Tab.0.left" timestamp="1616075053909">
+    <state width="1877" height="200" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1616648845393" />
+    <state width="1877" height="200" key="GridCell.Tab.0.left" timestamp="1616648845393">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1860" height="279" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1616075053909" />
-    <state width="1860" height="279" key="GridCell.Tab.0.right" timestamp="1616075053909">
+    <state width="1877" height="200" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1616648845393" />
+    <state width="1877" height="200" key="GridCell.Tab.0.right" timestamp="1616648845393">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1860" height="279" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1616075053909" />
+    <state width="1877" height="200" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1616648845393" />
     <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1615828606285">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -149,6 +188,10 @@
         <line-breakpoint enabled="true" suspend="THREAD" type="Dart">
           <url>file://$PROJECT_DIR$/lib/bloc/login/login_bloc.dart</url>
           <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="Dart">
+          <url>file://$PROJECT_DIR$/lib/entity/vendor_entity.dart</url>
+          <option name="timeStamp" value="3" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
