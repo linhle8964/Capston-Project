@@ -29,6 +29,15 @@ class _ListGuestState extends State<ListGuest> {
       return "Không tới";
   }
 
+  String getType(int type) {
+    if (type == 0)
+      return "Chưa sắp xếp";
+    else if (type == 1)
+      return "Nhà trai";
+    else
+      return "Nhà gái";
+  }
+
   String getColor(int stt) {
     if (stt == 0)
       return "#6eb5ff";
@@ -36,6 +45,26 @@ class _ListGuestState extends State<ListGuest> {
       return "#85e3ff";
     else
       return "#ff9cee";
+  }
+
+  Widget _companionPart(Guest guest) {
+    return Builder(builder: (context) {
+      if (guest.status == 1) {
+        return Row(
+          children: <Widget>[
+            Padding(padding: EdgeInsets.only(right: 5)),
+            Text(
+              (guest.companion + 1).toString(),
+            ),
+            Icon(
+              Icons.accessibility,
+            ),
+          ],
+        );
+      } else {
+        return SizedBox.shrink();
+      }
+    });
   }
 
   @override
@@ -55,22 +84,45 @@ class _ListGuestState extends State<ListGuest> {
                 child: Row(
                   children: <Widget>[
                     Padding(
-                      padding: EdgeInsets.all(10),
+                      padding: EdgeInsets.all(5),
                     ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Padding(padding: EdgeInsets.only(top: 10)),
-                        Text(
-                          widget.guests[index].name,
-                        ),
-                        Padding(padding: EdgeInsets.all(2)),
-                        Text(
-                          widget.guests[index].description,
-                        ),
-                        Padding(padding: EdgeInsets.only(bottom: 10)),
-                      ],
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Padding(padding: EdgeInsets.only(top: 5)),
+                          Text(
+                            widget.guests[index].name,
+                            overflow: TextOverflow.fade,
+                            maxLines: 1,
+                            softWrap: false,
+                          ),
+                          Padding(padding: EdgeInsets.all(2)),
+                          Text(
+                            widget.guests[index].description,
+                            overflow: TextOverflow.fade,
+                            maxLines: 1,
+                            softWrap: false,
+                          ),
+                          Builder(builder: (context) {
+                            if (widget.guests[index].status == 1 ||
+                                widget.guests[index].status == 0) {
+                              return Row(
+                                children: [
+                                  Icon(Icons.home_outlined),
+                                  Text(
+                                    getType(widget.guests[index].type),
+                                  ),
+                                ],
+                              );
+                            } else {
+                              return SizedBox.shrink();
+                            }
+                          }),
+                          Padding(padding: EdgeInsets.only(bottom: 5)),
+                        ],
+                      ),
                     ),
                     Expanded(
                       child: Row(
@@ -93,6 +145,7 @@ class _ListGuestState extends State<ListGuest> {
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10))),
                           ),
+                          _companionPart(widget.guests[index]),
                           Padding(padding: EdgeInsets.only(right: 10)),
                         ],
                       ),
@@ -109,6 +162,13 @@ class _ListGuestState extends State<ListGuest> {
     );
   }
 
+  bool isChecked(List<Guest> guests, String phone, int index) {
+    for (int i = 0; i < guests.length; i++) {
+      if (guests[i].phone == phone && i != index) return true;
+    }
+    return false;
+  }
+
   Future<void> showGuestInfoDialog(
       BuildContext context, int index, String weddingId) async {
     return await showDialog(
@@ -118,7 +178,12 @@ class _ListGuestState extends State<ListGuest> {
           String _description = widget.guests[index].description;
           String _phone = widget.guests[index].phone;
           int _status = widget.guests[index].status;
-          int group = _status;
+          int groupStt = _status;
+          int _type = widget.guests[index].type;
+          int groupType = _type;
+          int _companion = widget.guests[index].companion;
+          String _congrat = widget.guests[index].congrat;
+          int _money = widget.guests[index].money;
           return StatefulBuilder(builder: (context, setState) {
             return SingleChildScrollView(
                 child: MultiBlocProvider(
@@ -165,11 +230,11 @@ class _ListGuestState extends State<ListGuest> {
                             children: [
                               Radio(
                                   value: 0,
-                                  groupValue: group,
+                                  groupValue: groupStt,
                                   onChanged: (T) {
                                     _status = T;
                                     setState(() {
-                                      group = T;
+                                      groupStt = T;
                                     });
                                   }),
                               Text("Đã mời"),
@@ -180,11 +245,11 @@ class _ListGuestState extends State<ListGuest> {
                             children: [
                               Radio(
                                   value: 1,
-                                  groupValue: group,
+                                  groupValue: groupStt,
                                   onChanged: (T) {
                                     _status = T;
                                     setState(() {
-                                      group = T;
+                                      groupStt = T;
                                     });
                                   }),
                               Text("Sẽ tới"),
@@ -195,11 +260,11 @@ class _ListGuestState extends State<ListGuest> {
                             children: [
                               Radio(
                                   value: 2,
-                                  groupValue: group,
+                                  groupValue: groupStt,
                                   onChanged: (T) {
                                     _status = T;
                                     setState(() {
-                                      group = T;
+                                      groupStt = T;
                                     });
                                   }),
                               Text("Không tới"),
@@ -207,13 +272,111 @@ class _ListGuestState extends State<ListGuest> {
                           )),
                         ],
                       ),
+                      Builder(builder: (context) {
+                        if (groupStt == 1) {
+                          return Column(
+                            children: [
+                              TextFormField(
+                                initialValue: _companion.toString(),
+                                keyboardType: TextInputType.number,
+                                decoration: InputDecoration(
+                                  labelText: "Số người đi cùng",
+                                  fillColor: Colors.white,
+                                  filled: true,
+                                ),
+                                onSaved: (input) =>
+                                    _companion = int.parse(input),
+                              ),
+                            ],
+                          );
+                        } else {
+                          return SizedBox.shrink();
+                        }
+                      }),
+                      Builder(
+                        builder: (context) {
+                          if (groupStt == 1 || groupStt == 0) {
+                            return Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    Expanded(
+                                        child: Column(
+                                      children: [
+                                        Radio(
+                                            value: 0,
+                                            groupValue: groupType,
+                                            onChanged: (T) {
+                                              _type = T;
+                                              setState(() {
+                                                groupType = T;
+                                              });
+                                            }),
+                                        Text("Chưa xếp"),
+                                      ],
+                                    )),
+                                    Expanded(
+                                        child: Column(
+                                      children: [
+                                        Radio(
+                                            value: 1,
+                                            groupValue: groupType,
+                                            onChanged: (T) {
+                                              _type = T;
+                                              setState(() {
+                                                groupType = T;
+                                              });
+                                            }),
+                                        Text("Nhà trai"),
+                                      ],
+                                    )),
+                                    Expanded(
+                                        child: Column(
+                                      children: [
+                                        Radio(
+                                            value: 2,
+                                            groupValue: groupType,
+                                            onChanged: (T) {
+                                              _type = T;
+                                              setState(() {
+                                                groupType = T;
+                                              });
+                                            }),
+                                        Text("Nhà gái"),
+                                      ],
+                                    )),
+                                  ],
+                                ),
+                              ],
+                            );
+                          } else {
+                            return SizedBox.shrink();
+                          }
+                        },
+                      ),
                       TextFormField(
                         initialValue: _phone,
+                        keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           labelText: "Điện thoại",
                           fillColor: Colors.white,
                           filled: true,
                         ),
+                        validator: (input) {
+                          RegExp regex = new RegExp(
+                            r'(^(?:[+0]9)?[0-9]{9,10}$)',
+                            caseSensitive: false,
+                            multiLine: false,
+                          );
+                          if (input.isNotEmpty &&
+                              isChecked(widget.guests, input, index)) {
+                            return "Số điện thoại đã tồn tại";
+                          } else if (!regex.hasMatch(input)) {
+                            return "Số điện thoại không hợp lệ";
+                          } else {
+                            return null;
+                          }
+                        },
                         onSaved: (input) => _phone = input,
                       ),
                     ],
@@ -226,24 +389,30 @@ class _ListGuestState extends State<ListGuest> {
                       onPressed: () {
                         if (_formKey.currentState.validate()) {
                           _formKey.currentState.save();
-                          updateGuest(context, widget.guests[index].id, _name,
-                              _description, _status, _phone, weddingId);
+                          updateGuest(
+                              context,
+                              widget.guests[index].id,
+                              _name,
+                              _description,
+                              _status,
+                              _phone,
+                              _type,
+                              _companion,
+                              _congrat,
+                              _money,
+                              weddingId);
                           Navigator.of(context).pop();
                         }
                       },
                     ),
                   ),
-                  Builder(
-                    builder: (context) => TextButton(
-                      child: Text('Xóa'),
-                      onPressed: () {
-                        if (_formKey.currentState.validate()) {
-                          deleteGuest(
-                              context, widget.guests[index].id, weddingId);
-                          Navigator.of(context).pop();
-                        }
-                      },
-                    ),
+                  TextButton(
+                    child: Text('Xóa'),
+                    onPressed: () {
+                      if (_formKey.currentState.validate()) {
+                        confirmDeleteDialog(context, index, weddingId);
+                      }
+                    },
                   ),
                   TextButton(
                     child: Text('Hủy'),
@@ -258,14 +427,76 @@ class _ListGuestState extends State<ListGuest> {
         });
   }
 
-  void updateGuest(var context, String id, String name, String description,
-      int status, String phone, String weddingId) {
-    Guest guest = new Guest(name, description, status, phone, id: id);
+  Future<void> confirmDeleteDialog(
+      BuildContext context, int index, String weddingId) async {
+    return await showDialog(
+        context: context,
+        builder: (context) {
+          return StatefulBuilder(builder: (context, setState) {
+            return MultiBlocProvider(
+              providers: [
+                BlocProvider<GuestsBloc>(
+                  create: (context) {
+                    return GuestsBloc(
+                      guestsRepository: FirebaseGuestRepository(),
+                    )..add(LoadGuests(weddingId));
+                  },
+                ),
+              ],
+              child: AlertDialog(
+                title: Text('Bạn muốn xóa:'),
+                content: SingleChildScrollView(
+                  child: ListBody(
+                    children: <Widget>[
+                      Text(widget.guests[index].name),
+                    ],
+                  ),
+                ),
+                actions: <Widget>[
+                  Builder(
+                    builder: (context) => TextButton(
+                      child: Text('Có'),
+                      onPressed: () {
+                        deleteGuest(
+                            context, widget.guests[index].id, weddingId);
+                        Navigator.of(context).pop();
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ),
+                  TextButton(
+                    child: Text('Hủy'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              ),
+            );
+          });
+        });
+  }
+
+  void updateGuest(
+      var context,
+      String id,
+      String name,
+      String description,
+      int status,
+      String phone,
+      int type,
+      int companion,
+      String congrat,
+      int money,
+      String weddingId) {
+    Guest guest = new Guest(
+        name, description, status, phone, type, companion, congrat, money,
+        id: id);
     BlocProvider.of<GuestsBloc>(context)..add(UpdateGuest(guest, weddingId));
   }
 
   void deleteGuest(BuildContext context, String guestId, String weddingId) {
-    Guest guest = new Guest("", "", 0, "", id: guestId);
+    Guest guest = new Guest("", "", 0, "", 0, 0, "", 0, id: guestId);
     BlocProvider.of<GuestsBloc>(context)..add(DeleteGuest(guest, weddingId));
   }
 }
