@@ -9,4 +9,5 @@ abstract class TaskRepository {
   Stream<List<Task>> getTasks(String weddingID);
 
   Future<void> updateTask(Task task,String weddingID);
+
 }

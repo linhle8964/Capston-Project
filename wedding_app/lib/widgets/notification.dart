@@ -3,15 +3,17 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:wedding_app/entity/notification_entity.dart';
 import 'package:wedding_app/entity/task_entity.dart';
+import 'package:wedding_app/model/notification.dart';
 import 'package:wedding_app/model/task_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_app_badger/flutter_app_badger.dart';
 
 class NotificationManagement {
   static final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
   FlutterLocalNotificationsPlugin(); //Nang
-  static Map<int, Task> notificationTime ={};
-  static int mapKey = 1;
+  static List<NotificationModel> notificationTime =[];
   static bool isNotificationAllowed = false;
 
   NotificationManagement() {
@@ -24,7 +26,7 @@ class NotificationManagement {
     flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
 
-  static void addNotification(Task task) async {
+  static void addNotification(NotificationModel noti) async {
     NotificationManagement();
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
         'channel id', 'channel NAME', 'CHANNEL DESCRIPTION',
@@ -34,27 +36,17 @@ class NotificationManagement {
     var platformChannelSpecifics = NotificationDetails(
         android: androidPlatformChannelSpecifics,
         iOS: iOSPlatformChannelSpecifics);
-    notificationTime.addAll({mapKey: task});
-    mapKey++;
-    if (task.dueDate.isAfter(DateTime.now())) {
-      await flutterLocalNotificationsPlugin.schedule((mapKey-1), 'Đã đến hạn công việc', task.name,
-          task.dueDate, platformChannelSpecifics);
+   notificationTime.add(noti);
+    //mapKey++;
+    if (noti.date.isAfter(DateTime.now())) {
+      await flutterLocalNotificationsPlugin.schedule(noti.id, 'Thông báo', noti.content,
+          noti.date, platformChannelSpecifics);
     }
   }
 
-  static void updateNotification(Task oldtask, Task newTask) async {
-    int key=-1;
-    for(int i=0; i<notificationTime.length; i++){
-      if(oldtask == notificationTime.values.elementAt(i)){
-        key = notificationTime.keys.elementAt(i);
-        break;
-      }
-    }
-    if(key==-1){
-      key= mapKey++;
-    }
-    deleteNotification(key, oldtask);
-    addNotification(newTask);
+  static void updateNotification(NotificationModel old, NotificationModel newNoti) async {
+    deleteNotification(old);
+    addNotification(newNoti);
   }
 
 
@@ -62,66 +54,79 @@ class NotificationManagement {
   static void ClearAllNotifications() async {
     NotificationManagement();
     notificationTime.clear();
-    mapKey=1;
+    FlutterAppBadger.removeBadge();
     await flutterLocalNotificationsPlugin.cancelAll();
   }
 
-  static void deleteNotification(int key,Task task) async {
+  static void deleteNotification(NotificationModel noti) async {
     NotificationManagement();
-    notificationTime.remove(key);
-    flutterLocalNotificationsPlugin.cancel(key);
+    notificationTime.remove(noti);
+    flutterLocalNotificationsPlugin.cancel(noti.id);
   }
 
   /// code for alarm
   static CollectionReference reference;
   static StreamSubscription<QuerySnapshot> streamSub;
   static void  executeAlarm(String weddingID) async {
+    bool res = await FlutterAppBadger.isAppBadgeSupported();
+    print("Is AppBadge Supported: $res");
     if(reference == null){
       reference = FirebaseFirestore.instance.collection('wedding')
-        .doc(weddingID).collection("task");
+        .doc(weddingID).collection("notification");
     }
       streamSub?.cancel();
       bool isEmpty = false;
       streamSub = reference.snapshots().listen((querySnapshot) {
         if(notificationTime.isEmpty){
           querySnapshot.docs.forEach((change) {
-            addNotification(Task.fromEntity(TaskEntity.fromSnapshot(change)));
+            notificationTime.add(NotificationModel.fromEntity(NotificationEntity.fromSnapshot(change)));
           });
+        }
+
+        // add app badger
+        int numberBadger=0;
+        querySnapshot.docs.forEach((element) {
+          NotificationModel noti = NotificationModel.fromEntity(NotificationEntity.fromSnapshot(element));
+          if(noti.isNew) numberBadger++;
+        });
+        if(numberBadger != 0){
+          FlutterAppBadger.updateBadgeCount(numberBadger);
         }else{
+          FlutterAppBadger.removeBadge();
+        }
+        //set each states (add/ update/delete)
           if(notificationTime.length < querySnapshot.docs.length){
             querySnapshot.docs.forEach((change) {
-              Task task = Task.fromEntity(TaskEntity.fromSnapshot(change));
-              if(!notificationTime.containsValue(task)){
-                addNotification(task);
+              NotificationModel noti = NotificationModel.fromEntity(NotificationEntity.fromSnapshot(change));
+              if(!notificationTime.contains(noti)){
+                addNotification(noti);
               }
             });
           }else if(notificationTime.length == querySnapshot.docs.length){
             querySnapshot.docs.forEach((change) {
-              Task task = Task.fromEntity(TaskEntity.fromSnapshot(change));
+              NotificationModel noti = NotificationModel.fromEntity(NotificationEntity.fromSnapshot(change));
               for(int i = 0; i<notificationTime.length;i++){
-                if(notificationTime.values.elementAt(i).id == task.id
-                    && notificationTime.values.elementAt(i)!= task){
-                  updateNotification(notificationTime.values.elementAt(i), task);
+                if(notificationTime[i].docID == noti.docID
+                    && notificationTime[i]!= noti){
+                  updateNotification(notificationTime[i], noti);
                 }
               }
             });
           }else{
             for(int i=0; i< notificationTime.length; i++){
               bool isDeletedItem = true;
-              Task deleted = notificationTime.values.elementAt(i);
+              NotificationModel deleted = notificationTime[i];
               querySnapshot.docs.forEach((element) {
-                Task task = Task.fromEntity(TaskEntity.fromSnapshot(element));
-                if(deleted==task){
+                NotificationModel noti = NotificationModel.fromEntity(NotificationEntity.fromSnapshot(element));
+                if(deleted==noti){
                   isDeletedItem = false;
                 }
               });
               if(isDeletedItem == true){
-                int key = notificationTime.keys.elementAt(i);
-                deleteNotification(key, deleted);
+                deleteNotification(deleted);
               }
             }
           }
-        }
       });
   }
 

@@ -260,12 +260,16 @@ class _ListGuestState extends State<ListGuest> {
 
   void updateGuest(var context, String id, String name, String description,
       int status, String phone, String weddingId) {
-    Guest guest = new Guest(name, description, status, phone, id: id);
+    //nang edit
+    Guest guest = new Guest(name, description, status, phone,0,"",0,1, id: id);
+    //
     BlocProvider.of<GuestsBloc>(context)..add(UpdateGuest(guest, weddingId));
   }
 
   void deleteGuest(BuildContext context, String guestId, String weddingId) {
-    Guest guest = new Guest("", "", 0, "", id: guestId);
+    // nang edit
+    Guest guest = new Guest("", "", 0, "",0,"",0,1, id: guestId);
+    //
     BlocProvider.of<GuestsBloc>(context)..add(DeleteGuest(guest, weddingId));
   }
 }

@@ -12,7 +12,9 @@ class Task extends Equatable{
   final String category;
 
 //<editor-fold desc="Data Methods" defaultstate="collapsed">
-
+  String getDate(){
+    return "${dueDate.day}/${dueDate.month}/${dueDate.year}";
+  }
   const Task({
     @required this.id,
     @required this.name,

@@ -12,6 +12,7 @@ import 'package:wedding_app/screens/guest/view_guest_page.dart';
 import 'package:wedding_app/screens/home/home_page.dart';
 import 'package:wedding_app/firebase_repository/user_wedding_firebase_repository.dart';
 import 'package:wedding_app/firebase_repository/wedding_firebase_repository.dart';
+import 'package:wedding_app/screens/notification/notification.dart';
 import 'package:wedding_app/screens/setting/setting.dart';
 
 class NavigatorPage extends StatefulWidget {

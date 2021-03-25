@@ -476,7 +476,9 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                           onPressed: (){
                             if(_formKey.currentState.validate()){
                               _formKey.currentState.save();
-                              Guest _guest = new Guest(_name, _description, _status, _phone);
+                              //nang edit
+                              Guest _guest = new Guest(_name, _description, _status, _phone,0,"",0,1);
+                              //
                               addGuest(context, _guest, weddingId);
                               Navigator.of(context).pop();
                               AddGuestDialog(context, weddingId);
@@ -575,7 +577,7 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                                       subtitle: Text((contact.phones.length>0)?"${phone}":"No contact"),
                                       trailing: Checkbox(value: isChecked(listAddGuests, phone), onChanged: (checked){
                                         setState((){
-                                          Guest guest = new Guest(contact.displayName,"",0,phone);
+                                          Guest guest = new Guest(contact.displayName,"",0,phone,0,"",0,1); // nang edit
                                           if(!isChecked(listAddGuests, phone)){
                                             listAddGuests.add(guest);
                                           }
