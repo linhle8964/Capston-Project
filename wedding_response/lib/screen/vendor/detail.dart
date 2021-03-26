@@ -18,12 +18,13 @@ class Detail extends StatelessWidget {
         children: [
 
           Hero(
-            tag: property.frontImage,
+            tag:  AssetImage('/assets/B&G.jpg'),
             child: Container(
               height: size.height * 0.5,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage(property.frontImage), 
+                  //image: AssetImage(property.frontImage),
+                  image: AssetImage('/assets/B&G.jpg'),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -240,7 +241,7 @@ class Detail extends StatelessWidget {
                                 width: 65,
                                 decoration: BoxDecoration(
                                   image: DecorationImage(
-                                    image: AssetImage(property.ownerImage), 
+                                    image: AssetImage('/assets/thanks.jpg'),
                                     fit: BoxFit.cover,
                                   ),
                                   shape: BoxShape.circle,

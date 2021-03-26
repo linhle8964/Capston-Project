@@ -28,8 +28,8 @@ class AdminVendorRoutePath {
         isUnknown = false,
         isDone= true;
 
-  bool get isUnknow => adminID == null && vendorID == null && isUnknown == true;
-  bool get isLoginPage => adminID == null && vendorID == null;
+
+  bool get isLoginPage => adminID == null && vendorID == null && isUnknown == false;
 
   bool get isInputDetailsPage => adminID != null && vendorID != null;
 

@@ -82,7 +82,7 @@ class AdminVendorRouterDelegate extends RouterDelegate<AdminVendorRoutePath>
           MaterialPage(key: ValueKey('Login'), child: LoginPage()),
           if (show404)
             MaterialPage(key: ValueKey('UnknownPage'), child: UnknownScreen())
-          else if (_selectedUser != null && _selectedVendor != null)
+          else if (_selectedUser == null && _selectedVendor == null)
               MaterialPage(
                 key: ValueKey('Login'),
                 child: LoginPage()
@@ -118,8 +118,10 @@ class AdminVendorRouterDelegate extends RouterDelegate<AdminVendorRoutePath>
   _setPath(AdminVendorRoutePath path) {
     _selectedUser = null;
     _selectedVendor = null;
+
     if (path.isAllVendorPage) {
       _selectedUser = UserWedding(path.adminID);
+
 
     } else if (path.isInputDetailsPage) {
       _selectedUser = UserWedding(path.adminID);
@@ -129,10 +131,11 @@ class AdminVendorRouterDelegate extends RouterDelegate<AdminVendorRoutePath>
     } else if (path.isLoginPage){
       _selectedUser = null;
       _selectedVendor = null;
-
+      show404 = false;
+      return;
     }
 
-    if (path.isUnknow) {
+    if (path.isUnknown) {
       _selectedUser = null;
       _selectedVendor = null;
       show404 = true;
