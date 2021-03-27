@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wedding_app/bloc/guests/bloc.dart';
 import 'package:wedding_app/firebase_repository/guest_firebase_repository.dart';
+import 'package:wedding_app/model/guest.dart';
 import 'package:wedding_app/screens/guest/ListGuest.dart';
 import 'package:wedding_app/utils/format_number.dart';
 import 'package:wedding_app/utils/get_data.dart';
 import 'package:wedding_app/utils/hex_color.dart';
 import 'package:wedding_app/widgets/loading_indicator.dart';
 import 'package:permission_handler/permission_handler.dart';
-import '../../model/guest.dart';
 import 'ListGuestMoney.dart';
 
 class ViewGuestPage extends StatefulWidget {
@@ -35,6 +35,8 @@ class _ViewGuestPageState extends State<ViewGuestPage>
 
   TabController _tabController;
   int _selectedTab = 0;
+
+  var ctx;
 
   @override
   void initState() {
@@ -155,12 +157,12 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                             controller: _tabController,
                             children: [
                               BlocProvider<GuestsBloc>(
-                                create: (context) {
-                                  return GuestsBloc(
-                                    guestsRepository: FirebaseGuestRepository(),
-                                  )..add(LoadGuests(weddingId));
-                                },
-                                child: _infoTab(weddingId),
+                                  create: (context) {
+                                    return GuestsBloc(
+                                      guestsRepository: FirebaseGuestRepository(),
+                                    )..add(LoadGuests(weddingId));
+                                  },
+                                  child: _infoTab(weddingId)
                               ),
                               BlocProvider<GuestsBloc>(
                                 create: (context) {
@@ -214,8 +216,8 @@ class _ViewGuestPageState extends State<ViewGuestPage>
           _selectedTypeItem = int.parse(choice);
           statusPage = -1;
           print(_selectedTypeItem);
-          BlocProvider.of<GuestsBloc>(context)
-              .add(LoadGuests(weddingId));
+          BlocProvider.of<GuestsBloc>(ctx)
+              ..add(LoadGuests(weddingId));
         },
       );
     }else{
@@ -235,6 +237,7 @@ class _ViewGuestPageState extends State<ViewGuestPage>
               }
             },
             builder: (context, state) {
+              ctx = context;
               if (state is GuestsLoaded) {
                 _guests.clear();
                 _guests = state.guests;
