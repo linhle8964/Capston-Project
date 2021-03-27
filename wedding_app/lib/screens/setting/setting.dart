@@ -28,8 +28,8 @@ class _SettingPageState extends State<SettingPage> {
   @override
   void dispose() {
     // TODO: implement dispose
-    NotificationManagement.cancelAlarm();
-    AddTaskNotification.cancel();
+    //NotificationManagement.cancelAlarm();
+    //AddTaskNotification.cancel();
     super.dispose();
   }
 
@@ -118,8 +118,8 @@ class _SettingPageState extends State<SettingPage> {
                       CustomButtom("Đăng xuất", () async {
                         BlocProvider.of<AuthenticationBloc>(context)
                             .add(LoggedOut());
-                        NotificationManagement.ClearAllNotifications();
-                        var cancel = await AndroidAlarmManager.cancel(0);
+                        //NotificationManagement.ClearAllNotifications();
+                        //var cancel = await AndroidAlarmManager.cancel(0);
                       }, Colors.blue),
                       isAdmin(userWedding.role)
                           ? CustomButtom("Xoá đám cưới",

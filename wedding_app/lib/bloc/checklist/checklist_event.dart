@@ -19,7 +19,7 @@ class LoadSuccess extends TasksEvent{
 class SearchTasks extends TasksEvent{}
 
 class AddTask extends TasksEvent {
-  final Task task;
+  Task task;
   String weddingID;
 
   AddTask(this.task,this.weddingID);

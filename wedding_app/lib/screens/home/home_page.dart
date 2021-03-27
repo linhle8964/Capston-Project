@@ -39,7 +39,7 @@ showprint() async {
   String weddingID = prefs.getString("wedding_id");
   await Firebase.initializeApp();
   //AddTaskNotification.addTaskNotification(weddingID);
-  NotificationManagement.executeAlarm(weddingID);
+  //NotificationManagement.executeAlarm(weddingID);
 }
 
 class _HomePageState extends State<HomePage> {
@@ -49,7 +49,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Future<void> initState() {
     super.initState();
-    AndroidAlarmManager.periodic(Duration(seconds: 3), 0, showprint);
+    //AndroidAlarmManager.periodic(Duration(seconds: 3), 0, showprint);
   }
 
   void onTime() {

@@ -69,13 +69,15 @@ class NotificationFirebaseRepository implements NotificationRepository{
 
   @override
   Future<void> updateNotificationByTaskID(NotificationModel notification, String weddingID) {
-    return FirebaseFirestore.instance
+    var query = FirebaseFirestore.instance
         .collection('wedding')
         .doc(weddingID)
         .collection("notification")
         .where("details_id", isEqualTo: notification.detailsID)
-        .get()
-        .then((snapshots) {
+        .get();
+
+      return query.then((snapshots) {
+        if(snapshots.size==0) addNewNotication(notification, weddingID);
       for (DocumentSnapshot snapshot in snapshots.docs) {
         notification.docID = snapshot.id;
         snapshot.reference.update(notification.toEntity().toDocument());

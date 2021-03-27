@@ -8,7 +8,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 @immutable
 class NotificationModel extends Equatable{
   String docID;
-  int id;
   String content;
   bool read;
   int type;
@@ -20,8 +19,8 @@ class NotificationModel extends Equatable{
     return "${date.day}/${date.month}/${date.year}";
   }
 
-  static NotificationModel fromTask(Task task, List<NotificationModel> notifications,String weddingID){
-    int uniqueID=1;
+  static NotificationModel fromTask(Task task,String weddingID){
+    /*int uniqueID=1;
     for(int i =0;i< notifications.length;i++){
       NotificationModel noti = notifications[i];
       if(task.id == noti.detailsID) {
@@ -29,8 +28,8 @@ class NotificationModel extends Equatable{
         break;
       }
       if(noti.id >= uniqueID) uniqueID = noti.id+1;
-    }
-    NotificationModel notificationModel = new NotificationModel(id: uniqueID,
+    }*/
+    NotificationModel notificationModel = new NotificationModel(
         content: "Công việc ${task.name} đã đến hạn",
         read: true,
         type: 1,
@@ -41,7 +40,6 @@ class NotificationModel extends Equatable{
   }
 
    NotificationModel({this.docID,
-    @required this.id,
     @required this.content,
     @required this.read,
     @required this.type,
@@ -52,7 +50,6 @@ class NotificationModel extends Equatable{
 
   NotificationModel copyWith({
     String docID,
-    int id,
     String content,
     bool read,
     int type,
@@ -62,7 +59,6 @@ class NotificationModel extends Equatable{
     bool isNew,
   }) {
     if ((docID == null || identical(docID, this.docID)) &&
-        (id == null || identical(id, this.id)) &&
         (content == null || identical(content, this.content)) &&
         (read == null || identical(read, this.read)) &&
         (type == null || identical(type, this.type)) &&
@@ -75,7 +71,6 @@ class NotificationModel extends Equatable{
 
     return new NotificationModel(
       docID: docID ?? this.docID,
-      id: id ?? this.id,
       content: content ?? this.content,
       read: read ?? this.read,
       type: type ?? this.type,
@@ -87,7 +82,7 @@ class NotificationModel extends Equatable{
 
   @override
   String toString() {
-    return 'Notification{$docID $id $content $read $type $date $detailsID $isNew}';
+    return 'Notification{$docID $content $read $type $date $detailsID $isNew}';
   }
 
   @override
@@ -96,7 +91,6 @@ class NotificationModel extends Equatable{
           (other is NotificationModel &&
               runtimeType == other.runtimeType &&
               docID == other.docID &&
-              id == other.id &&
               content == other.content &&
               read == other.read &&
               type == other.type &&
@@ -108,7 +102,6 @@ class NotificationModel extends Equatable{
   @override
   int get hashCode =>
       docID.hashCode ^
-      id.hashCode ^
       content.hashCode ^
       read.hashCode ^
       type.hashCode ^
@@ -117,13 +110,12 @@ class NotificationModel extends Equatable{
       isNew.hashCode;
 
   NotificationEntity toEntity() {
-    return NotificationEntity(docID, id, content, read, type, date, detailsID, isNew);
+    return NotificationEntity(docID, content, read, type, date, detailsID, isNew);
   }
 
   static NotificationModel fromEntity(NotificationEntity entity) {
     return NotificationModel(
       docID: entity.docID,
-      id: entity.id,
       content: entity.content,
       read: entity.read,
       type: entity.type,
@@ -134,6 +126,6 @@ class NotificationModel extends Equatable{
   }
 
   @override
-  List<Object> get props => [docID, id,content,read,type,date,detailsID,isNew];
+  List<Object> get props => [docID,content,read,type,date,detailsID,isNew];
 
 }

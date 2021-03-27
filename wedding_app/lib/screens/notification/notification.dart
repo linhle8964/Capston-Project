@@ -21,6 +21,8 @@ class NotificationPage extends StatefulWidget {
   _NotificationPageState createState() => _NotificationPageState();
 }
 
+int time1 =1;
+int time2 =1;
 class _NotificationPageState extends State<NotificationPage> {
 
    Future<bool> _onWillPop() async {
@@ -30,6 +32,15 @@ class _NotificationPageState extends State<NotificationPage> {
       BlocProvider.of<NotificationBloc>(context)..add(UpdateNewNotifications(widget.weddingID, notifications));
     }
     return true;
+  }
+
+
+  @override
+  void initState() {
+    time1=1;
+    time2=1;
+    // TODO: implement initState
+    super.initState();
   }
   @override
   Widget build(BuildContext context) {
@@ -45,6 +56,7 @@ class _NotificationPageState extends State<NotificationPage> {
                   BlocProvider<ChecklistBloc>(create: (BuildContext context) {
                     return ChecklistBloc(
                       taskRepository: FirebaseTaskRepository(),
+                      notificationRepository: NotificationFirebaseRepository(),
                     )..add(LoadSuccess(weddingID));
                   }),
                   BlocProvider<GuestsBloc>(create: (BuildContext context) {
@@ -115,12 +127,12 @@ class _NotificationPageState extends State<NotificationPage> {
                                     child: Column(
                                       crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
-                                        ListNotifications(notifications: newNotifications, weddingID: weddingID),
+                                        ListNotifications(notifications: newNotifications, weddingID: weddingID,isOld: 1,),
                                         Container(
                                             margin: EdgeInsets.only(left: 12),
                                             child: Text("Trước đó", style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),)),
                                         SizedBox(height: 10,),
-                                        ListNotifications(notifications: oldNotifications, weddingID: weddingID),
+                                        ListNotifications(notifications: oldNotifications, weddingID: weddingID,isOld: 2,),
                                       ],
                                     ),
                                   );

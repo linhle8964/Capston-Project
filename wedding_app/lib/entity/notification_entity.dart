@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 
 class NotificationEntity extends Equatable {
   final String docID;
-  final int id;
   final String content;
   final bool read ;
   final int type;
@@ -15,7 +14,6 @@ class NotificationEntity extends Equatable {
   @override
   List<Object> get props => [
     docID,
-    id,
     content,
     read,
     type,
@@ -26,7 +24,6 @@ class NotificationEntity extends Equatable {
 
   const NotificationEntity(
       this.docID,
-      this.id,
       this.content,
       this.read,
       this.type,
@@ -37,13 +34,12 @@ class NotificationEntity extends Equatable {
 
   @override
   String toString() {
-    return 'NotificationEntity{$docID $id $content $read $type $date $detailsID $isNew}';
+    return 'NotificationEntity{$docID $content $read $type $date $detailsID $isNew}';
   }
 
   Map<String, Object> toJson() {
     return {
       "docID": docID,
-      "id": id,
       "content": content,
       "read": read,
       "type": type,
@@ -56,7 +52,6 @@ class NotificationEntity extends Equatable {
   static NotificationEntity fromJson(Map<String, Object> json) {
     return NotificationEntity(
       json["docID"] as String,
-      json["id"] as int,
       json["content"] as String,
       json["read"] as bool,
       json["type"] as int,
@@ -71,7 +66,6 @@ class NotificationEntity extends Equatable {
     DateTime tempDate = timestamp.toDate();
     return NotificationEntity(
       snapshot.id,
-      snapshot.get("ID"),
       snapshot.get("content"),
       snapshot.get("read"),
       snapshot.get("type"),
@@ -83,7 +77,6 @@ class NotificationEntity extends Equatable {
 
   Map<String, Object> toDocument() {
     return {
-      "ID": id,
       "content": content,
       "read": read,
       "type": type,
