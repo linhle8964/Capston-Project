@@ -4,11 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wedding_app/bloc/guests/bloc.dart';
 import 'package:wedding_app/firebase_repository/guest_firebase_repository.dart';
 import 'package:wedding_app/screens/guest/ListGuest.dart';
+import 'package:wedding_app/utils/format_number.dart';
 import 'package:wedding_app/utils/get_data.dart';
 import 'package:wedding_app/utils/hex_color.dart';
 import 'package:wedding_app/widgets/loading_indicator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../../model/guest.dart';
+import 'ListGuestMoney.dart';
 
 class ViewGuestPage extends StatefulWidget {
   @override
@@ -18,7 +20,7 @@ class ViewGuestPage extends StatefulWidget {
 }
 
 class _ViewGuestPageState extends State<ViewGuestPage>
-    with WidgetsBindingObserver {
+    with WidgetsBindingObserver, SingleTickerProviderStateMixin {
   static final GlobalKey<ScaffoldState> scaffoldKey =
       new GlobalKey<ScaffoldState>();
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -31,15 +33,29 @@ class _ViewGuestPageState extends State<ViewGuestPage>
   int _selectedTypeItem = 3;
   List<String> _typeItems = ["Chưa sắp xếp", "Nhà trai", "Nhà gái", "Tất cả"];
 
+  TabController _tabController;
+  int _selectedTab = 0;
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    _tabController = new TabController(vsync: this, length: 2);
+    _tabController.addListener(_handleTabSelection);
+  }
+
+  void _handleTabSelection() {
+    if(_tabController.indexIsChanging){
+      setState(() {
+        _selectedTab = _tabController.index;
+      });
+    }
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    _tabController.dispose();
     super.dispose();
   }
 
@@ -57,78 +73,121 @@ class _ViewGuestPageState extends State<ViewGuestPage>
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             final String weddingId = snapshot.data;
-            return MultiBlocProvider(
-              providers: [
-                BlocProvider<GuestsBloc>(
-                  create: (context) {
-                    return GuestsBloc(
-                      guestsRepository: FirebaseGuestRepository(),
-                    )..add(LoadGuests(weddingId));
-                  },
-                )
-              ],
+            return BlocProvider<GuestsBloc>(
+              create: (context) {
+                return GuestsBloc(
+                  guestsRepository: FirebaseGuestRepository(),
+                )..add(LoadGuests(weddingId));
+              },
               child: Builder(
                   builder: (context) => BlocListener(
-                        cubit: BlocProvider.of<GuestsBloc>(context),
-                        listener: (context, state) {},
-                        child: Scaffold(
-                          key: scaffoldKey,
-                          appBar: new AppBar(
-                              backgroundColor: hexToColor("#d86a77"),
-                              title: const Text("Khách mời"),
-                              actions: <Widget>[
-                                IconButton(
-                                  icon: const Icon(
-                                    Icons.download_outlined,
-                                    color: Colors.white,
-                                  ),
-                                  onPressed: () {
-                                    print("Excel");
-                                  },
+                    cubit: BlocProvider.of<GuestsBloc>(context),
+                    listener: (context, state) {},
+                    child: DefaultTabController(
+                      length: 2,
+                      child: Scaffold(
+                        key: scaffoldKey,
+                        appBar: new AppBar(
+                          backgroundColor: hexToColor("#d86a77"),
+                          title: const Text("Khách mời"),
+                          actions: <Widget>[
+                            IconButton(
+                              icon: const Icon(
+                                Icons.download_outlined,
+                                color: Colors.white,
+                              ),
+                              onPressed: () {
+                                print("Excel");
+                              },
+                            ),
+                            IconButton(
+                              icon: const Icon(
+                                Icons.search,
+                                color: Colors.white,
+                              ),
+                              onPressed: () {
+                                SearchGuest(context, weddingId);
+                              },
+                            ),
+                            _typePopup(_selectedTab, weddingId),
+                          ],
+                          bottom: TabBar(
+                            controller: _tabController,
+                            indicator: BoxDecoration(
+                                borderRadius: BorderRadius.circular(50), // Creates border
+                                color: Colors.greenAccent,),
+                            tabs: [
+                              Tab(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.assignment,
+                                      color: Colors.white,
+                                    ),
+                                    Text(
+                                      'Thông tin',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ],
                                 ),
-                                IconButton(
-                                  icon: const Icon(
-                                    Icons.search,
-                                    color: Colors.white,
-                                  ),
-                                  onPressed: () {
-                                    SearchGuest(context, weddingId);
-                                  },
+                              ),
+                              Tab(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.monetization_on_outlined,
+                                      color: Colors.white,
+                                    ),
+                                    Text(
+                                      'Tiền mừng',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ],
                                 ),
-                                PopupMenuButton<String>(
-                                  itemBuilder: (context) {
-                                    return _typeItems.map((String choice) {
-                                      return PopupMenuItem<String>(
-                                        value: _typeItems
-                                            .indexOf(choice)
-                                            .toString(),
-                                        child: Text(choice),
-                                      );
-                                    }).toList();
-                                  },
-                                  onSelected: (choice) {
-                                    _selectedTypeItem = int.parse(choice);
-                                    statusPage = -1;
-                                    print(_selectedTypeItem);
-                                    BlocProvider.of<GuestsBloc>(context)
-                                        .add(LoadGuests(weddingId));
-                                  },
-                                ),
-                              ]),
-                          body: _body(weddingId),
-                          floatingActionButton: FloatingActionButton(
-                            tooltip: 'Mời thêm khách',
-                            child: Icon(Icons.add),
-                            backgroundColor: hexToColor("#d86a77"),
-                            onPressed: () {
-                              print('invite guest');
-                              AddGuestDialog(context, weddingId);
-                            },
+                              ),
+                            ],
                           ),
-                          floatingActionButtonLocation:
-                              FloatingActionButtonLocation.endFloat,
                         ),
-                      )),
+                        body: TabBarView(
+                          physics: NeverScrollableScrollPhysics(),
+                            controller: _tabController,
+                            children: [
+                              BlocProvider<GuestsBloc>(
+                                create: (context) {
+                                  return GuestsBloc(
+                                    guestsRepository: FirebaseGuestRepository(),
+                                  )..add(LoadGuests(weddingId));
+                                },
+                                child: _infoTab(weddingId),
+                              ),
+                              BlocProvider<GuestsBloc>(
+                                create: (context) {
+                                  return GuestsBloc(
+                                    guestsRepository: FirebaseGuestRepository(),
+                                  )..add(LoadGuests(weddingId));
+                                },
+                                child: _moneyTab(weddingId),
+                              ),
+                            ]
+                        ),
+                        floatingActionButton: FloatingActionButton(
+                          child: Icon(Icons.add),
+                          backgroundColor: hexToColor("#d86a77"),
+                          onPressed: () {
+                            print('invite guest');
+                            if(_tabController.index == 0)
+                              AddGuestDialog(context, weddingId);
+                            else if (_tabController.index == 1)
+                              addMoneyDialog(context, weddingId);
+                          },
+                        ),
+                        floatingActionButtonLocation:
+                        FloatingActionButtonLocation.endFloat,
+                      ),
+                    ),
+                  )),
             );
           } else {
             return Center(
@@ -138,7 +197,33 @@ class _ViewGuestPageState extends State<ViewGuestPage>
         });
   }
 
-  Widget _body(String weddingId) {
+  Widget _typePopup(int tabIndex, String weddingId){
+    if(tabIndex == 0){
+      return PopupMenuButton<String>(
+        itemBuilder: (context) {
+          return _typeItems.map((String choice) {
+            return PopupMenuItem<String>(
+              value: _typeItems
+                  .indexOf(choice)
+                  .toString(),
+              child: Text(choice),
+            );
+          }).toList();
+        },
+        onSelected: (choice) {
+          _selectedTypeItem = int.parse(choice);
+          statusPage = -1;
+          print(_selectedTypeItem);
+          BlocProvider.of<GuestsBloc>(context)
+              .add(LoadGuests(weddingId));
+        },
+      );
+    }else{
+      return SizedBox.shrink();
+    }
+  }
+
+  Widget _infoTab(String weddingId) {
     return Builder(
         builder: (context) => BlocBuilder(
             cubit: BlocProvider.of<GuestsBloc>(context),
@@ -327,7 +412,81 @@ class _ViewGuestPageState extends State<ViewGuestPage>
               } else {
                 return Center(child: LoadingIndicator());
               }
-            }));
+            }
+            )
+    );
+  }
+
+  Widget _moneyTab(String weddingId) {
+    return Builder(
+      builder: (context) => BlocBuilder(
+        cubit: BlocProvider.of<GuestsBloc>(context),
+        buildWhen: (previous, current) {
+          if (current is GuestUpdated) {
+            return false;
+          } else {
+            return true;
+          }
+        },
+          builder: (context, state) {
+            if (state is GuestsLoaded) {
+              _guests.clear();
+              _guests = state.guests;
+              _tempguests = _guests;
+              return SafeArea(
+                minimum: const EdgeInsets.only(top: 5, left: 10, right: 10),
+                child: SingleChildScrollView(
+                    child: BlocBuilder(
+                        cubit: BlocProvider.of<GuestsBloc>(context),
+                        builder: (context, state) {
+                          _data.clear();
+                          for (int i = 0; i < _tempguests.length; i++) {
+                            if (_tempguests[i].money > 0) {
+                              _data.add(_tempguests[i]);
+                            }
+                          }
+                          return Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Container(
+                                decoration: const BoxDecoration(
+                                  image: DecorationImage(
+                                      image:
+                                      AssetImage('assets/image/money_back.jpg'),
+                                      fit: BoxFit.cover),
+                                ),
+                                height: 50,
+                                alignment: Alignment.center,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        formatCurrency(countMoney()),
+                                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+                                      ),
+                                    ]),
+                              ),
+                              ListGuestMoney(_data, weddingId)
+                            ],
+                          );
+                        })),
+              );
+            } else {
+              return Center(child: LoadingIndicator());
+            }
+          }
+      )
+    );
+  }
+
+  String countMoney(){
+    int count = 0;
+    for (int i = 0; i < _tempguests.length; i++) {
+      if (_tempguests[i].money > 0) {
+        count += _tempguests[i].money;
+      }
+    }
+    return count.toString() + "000";
   }
 
   String countCompanion() {
@@ -339,6 +498,158 @@ class _ViewGuestPageState extends State<ViewGuestPage>
       }
     }
     return count.toString();
+  }
+
+  Future<void> addMoneyDialog(BuildContext context, String weddingId) async {
+    return await showDialog(
+        context: context,
+        builder: (context) {
+          String _searchQuery = "";
+          List<Guest> _listSearch = [];
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider<GuestsBloc>(
+                create: (context) {
+                  return GuestsBloc(
+                    guestsRepository: FirebaseGuestRepository(),
+                  )..add(LoadGuests(weddingId));
+                },
+              )
+            ],
+            child: Builder(
+                builder: (context) => BlocListener(
+                  cubit: BlocProvider.of<GuestsBloc>(context),
+                  listener: (context, state) {},
+                  child: Builder(
+                      builder: (context) => BlocBuilder(
+                          cubit: BlocProvider.of<GuestsBloc>(context),
+                          buildWhen: (previous, current) {
+                            if (current is GuestUpdated) {
+                              return false;
+                            } else {
+                              return true;
+                            }
+                          },
+                          builder: (context, state) {
+                            if (state is GuestsLoaded) {
+                              _listSearch.clear();
+                              _guests = state.guests;
+                              _tempguests = _guests;
+                              return StatefulBuilder(
+                                  builder: (context, setState) {
+                                    _listSearch.clear();
+                                    for (var guest in _tempguests) {
+                                      var name = guest.name.toLowerCase();
+                                      var phone = guest.phone.toLowerCase();
+                                      var money = guest.money;
+                                      if ((name.contains(_searchQuery.toLowerCase())
+                                          || phone.contains(_searchQuery.toLowerCase()))
+                                          && money == 0) {
+                                        _listSearch.add(guest);
+                                        print(guest);
+                                      }
+                                    }
+                                    return SingleChildScrollView(
+                                        child: MultiBlocProvider(
+                                            providers: [
+                                              BlocProvider<GuestsBloc>(
+                                                create: (context) {
+                                                  return GuestsBloc(
+                                                    guestsRepository:
+                                                    FirebaseGuestRepository(),
+                                                  )..add(LoadGuests(weddingId));
+                                                },
+                                              ),
+                                            ],
+                                            child: AlertDialog(
+                                              contentPadding: EdgeInsets.all(1),
+                                              content: Form(
+                                                key: _formKey,
+                                                child: Container(
+                                                    height:
+                                                    MediaQuery.of(context)
+                                                        .size
+                                                        .height -
+                                                        190,
+                                                    width: 2000,
+                                                    child: Column(
+                                                        mainAxisSize:
+                                                        MainAxisSize.min,
+                                                        children: <Widget>[
+                                                          TextFormField(
+                                                            //controller: ,
+                                                              initialValue:
+                                                              _searchQuery,
+                                                              decoration:
+                                                              InputDecoration(
+                                                                labelText:
+                                                                "Tìm kiếm khách mời",
+                                                                fillColor:
+                                                                Colors
+                                                                    .white,
+                                                                filled: true,
+                                                              ),
+                                                              onChanged:
+                                                                  (input) {
+                                                                setState(() {
+                                                                  _searchQuery =
+                                                                      input;
+                                                                  print(
+                                                                      _searchQuery);
+                                                                });
+                                                              }),
+                                                          Builder(builder:
+                                                              (context) {
+                                                            if (_listSearch
+                                                                .length !=
+                                                                0) {
+                                                              return ListGuest(
+                                                                  _listSearch,
+                                                                  weddingId);
+                                                            } else {
+                                                              return Column(
+                                                                children: [
+                                                                  SizedBox(
+                                                                    height: 20,
+                                                                  ),
+                                                                  Center(
+                                                                    child: Text(
+                                                                      'Không có khách mời phù hợp !',
+                                                                      textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                      style: TextStyle(
+                                                                          color: Colors
+                                                                              .grey,
+                                                                          fontSize:
+                                                                          20,
+                                                                          fontWeight:
+                                                                          FontWeight.w600),
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              );
+                                                            }
+                                                          })
+                                                        ])),
+                                              ),
+                                              actions: <Widget>[
+                                                TextButton(
+                                                  child: Text('Hủy'),
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                ),
+                                              ],
+                                            )));
+                                  });
+                            } else {
+                              return Center(child: LoadingIndicator());
+                            }
+                          })),
+                )),
+          );
+        });
   }
 
   Future<void> AddGuestDialog(BuildContext context, String weddingId) async {
@@ -896,11 +1207,9 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                                               content: Form(
                                                 key: _formKey,
                                                 child: Container(
-                                                    height:
-                                                        MediaQuery.of(context)
+                                                    height: MediaQuery.of(context)
                                                                 .size
-                                                                .height -
-                                                            130,
+                                                                .height - 190,
                                                     width: 2000,
                                                     child: Column(
                                                         mainAxisSize:
