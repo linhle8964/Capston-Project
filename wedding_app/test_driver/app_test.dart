@@ -1,6 +1,7 @@
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
 import 'package:wedding_app/widgets/widget_key.dart';
+
 void main() {
   group('Wedding App', () {
     const loginButtonKey = WidgetKey.loginButtonKey;
@@ -43,8 +44,14 @@ void main() {
       await Future.delayed(Duration(seconds: 2));
       await driver.tap(find.byValueKey(showPasswordButtonKey));
       await Future.delayed(Duration(seconds: 2));
-      await driver.tap(find.byValueKey(loginButtonKey));
 
+      await driver.tap(find.byValueKey(loginButtonKey));
+      expect(
+          await isPresent(
+              find.byValueKey(WidgetKey.loadingSnackbarKey), driver),
+          isTrue);
+      expect(
+          await isPresent(find.byValueKey(successSnackbarKey), driver), isTrue);
       await driver.tap(find.byValueKey(navigateTaskButtonKey));
       await Future.delayed(Duration(seconds: 1));
       await driver.tap(find.byValueKey(navigateBudgetButtonKey));
@@ -61,15 +68,16 @@ void main() {
       await driver.tap(find.byValueKey(WidgetKey.yesConfirmButtonKey));
       await Future.delayed(Duration(seconds: 2));
     });
-
-  });
+  }, timeout: Timeout.none);
 }
 
-Future<bool> isPresent(SerializableFinder byValueKey, FlutterDriver driver, {Duration timeout = const Duration(seconds: 1)}) async {
+Future<bool> isPresent(
+    SerializableFinder byValueKey, FlutterDriver driver) async {
   try {
-    await driver.waitFor(byValueKey,timeout: timeout);
+    await driver.waitFor(byValueKey);
     return true;
-  } catch(exception) {
+  } catch (exception) {
+    print(exception.toString());
     return false;
   }
 }
