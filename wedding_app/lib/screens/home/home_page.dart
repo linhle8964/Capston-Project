@@ -38,7 +38,7 @@ showprint() async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String weddingID = prefs.getString("wedding_id");
   await Firebase.initializeApp();
-  AddTaskNotification.addTaskNotification(weddingID);
+  //AddTaskNotification.addTaskNotification(weddingID);
   NotificationManagement.executeAlarm(weddingID);
 }
 

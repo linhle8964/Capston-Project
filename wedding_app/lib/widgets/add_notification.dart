@@ -29,7 +29,6 @@ class AddTaskNotification {
       reference = FirebaseFirestore.instance.collection('wedding')
           .doc(weddingID).collection("task");
     }
-    // problems
     if(referenceNotification == null){
       referenceNotification = FirebaseFirestore.instance.collection('wedding')
           .doc(weddingID).collection("notification");
@@ -56,13 +55,22 @@ class AddTaskNotification {
         querySnapshot.docs.forEach((change) {
           Task task = Task.fromEntity(TaskEntity.fromSnapshot(change));
           for(int i = 0; i<tasks.length;i++){
+            //updating
             if(tasks[i].id == task.id
                 && tasks[i]!= task){
-              // updating
               NotificationModel notification = NotificationModel.fromTask(task,
                   NotificationManagement.notificationTime, weddingID);
               tasks[i] = task;
-              notificationRepository.updateNotificationByTaskID(notification, weddingID);
+              bool isUpdating = false;
+              for(int i=0; i< NotificationManagement.notificationTime.length;i++){
+                if(task.id == NotificationManagement.notificationTime[i].detailsID) {
+                  isUpdating = true;
+                  break;
+                }
+              }
+              if(isUpdating)
+                notificationRepository.updateNotificationByTaskID(notification, weddingID);
+              else notificationRepository.addNewNotication(notification, weddingID);
             }
           }
         });

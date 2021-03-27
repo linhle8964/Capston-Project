@@ -24,11 +24,15 @@ class NotificationModel extends Equatable{
     int uniqueID=1;
     for(int i =0;i< notifications.length;i++){
       NotificationModel noti = notifications[i];
-      if(noti.id >= uniqueID) uniqueID = noti.id;
+      if(task.id == noti.detailsID) {
+        uniqueID = noti.id;
+        break;
+      }
+      if(noti.id >= uniqueID) uniqueID = noti.id+1;
     }
-    NotificationModel notificationModel = new NotificationModel(id: uniqueID+1,
+    NotificationModel notificationModel = new NotificationModel(id: uniqueID,
         content: "Công việc ${task.name} đã đến hạn",
-        read: false,
+        read: true,
         type: 1,
         date: task.dueDate,
         detailsID: task.id,

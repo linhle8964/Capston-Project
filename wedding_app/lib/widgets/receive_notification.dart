@@ -36,7 +36,7 @@ class NotificationManagement {
         android: androidPlatformChannelSpecifics,
         iOS: iOSPlatformChannelSpecifics);
    notificationTime.add(noti);
-    if (noti.date.isAfter(DateTime.now())) {
+    if (noti.date.isAfter(DateTime.now().subtract(Duration(minutes: 3)))) {
       await flutterLocalNotificationsPlugin.schedule(noti.id, 'Thông báo', noti.content,
           noti.date, platformChannelSpecifics);
     }
