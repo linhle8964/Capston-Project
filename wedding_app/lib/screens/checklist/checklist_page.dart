@@ -29,17 +29,9 @@ class _ChecklistPageState extends State<ChecklistPage>
   List<Task> tasks = []; // all
   List<Task> searchList = []; // searching
 
-  TextEditingController _searchQuery = new TextEditingController();
-
   @override
   void initState() {
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    _searchQuery.dispose();
-    super.dispose();
   }
 
   Widget _buildTitle(BuildContext context) {
@@ -63,18 +55,6 @@ class _ChecklistPageState extends State<ChecklistPage>
     );
   }
 
-  Widget _buildSearchField(context) {
-    return new TextField(
-      controller: _searchQuery,
-      autofocus: true,
-      decoration: const InputDecoration(
-        hintText: 'Tìm kiếm',
-        border: InputBorder.none,
-        hintStyle: const TextStyle(color: Colors.white),
-      ),
-      style: const TextStyle(color: Colors.white, fontSize: 16.0),
-    );
-  }
 
   List<Widget> _buildActions(context, String weddingID) {
     return <Widget>[

@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:wedding_app/entity/notification_entity.dart';
 import 'package:wedding_app/model/notification.dart';
 import 'package:wedding_app/repository/notification_repository.dart';
@@ -8,7 +7,11 @@ class NotificationFirebaseRepository implements NotificationRepository{
 
   @override
   Future<void> addNewNotication(NotificationModel notification, String weddingID) {
-    throw UnimplementedError();
+    return FirebaseFirestore.instance
+        .collection('wedding')
+        .doc(weddingID)
+        .collection("notification")
+        .add(notification.toEntity().toDocument());
   }
 
   @override
@@ -34,6 +37,7 @@ class NotificationFirebaseRepository implements NotificationRepository{
         .collection('wedding')
         .doc(weddingID)
         .collection("notification")
+        .where("date", isLessThan: DateTime.now())
         .orderBy("date", descending: true)
         .snapshots()
         .map((snapshot) {
@@ -45,7 +49,7 @@ class NotificationFirebaseRepository implements NotificationRepository{
 
   @override
   Future<void> updateNotification(NotificationModel notification, String weddingID) {
-    return FirebaseFirestore.instance
+    var query = FirebaseFirestore.instance
         .collection('wedding')
         .doc(weddingID)
         .collection("notification")
@@ -61,6 +65,38 @@ class NotificationFirebaseRepository implements NotificationRepository{
         updateNotification(notifications[i], weddingID);
       }
     }
+  }
+
+  @override
+  Future<void> updateNotificationByTaskID(NotificationModel notification, String weddingID) {
+    return FirebaseFirestore.instance
+        .collection('wedding')
+        .doc(weddingID)
+        .collection("notification")
+        .where("details_id", isEqualTo: notification.detailsID)
+        .get()
+        .then((snapshots) {
+      for (DocumentSnapshot snapshot in snapshots.docs) {
+        notification.docID = snapshot.id;
+        snapshot.reference.update(notification.toEntity().toDocument());
+      }
+    });
+  }
+
+  @override
+  Future<void> deleteNotificationByTaskID(NotificationModel notification, String weddingID) {
+    return FirebaseFirestore.instance
+        .collection('wedding')
+        .doc(weddingID)
+        .collection("notification")
+        .where("details_id", isEqualTo: notification.detailsID)
+        .get()
+        .then((snapshots) {
+      for (DocumentSnapshot snapshot in snapshots.docs) {
+        notification.docID = snapshot.id;
+        snapshot.reference.delete();
+      }
+    });
   }
 
 }

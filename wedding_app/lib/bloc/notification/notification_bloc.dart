@@ -29,6 +29,8 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
       yield* _mapUpdateNotificationToState(event);
     }else if (event is UpdateNewNotifications) {
       yield* _mapUpdateNewNotificationsToState(event);
+    }else if (event is CreateNotification) {
+      yield* _mapCreateNotificationToState(event);
     }
   }
 
@@ -61,6 +63,11 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   Stream<NotificationState> _mapUpdateNewNotificationsToState(UpdateNewNotifications event) async* {
     _notificationRepository.updateNewNotifications(event.weddingID, event.notifications);
     yield NewNotificationsUpdated();
+  }
+
+  Stream<NotificationState> _mapCreateNotificationToState(CreateNotification event) async* {
+    _notificationRepository.addNewNotication(event.notification, event.weddingID);
+    yield NotificationCreated();
   }
 
   @override

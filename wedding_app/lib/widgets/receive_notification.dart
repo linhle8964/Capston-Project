@@ -14,7 +14,6 @@ class NotificationManagement {
   static final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
   FlutterLocalNotificationsPlugin(); //Nang
   static List<NotificationModel> notificationTime =[];
-  static bool isNotificationAllowed = false;
 
   NotificationManagement() {
     WidgetsFlutterBinding.ensureInitialized();
@@ -37,7 +36,6 @@ class NotificationManagement {
         android: androidPlatformChannelSpecifics,
         iOS: iOSPlatformChannelSpecifics);
    notificationTime.add(noti);
-    //mapKey++;
     if (noti.date.isAfter(DateTime.now())) {
       await flutterLocalNotificationsPlugin.schedule(noti.id, 'Thông báo', noti.content,
           noti.date, platformChannelSpecifics);
@@ -68,14 +66,11 @@ class NotificationManagement {
   static CollectionReference reference;
   static StreamSubscription<QuerySnapshot> streamSub;
   static void  executeAlarm(String weddingID) async {
-    bool res = await FlutterAppBadger.isAppBadgeSupported();
-    print("Is AppBadge Supported: $res");
     if(reference == null){
       reference = FirebaseFirestore.instance.collection('wedding')
         .doc(weddingID).collection("notification");
     }
       streamSub?.cancel();
-      bool isEmpty = false;
       streamSub = reference.snapshots().listen((querySnapshot) {
         if(notificationTime.isEmpty){
           querySnapshot.docs.forEach((change) {

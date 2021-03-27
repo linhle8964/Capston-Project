@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:wedding_app/entity/notification_entity.dart';
 import 'package:wedding_app/entity/task_entity.dart';
 import 'package:equatable/equatable.dart';
+import 'package:wedding_app/model/task_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 @immutable
 class NotificationModel extends Equatable{
@@ -18,8 +20,23 @@ class NotificationModel extends Equatable{
     return "${date.day}/${date.month}/${date.year}";
   }
 
-   NotificationModel({
-    @required this.docID,
+  static NotificationModel fromTask(Task task, List<NotificationModel> notifications,String weddingID){
+    int uniqueID=1;
+    for(int i =0;i< notifications.length;i++){
+      NotificationModel noti = notifications[i];
+      if(noti.id >= uniqueID) uniqueID = noti.id;
+    }
+    NotificationModel notificationModel = new NotificationModel(id: uniqueID+1,
+        content: "Công việc ${task.name} đã đến hạn",
+        read: false,
+        type: 1,
+        date: task.dueDate,
+        detailsID: task.id,
+        isNew: true);
+    return notificationModel;
+  }
+
+   NotificationModel({this.docID,
     @required this.id,
     @required this.content,
     @required this.read,

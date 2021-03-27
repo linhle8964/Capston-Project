@@ -35,5 +35,10 @@ class UpdateNotification extends NotificationEvent {
   final NotificationModel notification;
   String weddingID;
   UpdateNotification(this.notification,this.weddingID);
+}
 
+class CreateNotification extends NotificationEvent {
+  final NotificationModel notification;
+  String weddingID;
+  CreateNotification(this.notification,this.weddingID);
 }

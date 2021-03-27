@@ -8,6 +8,8 @@ class NotificationDeleted extends NotificationState {}
 
 class NotificationUpdated extends NotificationState {}
 
+class NotificationCreated extends NotificationState {}
+
 class NewNotificationsUpdated extends NotificationState {}
 
 class AllNotificationsDeleted extends NotificationState {}

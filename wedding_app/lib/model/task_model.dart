@@ -16,7 +16,7 @@ class Task extends Equatable{
     return "${dueDate.day}/${dueDate.month}/${dueDate.year}";
   }
   const Task({
-    @required this.id,
+    this.id,
     @required this.name,
     @required this.dueDate,
     @required this.status,

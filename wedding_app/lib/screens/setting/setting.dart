@@ -14,9 +14,10 @@ import 'package:wedding_app/utils/hex_color.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:wedding_app/utils/show_snackbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wedding_app/widgets/add_notification.dart';
 import 'package:wedding_app/widgets/confirm_dialog.dart';
 import 'package:android_alarm_manager/android_alarm_manager.dart';
-import 'package:wedding_app/widgets/notification.dart';
+import 'package:wedding_app/widgets/receive_notification.dart';
 
 class SettingPage extends StatefulWidget {
   @override
@@ -28,6 +29,7 @@ class _SettingPageState extends State<SettingPage> {
   void dispose() {
     // TODO: implement dispose
     NotificationManagement.cancelAlarm();
+    AddTaskNotification.cancel();
     super.dispose();
   }
 
