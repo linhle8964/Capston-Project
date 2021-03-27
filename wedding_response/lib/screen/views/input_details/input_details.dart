@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_web_diary/bloc/guests/bloc.dart';
 import 'package:flutter_web_diary/firebase_repository/guest_firebase_repository.dart';
+import 'package:flutter_web_diary/firebase_repository/notification_firebase_repository.dart';
 import 'package:flutter_web_diary/model/guest.dart';
 import 'package:flutter_web_diary/model/wedding.dart';
 import 'package:flutter_web_diary/screen/views/error/error_page.dart';
@@ -27,6 +28,7 @@ class InputDetailsPage extends StatelessWidget {
     return BlocProvider(
       create: (BuildContext context) => GuestsBloc(
         guestsRepository: FirebaseGuestRepository(),
+        notificationRepository: NotificationFirebaseRepository(),
       )..add(LoadGuests(selectedWedding.id)),
       child: Builder(
         builder: (context) => BlocBuilder(

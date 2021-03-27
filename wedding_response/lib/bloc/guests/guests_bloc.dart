@@ -1,26 +1,29 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_web_diary/model/guest.dart';
+import 'package:flutter_web_diary/model/notification.dart';
 import 'package:flutter_web_diary/repository/guests_repository.dart';
+import 'package:flutter_web_diary/repository/notification_repository.dart';
 
 import 'bloc.dart';
 
 
 class GuestsBloc extends Bloc<GuestsEvent, GuestsState> {
   final GuestsRepository _guestsRepository;
+  final NotificationRepository _notiRepository;
   StreamSubscription _guestsSubscription;
 
-  GuestsBloc({GuestsRepository guestsRepository})
-      : assert(guestsRepository != null),
+  GuestsBloc({@required GuestsRepository guestsRepository, @required NotificationRepository notificationRepository})
+      : assert(guestsRepository != null && notificationRepository != null),
         _guestsRepository = guestsRepository,
+        _notiRepository = notificationRepository,
         super(GuestsLoading());
 
   @override
   Stream<GuestsState> mapEventToState(GuestsEvent event) async* {
     if(event is LoadGuests){
       yield* _mapLoadGuestsToState(event);
-    }else if(event is AddGuest){
-      yield* _mapAddGuestToState(event);
     }else if(event is UpdateGuest){
       yield* _mapUpdateGuestToState(event);
     }else if(event is DeleteGuest){
@@ -45,13 +48,10 @@ class GuestsBloc extends Bloc<GuestsEvent, GuestsState> {
     );
   }
 
-  Stream<GuestsState> _mapAddGuestToState(AddGuest event) async*{
-    _guestsRepository.createGuest(event.guest, event.weddingId);
-    yield GuestAdded();
-  }
-
   Stream<GuestsState> _mapUpdateGuestToState(UpdateGuest event) async*{
     _guestsRepository.updateGuest(event.guest, event.weddingId);
+    NotificationModel noti = NotificationModel.fromGuest(event.guest, event.weddingId);
+    _notiRepository.updateNotificationByTaskID(noti, event.weddingId);
     yield GuestUpdated();
   }
 
