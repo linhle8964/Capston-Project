@@ -46,4 +46,16 @@ class FirebaseInviteEmailRepository extends InviteEmailRepository {
       snapshot.docs.first.reference.delete();
     });
   }
+
+  @override
+  Future<void> deleteInviteEmailByWedding(String weddingId) {
+    return inviteEmailCollection
+        .where("wedding_id", isEqualTo: weddingId)
+        .get()
+        .then((snapshot) {
+      if (snapshot.docs.length != 0) {
+        snapshot.docs.first.reference.delete();
+      }
+    });
+  }
 }

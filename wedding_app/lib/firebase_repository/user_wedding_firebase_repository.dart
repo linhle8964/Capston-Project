@@ -114,8 +114,14 @@ class FirebaseUserWeddingRepository extends UserWeddingRepository {
   }
 
   @override
-  Future<List<UserWedding>> getAllWeddingAdminByWedding(String weddingId) {
-    // TODO: implement getAllWeddingAdminByWedding
-    throw UnimplementedError();
+  Future<List<UserWedding>> getAllWeddingAdminByWedding(
+      String weddingId) async {
+    QuerySnapshot querySnapshot = await userWeddingCollection
+        .where("wedding_id", isEqualTo: weddingId)
+        .where("role", isEqualTo: "wedding_admin")
+        .get();
+    return querySnapshot.docs.map((snapshot) {
+      return UserWedding.fromEntity(UserWeddingEntity.fromSnapshot(snapshot));
+    }).toList();
   }
 }

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:meta/meta.dart';
 import 'package:wedding_app/bloc/authentication/bloc.dart';
 import 'package:wedding_app/model/user_wedding.dart';
 import 'package:wedding_app/model/wedding.dart';
@@ -78,6 +78,7 @@ class AuthenticationBloc
       await preferences.setString("wedding_id", userWedding.weddingId);
       await preferences.setString(
           "user_wedding", jsonEncode(userWedding.toEntity().toJson()));
+      print(jsonEncode(userWedding.toEntity().toJson()));
       await preferences.setString(
           "wedding", jsonEncode(wedding.toEntity().toJson()));
       yield Authenticated(user);

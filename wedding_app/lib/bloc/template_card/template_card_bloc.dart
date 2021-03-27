@@ -16,22 +16,26 @@ class TemplateCardBloc extends Bloc<TemplateCardEvent, TemplateCardState> {
         super(TemplateCardLoading());
 
   @override
-  Stream<TemplateCardState> mapEventToState(TemplateCardEvent event) async*{
-    if(event is LoadTemplateCard){
+  Stream<TemplateCardState> mapEventToState(TemplateCardEvent event) async* {
+    if (event is LoadTemplateCard) {
       yield* _mapLoadTemplateCardToState();
-    }else if(event is TemplateCardUpdated){
+    } else if (event is TemplateCardUpdated) {
       yield* _mapUpadteTemplateCardToState(event);
     }
   }
-  Stream<TemplateCardState> _mapLoadTemplateCardToState() async*{
+
+  Stream<TemplateCardState> _mapLoadTemplateCardToState() async* {
     _templateCardSubscription?.cancel();
-    _templateCardSubscription = _templateCardRepository.GetAllTemplate().listen(
-            (template) => add(TemplateCardUpdated(template)),
-    );
+    _templateCardSubscription = _templateCardRepository.getAllTemplate().listen(
+          (template) => add(TemplateCardUpdated(template)),
+        );
   }
-  Stream<TemplateCardState> _mapUpadteTemplateCardToState(TemplateCardUpdated event) async*{
+
+  Stream<TemplateCardState> _mapUpadteTemplateCardToState(
+      TemplateCardUpdated event) async* {
     yield TemplateCardLoaded(event.template);
   }
+
   @override
   Future<void> close() {
     _templateCardSubscription?.cancel();
