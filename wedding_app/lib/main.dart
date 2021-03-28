@@ -42,11 +42,12 @@ import 'firebase_repository/category_firebase_repository.dart';
 
 import 'firebase_repository/user_firebase_repository.dart';
 import 'package:android_alarm_manager/android_alarm_manager.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 void main() async {
+  //TestWidgetsFlutterBinding.ensureInitialized();
   WidgetsFlutterBinding.ensureInitialized();
-  //await AndroidAlarmManager.initialize();
-  WidgetsFlutterBinding.ensureInitialized();
+  await AndroidAlarmManager.initialize();
   Bloc.observer = SimpleBlocObserver();
   await Firebase.initializeApp().whenComplete(() => runApp(MyApp()));
 }

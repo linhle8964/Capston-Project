@@ -75,14 +75,16 @@ class ChecklistBloc extends Bloc<TasksEvent, TaskState> {
   Stream<TaskState> _mapTaskUpdated2ToState(Update2Task event) async* {
     _taskRepository.updateTask(event.task, event.weddingID);
     NotificationModel noti = NotificationModel.fromTask(event.task, event.weddingID);
-    _notiRepository.updateNotificationByTaskID(noti, event.weddingID);
+    if(noti.date.isAfter(DateTime.now()))
+      _notiRepository.updateNotificationByTaskID(noti, event.weddingID);
     yield TaskUpdated2();
   }
 
   Stream<TaskState> _mapTaskDeletedToState(DeleteTask event) async* {
     _taskRepository.deleteTask(event.task, event.weddingID);
     NotificationModel noti = NotificationModel.fromTask(event.task, event.weddingID);
-    _notiRepository.deleteNotificationByTaskID(noti, event.weddingID);
+    if(noti.date.isAfter(DateTime.now()))
+      _notiRepository.deleteNotificationByTaskID(noti, event.weddingID);
     yield TaskDeleted();
   }
 

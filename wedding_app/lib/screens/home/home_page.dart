@@ -22,7 +22,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:wedding_app/widgets/add_notification.dart';
 import 'package:wedding_app/widgets/receive_notification.dart';
 import 'button_column.dart';
 import 'info_column.dart';
@@ -39,7 +38,8 @@ showprint() async {
   String weddingID = prefs.getString("wedding_id");
   await Firebase.initializeApp();
   //AddTaskNotification.addTaskNotification(weddingID);
-  //NotificationManagement.executeAlarm(weddingID);
+  NotificationManagement.executeAlarm(weddingID);
+  print('CALLING');
 }
 
 class _HomePageState extends State<HomePage> {
@@ -47,13 +47,13 @@ class _HomePageState extends State<HomePage> {
   int endTime = DateTime(2021, 3, 1, 7, 30, 00).millisecondsSinceEpoch;
 
   @override
-  Future<void> initState() {
+  void initState() {
     super.initState();
-    //AndroidAlarmManager.periodic(Duration(seconds: 3), 0, showprint);
+    onTime();
   }
 
-  void onTime() {
-    print('Married');
+  onTime() {
+    AndroidAlarmManager.periodic(Duration(seconds: 3), 0, showprint,);
   }
 
   @override

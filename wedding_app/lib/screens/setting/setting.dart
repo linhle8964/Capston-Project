@@ -14,7 +14,6 @@ import 'package:wedding_app/utils/hex_color.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:wedding_app/utils/show_snackbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:wedding_app/widgets/add_notification.dart';
 import 'package:wedding_app/widgets/confirm_dialog.dart';
 import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:wedding_app/widgets/receive_notification.dart';
@@ -27,11 +26,10 @@ class SettingPage extends StatefulWidget {
 class _SettingPageState extends State<SettingPage> {
   @override
   void dispose() {
-    // TODO: implement dispose
-    //NotificationManagement.cancelAlarm();
-    //AddTaskNotification.cancel();
+    NotificationManagement.cancelAlarm();
     super.dispose();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -118,8 +116,8 @@ class _SettingPageState extends State<SettingPage> {
                       CustomButtom("Đăng xuất", () async {
                         BlocProvider.of<AuthenticationBloc>(context)
                             .add(LoggedOut());
-                        //NotificationManagement.ClearAllNotifications();
-                        //var cancel = await AndroidAlarmManager.cancel(0);
+                        NotificationManagement.ClearAllNotifications();
+                        var cancel = await AndroidAlarmManager.cancel(0);
                       }, Colors.blue),
                       isAdmin(userWedding.role)
                           ? CustomButtom("Xoá đám cưới",
