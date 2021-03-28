@@ -65,19 +65,38 @@ class _NavigatorPageState extends State<NavigatorPage> {
       child: Scaffold(
         body: _children[_selectedIndex],
         bottomNavigationBar: BottomNavigationBar(
-          key: Key(WidgetKey.bottomNavigationBarKey),
+            key: Key(WidgetKey.bottomNavigationBarKey),
             items: [
               BottomNavigationBarItem(
-                  icon: Icon(Icons.home, key: Key(WidgetKey.navigateHomeButtonKey),), label: "Trang chủ"),
+                  icon: Icon(
+                    Icons.home,
+                    key: Key(WidgetKey.navigateHomeButtonKey),
+                  ),
+                  label: "Trang chủ"),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.check_box, key: Key(WidgetKey.navigateTaskButtonKey),), label: "Công việc"),
+                  icon: Icon(
+                    Icons.check_box,
+                    key: Key(WidgetKey.navigateTaskButtonKey),
+                  ),
+                  label: "Công việc"),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.account_balance_wallet_outlined, key: Key(WidgetKey.navigateBudgetButtonKey),),
+                  icon: Icon(
+                    Icons.account_balance_wallet_outlined,
+                    key: Key(WidgetKey.navigateBudgetButtonKey),
+                  ),
                   label: "Kinh phí"),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.people, key: Key(WidgetKey.navigateGuestButtonKey),), label: "Khách mời"),
+                  icon: Icon(
+                    Icons.people,
+                    key: Key(WidgetKey.navigateGuestButtonKey),
+                  ),
+                  label: "Khách mời"),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.settings, key: Key(WidgetKey.navigateSettingButtonKey),), label: "Cài đặt"),
+                  icon: Icon(
+                    Icons.settings,
+                    key: Key(WidgetKey.navigateSettingButtonKey),
+                  ),
+                  label: "Cài đặt"),
             ],
             currentIndex: _selectedIndex,
             selectedItemColor: Colors.red,
