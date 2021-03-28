@@ -8,6 +8,7 @@ abstract class UserWeddingRepository {
   Future<void> updateUserWedding(UserWedding userWedding);
   Stream<UserWedding> getWeddingByUser(String userId);
   Future<List<UserWedding>> getAllUserByWedding(String weddingId);
+  Future<List<UserWedding>> getAllWeddingAdminByWedding(String weddingId);
   Future<UserWedding> getUserWeddingByUser(User user);
   Future<UserWedding> getUserWeddingByEmail(String email);
   Future<void> addUserId(UserWedding userWedding, User user);

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wedding_app/widgets/widget_key.dart';
 
 class PersonDetailsDialog extends StatefulWidget {
   final String message;
@@ -26,6 +27,7 @@ class _PersonDetailsDialogState extends State<PersonDetailsDialog> {
       ),
       actions: <Widget>[
         TextButton(
+          key: Key(WidgetKey.yesConfirmButtonKey),
           child: Text('Có'),
           onPressed: () {
             widget.onPressedFunction();
@@ -33,6 +35,7 @@ class _PersonDetailsDialogState extends State<PersonDetailsDialog> {
           },
         ),
         TextButton(
+          key: Key(WidgetKey.noConfirmButtonKey),
           child: Text('Hủy'),
           onPressed: () {
             Navigator.of(context).pop();

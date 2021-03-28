@@ -17,7 +17,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wedding_app/widgets/confirm_dialog.dart';
 import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:wedding_app/widgets/notification.dart';
-
+import 'package:wedding_app/widgets/widget_key.dart';
 
 class SettingPage extends StatefulWidget {
   @override
@@ -27,146 +27,178 @@ class SettingPage extends StatefulWidget {
 class _SettingPageState extends State<SettingPage> {
   @override
   void dispose() {
-    // TODO: implement dispose
     NotificationManagement.cancelAlarm();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: hexToColor("#d86a77"),
-        title: Text(
-          "CÀI ĐẶT",
-          style: TextStyle(color: Colors.white),
-        ),
-        centerTitle: true,
-      ),
-      body: MultiBlocListener(
-        listeners: [
-          BlocListener<UserWeddingBloc, UserWeddingState>(
-            listener: (context, state) {
-              if (state is UserWeddingProcessing) {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              } else if (state is UserWeddingFailed) {
-                showFailedSnackbar(context, state.message);
-              } else if (state is UserWeddingSuccess) {
-                showSuccessAlertDialog(context, "Rời đám cưới", state.message,
-                    () {
-                  Navigator.pop(context);
-                  BlocProvider.of<AuthenticationBloc>(context).add(LoggedOut());
-                });
-              }
-            },
-          ),
-          BlocListener<WeddingBloc, WeddingState>(
-            listener: (context, state) {
-              if (state is Loading) {
-                return Center(
-                  child: CircularProgressIndicator(),
-                );
-              } else if (state is Failed) {
-                showFailedSnackbar(context, state.message);
-              } else if (state is Success) {
-                showSuccessAlertDialog(context, "Xóa đám cưới", state.message,
-                    () {
-                  Navigator.pop(context);
-                  BlocProvider.of<AuthenticationBloc>(context).add(LoggedOut());
-                });
-              }
-            },
-          )
-        ],
-        child: FutureBuilder(
-          future: getUserWedding(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              final UserWedding userWedding = snapshot.data;
-              return SingleChildScrollView(
-                child: Container(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                  child: Column(
-                    children: <Widget>[
-                      SettingItem(null, "Thông tin cá nhân"),
-                      SettingItem(
-                          () async => Navigator.pushNamed(
-                              context, "/create_wedding",
-                              arguments: CreateWeddingArguments(
-                                  isEditing: true,
-                                  wedding:
-                                      await getWeddingFromSharePreferences())),
-                          "Thông tin đám cưới"),
-                      SettingItem(null, "Chi phí dự trù"),
-                      SettingItem(null, "Thông tin ngày cưới"),
-                      isAdmin(userWedding.role)
-                          ? SettingItem(() {
-                              Navigator.pushNamed(
-                                  context, "/invite_collaborator");
-                            }, "Kết nối với người ấy")
-
-                          : Container(),
-                      SettingItem(null, "Ngôn ngữ"),
-                      SettingItem(null, "Chính sách bảo mật"),
-                      SettingItem(null, "Điều khoản"),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 40, 0, 0),
-                        child: Text('App version 1.0.25'),
-                      ),
-                      CustomButtom("Đăng xuất", () async {
-                        BlocProvider.of<AuthenticationBloc>(context)
-                            .add(LoggedOut());
-                        NotificationManagement.ClearAllNotifications();
-                        var cancel = await AndroidAlarmManager.cancel(0);
-                      }, Colors.blue),
-                      isAdmin(userWedding.role)
-                          ? CustomButtom("Xoá đám cưới",
-                              () => _onDeleteWeddingClick(context), Colors.grey)
-                          : CustomButtom("Rời đám cưới",
-                              () => _onLeftWeddingClick(context), Colors.grey),
-                    ],
-                  ),
+    return FutureBuilder(
+        future: getUserWedding(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final UserWedding userWedding = snapshot.data;
+            return Scaffold(
+              appBar: AppBar(
+                backgroundColor: hexToColor("#d86a77"),
+                title: Text(
+                  "CÀI ĐẶT",
+                  style: TextStyle(color: Colors.white),
                 ),
-              );
-            } else {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-          },
-        ),
-      ),
-    );
+                centerTitle: true,
+              ),
+              bottomNavigationBar: Wrap(
+                children: [
+                  Center(
+                    child: Text('App version 1.0.00'),
+                  ),
+                  CustomButtom(Key(WidgetKey.logoutButtonKey),"Đăng xuất", () async {
+                    showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (ctx) => PersonDetailsDialog(
+                              message: "Bạn có muốn đăng xuất?",
+                              onPressedFunction: () async {
+                                _logOut();
+                              },
+                            ));
+                  }, Colors.blue),
+                  CustomButtom(Key(WidgetKey.leaveWeddingButton), "Rời đám cưới",
+                      () => _onLeftWeddingClick(context), Colors.grey),
+                  isAdmin(userWedding.role)
+                      ? CustomButtom(Key(WidgetKey.deleteWeddingButton), "Xoá đám cưới",
+                          () => _onDeleteWeddingClick(context), Colors.black54)
+                      : Container(),
+                ],
+              ),
+              body: MultiBlocListener(
+                listeners: [
+                  BlocListener<UserWeddingBloc, UserWeddingState>(
+                    listener: (context, state) {
+                      if (state is UserWeddingProcessing) {
+                      } else if (state is UserWeddingFailed) {
+                        showFailedSnackbar(context, state.message);
+                      } else if (state is UserWeddingSuccess) {
+                        showSuccessAlertDialog(
+                            context, "Rời đám cưới", state.message, () {
+                          Navigator.pop(context);
+                          _logOut();
+                        });
+                      } else if (state is UserWeddingEmpty) {
+                        showDialog(
+                            context: context,
+                            barrierDismissible: false,
+                            builder: (ctx) => PersonDetailsDialog(
+                                  message:
+                                      "Bạn là người dùng còn lại duy nhất trong đám cưới. Nếu bạn rời thì đám cưới sẽ bị xóa. Bạn có muốn rời?",
+                                  onPressedFunction: () async {
+                                    SharedPreferences preferences =
+                                        await SharedPreferences.getInstance();
+                                    String weddingId =
+                                        preferences.getString("wedding_id");
+                                    BlocProvider.of<WeddingBloc>(context)
+                                        .add(DeleteWedding(weddingId));
+                                  },
+                                ));
+                      }
+                    },
+                  ),
+                  BlocListener<WeddingBloc, WeddingState>(
+                    listener: (context, state) {
+                      if (state is Loading) {
+                      } else if (state is Failed) {
+                        showFailedSnackbar(context, state.message);
+                      } else if (state is Success) {
+                        showSuccessAlertDialog(
+                            context, "Xóa đám cưới", state.message, () {
+                          Navigator.pop(context);
+                          _logOut();
+                        });
+                      }
+                    },
+                  )
+                ],
+                child: LayoutBuilder(builder:
+                    (BuildContext context, BoxConstraints constraints) {
+                  return SingleChildScrollView(
+                    child: ConstrainedBox(
+                      constraints: constraints.copyWith(
+                        minHeight: constraints.maxHeight,
+                        maxHeight: double.infinity,
+                      ),
+                      child: IntrinsicHeight(
+                        child: Column(
+                          children: <Widget>[
+                            // Your body widgets here
+                            SettingItem(null, "Thông tin cá nhân"),
+                            SettingItem(
+                                () async => Navigator.pushNamed(
+                                    context, "/create_wedding",
+                                    arguments: CreateWeddingArguments(
+                                        isEditing: true,
+                                        wedding:
+                                            await getWeddingFromSharePreferences())),
+                                "Thông tin đám cưới"),
+                            SettingItem(null, "Chi phí dự trù"),
+                            SettingItem(null, "Thông tin ngày cưới"),
+                            isAdmin(userWedding.role)
+                                ? SettingItem(() {
+                                    Navigator.pushNamed(
+                                        context, "/invite_collaborator");
+                                  }, "Chia sẻ quyền quản lý")
+                                : Container(),
+                            SettingItem(null, "Ngôn ngữ"),
+                            SettingItem(null, "Chính sách bảo mật"),
+                            SettingItem(null, "Điều khoản"),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                }),
+              ),
+            );
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        });
   }
 
-  void _onLeftWeddingClick(BuildContext ctx) {
+  void _onLeftWeddingClick(BuildContext context) {
     showDialog(
-        context: ctx,
+        context: context,
         barrierDismissible: false,
-        builder: (BuildContext context) => PersonDetailsDialog(
+        builder: (BuildContext ctx) => PersonDetailsDialog(
               message: "Bạn có muốn rời đám cưới?",
               onPressedFunction: () async {
                 final User user = FirebaseAuth.instance.currentUser;
-                BlocProvider.of<UserWeddingBloc>(ctx)
+                BlocProvider.of<UserWeddingBloc>(context)
                     .add(RemoveUserFromUserWedding(user));
               },
             ));
   }
 
-  void _onDeleteWeddingClick(BuildContext ctx) async {
+  void _onDeleteWeddingClick(BuildContext context) async {
     showDialog(
-        context: ctx,
+        context: context,
         barrierDismissible: false,
-        builder: (context) => PersonDetailsDialog(
+        builder: (ctx) => PersonDetailsDialog(
               message: "Bạn có muốn xóa đám cưới?",
               onPressedFunction: () async {
                 SharedPreferences preferences =
                     await SharedPreferences.getInstance();
                 String weddingId = preferences.getString("wedding_id");
-                BlocProvider.of<WeddingBloc>(ctx).add(DeleteWedding(weddingId));
+                BlocProvider.of<WeddingBloc>(context)
+                    .add(DeleteWedding(weddingId));
               },
             ));
+  }
+
+  void _logOut() async {
+    BlocProvider.of<AuthenticationBloc>(context).add(LoggedOut());
+    NotificationManagement.ClearAllNotifications();
+    var cancel = await AndroidAlarmManager.cancel(0);
   }
 }

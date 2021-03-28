@@ -4,7 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wedding_app/bloc/login/bloc.dart';
 import 'package:wedding_app/bloc/authentication/bloc.dart';
 import 'package:wedding_app/utils/alert_dialog.dart';
+import 'package:wedding_app/utils/hex_color.dart';
 import 'package:wedding_app/utils/show_snackbar.dart';
+import 'package:wedding_app/widgets/widget_key.dart';
 
 class LoginPage extends StatefulWidget {
   // This widget is the root of your application.
@@ -93,6 +95,7 @@ class _LoginPageState extends State<LoginPage> {
                     Padding(
                         padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                         child: TextField(
+                          key: Key(WidgetKey.loginEmailTextFieldKey),
                           style: TextStyle(fontSize: 18, color: Colors.black),
                           controller: _emailController,
                           decoration: InputDecoration(
@@ -109,6 +112,7 @@ class _LoginPageState extends State<LoginPage> {
                         alignment: AlignmentDirectional.centerEnd,
                         children: <Widget>[
                           TextField(
+                            key: Key(WidgetKey.loginPasswordTextFieldKey),
                             style: TextStyle(fontSize: 18, color: Colors.black),
                             controller: _passController,
                             obscureText: !_showPass,
@@ -121,11 +125,12 @@ class _LoginPageState extends State<LoginPage> {
                                     color: Colors.grey, fontSize: 15)),
                           ),
                           GestureDetector(
+                            key: Key(WidgetKey.loginShowPasswordButtonKey),
                             onTap: onToggleShowPass,
                             child: Text(
                               _showPass ? "Ẩn Mật khẩu" : "Hiện Mật Khẩu",
                               style: TextStyle(
-                                  color: Colors.blue,
+                                  color: hexToColor("#d86a77"),
                                   fontSize: 13,
                                   fontWeight: FontWeight.bold),
                             ),
@@ -139,9 +144,10 @@ class _LoginPageState extends State<LoginPage> {
                         width: double.infinity,
                         height: 30,
                         child: ElevatedButton(
+                          key: Key(WidgetKey.loginButtonKey),
                           style: ElevatedButton.styleFrom(
                             primary: isLoginButtonEnabled(state)
-                                ? Colors.blue
+                                ? hexToColor("#d86a77")
                                 : Colors.grey,
                           ),
                           onPressed: () => isLoginButtonEnabled(state)
@@ -160,6 +166,7 @@ class _LoginPageState extends State<LoginPage> {
                         height: 20,
                         width: double.infinity,
                         child: new InkWell(
+                          key: Key(WidgetKey.toRegisterPageButtonKey),
                           onTap: () {
                             Navigator.pushNamed(context, '/register');
                           },
@@ -168,8 +175,8 @@ class _LoginPageState extends State<LoginPage> {
                             children: [
                               Text(
                                 'Chưa có tài khoản? Đăng Kí ngay',
-                                style:
-                                    TextStyle(color: Colors.blue, fontSize: 16),
+                                style: TextStyle(
+                                    color: hexToColor("#d86a77"), fontSize: 16),
                               ),
                             ],
                           ),
@@ -181,15 +188,19 @@ class _LoginPageState extends State<LoginPage> {
                       child: Container(
                         height: 20,
                         width: double.infinity,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
-                              "Quên Mật Khẩu?",
-                              style:
-                                  TextStyle(fontSize: 15, color: Colors.blue),
-                            ),
-                          ],
+                        child: InkWell(
+                          onTap: () =>
+                              Navigator.pushNamed(context, "/reset_password"),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
+                                "Quên Mật Khẩu?",
+                                style: TextStyle(
+                                    fontSize: 15, color: hexToColor("#d86a77")),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),

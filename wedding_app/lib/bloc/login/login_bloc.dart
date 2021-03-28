@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:meta/meta.dart';
 import 'package:wedding_app/firebase_repository/user_firebase_repository.dart';
 import 'package:wedding_app/repository/user_repository.dart';
 import 'bloc.dart';
@@ -80,17 +80,17 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           yield LoginState.success();
         }
       }
-    } on EmailNotFoundException{
+    } on EmailNotFoundException {
       yield LoginState.failure(message: "Tài khoản không tồn tại");
-    } on WrongPasswordException{
+    } on WrongPasswordException {
       yield LoginState.failure(message: "Sai mật khẩu");
-    } on TooManyRequestException{
+    } on TooManyRequestException {
       yield LoginState.failure(
           message:
-          "Bạn đã đăng nhập quá nhiều lần. Hãy thử lại trong giây lát");
-    } on FirebaseException{
+              "Bạn đã đăng nhập quá nhiều lần. Hãy thử lại trong giây lát");
+    } on FirebaseException {
       yield LoginState.failure(message: "Có lỗi xảy ra");
-    }catch (e) {
+    } catch (e) {
       print("[ERROR] : $e");
       yield LoginState.failure(message: "Có lỗi xảy ra");
     }
