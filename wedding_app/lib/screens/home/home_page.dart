@@ -22,6 +22,7 @@ import '../../widgets/notification.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'button_column.dart';
 import 'info_column.dart';
+import 'package:wedding_app/screens/vendor/vendor_list.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -168,6 +169,14 @@ class _HomePageState extends State<HomePage> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
+                                  buildButtonColumn(Colors.blue,
+                                      Icons.add_rounded, 'GIAN HÀNG', () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => Search()),
+                                    );
+                                  }),
                                   buildButtonColumn(Colors.blue,
                                       Icons.add_rounded, 'KHÁCH MỜI', () {}),
                                   buildButtonColumn(
