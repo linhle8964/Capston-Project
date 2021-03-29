@@ -13,8 +13,6 @@ import 'package:flutter_app_badger/flutter_app_badger.dart';
 class NotificationManagement {
   static final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
   FlutterLocalNotificationsPlugin(); //Nang
-  static Map<int, NotificationModel> notificationTime ={};
-  static int mapKey = 1;
 
   NotificationManagement() {
     WidgetsFlutterBinding.ensureInitialized();
@@ -36,44 +34,22 @@ class NotificationManagement {
     var platformChannelSpecifics = NotificationDetails(
         android: androidPlatformChannelSpecifics,
         iOS: iOSPlatformChannelSpecifics);
-    notificationTime.addAll({mapKey: notificationModel});
-    mapKey++;
-    if (notificationModel.date.isAfter(DateTime.now().subtract(Duration(minutes: 3)))) {
-      await flutterLocalNotificationsPlugin.schedule((mapKey-1), 'Thông báo', notificationModel.content,
+    if (notificationModel.type != 0 && notificationModel.date.isAfter(DateTime.now())) {
+      await flutterLocalNotificationsPlugin.schedule(notificationModel.number, 'Thông báo', notificationModel.content,
           notificationModel.date, platformChannelSpecifics);
+      print("zzz");
     }
   }
-
-  static void updateNotification(NotificationModel old, NotificationModel newNoti) async {
-    int key=-1;
-    for(int i=0; i<notificationTime.length; i++){
-      if(old == notificationTime.values.elementAt(i)){
-        key = notificationTime.keys.elementAt(i);
-        break;
-      }
-    }
-    if(key==-1){
-      key= mapKey++;
-    }
-    deleteNotification(key);
-    addNotification(newNoti);
-  }
-
-
 
   static void ClearAllNotifications() async {
     NotificationManagement();
-    notificationTime.clear();
-    mapKey=1;
     await flutterLocalNotificationsPlugin.cancelAll();
   }
 
   static void deleteNotification(int key) async {
     NotificationManagement();
-    notificationTime.remove(key);
     flutterLocalNotificationsPlugin.cancel(key);
   }
-
   /// code for alarm
   static CollectionReference reference;
   static StreamSubscription<QuerySnapshot> streamSub;
@@ -97,45 +73,10 @@ class NotificationManagement {
         FlutterAppBadger.removeBadge();
       }
       //set each states (add/ update/delete)
-      if(notificationTime.isEmpty){
-        querySnapshot.docs.forEach((change) {
-          addNotification(NotificationModel.fromEntity(NotificationEntity.fromSnapshot(change)));
-        });
-      }else{
-        if(notificationTime.length < querySnapshot.docs.length){
-          querySnapshot.docs.forEach((change) {
-            NotificationModel noti = NotificationModel.fromEntity(NotificationEntity.fromSnapshot(change));
-            if(!notificationTime.containsValue(noti)){
-              addNotification(noti);
-            }
-          });
-        }else if(notificationTime.length == querySnapshot.docs.length){
-          querySnapshot.docs.forEach((change) {
-            NotificationModel noti = NotificationModel.fromEntity(NotificationEntity.fromSnapshot(change));
-            for(int i = 0; i<notificationTime.length;i++){
-              if(notificationTime.values.elementAt(i).docID == noti.docID
-                  && notificationTime.values.elementAt(i)!= noti){
-                updateNotification(notificationTime.values.elementAt(i), noti);
-              }
-            }
-          });
-        }else{
-          for(int i=0; i< notificationTime.length; i++){
-            bool isDeletedItem = true;
-            NotificationModel deleted = notificationTime.values.elementAt(i);
-            querySnapshot.docs.forEach((element) {
-              NotificationModel noti = NotificationModel.fromEntity(NotificationEntity.fromSnapshot(element));
-              if(deleted==noti){
-                isDeletedItem = false;
-              }
-            });
-            if(isDeletedItem == true){
-              int key = notificationTime.keys.elementAt(i);
-              deleteNotification(key);
-            }
-          }
-        }
-      }
+      querySnapshot.docs.forEach((element) {
+        NotificationModel notificationModel = NotificationModel.fromEntity(NotificationEntity.fromSnapshot(element));
+        addNotification(notificationModel);
+      });
     });
   }
 

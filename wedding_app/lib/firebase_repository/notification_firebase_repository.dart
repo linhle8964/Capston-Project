@@ -37,8 +37,9 @@ class NotificationFirebaseRepository implements NotificationRepository{
         .collection('wedding')
         .doc(weddingID)
         .collection("notification")
-        .where("date", isLessThan: DateTime.now())
+        .where("date", isLessThan: DateTime.now()) // công việc đã hoàn thành không thông báo
         .orderBy("date", descending: true)
+        //.where("type", isGreaterThan: 0)
         .snapshots()
         .map((snapshot) {
       return snapshot.docs
@@ -86,16 +87,15 @@ class NotificationFirebaseRepository implements NotificationRepository{
   }
 
   @override
-  Future<void> deleteNotificationByTaskID(NotificationModel notification, String weddingID) {
+  Future<void> deleteNotificationByTaskID(NotificationModel notificationModel, String weddingID) {
     return FirebaseFirestore.instance
         .collection('wedding')
         .doc(weddingID)
         .collection("notification")
-        .where("details_id", isEqualTo: notification.detailsID)
+        .where("details_id", isEqualTo: notificationModel.detailsID)
         .get()
         .then((snapshots) {
       for (DocumentSnapshot snapshot in snapshots.docs) {
-        notification.docID = snapshot.id;
         snapshot.reference.delete();
       }
     });

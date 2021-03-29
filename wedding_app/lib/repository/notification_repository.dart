@@ -17,7 +17,7 @@ abstract class NotificationRepository {
 
   Future<void> updateNotificationByTaskID(NotificationModel notification,String weddingID);
 
-  Future<void> deleteNotificationByTaskID(NotificationModel notification,String weddingID);
+  Future<void> deleteNotificationByTaskID(NotificationModel notificationModel,String weddingID);
 
   Future<void> updateNewNotifications(String weddingID, List<NotificationModel> notifications);
 }

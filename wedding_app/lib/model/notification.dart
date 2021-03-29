@@ -14,30 +14,15 @@ class NotificationModel extends Equatable{
   DateTime date;
   String detailsID;
   bool isNew;
+  int number;
 //<editor-fold desc="Data Methods" defaultstate="collapsed">
   String getDate(){
     return "${date.day}/${date.month}/${date.year}";
   }
+  // đã hoàn thành: type =0
+  // chưa hoàn thành: type =1
+  // guest type=2
 
-  static NotificationModel fromTask(Task task,String weddingID){
-    /*int uniqueID=1;
-    for(int i =0;i< notifications.length;i++){
-      NotificationModel noti = notifications[i];
-      if(task.id == noti.detailsID) {
-        uniqueID = noti.id;
-        break;
-      }
-      if(noti.id >= uniqueID) uniqueID = noti.id+1;
-    }*/
-    NotificationModel notificationModel = new NotificationModel(
-        content: "Công việc ${task.name} đã đến hạn",
-        read: true,
-        type: 1,
-        date: task.dueDate,
-        detailsID: task.id,
-        isNew: true);
-    return notificationModel;
-  }
 
    NotificationModel({this.docID,
     @required this.content,
@@ -46,6 +31,7 @@ class NotificationModel extends Equatable{
     @required this.date,
     @required this.detailsID,
     @required this.isNew,
+    @required this.number,
   });
 
   NotificationModel copyWith({
@@ -57,6 +43,7 @@ class NotificationModel extends Equatable{
     DateTime date,
     String detailsID,
     bool isNew,
+    int number,
   }) {
     if ((docID == null || identical(docID, this.docID)) &&
         (content == null || identical(content, this.content)) &&
@@ -64,7 +51,8 @@ class NotificationModel extends Equatable{
         (type == null || identical(type, this.type)) &&
         (date == null || identical(date, this.date)) &&
         (detailsID == null || identical(detailsID, this.detailsID)) &&
-        (isNew == null || identical(isNew, this.isNew))
+        (isNew == null || identical(isNew, this.isNew)) &&
+        (number == null || identical(number, this.number))
     ) {
       return this;
     }
@@ -77,12 +65,13 @@ class NotificationModel extends Equatable{
       date: date ?? this.date,
       detailsID: detailsID ?? this.detailsID,
       isNew: isNew ?? this.isNew,
+      number: number ?? this.number,
     );
   }
 
   @override
   String toString() {
-    return 'Notification{$docID $content $read $type $date $detailsID $isNew}';
+    return 'Notification{$docID $content $read $type $date $detailsID $isNew, $number}';
   }
 
   @override
@@ -96,7 +85,8 @@ class NotificationModel extends Equatable{
               type == other.type &&
               date == other.date &&
               detailsID == other.detailsID &&
-              isNew == other.isNew
+              isNew == other.isNew &&
+              number == other.number
           );
 
   @override
@@ -107,10 +97,11 @@ class NotificationModel extends Equatable{
       type.hashCode ^
       date.hashCode ^
       detailsID.hashCode ^
-      isNew.hashCode;
+      isNew.hashCode ^
+      number.hashCode ;
 
   NotificationEntity toEntity() {
-    return NotificationEntity(docID, content, read, type, date, detailsID, isNew);
+    return NotificationEntity(docID, content, read, type, date, detailsID, isNew,number);
   }
 
   static NotificationModel fromEntity(NotificationEntity entity) {
@@ -122,10 +113,11 @@ class NotificationModel extends Equatable{
       date: entity.date,
       detailsID: entity.detailsID,
       isNew: entity.isNew,
+      number: entity.number,
     );
   }
 
   @override
-  List<Object> get props => [docID,content,read,type,date,detailsID,isNew];
+  List<Object> get props => [docID,content,read,type,date,detailsID,isNew,number];
 
 }

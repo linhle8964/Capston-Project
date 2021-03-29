@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:wedding_app/model/notification.dart';
 import 'package:wedding_app/repository/notification_repository.dart';
 import 'bloc.dart';
 
@@ -37,7 +38,12 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   Stream<NotificationState> _mapLoadNotificationsToState(LoadNotifications event) async* {
     _notificationSubscription?.cancel();
     _notificationSubscription = _notificationRepository.getNotifications(event.weddingID).listen(
-          (notifications) => add(ToggleAll(notifications)),
+          (notifications) {
+            List<NotificationModel> notis = [];
+            for(int i=0; i<notifications.length;i++){
+              if(notifications[i].type != 0) notis.add(notifications[i]);
+            }
+            add(ToggleAll(notis));}
     );
   }
 

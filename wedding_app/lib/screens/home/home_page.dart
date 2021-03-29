@@ -49,12 +49,10 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    onTime();
+    AndroidAlarmManager.periodic(Duration(seconds: 3), 0, showprint,);
+    showprint();
   }
 
-  onTime() {
-    AndroidAlarmManager.periodic(Duration(seconds: 3), 0, showprint,);
-  }
 
   @override
   void dispose() {

@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:wedding_app/model/notification.dart';
 import 'package:wedding_app/model/task_model.dart';
 
 @immutable
@@ -91,3 +92,16 @@ class DuedateCome extends TasksEvent {
 
   const DuedateCome(this.dueDate);
 }
+
+class ChangeToNotification extends TasksEvent {
+  final List<NotificationModel> notifications;
+  final String weddingID;
+  final Task task;
+  final String status;
+
+  const ChangeToNotification(this.task, this.notifications, this.weddingID, this.status);
+
+
+}
+
+
