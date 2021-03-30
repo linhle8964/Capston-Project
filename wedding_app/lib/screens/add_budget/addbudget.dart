@@ -11,6 +11,7 @@ import 'package:wedding_app/widgets/confirm_dialog.dart';
 import 'package:wedding_app/widgets/loading_indicator.dart';
 import 'package:wedding_app/utils/hex_color.dart';
 
+
 class AddBudget extends StatefulWidget {
   final bool isEditing;
   final Budget budget;
@@ -22,10 +23,6 @@ class AddBudget extends StatefulWidget {
   _AddBudgetState createState() => _AddBudgetState();
 }
 
-// Future<String> loadData() async {
-//   SharedPreferences preferences = await SharedPreferences.getInstance();
-//   return preferences.getString(nameKey);
-// }
 class _AddBudgetState extends State<AddBudget> {
   bool get isEditing => widget.isEditing;
 
