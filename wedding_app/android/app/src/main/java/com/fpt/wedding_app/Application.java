@@ -10,7 +10,7 @@ public class Application extends FlutterApplication
     @Override
     public void onCreate() {
         super.onCreate();
-        AlarmService.setPluginRegistrant(this);
+        //AlarmService.setPluginRegistrant(this);
     }
 
     @Override

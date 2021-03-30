@@ -7,6 +7,7 @@ import 'package:wedding_app/utils/alert_dialog.dart';
 import 'package:wedding_app/utils/hex_color.dart';
 import 'package:wedding_app/utils/show_snackbar.dart';
 import 'package:wedding_app/widgets/widget_key.dart';
+import 'package:flutter/scheduler.dart';
 
 class LoginPage extends StatefulWidget {
   // This widget is the root of your application.
@@ -47,9 +48,10 @@ class _LoginPageState extends State<LoginPage> {
           showProcessingSnackbar(context, state.message);
         }
         if (state.isSuccess) {
-          FocusScope.of(context).unfocus();
-          showSuccessSnackbar(context, state.message);
-          BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
+          SchedulerBinding.instance.addPostFrameCallback((_) {
+            showSuccessSnackbar(context, state.message);
+            BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
+          });
         }
         if (state.isFailure) {
           FocusScope.of(context).unfocus();
