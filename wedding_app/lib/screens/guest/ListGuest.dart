@@ -3,15 +3,17 @@ import 'package:wedding_app/bloc/guests/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wedding_app/firebase_repository/guest_firebase_repository.dart';
 import 'package:wedding_app/model/guest.dart';
+import 'package:wedding_app/model/user_wedding.dart';
+import 'package:wedding_app/utils/get_share_preferences.dart';
 import 'package:wedding_app/utils/hex_color.dart';
 
 import '../../model/guest.dart';
 
 class ListGuest extends StatefulWidget {
   final List<Guest> guests;
-  final String weddingId;
+  final UserWedding userWedding;
 
-  ListGuest(this.guests, this.weddingId);
+  ListGuest(this.guests, this.userWedding);
 
   @override
   _ListGuestState createState() => _ListGuestState();
@@ -70,8 +72,9 @@ class _ListGuestState extends State<ListGuest> {
 
   @override
   Widget build(BuildContext context) {
+    String weddingId = widget.userWedding.weddingId;
     return Container(
-      height: MediaQuery.of(context).size.height - 250,
+      height: isAdmin(widget.userWedding.role)? MediaQuery.of(context).size.height - 250 : MediaQuery.of(context).size.height - 200,
       child: ListView.builder(
         itemCount: widget.guests.length,
         itemBuilder: (context, index) {
@@ -155,26 +158,32 @@ class _ListGuestState extends State<ListGuest> {
                       ],
                     )
                 ),
-                Positioned(
-                  top: 0,
-                  right: 0,
-                  child: Center(
-                      child:  IconButton (
-                          icon: Icon(
-                            Icons.monetization_on_outlined,
-                            color: Colors.amber,
-                          ),
-                          onPressed: () {
-                            showGuestMoneyDialog(context, index, widget.weddingId);
-                          }
-                      )
-                  ),
-                ),
+                Builder(builder: (context) {
+                  if (isAdmin(widget.userWedding.role)) {
+                    return Positioned(
+                      top: 0,
+                      right: 0,
+                      child: Center(
+                          child:  IconButton (
+                              icon: Icon(
+                                Icons.monetization_on_outlined,
+                                color: Colors.amber,
+                              ),
+                              onPressed: () {
+                                showGuestMoneyDialog(context, index, widget.userWedding.weddingId);
+                              }
+                          )
+                      ),
+                    );
+                  } else {
+                    return SizedBox.shrink();
+                  }
+                }),
               ]
             ),
             onTap: () {
               print(widget.guests[index].name);
-              showGuestInfoDialog(context, index, widget.weddingId);
+              showGuestInfoDialog(context, index, widget.userWedding.weddingId);
             },
           );
         },
