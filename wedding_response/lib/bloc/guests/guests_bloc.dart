@@ -5,7 +5,6 @@ import 'package:flutter_web_diary/model/guest.dart';
 import 'package:flutter_web_diary/model/notification.dart';
 import 'package:flutter_web_diary/repository/guests_repository.dart';
 import 'package:flutter_web_diary/repository/notification_repository.dart';
-
 import 'bloc.dart';
 
 
@@ -13,12 +12,37 @@ class GuestsBloc extends Bloc<GuestsEvent, GuestsState> {
   final GuestsRepository _guestsRepository;
   final NotificationRepository _notiRepository;
   StreamSubscription _guestsSubscription;
+  StreamSubscription _notiSubscription;
 
   GuestsBloc({@required GuestsRepository guestsRepository, @required NotificationRepository notificationRepository})
       : assert(guestsRepository != null && notificationRepository != null),
         _guestsRepository = guestsRepository,
         _notiRepository = notificationRepository,
         super(GuestsLoading());
+
+  NotificationModel fromGuest(Guest guest,String weddingID, List<NotificationModel> notifications){
+    int number =1;
+    bool isUpdating = false;
+    for(int i=0; i<notifications.length; i++){
+      if(guest.id == notifications[i].detailsID){
+        number = notifications[i].number;
+        isUpdating =true;
+        break;
+      }
+      if(notifications[i].number >= number)
+        number = notifications[i].number;
+    }
+    NotificationModel notificationModel = new NotificationModel(
+        content: "${guest.name} đã phản hồi lời mời",
+        read: true,
+        type: 2,
+        date: DateTime.now().add(Duration(minutes: 2)),
+        detailsID: guest.id,
+        isNew: true,
+        number: isUpdating ? number : (number +1));
+
+    return notificationModel;
+  }
 
   @override
   Stream<GuestsState> mapEventToState(GuestsEvent event) async* {
@@ -43,15 +67,25 @@ class GuestsBloc extends Bloc<GuestsEvent, GuestsState> {
 
   Stream<GuestsState> _mapLoadGuestsToState(LoadGuests event) async*{
     _guestsSubscription?.cancel();
+    _notiSubscription?.cancel();
     _guestsSubscription = _guestsRepository.readGuest(event.weddingId).listen(
             (guests) => add(ToggleAll(guests)),
     );
   }
 
+  bool isUpdate = false;
   Stream<GuestsState> _mapUpdateGuestToState(UpdateGuest event) async*{
     _guestsRepository.updateGuest(event.guest, event.weddingId);
-    NotificationModel noti = NotificationModel.fromGuest(event.guest, event.weddingId);
-    _notiRepository.updateNotificationByTaskID(noti, event.weddingId);
+    _notiSubscription?.cancel();
+    isUpdate = true;
+    _notiSubscription = _notiRepository.getNotifications(event.weddingId).listen(
+          (notis) {
+            NotificationModel noti = fromGuest(event.guest, event.weddingId, notis);
+            print("NOTI "+noti.toString());
+            _notiRepository.updateNotificationByTaskID(noti, event.weddingId);
+            _notiSubscription?.cancel();
+          }
+    );
     yield GuestUpdated();
   }
 

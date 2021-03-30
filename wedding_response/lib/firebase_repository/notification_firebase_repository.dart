@@ -38,8 +38,8 @@ class NotificationFirebaseRepository implements NotificationRepository{
         .collection('wedding')
         .doc(weddingID)
         .collection("notification")
-        .where("date", isLessThan: DateTime.now())
-        .orderBy("date", descending: true)
+        //.where("date", isLessThan: DateTime.now())
+        //.orderBy("date", descending: true)
         .snapshots()
         .map((snapshot) {
       return snapshot.docs

@@ -10,6 +10,7 @@ class NotificationEntity extends Equatable {
   final DateTime date;
   final String detailsID;
   final bool isNew;
+  final int number;
 
   @override
   List<Object> get props => [
@@ -19,7 +20,8 @@ class NotificationEntity extends Equatable {
     type,
     date,
     detailsID,
-    isNew
+    isNew,
+    number
   ];
 
   const NotificationEntity(
@@ -29,12 +31,13 @@ class NotificationEntity extends Equatable {
       this.type,
       this.date,
       this.detailsID,
-      this.isNew
+      this.isNew,
+      this.number
       );
 
   @override
   String toString() {
-    return 'NotificationEntity{$docID $content $read $type $date $detailsID $isNew}';
+    return 'NotificationEntity{$docID $content $read $type $date $detailsID $isNew, $number}';
   }
 
   Map<String, Object> toJson() {
@@ -46,6 +49,7 @@ class NotificationEntity extends Equatable {
       "date": date,
       "details_id": detailsID,
       "is_new": isNew,
+      "number": number,
     };
   }
 
@@ -58,6 +62,7 @@ class NotificationEntity extends Equatable {
       json["date"] as DateTime,
       json["details_id"] as String,
       json["is_new"] as bool,
+      json["number"] as int,
     );
   }
 
@@ -72,6 +77,7 @@ class NotificationEntity extends Equatable {
       tempDate,
       snapshot.get("details_id"),
       snapshot.get("is_new"),
+      snapshot.get("number"),
     );
   }
 
@@ -83,6 +89,7 @@ class NotificationEntity extends Equatable {
       "date":date,
       "details_id":detailsID,
       "is_new": isNew,
+      "number": number,
     };
   }
 }

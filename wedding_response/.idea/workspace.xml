@@ -20,16 +20,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f3e24abf-ec34-481a-919d-25be2615c827" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/lib/entity/notification_entity.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/firebase_repository/notification_firebase_repository.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/model/notification.dart" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/lib/repository/notification_repository.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../wedding_app/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/../wedding_app/.flutter-plugins-dependencies" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.flutter-plugins" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/bloc/guests/guests_bloc.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/bloc/guests/guests_bloc.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/bloc/guests/guests_event.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/bloc/guests/guests_event.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/entity/notification_entity.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/entity/notification_entity.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/firebase_repository/notification_firebase_repository.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/firebase_repository/notification_firebase_repository.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/generated_plugin_registrant.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/generated_plugin_registrant.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/screen/views/input_details/input_details.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screen/views/input_details/input_details.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/screen/widgets/phone_input/phone_input.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/screen/widgets/phone_input/phone_input.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/model/notification.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/model/notification.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -112,10 +111,10 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="413" y="110" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1366.728@0.0.1366.728" timestamp="1615827611837" />
-    <state x="100" y="100" width="777" height="528" key="AVDManager" timestamp="1615642929247">
+    <state x="100" y="100" width="777" height="528" key="AVDManager" timestamp="1617076419967">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="100" y="100" width="777" height="528" key="AVDManager/0.0.1366.728@0.0.1366.728" timestamp="1615642929247" />
+    <state x="100" y="100" width="777" height="528" key="AVDManager/0.0.1366.728@0.0.1366.728" timestamp="1617076419967" />
     <state x="463" y="118" key="FileChooserDialogImpl" timestamp="1615955473089">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
