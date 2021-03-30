@@ -4,9 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wedding_app/bloc/guests/bloc.dart';
 import 'package:wedding_app/firebase_repository/guest_firebase_repository.dart';
 import 'package:wedding_app/model/guest.dart';
+import 'package:wedding_app/model/user_wedding.dart';
 import 'package:wedding_app/screens/guest/ListGuest.dart';
+import 'package:wedding_app/screens/privacy_term/pdfview_page.dart';
 import 'package:wedding_app/utils/format_number.dart';
-import 'package:wedding_app/utils/get_data.dart';
+import 'package:wedding_app/utils/get_share_preferences.dart';
 import 'package:wedding_app/utils/hex_color.dart';
 import 'package:wedding_app/widgets/loading_indicator.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -25,6 +27,7 @@ class _ViewGuestPageState extends State<ViewGuestPage>
       new GlobalKey<ScaffoldState>();
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  UserWedding userWedding;
   List<Guest> _data = [];
   List<Guest> _guests = [];
   List<Guest> _tempguests = [];
@@ -71,10 +74,11 @@ class _ViewGuestPageState extends State<ViewGuestPage>
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: getWeddingID(),
+        future: getUserWedding(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            final String weddingId = snapshot.data;
+            userWedding = snapshot.data;
+            final String weddingId = userWedding.weddingId;
             return BlocProvider<GuestsBloc>(
               create: (context) {
                 return GuestsBloc(
@@ -82,114 +86,171 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                 )..add(LoadGuests(weddingId));
               },
               child: Builder(
-                  builder: (context) => BlocListener(
-                    cubit: BlocProvider.of<GuestsBloc>(context),
-                    listener: (context, state) {},
-                    child: DefaultTabController(
-                      length: 2,
-                      child: Scaffold(
-                        key: scaffoldKey,
-                        appBar: new AppBar(
-                          backgroundColor: hexToColor("#d86a77"),
-                          title: const Text("Khách mời"),
-                          actions: <Widget>[
-                            IconButton(
-                              icon: const Icon(
-                                Icons.download_outlined,
-                                color: Colors.white,
+                  builder: (context) {
+                    if(isAdmin(userWedding.role)){
+                      return BlocListener(
+                        cubit: BlocProvider.of<GuestsBloc>(context),
+                        listener: (context, state) {},
+                        child: DefaultTabController(
+                          length: 2,
+                          child: Scaffold(
+                            key: scaffoldKey,
+                            appBar: new AppBar(
+                              backgroundColor: hexToColor("#d86a77"),
+                              title: const Text("Khách mời"),
+                              actions: <Widget>[
+                                IconButton(
+                                  icon: const Icon(
+                                    Icons.download_outlined,
+                                    color: Colors.white,
+                                  ),
+                                  onPressed: () {
+                                    print("Excel");
+                                  },
+                                ),
+                                IconButton(
+                                  icon: const Icon(
+                                    Icons.search,
+                                    color: Colors.white,
+                                  ),
+                                  onPressed: () {
+                                    SearchGuest(context, weddingId);
+                                  },
+                                ),
+                                _typePopup(_selectedTab, weddingId),
+                              ],
+                              bottom: TabBar(
+                                controller: _tabController,
+                                indicator: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(50), // Creates border
+                                  color: Colors.greenAccent,),
+                                tabs: [
+                                  Tab(
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.assignment,
+                                          color: Colors.white,
+                                        ),
+                                        Text(
+                                          'Thông tin',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Tab(
+                                    child: GestureDetector(
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Icon(
+                                            Icons.monetization_on_outlined,
+                                            color: Colors.white,
+                                          ),
+                                          Text(
+                                            'Tiền mừng',
+                                            style: TextStyle(color: Colors.white),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
+                            ),
+                            body: TabBarView(
+                                physics: NeverScrollableScrollPhysics(),
+                                controller: _tabController,
+                                children: [
+                                  BlocProvider<GuestsBloc>(
+                                      create: (context) {
+                                        return GuestsBloc(
+                                          guestsRepository: FirebaseGuestRepository(),
+                                        )..add(LoadGuests(weddingId));
+                                      },
+                                      child: _infoTab(weddingId)
+                                  ),
+                                  BlocProvider<GuestsBloc>(
+                                    create: (context) {
+                                      return GuestsBloc(
+                                        guestsRepository: FirebaseGuestRepository(),
+                                      )..add(LoadGuests(weddingId));
+                                    },
+                                    child: _moneyTab(weddingId),
+                                  ),
+                                ]
+                            ),
+                            floatingActionButton: FloatingActionButton(
+                              child: Icon(Icons.add),
+                              backgroundColor: hexToColor("#d86a77"),
                               onPressed: () {
-                                print("Excel");
+                                print('invite guest');
+                                if(_tabController.index == 0)
+                                  AddGuestDialog(context, weddingId);
+                                else if (_tabController.index == 1)
+                                  addMoneyDialog(context, weddingId);
                               },
                             ),
-                            IconButton(
-                              icon: const Icon(
-                                Icons.search,
-                                color: Colors.white,
-                              ),
-                              onPressed: () {
-                                SearchGuest(context, weddingId);
-                              },
-                            ),
-                            _typePopup(_selectedTab, weddingId),
-                          ],
-                          bottom: TabBar(
-                            controller: _tabController,
-                            indicator: BoxDecoration(
-                                borderRadius: BorderRadius.circular(50), // Creates border
-                                color: Colors.greenAccent,),
-                            tabs: [
-                              Tab(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.assignment,
-                                      color: Colors.white,
-                                    ),
-                                    Text(
-                                      'Thông tin',
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Tab(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.monetization_on_outlined,
-                                      color: Colors.white,
-                                    ),
-                                    Text(
-                                      'Tiền mừng',
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
+                            floatingActionButtonLocation:
+                            FloatingActionButtonLocation.endFloat,
                           ),
                         ),
-                        body: TabBarView(
-                          physics: NeverScrollableScrollPhysics(),
-                            controller: _tabController,
-                            children: [
-                              BlocProvider<GuestsBloc>(
-                                  create: (context) {
-                                    return GuestsBloc(
-                                      guestsRepository: FirebaseGuestRepository(),
-                                    )..add(LoadGuests(weddingId));
+                      );
+                    }else{
+                      return BlocListener(
+                        cubit: BlocProvider.of<GuestsBloc>(context),
+                        listener: (context, state) {},
+                        child: DefaultTabController(
+                          length: 2,
+                          child: Scaffold(
+                            key: scaffoldKey,
+                            appBar: new AppBar(
+                              backgroundColor: hexToColor("#d86a77"),
+                              title: const Text("Khách mời"),
+                              actions: <Widget>[
+                                IconButton(
+                                  icon: const Icon(
+                                    Icons.download_outlined,
+                                    color: Colors.white,
+                                  ),
+                                  onPressed: () {
+                                    print("Excel");
                                   },
-                                  child: _infoTab(weddingId)
-                              ),
-                              BlocProvider<GuestsBloc>(
-                                create: (context) {
-                                  return GuestsBloc(
-                                    guestsRepository: FirebaseGuestRepository(),
-                                  )..add(LoadGuests(weddingId));
-                                },
-                                child: _moneyTab(weddingId),
-                              ),
-                            ]
+                                ),
+                                IconButton(
+                                  icon: const Icon(
+                                    Icons.search,
+                                    color: Colors.white,
+                                  ),
+                                  onPressed: () {
+                                    SearchGuest(context, weddingId);
+                                  },
+                                ),
+                                _typePopup(_selectedTab, weddingId),
+                              ],
+                            ),
+                            body: _infoTab(weddingId),
+                            floatingActionButton: FloatingActionButton(
+                              child: Icon(Icons.add),
+                              backgroundColor: hexToColor("#d86a77"),
+                              onPressed: () {
+                                print('invite guest');
+                                if(_tabController.index == 0)
+                                  AddGuestDialog(context, weddingId);
+                                else if (_tabController.index == 1)
+                                  addMoneyDialog(context, weddingId);
+                              },
+                            ),
+                            floatingActionButtonLocation:
+                            FloatingActionButtonLocation.endFloat,
+                          ),
                         ),
-                        floatingActionButton: FloatingActionButton(
-                          child: Icon(Icons.add),
-                          backgroundColor: hexToColor("#d86a77"),
-                          onPressed: () {
-                            print('invite guest');
-                            if(_tabController.index == 0)
-                              AddGuestDialog(context, weddingId);
-                            else if (_tabController.index == 1)
-                              addMoneyDialog(context, weddingId);
-                          },
-                        ),
-                        floatingActionButtonLocation:
-                        FloatingActionButtonLocation.endFloat,
-                      ),
-                    ),
-                  )),
+                      );
+                    }
+                  }
+              ),
             );
           } else {
             return Center(
@@ -407,7 +468,7 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                                     )),
                                   ],
                                 ),
-                                ListGuest(_data, weddingId)
+                                ListGuest(_data, userWedding)
                               ],
                             );
                           })),
@@ -608,7 +669,7 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                                                                 0) {
                                                               return ListGuest(
                                                                   _listSearch,
-                                                                  weddingId);
+                                                                  userWedding);
                                                             } else {
                                                               return Column(
                                                                 children: [
@@ -1247,7 +1308,7 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                                                                 0) {
                                                               return ListGuest(
                                                                   _listSearch,
-                                                                  weddingId);
+                                                                  userWedding);
                                                             } else {
                                                               return Column(
                                                                 children: [
