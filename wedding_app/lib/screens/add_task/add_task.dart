@@ -175,7 +175,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                               contentPadding: EdgeInsets.all(0),
                               activeColor: Colors.blue,
                               controlAffinity: ListTileControlAffinity.leading,
-                              title: Text('Chưa hoàn thành'),
+                              title: Text('Hoàn thành'),
                               value: _checkboxListTile,
                               onChanged: (value) {
                                 setState(() {

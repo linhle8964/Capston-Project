@@ -82,10 +82,8 @@ class FirebaseUserRepository extends UserRepository {
       idToken: googleSignInAuthentication.idToken,
     );
 
-    final UserCredential userCredential = await _firebaseAuth
-        .signInWithCredential(credential)
-        .catchError(
-            (onError) => {print('[Firebase Google Sign Up Error] : $onError')});
+    final UserCredential userCredential =
+        await _firebaseAuth.signInWithCredential(credential);
 
     final User user = userCredential.user;
 

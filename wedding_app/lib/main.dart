@@ -14,6 +14,7 @@ import 'package:wedding_app/screens/create_wedding/create_wedding_argument.dart'
 
 import 'package:wedding_app/screens/create_wedding/create_wedding_page.dart';
 import 'package:wedding_app/screens/invite_collaborator/invite_collaborator.dart';
+import 'package:wedding_app/screens/list_collaborator/list_collaborator.dart';
 import 'package:wedding_app/screens/login/login_page.dart';
 import 'package:wedding_app/screens/navigator/navigator.dart';
 import 'package:bloc/bloc.dart';
@@ -59,9 +60,10 @@ class MyApp extends StatelessWidget {
         providers: [
           BlocProvider<AuthenticationBloc>(create: (context) {
             return AuthenticationBloc(
-              userRepository: FirebaseUserRepository(),
-              userWeddingRepository: FirebaseUserWeddingRepository(),
-            )..add(AppStarted());
+                userRepository: FirebaseUserRepository(),
+                userWeddingRepository: FirebaseUserWeddingRepository(),
+                weddingRepository: FirebaseWeddingRepository())
+              ..add(AppStarted());
           }),
           BlocProvider<TemplateCardBloc>(create: (context) {
             return TemplateCardBloc(
@@ -75,6 +77,7 @@ class MyApp extends StatelessWidget {
             return WeddingBloc(
               userWeddingRepository: FirebaseUserWeddingRepository(),
               weddingRepository: FirebaseWeddingRepository(),
+              inviteEmailRepository: FirebaseInviteEmailRepository(),
             );
           }),
           BlocProvider<BudgetBloc>(
@@ -86,15 +89,6 @@ class MyApp extends StatelessWidget {
             create: (BuildContext context) => CateBloc(
               todosRepository: FirebaseCategoryRepository(),
             ),
-          ),
-          BlocProvider<AuthenticationBloc>(
-            create: (context) {
-              return AuthenticationBloc(
-                userRepository: FirebaseUserRepository(),
-                userWeddingRepository: FirebaseUserWeddingRepository(),
-                weddingRepository: FirebaseWeddingRepository(),
-              )..add(AppStarted());
-            },
           ),
         ],
         child: MaterialApp(
@@ -108,10 +102,11 @@ class MyApp extends StatelessWidget {
                     providers: [
                       BlocProvider<WeddingBloc>(
                         create: (context) => WeddingBloc(
-                          weddingRepository: FirebaseWeddingRepository(),
-                          userWeddingRepository:
-                              FirebaseUserWeddingRepository(),
-                        ),
+                            weddingRepository: FirebaseWeddingRepository(),
+                            userWeddingRepository:
+                                FirebaseUserWeddingRepository(),
+                            inviteEmailRepository:
+                                FirebaseInviteEmailRepository()),
                       ),
                       BlocProvider<ValidateWeddingBloc>(
                         create: (context) => ValidateWeddingBloc(),
@@ -179,6 +174,18 @@ class MyApp extends StatelessWidget {
                   }),
                 ],
                 child: InviteCollaboratorPage(),
+              );
+            },
+            '/list_collaborator': (context) {
+              return MultiBlocProvider(
+                providers: [
+                  BlocProvider<UserWeddingBloc>(create: (context) {
+                    return UserWeddingBloc(
+                      userWeddingRepository: FirebaseUserWeddingRepository(),
+                    )..add(LoadUserWeddingByWedding());
+                  }),
+                ],
+                child: ListCollaborator(),
               );
             },
             "/wedding_code": (context) {

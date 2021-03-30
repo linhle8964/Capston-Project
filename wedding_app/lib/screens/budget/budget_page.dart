@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:wedding_app/bloc/budget/bloc.dart';
 import 'package:wedding_app/bloc/category/bloc.dart';
@@ -9,6 +11,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wedding_app/screens/add_budget/addbudget.dart';
 import 'package:search_page/search_page.dart';
 import 'package:wedding_app/utils/hex_color.dart';
+
+import 'download_excel.dart';
 
 class BudgetList extends StatefulWidget {
   @override
@@ -25,6 +29,40 @@ class _BudgetListState extends State<BudgetList> {
   SharedPreferences sharedPrefs;
   double sum = 0;
   double _cateSum = 0;
+
+  showMyAlertDialog(BuildContext context) {
+    GlobalKey _containerKey = GlobalKey();
+    // Create AlertDialog
+    AlertDialog dialog = AlertDialog(
+      key: _containerKey,
+      title: Text("Lưu lại"),
+      content: Text("Bạn có muốn lưu lại kinh phí dưới dạng file excel?"),
+      actions: [
+        TextButton(
+            style: TextButton.styleFrom(primary: hexToColor("#d86a77")),
+            child: Text("Có"),
+            onPressed: () {
+              Navigator.of(_containerKey.currentContext).pop();
+              downloadFile(_budgets,_categorys,context);
+            }),
+        TextButton(
+            style: TextButton.styleFrom(
+              primary: hexToColor("#d86a77"),
+            ),
+            child: Text("Không"),
+            onPressed: () {
+              Navigator.of(_containerKey.currentContext).pop();
+            }),
+      ],
+    );
+
+    // Call showDialog function to show dialog.
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return dialog;
+        });
+  }
 
   @override
   void initState() {
@@ -78,6 +116,12 @@ class _BudgetListState extends State<BudgetList> {
                   },
                 )
               : IconButton(
+                  icon: Icon(Icons.arrow_downward),
+                  onPressed: () {
+                    showMyAlertDialog(context);
+                  },
+                ),
+                IconButton(
                   icon: Icon(Icons.search),
                   onPressed: () => showSearch(
                       context: context,
@@ -282,9 +326,7 @@ class _BudgetListState extends State<BudgetList> {
                                       BlocProvider.of<BudgetBloc>(context)
                                         ..add(GetAllBudget(id));
                                       if (state is BudgetLoaded) {
-                                        print("test index" + index.toString());
                                         _budgets = state.budgets;
-                                        print(item.cateName);
                                       }
                                       if (state is BudgetNotLoaded) {}
 
@@ -439,4 +481,6 @@ class _BudgetListState extends State<BudgetList> {
       ),
     );
   }
+
+
 }

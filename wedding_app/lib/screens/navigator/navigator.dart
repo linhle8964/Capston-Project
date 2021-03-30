@@ -7,14 +7,15 @@ import 'package:wedding_app/bloc/wedding/bloc.dart';
 import 'package:wedding_app/firebase_repository/firebase_task_repository.dart';
 import 'package:wedding_app/firebase_repository/guest_firebase_repository.dart';
 import 'package:wedding_app/firebase_repository/notification_firebase_repository.dart';
+import 'package:wedding_app/firebase_repository/invite_email_firebase_repository.dart';
 import 'package:wedding_app/screens/budget/budget_page.dart';
 import 'package:wedding_app/screens/checklist/checklist_page.dart';
 import 'package:wedding_app/screens/guest/view_guest_page.dart';
 import 'package:wedding_app/screens/home/home_page.dart';
 import 'package:wedding_app/firebase_repository/user_wedding_firebase_repository.dart';
 import 'package:wedding_app/firebase_repository/wedding_firebase_repository.dart';
-import 'package:wedding_app/screens/notification/notification.dart';
 import 'package:wedding_app/screens/setting/setting.dart';
+import 'package:wedding_app/widgets/widget_key.dart';
 
 class NavigatorPage extends StatefulWidget {
   @override
@@ -42,9 +43,9 @@ class _NavigatorPageState extends State<NavigatorPage> {
       providers: [
         BlocProvider<WeddingBloc>(
           create: (BuildContext context) => WeddingBloc(
-            userWeddingRepository: FirebaseUserWeddingRepository(),
-            weddingRepository: FirebaseWeddingRepository(),
-          ),
+              userWeddingRepository: FirebaseUserWeddingRepository(),
+              weddingRepository: FirebaseWeddingRepository(),
+              inviteEmailRepository: FirebaseInviteEmailRepository()),
         ),
         BlocProvider<UserWeddingBloc>(
           create: (BuildContext context) => UserWeddingBloc(
@@ -66,18 +67,38 @@ class _NavigatorPageState extends State<NavigatorPage> {
       child: Scaffold(
         body: _children[_selectedIndex],
         bottomNavigationBar: BottomNavigationBar(
+            key: Key(WidgetKey.bottomNavigationBarKey),
             items: [
               BottomNavigationBarItem(
-                  icon: Icon(Icons.home), label: "Trang chủ"),
+                  icon: Icon(
+                    Icons.home,
+                    key: Key(WidgetKey.navigateHomeButtonKey),
+                  ),
+                  label: "Trang chủ"),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.check_box), label: "Công việc"),
+                  icon: Icon(
+                    Icons.check_box,
+                    key: Key(WidgetKey.navigateTaskButtonKey),
+                  ),
+                  label: "Công việc"),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.account_balance_wallet_outlined),
+                  icon: Icon(
+                    Icons.account_balance_wallet_outlined,
+                    key: Key(WidgetKey.navigateBudgetButtonKey),
+                  ),
                   label: "Kinh phí"),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.people), label: "Khách mời"),
+                  icon: Icon(
+                    Icons.people,
+                    key: Key(WidgetKey.navigateGuestButtonKey),
+                  ),
+                  label: "Khách mời"),
               BottomNavigationBarItem(
-                  icon: Icon(Icons.settings), label: "Cài đặt"),
+                  icon: Icon(
+                    Icons.settings,
+                    key: Key(WidgetKey.navigateSettingButtonKey),
+                  ),
+                  label: "Cài đặt"),
             ],
             currentIndex: _selectedIndex,
             selectedItemColor: Colors.red,

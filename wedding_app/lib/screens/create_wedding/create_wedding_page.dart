@@ -111,7 +111,6 @@ class _CreateWeddingPageState extends State<CreateWeddingPage> {
                   setState(() {
                     _absorbing = false;
                   });
-                  print(_absorbing);
                   showSuccessSnackbar(context, state.message);
                   widget.isEditing
                       ? Navigator.pop(context)
@@ -121,13 +120,11 @@ class _CreateWeddingPageState extends State<CreateWeddingPage> {
                   setState(() {
                     _absorbing = false;
                   });
-                  print(_absorbing);
                   showFailedSnackbar(context, state.message);
                 } else if (state is Loading) {
                   setState(() {
                     _absorbing = true;
                   });
-                  print(_absorbing);
                   showProcessingSnackbar(context, state.message);
                 }
               },

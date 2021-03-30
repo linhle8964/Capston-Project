@@ -107,7 +107,7 @@ class _InvitationCardPageState extends State<InvitationCardPage> {
                       child: Center(
                         child: Column(
                           children: <Widget>[
-                            Text('Trận trong mời bạn đến',
+                            Text('Trân trọng mời bạn đến',
                                 style: TextStyle(fontSize: 11.0.sp),
                                 textAlign: TextAlign.center),
                             Text('dự tiệc cưới của chúng tôi',
