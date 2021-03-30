@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wedding_app/widgets/widget_key.dart';
 
 void showFailedSnackbar(BuildContext context, String message) {
   FocusScope.of(context).unfocus();
@@ -6,7 +7,8 @@ void showFailedSnackbar(BuildContext context, String message) {
     ..hideCurrentSnackBar()
     ..showSnackBar(
       SnackBar(
-        duration: Duration(seconds: 2),
+        key: Key(WidgetKey.failedSnackbarKey),
+        duration: Duration(seconds: 1),
         content: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -25,6 +27,7 @@ void showProcessingSnackbar(BuildContext context, String message) {
     ..hideCurrentSnackBar()
     ..showSnackBar(
       SnackBar(
+        key: Key(WidgetKey.loadingSnackbarKey),
         content: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -42,12 +45,16 @@ void showSuccessSnackbar(BuildContext context, String message) {
     ..hideCurrentSnackBar()
     ..showSnackBar(
       SnackBar(
-        duration: Duration(seconds: 2),
+        key: Key(WidgetKey.successSnackbarKey),
+        duration: Duration(seconds: 1),
         content: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(message),
-            Icon(Icons.check),
+            Icon(
+              Icons.check,
+              color: Colors.white,
+            ),
           ],
         ),
         backgroundColor: Colors.green,

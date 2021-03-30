@@ -90,7 +90,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
                     context: context,
                     barrierDismissible: false,
                     builder: (BuildContext context) => PersonDetailsDialog(
-                          message: "Bạn đang thêm công việc",
+                          message: "Bạn đang chỉnh sửa công việc",
                           onPressedFunction: () {
                             updateTask(ctx);
                           },
@@ -186,7 +186,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
                                 activeColor: Colors.blue,
                                 controlAffinity:
                                     ListTileControlAffinity.leading,
-                                title: Text('Chưa hoàn thành'),
+                                title: Text('Hoàn thành'),
                                 value: _checkboxListTile,
                                 onChanged: (value) {
                                   setState(() {

@@ -1,18 +1,21 @@
 import 'package:meta/meta.dart';
+import 'package:equatable/equatable.dart';
 
 @immutable
-class ValidateWeddingState {
+class ValidateWeddingState extends Equatable{
   final bool isGroomNameValid;
   final bool isBrideNameValid;
   final bool isAddressValid;
+  final bool isBudgetValid;
 
   bool get isFormValid =>
-      isGroomNameValid && isBrideNameValid && isAddressValid;
+      isGroomNameValid && isBrideNameValid && isAddressValid && isBudgetValid;
 
   ValidateWeddingState({
     @required this.isGroomNameValid,
     @required this.isBrideNameValid,
     @required this.isAddressValid,
+    @required this.isBudgetValid,
   });
 
   factory ValidateWeddingState.empty() {
@@ -20,6 +23,16 @@ class ValidateWeddingState {
       isGroomNameValid: true,
       isBrideNameValid: true,
       isAddressValid: true,
+      isBudgetValid: true,
+    );
+  }
+
+  factory ValidateWeddingState.submitting() {
+    return ValidateWeddingState(
+      isGroomNameValid: true,
+      isBrideNameValid: true,
+      isAddressValid: true,
+      isBudgetValid: true,
     );
   }
 
@@ -27,11 +40,13 @@ class ValidateWeddingState {
     bool isGroomNameValid,
     bool isBrideNameValid,
     bool isAddressValid,
+    bool isBudgetValid,
   }) {
     return copyWith(
       isGroomNameValid: isGroomNameValid,
       isBrideNameValid: isBrideNameValid,
       isAddressValid: isAddressValid,
+      isBudgetValid: isBudgetValid,
     );
   }
 
@@ -39,12 +54,13 @@ class ValidateWeddingState {
     bool isGroomNameValid,
     bool isBrideNameValid,
     bool isAddressValid,
-    bool isSubmitEnabled,
+    bool isBudgetValid,
   }) {
     return ValidateWeddingState(
       isGroomNameValid: isGroomNameValid ?? this.isGroomNameValid,
       isBrideNameValid: isBrideNameValid ?? this.isBrideNameValid,
       isAddressValid: isAddressValid ?? this.isAddressValid,
+      isBudgetValid: isBudgetValid ?? this.isBudgetValid,
     );
   }
 
@@ -54,6 +70,10 @@ class ValidateWeddingState {
       isGroomNameValid: $isGroomNameValid,
       isBrideNameValid: $isBrideNameValid,
       isAddressValid : $isAddressValid,
+      isBudgetValid : $isBudgetValid,
     }''';
   }
+
+  @override
+  List<Object> get props => [isGroomNameValid, isBrideNameValid, isAddressValid, isBudgetValid];
 }

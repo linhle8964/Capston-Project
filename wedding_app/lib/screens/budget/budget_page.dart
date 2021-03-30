@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:wedding_app/bloc/budget/bloc.dart';
 import 'package:wedding_app/bloc/category/bloc.dart';
@@ -9,6 +11,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wedding_app/screens/add_budget/addbudget.dart';
 import 'package:search_page/search_page.dart';
 import 'package:wedding_app/utils/hex_color.dart';
+
+import 'download_excel.dart';
 
 class BudgetList extends StatefulWidget {
   @override
@@ -25,6 +29,40 @@ class _BudgetListState extends State<BudgetList> {
   SharedPreferences sharedPrefs;
   double sum = 0;
   double _cateSum = 0;
+
+  showMyAlertDialog(BuildContext context) {
+    GlobalKey _containerKey = GlobalKey();
+    // Create AlertDialog
+    AlertDialog dialog = AlertDialog(
+      key: _containerKey,
+      title: Text("Lưu lại"),
+      content: Text("Bạn có muốn lưu lại kinh phí dưới dạng file excel?"),
+      actions: [
+        TextButton(
+            style: TextButton.styleFrom(primary: hexToColor("#d86a77")),
+            child: Text("Có"),
+            onPressed: () {
+              Navigator.of(_containerKey.currentContext).pop();
+              downloadFile(_budgets,_categorys,context);
+            }),
+        TextButton(
+            style: TextButton.styleFrom(
+              primary: hexToColor("#d86a77"),
+            ),
+            child: Text("Không"),
+            onPressed: () {
+              Navigator.of(_containerKey.currentContext).pop();
+            }),
+      ],
+    );
+
+    // Call showDialog function to show dialog.
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return dialog;
+        });
+  }
 
   @override
   void initState() {
@@ -52,7 +90,7 @@ class _BudgetListState extends State<BudgetList> {
         title: Center(
           child: !isSearching
               ? Text(
-                  'KINH PHÍ',
+                  '     KINH PHÍ',
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 )
               : TextField(
@@ -78,13 +116,23 @@ class _BudgetListState extends State<BudgetList> {
                   },
                 )
               : IconButton(
+                  icon: Icon(Icons.arrow_downward),
+                  onPressed: () {
+                    showMyAlertDialog(context);
+                  },
+                ),
+                IconButton(
                   icon: Icon(Icons.search),
                   onPressed: () => showSearch(
                       context: context,
                       delegate: SearchPage<Budget>(
+                        barTheme: ThemeData(
+                            appBarTheme: AppBarTheme(
+                                elevation: 0.0, color: hexToColor("#d86a77"))),
                         searchLabel: "Tìm Kiếm",
                         builder: (Budget budget) => InkWell(
                             onTap: () {
+                              Navigator.pop(context);
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -111,14 +159,37 @@ class _BudgetListState extends State<BudgetList> {
                                     Container(
                                       child: Text(budget.budgetName,
                                           style: TextStyle(
-                                              color: Colors.black,
                                               fontSize: 20,
                                               fontWeight: FontWeight.bold)),
                                     ),
+                                    Flexible(
+                                        fit: FlexFit.tight, child: SizedBox()),
+                                    Visibility(
+                                        visible: budget.isComplete,
+                                        child: SizedBox(
+                                          child: Container(
+                                            padding: EdgeInsets.only(
+                                                left: 5,
+                                                right: 5,
+                                                top: 3,
+                                                bottom: 3),
+                                            decoration: new BoxDecoration(
+                                              color: Colors.greenAccent,
+                                              borderRadius:
+                                                  BorderRadius.circular(16),
+                                            ),
+                                            child: Text(" Hoàn Thành ",
+                                                style: TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 15,
+                                                    fontWeight:
+                                                        FontWeight.normal)),
+                                          ),
+                                        )),
                                     Text(
-                                      budget.money.toString() + "₫",
+                                      (budget.money - budget.payMoney).toString() +
+                                          "₫",
                                       style: TextStyle(
-                                          color: Colors.black,
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold),
                                     )
@@ -194,7 +265,8 @@ class _BudgetListState extends State<BudgetList> {
                                 sum = 0;
                                 _budgets = state.budgets;
                                 for (int i = 0; i < _budgets.length; i++) {
-                                  sum += _budgets[i].money;
+                                  sum += (_budgets[i].money -
+                                      _budgets[i].payMoney);
                                 }
                               }
                               return Text(sum.toString());
@@ -233,10 +305,10 @@ class _BudgetListState extends State<BudgetList> {
                             _cateSum = 0;
                             for (int i = 0; i < _budgets.length; i++) {
                               if (item.id == _budgets[i].cateID) {
-                                _cateSum += _budgets[i].money;
+                                _cateSum +=
+                                    _budgets[i].money - _budgets[i].payMoney;
                               }
                             }
-                            print("test" + _cateSum.toString());
 
                             return Column(
                               children: <Widget>[
@@ -254,9 +326,7 @@ class _BudgetListState extends State<BudgetList> {
                                       BlocProvider.of<BudgetBloc>(context)
                                         ..add(GetAllBudget(id));
                                       if (state is BudgetLoaded) {
-                                        print("test index" + index.toString());
                                         _budgets = state.budgets;
-                                        print(item.cateName);
                                       }
                                       if (state is BudgetNotLoaded) {}
 
@@ -356,11 +426,10 @@ class _BudgetListState extends State<BudgetList> {
                                                                   ),
                                                                 )),
                                                             Text(
-                                                              low.isComplete
-                                                                  ? "0 ₫"
-                                                                  : low.money
-                                                                          .toString() +
-                                                                      "₫",
+                                                              (low.money -
+                                                                          low.payMoney)
+                                                                      .toString() +
+                                                                  "₫",
                                                               style: TextStyle(
                                                                   fontSize: 20,
                                                                   fontWeight:
@@ -412,4 +481,6 @@ class _BudgetListState extends State<BudgetList> {
       ),
     );
   }
+
+
 }

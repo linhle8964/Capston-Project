@@ -9,9 +9,9 @@ import 'package:wedding_app/model/task_model.dart';
 import 'package:wedding_app/utils/border.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:wedding_app/utils/show_snackbar.dart';
 import 'package:wedding_app/widgets/confirm_dialog.dart';
 import 'package:wedding_app/utils/hex_color.dart';
-import 'package:wedding_app/widgets/notification.dart';
 
 class AddTaskPage extends StatefulWidget {
   String weddingID;
@@ -172,7 +172,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                               contentPadding: EdgeInsets.all(0),
                               activeColor: Colors.blue,
                               controlAffinity: ListTileControlAffinity.leading,
-                              title: Text('Chưa hoàn thành'),
+                              title: Text('Hoàn thành'),
                               value: _checkboxListTile,
                               onChanged: (value) {
                                 setState(() {
@@ -280,14 +280,9 @@ class _AddTaskPageState extends State<AddTaskPage> {
     if (_task != null && _category != null && _task.trim().isNotEmpty) {
       BlocProvider.of<ChecklistBloc>(context)
         ..add(AddTask(task, widget.weddingID));
-      //NotificationManagement.addNotification(task);
       Navigator.pop(context);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('có lỗi xảy ra'),
-        ),
-      );
+      showFailedSnackbar(context, "Tên, loại công việc phải có dữ liệu");
     }
   }
 }

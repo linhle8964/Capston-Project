@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:meta/meta.dart';
 import 'package:wedding_app/bloc/checklist/bloc.dart';
 import 'package:wedding_app/repository/task_repository.dart';
 

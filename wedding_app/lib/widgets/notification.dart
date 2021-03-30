@@ -36,7 +36,6 @@ class NotificationManagement {
         iOS: iOSPlatformChannelSpecifics);
     notificationTime.addAll({mapKey: task});
     mapKey++;
-    print("ADD ${notificationTime.toString()}");
     if (task.dueDate.isAfter(DateTime.now())) {
       await flutterLocalNotificationsPlugin.schedule((mapKey-1), 'Đã đến hạn công việc', task.name,
           task.dueDate, platformChannelSpecifics);
@@ -63,7 +62,6 @@ class NotificationManagement {
   static void ClearAllNotifications() async {
     NotificationManagement();
     notificationTime.clear();
-    print("CLEAR: ${notificationTime.toString()}");
     mapKey=1;
     await flutterLocalNotificationsPlugin.cancelAll();
   }
@@ -72,7 +70,6 @@ class NotificationManagement {
     NotificationManagement();
     notificationTime.remove(key);
     flutterLocalNotificationsPlugin.cancel(key);
-    print("DELETE: ${notificationTime.toString()}");
   }
 
   /// code for alarm
@@ -95,7 +92,6 @@ class NotificationManagement {
             querySnapshot.docs.forEach((change) {
               Task task = Task.fromEntity(TaskEntity.fromSnapshot(change));
               if(!notificationTime.containsValue(task)){
-                print("adding $task");
                 addNotification(task);
               }
             });
@@ -105,7 +101,6 @@ class NotificationManagement {
               for(int i = 0; i<notificationTime.length;i++){
                 if(notificationTime.values.elementAt(i).id == task.id
                     && notificationTime.values.elementAt(i)!= task){
-                  print("updating $task");
                   updateNotification(notificationTime.values.elementAt(i), task);
                 }
               }
@@ -121,7 +116,6 @@ class NotificationManagement {
                 }
               });
               if(isDeletedItem == true){
-                print("deleting $deleted");
                 int key = notificationTime.keys.elementAt(i);
                 deleteNotification(key, deleted);
               }

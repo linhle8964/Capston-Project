@@ -26,7 +26,8 @@ dependencies:
   flutter_time_picker_spinner: ^1.0.6+1
   flutter_countdown_timer: ^3.0.1
   contacts_service: ^0.4.6
-  permission_handler: ^6.0.1
+  permission_handler: ^6.1.0
+  flutter_pdfview: ^1.1.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -35,6 +36,9 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_driver:
+    sdk: flutter
+  test: any
     # Add Sign in method for google and facebook
   google_sign_in: ^4.5.9
   # bloc dependencies
@@ -46,22 +50,30 @@ dev_dependencies:
   intl: ^0.17.0
 
     # Add the dependencies for any other Firebase products you want to use in your app
-  # For example, to use Firebase Authentication and Cloud Firestore
+
+    # For example, to use Firebase Authentication and Cloud Firestore
   firebase_auth: ^1.0.0
+  image_picker: ^0.7.2
   # Add the dependency for the FlutterFire plugin for Google Analytics
-
-  cloud_firestore: ^1.0.0
-  firebase_core: ^1.0.0
-
+  cloud_firestore: ^1.0.1
+  firebase_core: ^1.0.1
+  firebase_storage: ^8.0.0
+  transparent_image: ^1.0.0
+  path_provider:
   rxdart: ^0.26.0
   equatable: ^2.0.0
-  flutter_launcher_icons: ^0.9.0
-  shared_preferences: ^2.0.3
+  shared_preferences: ^2.0.5
   mailer: ^4.0.0
   flutter_local_notifications: ^5.0.0-nullsafety.0
   android_alarm_manager: ^0.4.5+14
   firebase_messaging: ^9.0.0
   search_page: ^1.4.0
+  sizer: ^1.1.8
+  dio: ^4.0.0-beta7
+  permission_handler: ^6.0.1+1
+  excel: ^1.1.5
+  share: ^2.0.1
+  integration_test: ^1.0.2+2
 
 
 # For information on the generic Dart part of this file, see the
@@ -85,6 +97,7 @@ flutter:
     - assets/cardTemplate/
     - assets/edit_invitation/
     - assets/image/
+    - assets/pdf/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
