@@ -100,7 +100,7 @@ class _AddBudgetState extends State<AddBudget> {
                       icon: Icon(
                         Icons.check,
                         size: 40,
-                        color: Colors.red,
+                        color: Colors.white,
                       ),
                       onPressed: () {
                         showDialog(
@@ -108,7 +108,9 @@ class _AddBudgetState extends State<AddBudget> {
                             barrierDismissible: false,
                             builder: (BuildContext context) =>
                                 PersonDetailsDialog(
-                                  message: isEditing?"Bạn đang sửa kinh phí":"Bạn đang thêm kinh phí",
+                                  message: isEditing
+                                      ? "Bạn đang sửa kinh phí"
+                                      : "Bạn đang thêm kinh phí",
                                   onPressedFunction: () {
                                     updateBudget();
                                   },
@@ -210,7 +212,8 @@ class _AddBudgetState extends State<AddBudget> {
                                         setState(() {
                                           _checkboxListTile =
                                               !_checkboxListTile;
-                                          payMoneyController.text= moneyController.value.text;
+                                          payMoneyController.text =
+                                              moneyController.value.text;
                                         });
                                       },
                                     ))),
@@ -233,10 +236,19 @@ class _AddBudgetState extends State<AddBudget> {
                               );
                             },
                             validator: (val) {
-                              print("test money "+ moneyController.value.text.replaceAll(",",""));
-                              if (double.parse(val.replaceAll(",", "")) >
-                                  double.parse(moneyController.value.text.replaceAll(",",""))) {
+
+                              if (val == "") {
+                                setState(() {
+                                  payMoneyController.text="0";
+                                  double.parse(val);
+                                });
+
+
+                              } else if (double.parse(val.replaceAll(",", "")) >
+                                  double.parse(moneyController.value.text
+                                      .replaceAll(",", ""))) {
                                 print("falied ");
+
                                 showFailedSnackbar(
                                     context, "Xin Vui Lòng nhập lại quỹ");
                                 print(double.parse(val.replaceAll(",", "")) <

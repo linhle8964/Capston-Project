@@ -101,21 +101,7 @@ class Detail extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      Container(
-                        height: 50,
-                        width: 50,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Center(
-                          child: Icon(
-                            Icons.favorite,
-                            color: Colors.yellow[700],
-                            size: 20,
-                          ),
-                        ),
-                      ),
+
                     ],
                   ),
                 ),
@@ -149,18 +135,6 @@ class Detail extends StatelessWidget {
                           Icon(
                             Icons.zoom_out_map,
                             color: Colors.white,
-                            size: 16,
-                          ),
-                          SizedBox(
-                            width: 4,
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.star,
-                            color: Colors.yellow[700],
                             size: 16,
                           ),
                           SizedBox(
@@ -280,20 +254,7 @@ class Detail extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                        right: 24,
-                        left: 24,
-                        bottom: 16,
-                      ),
-                      child: Text(
-                        "Photos",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
+
                   ],
                 ),
               ),

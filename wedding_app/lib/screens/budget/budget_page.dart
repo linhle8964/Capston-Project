@@ -235,8 +235,6 @@ class _BudgetListState extends State<BudgetList> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           weddingID = snapshot.data;
-
-          BlocProvider.of<BudgetBloc>(context).add(GetAllBudget(weddingID));
         }
         return Scaffold(
           appBar: AppBar(
@@ -297,8 +295,8 @@ class _BudgetListState extends State<BudgetList> {
                                   }
                                   return Text(
                                       _formatNumber(sum.toString()) + "₫",
-                                      style: TextStyle(fontWeight: FontWeight.bold));
-
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold));
                                 })
                           ],
                         ),
@@ -307,24 +305,24 @@ class _BudgetListState extends State<BudgetList> {
                           width: 2,
                           color: Colors.deepPurple,
                         ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Icon(
-                              Icons.account_balance_wallet,
-                              color: Colors.deepPurple,
-                              size: 45,
-                            ),
-                            BlocBuilder(
-                                cubit: BlocProvider.of<WeddingBloc>(context),
-                                builder: (context, state) {
-                                  BlocProvider.of<WeddingBloc>(context)
-                                      .add(LoadWeddingById(weddingID));
-                                  if (state is WeddingLoaded) {
-                                    pay = 0;
-                                    pay = state.wedding.budget;
-                                  }
-                                  return BlocBuilder(
+                        BlocBuilder(
+                            cubit: BlocProvider.of<WeddingBloc>(context),
+                            builder: (context, state) {
+                              BlocProvider.of<WeddingBloc>(context)
+                                  .add(LoadWeddingById(weddingID));
+                              if (state is WeddingLoaded) {
+                                pay = 0;
+                                pay = state.wedding.budget;
+                              }
+                              return Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Icon(
+                                    Icons.account_balance_wallet,
+                                    color: Colors.deepPurple,
+                                    size: 45,
+                                  ),
+                                  BlocBuilder(
                                       cubit:
                                           BlocProvider.of<BudgetBloc>(context),
                                       builder: (context, state) {
@@ -339,10 +337,7 @@ class _BudgetListState extends State<BudgetList> {
                                           }
                                         }
                                         return Text(
-                                            pay < 0
-                                                ? "TIỀN TRONG ĐÁM CƯỚI ĐÃ\nHẾT"
-                                                    " XIN VUI CÂN NHẮC LẠI"
-                                                : _formatNumber(
+                                         _formatNumber(
                                                         pay.toString()) +
                                                     "₫",
                                             style: TextStyle(
@@ -350,10 +345,10 @@ class _BudgetListState extends State<BudgetList> {
                                                 color: pay < 0
                                                     ? Colors.red
                                                     : Colors.black));
-                                      });
-                                }),
-                          ],
-                        )
+                                      })
+                                ],
+                              );
+                            }),
                       ],
                     ),
                   ),
@@ -502,7 +497,7 @@ class _BudgetListState extends State<BudgetList> {
                                                                         child: Text(
                                                                             " Đã trả 1 phần ",
                                                                             style: TextStyle(
-                                                                                color: Colors.black,
+                                                                                color: Colors.white,
                                                                                 fontSize: 15,
                                                                                 fontWeight: FontWeight.normal)),
                                                                       ),
