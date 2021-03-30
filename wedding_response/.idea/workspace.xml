@@ -20,15 +20,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f3e24abf-ec34-481a-919d-25be2615c827" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../wedding_app/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/../wedding_app/.flutter-plugins-dependencies" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.flutter-plugins" beforeDir="false" afterPath="$PROJECT_DIR$/.flutter-plugins" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_3_29_2021_11_52_PM__Default_Changelist_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_3_29_2021_11_52_PM__Default_Changelist_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/bloc/guests/guests_bloc.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/bloc/guests/guests_bloc.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/bloc/guests/guests_event.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/bloc/guests/guests_event.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/entity/notification_entity.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/entity/notification_entity.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/firebase_repository/notification_firebase_repository.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/firebase_repository/notification_firebase_repository.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/generated_plugin_registrant.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/generated_plugin_registrant.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/model/notification.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/model/notification.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
