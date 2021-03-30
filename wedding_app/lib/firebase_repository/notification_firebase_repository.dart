@@ -37,7 +37,7 @@ class NotificationFirebaseRepository implements NotificationRepository{
         .collection('wedding')
         .doc(weddingID)
         .collection("notification")
-        .where("date", isLessThan: DateTime.now()) // công việc đã hoàn thành không thông báo
+        //.where("date", isLessThan: DateTime.now()) // công việc đã hoàn thành không thông báo
         .orderBy("date", descending: true)
         //.where("type", isGreaterThan: 0)
         .snapshots()

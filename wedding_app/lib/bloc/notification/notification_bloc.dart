@@ -41,7 +41,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
           (notifications) {
             List<NotificationModel> notis = [];
             for(int i=0; i<notifications.length;i++){
-              if(notifications[i].type != 0) notis.add(notifications[i]);
+              if(notifications[i].type != 0 && notifications[i].date.isBefore(DateTime.now())) notis.add(notifications[i]);
             }
             add(ToggleAll(notis));}
     );
