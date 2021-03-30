@@ -47,12 +47,13 @@ class _SettingPageState extends State<SettingPage> {
                 ),
                 centerTitle: true,
               ),
-              bottomNavigationBar: Wrap(
+              bottomSheet: Wrap(
                 children: [
                   Center(
                     child: Text('App version 1.0.00'),
                   ),
-                  CustomButtom(Key(WidgetKey.logoutButtonKey),"Đăng xuất", () async {
+                  CustomButtom(Key(WidgetKey.logoutButtonKey), "Đăng xuất",
+                      () async {
                     showDialog(
                         context: context,
                         barrierDismissible: false,
@@ -63,11 +64,17 @@ class _SettingPageState extends State<SettingPage> {
                               },
                             ));
                   }, Colors.blue),
-                  CustomButtom(Key(WidgetKey.leaveWeddingButton), "Rời đám cưới",
-                      () => _onLeftWeddingClick(context), Colors.grey),
+                  CustomButtom(
+                      Key(WidgetKey.leaveWeddingButton),
+                      "Rời đám cưới",
+                      () => _onLeftWeddingClick(context),
+                      Colors.grey),
                   isAdmin(userWedding.role)
-                      ? CustomButtom(Key(WidgetKey.deleteWeddingButton), "Xoá đám cưới",
-                          () => _onDeleteWeddingClick(context), Colors.black54)
+                      ? CustomButtom(
+                          Key(WidgetKey.deleteWeddingButton),
+                          "Xoá đám cưới",
+                          () => _onDeleteWeddingClick(context),
+                          Colors.black54)
                       : Container(),
                 ],
               ),
@@ -129,8 +136,6 @@ class _SettingPageState extends State<SettingPage> {
                       child: IntrinsicHeight(
                         child: Column(
                           children: <Widget>[
-                            // Your body widgets here
-                            SettingItem(null, "Thông tin cá nhân"),
                             SettingItem(
                                 () async => Navigator.pushNamed(
                                     context, "/create_wedding",
@@ -139,17 +144,20 @@ class _SettingPageState extends State<SettingPage> {
                                         wedding:
                                             await getWeddingFromSharePreferences())),
                                 "Thông tin đám cưới"),
-                            SettingItem(null, "Chi phí dự trù"),
-                            SettingItem(null, "Thông tin ngày cưới"),
+                            SettingItem(() {
+                              Navigator.pushNamed(
+                                  context, "/list_collaborator");
+                            }, "Danh sách cộng tác viên"),
                             isAdmin(userWedding.role)
                                 ? SettingItem(() {
                                     Navigator.pushNamed(
                                         context, "/invite_collaborator");
                                   }, "Chia sẻ quyền quản lý")
                                 : Container(),
-                            SettingItem(null, "Ngôn ngữ"),
                             SettingItem(null, "Chính sách bảo mật"),
                             SettingItem(null, "Điều khoản"),
+                            SettingItem(null, "Hỗ trợ"),
+                            SettingItem(null, "Đánh giá ứng dụng"),
                           ],
                         ),
                       ),
