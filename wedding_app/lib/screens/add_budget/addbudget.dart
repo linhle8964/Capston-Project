@@ -108,7 +108,7 @@ class _AddBudgetState extends State<AddBudget> {
                             barrierDismissible: false,
                             builder: (BuildContext context) =>
                                 PersonDetailsDialog(
-                                  message: "Bạn đang thêm Kinh Phi",
+                                  message: isEditing?"Bạn đang sửa kinh phí":"Bạn đang thêm kinh phí",
                                   onPressedFunction: () {
                                     updateBudget();
                                   },

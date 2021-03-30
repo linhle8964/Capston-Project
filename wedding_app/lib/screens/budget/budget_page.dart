@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:wedding_app/bloc/budget/bloc.dart';
 import 'package:wedding_app/bloc/category/bloc.dart';
+import 'package:wedding_app/bloc/wedding/bloc.dart';
 import 'package:wedding_app/model/budget.dart';
 import 'package:wedding_app/model/category.dart';
 import 'package:intl/intl.dart';
@@ -32,12 +33,14 @@ class _BudgetListState extends State<BudgetList> {
   double sum = 0;
   double _cateSum = 0;
   String weddingID;
+  double pay = 0;
   static final GlobalKey<ScaffoldState> scaffoldKey =
       new GlobalKey<ScaffoldState>();
   static const _locale = 'en';
 
   String _formatNumber(String s) =>
       NumberFormat.decimalPattern(_locale).format(double.parse(s));
+
   showMyAlertDialog(BuildContext context) {
     GlobalKey _containerKey = GlobalKey();
     // Create AlertDialog
@@ -79,6 +82,7 @@ class _BudgetListState extends State<BudgetList> {
     _categorys = [];
     sum = 0;
     _cateSum = 0;
+    pay = 0;
   }
 
   Widget _buildTitle(BuildContext context) {
@@ -278,7 +282,24 @@ class _BudgetListState extends State<BudgetList> {
                               color: Colors.deepPurple,
                               size: 45,
                             ),
-                            Text("10000")
+                            BlocBuilder(
+                                cubit: BlocProvider.of<BudgetBloc>(context),
+                                builder: (context, state) {
+                                  BlocProvider.of<BudgetBloc>(context)
+                                      .add(GetAllBudget(weddingID));
+                                  if (state is BudgetLoaded) {
+                                    sum = 0;
+                                    _budgets = state.budgets;
+                                    for (int i = 0; i < _budgets.length; i++) {
+                                      sum += (_budgets[i].money -
+                                          _budgets[i].payMoney);
+                                    }
+                                  }
+                                  return Text(
+                                      _formatNumber(sum.toString()) + "₫",
+                                      style: TextStyle(fontWeight: FontWeight.bold));
+
+                                })
                           ],
                         ),
                         Container(
@@ -295,20 +316,42 @@ class _BudgetListState extends State<BudgetList> {
                               size: 45,
                             ),
                             BlocBuilder(
-                                cubit: BlocProvider.of<BudgetBloc>(context),
+                                cubit: BlocProvider.of<WeddingBloc>(context),
                                 builder: (context, state) {
-                                  BlocProvider.of<BudgetBloc>(context)
-                                      .add(GetAllBudget(weddingID));
-                                  if (state is BudgetLoaded) {
-                                    sum = 0;
-                                    _budgets = state.budgets;
-                                    for (int i = 0; i < _budgets.length; i++) {
-                                      sum += (_budgets[i].money -
-                                          _budgets[i].payMoney);
-                                    }
+                                  BlocProvider.of<WeddingBloc>(context)
+                                      .add(LoadWeddingById(weddingID));
+                                  if (state is WeddingLoaded) {
+                                    pay = 0;
+                                    pay = state.wedding.budget;
                                   }
-                                  return Text(_formatNumber(sum.toString()));
-                                })
+                                  return BlocBuilder(
+                                      cubit:
+                                          BlocProvider.of<BudgetBloc>(context),
+                                      builder: (context, state) {
+                                        BlocProvider.of<BudgetBloc>(context)
+                                            .add(GetAllBudget(weddingID));
+                                        if (state is BudgetLoaded) {
+                                          _budgets = state.budgets;
+                                          for (int i = 0;
+                                              i < _budgets.length;
+                                              i++) {
+                                            pay -= _budgets[i].payMoney;
+                                          }
+                                        }
+                                        return Text(
+                                            pay < 0
+                                                ? "TIỀN TRONG ĐÁM CƯỚI ĐÃ\nHẾT"
+                                                    " XIN VUI CÂN NHẮC LẠI"
+                                                : _formatNumber(
+                                                        pay.toString()) +
+                                                    "₫",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: pay < 0
+                                                    ? Colors.red
+                                                    : Colors.black));
+                                      });
+                                }),
                           ],
                         )
                       ],
@@ -354,7 +397,7 @@ class _BudgetListState extends State<BudgetList> {
                                       child: ListTile(
                                         title: Text(item.cateName +
                                             " | " +
-                                          _formatNumber(  _cateSum.toString()) +
+                                            _formatNumber(_cateSum.toString()) +
                                             " ₫"),
                                       ),
                                     ),
@@ -496,10 +539,9 @@ class _BudgetListState extends State<BudgetList> {
                                                                       ),
                                                                     )),
                                                                 Text(
-                                                                  _formatNumber( (low.money -
-                                                                      low.payMoney)
-                                                                      .toString())
-                                                                  +
+                                                                  _formatNumber((low.money -
+                                                                              low.payMoney)
+                                                                          .toString()) +
                                                                       "₫",
                                                                   style: TextStyle(
                                                                       fontSize:
