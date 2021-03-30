@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 class CustomShape extends CustomClipper<Path> {
@@ -6,23 +5,20 @@ class CustomShape extends CustomClipper<Path> {
   Path getClip(Size size) {
     Path path = new Path();
 
-    path.lineTo(0, size.height) ;
-    path.quadraticBezierTo(size.width/4, size.height-40, size.width/2, size.height-20) ;
+    path.lineTo(0, size.height);
+    path.quadraticBezierTo(
+        size.width / 4, size.height - 40, size.width / 2, size.height - 20);
 
-    path.quadraticBezierTo(3/4 * size.width, size.height, size.width, size.height - 20) ;
+    path.quadraticBezierTo(
+        3 / 4 * size.width, size.height, size.width, size.height - 20);
 
-    path.lineTo(size.width, 0) ;
+    path.lineTo(size.width, 0);
 
-
-    return path ;
+    return path;
   }
 
   @override
   bool shouldReclip(CustomClipper<Path> oldClipper) {
-    // TODO: implement shouldReclip
     return false;
   }
-
-
-
 }

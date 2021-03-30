@@ -7,13 +7,21 @@ class GuestEntity extends Equatable {
   String description;
   int status;
   String phone;
+  int type;
+  int companion;
+  String congrat;
+  int money;
 
   GuestEntity(
       this.id,
       this.name,
       this.description,
       this.status,
-      this.phone);
+      this.phone,
+      this.type,
+      this.companion,
+      this.congrat,
+      this.money);
 
   @override
   List<Object> get props => [
@@ -21,7 +29,11 @@ class GuestEntity extends Equatable {
     name,
     description,
     status,
-    phone
+    phone,
+    type,
+    companion,
+    congrat,
+    money
   ];
 
   Map<String, Object> toJson(){
@@ -31,6 +43,10 @@ class GuestEntity extends Equatable {
       "description": description,
       "status": status,
       "phone": phone,
+      "type": type,
+      "companion": companion,
+      "congrat": congrat,
+      "money": money
     };
   }
 
@@ -41,6 +57,10 @@ class GuestEntity extends Equatable {
         json["description"] as String,
         json["status"] as int,
         json["phone"] as String,
+        json["type"] as int,
+        json["companion"] as int,
+        json["congrat"] as String,
+        json["money"] as int
     );
   }
 
@@ -51,6 +71,10 @@ class GuestEntity extends Equatable {
         snapshot.get("description"),
         snapshot.get("status"),
         snapshot.get("phone"),
+        snapshot.get("type"),
+        snapshot.get("companion"),
+        snapshot.get("congrat"),
+        snapshot.get("money")
     );
   }
 
@@ -60,6 +84,10 @@ class GuestEntity extends Equatable {
       "description": description,
       "status": status,
       "phone": phone,
+      "type": type,
+      "companion": companion,
+      "congrat": congrat,
+      "money": money
     };
   }
 }

@@ -35,7 +35,7 @@ class FirebaseUserWeddingRepository extends UserWeddingRepository {
   @override
   Future<void> createUserWedding(User user) {
     return userWeddingCollection
-        .add(new UserWedding(user.email, id: user.uid).toEntity().toDocument());
+        .add(new UserWedding(user.uid, email: user.email).toEntity().toDocument());
   }
 
   @override

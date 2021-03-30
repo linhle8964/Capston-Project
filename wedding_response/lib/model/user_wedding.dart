@@ -9,13 +9,13 @@ class UserWedding {
   final String email;
   final DateTime joinDate;
 
-  UserWedding(this.email,
-      {String id,
+  UserWedding(this.id,
+      {String email,
       String userId,
       String weddingId,
       String role,
       DateTime joinDate})
-      : this.id = id,
+      : this.email = email,
         this.userId = userId,
         this.weddingId = weddingId,
         this.role = role,
@@ -28,8 +28,8 @@ class UserWedding {
       String weddingId,
       String role,
       DateTime joinDate}) {
-    return UserWedding(email ?? this.email,
-        id: id ?? this.id,
+    return UserWedding(id ?? this.id,
+        email: email ?? this.email,
         userId: userId ?? this.userId,
         weddingId: weddingId ?? this.weddingId,
         role: role ?? this.role,
@@ -37,8 +37,8 @@ class UserWedding {
   }
 
   static UserWedding fromEntity(UserWeddingEntity entity) {
-    return UserWedding(entity.email,
-        id: entity.id,
+    return UserWedding(entity.id,
+        email: entity.email,
         userId: entity.userId,
         weddingId: entity.weddingId,
         role: entity.role,

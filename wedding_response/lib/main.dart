@@ -8,8 +8,8 @@ import 'package:flutter_web_diary/entity/wedding_entity.dart';
 import 'package:flutter_web_diary/firebase_repository/user_firebase_repository.dart';
 import 'package:flutter_web_diary/firebase_repository/user_wedding_firebase_repository.dart';
 import 'package:flutter_web_diary/model/wedding.dart';
-import 'package:flutter_web_diary/util/wedding_guest_router_delegate.dart';
-import 'package:flutter_web_diary/util/wedding_route_information_parser.dart';
+import 'package:flutter_web_diary/util/admin_vendor_router_delegate.dart';
+import 'package:flutter_web_diary/util/admin_vendor_route_information_parser.dart';
 import 'bloc/wedding/bloc.dart';
 import 'bloc/wedding/wedding_bloc.dart';
 import 'bloc/wedding/wedding_event.dart';
@@ -27,8 +27,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final _routerDelegate = WeddingGuestRouterDelegate();
-  final _routeInformationParser = WeddingGuestRouteInformationParser();
+  final _routerDelegate = AdminVendorRouterDelegate();
+  final _routeInformationParser = AdminVendorRouteInformationParser();
 
   @override
   void initState() {

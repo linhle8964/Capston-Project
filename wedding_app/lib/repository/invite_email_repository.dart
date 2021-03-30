@@ -5,4 +5,5 @@ abstract class InviteEmailRepository {
   Future<InviteEmail> getInviteEmail(String weddingId, String to);
   Future<InviteEmail> getInviteEmailByCode(String code);
   Future<void> deleteInviteEmailByEmail(String email, String weddingId);
+  Future<void> deleteInviteEmailByWedding(String weddingId);
 }

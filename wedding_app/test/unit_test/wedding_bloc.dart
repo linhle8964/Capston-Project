@@ -4,6 +4,7 @@ import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wedding_app/bloc/validate_wedding/bloc.dart';
 import 'package:wedding_app/bloc/wedding/bloc.dart';
+import 'package:wedding_app/firebase_repository/invite_email_firebase_repository.dart';
 import 'package:wedding_app/firebase_repository/user_wedding_firebase_repository.dart';
 import 'package:wedding_app/firebase_repository/wedding_firebase_repository.dart';
 import 'package:wedding_app/model/wedding.dart';
@@ -14,6 +15,9 @@ class MockWeddingRepository extends Mock implements FirebaseWeddingRepository {}
 class MockUserWeddingRepository extends Mock
     implements FirebaseUserWeddingRepository {}
 
+class MockInviteEmailRepository extends Mock
+    implements FirebaseInviteEmailRepository {}
+
 class MockFirebaseAuth extends Mock implements FirebaseAuth {}
 
 void main() {
@@ -21,18 +25,15 @@ void main() {
   const invalidName = "linh1";
   const validName = "linh le";
 
-  final Wedding wedding =
-      new Wedding(validName, validName, DateTime.now(), "default", "address", id: "dasd");
+  final Wedding wedding = new Wedding(
+      validName, validName, DateTime.now(), "default", "address",
+      id: "dasd");
   final user = mock_user.MockUser(
     uid: "uid",
     email: "linhle8964@gmail.com",
   );
   group("valid wedding field", () {
-    ValidateWeddingBloc validateWeddingBloc;
-
-    setUp(() {
-      validateWeddingBloc = ValidateWeddingBloc();
-    });
+    setUp(() {});
     test("initial state is empty", () {
       expect(ValidateWeddingBloc().state, ValidateWeddingState.empty());
     });
@@ -47,7 +48,8 @@ void main() {
             ValidateWeddingState(
                 isGroomNameValid: false,
                 isBrideNameValid: true,
-                isAddressValid: true)
+                isAddressValid: true,
+                isBudgetValid: true)
           ]);
 
       blocTest("emit [invalid] when name contain number or symbol",
@@ -59,7 +61,8 @@ void main() {
             ValidateWeddingState(
                 isGroomNameValid: false,
                 isBrideNameValid: true,
-                isAddressValid: true)
+                isAddressValid: true,
+                isBudgetValid: true)
           ]);
 
       blocTest("emit [valid] name",
@@ -69,12 +72,14 @@ void main() {
           seed: ValidateWeddingState(
               isGroomNameValid: false,
               isBrideNameValid: true,
-              isAddressValid: true),
+              isAddressValid: true,
+              isBudgetValid: true),
           expect: [
             ValidateWeddingState(
                 isGroomNameValid: true,
                 isBrideNameValid: true,
-                isAddressValid: true)
+                isAddressValid: true,
+                isBudgetValid: true)
           ]);
 
       blocTest("emit [invalid] when address is empty",
@@ -86,7 +91,8 @@ void main() {
             ValidateWeddingState(
                 isGroomNameValid: true,
                 isBrideNameValid: true,
-                isAddressValid: false)
+                isAddressValid: false,
+                isBudgetValid: true)
           ]);
     });
   });
@@ -94,20 +100,28 @@ void main() {
   group("crud wedding", () {
     MockWeddingRepository mockWeddingRepository;
     MockUserWeddingRepository mockUserWeddingRepository;
-    MockFirebaseAuth mockFirebaseAuth;
+    MockInviteEmailRepository mockInviteEmailRepository;
     setUp(() {
       mockWeddingRepository = MockWeddingRepository();
       mockUserWeddingRepository = MockUserWeddingRepository();
-      mockFirebaseAuth = MockFirebaseAuth();
+      mockInviteEmailRepository = MockInviteEmailRepository();
     });
 
     test('throws AssertionError when weddingRepository is null', () {
-      expect(() => WeddingBloc(weddingRepository: null),
+      expect(
+          () => WeddingBloc(
+              weddingRepository: null,
+              userWeddingRepository: mockUserWeddingRepository,
+              inviteEmailRepository: mockInviteEmailRepository),
           throwsA(isA<AssertionError>()));
     });
 
     test('throws AssertionError when userWeddingRepository is null', () {
-      expect(() => WeddingBloc(userWeddingRepository: null),
+      expect(
+          () => WeddingBloc(
+              userWeddingRepository: null,
+              weddingRepository: mockWeddingRepository,
+              inviteEmailRepository: mockInviteEmailRepository),
           throwsA(isA<AssertionError>()));
     });
 
@@ -116,7 +130,8 @@ void main() {
           //when(mockFirebaseAuth.currentUser).thenAnswer((_) => user);
           return WeddingBloc(
               weddingRepository: mockWeddingRepository,
-              userWeddingRepository: mockUserWeddingRepository);
+              userWeddingRepository: mockUserWeddingRepository,
+              inviteEmailRepository: mockInviteEmailRepository);
         },
         act: (bloc) => bloc.add(CreateWedding(wedding)),
         expect: [
