@@ -15,7 +15,8 @@ class FirebaseTaskRepository implements TaskRepository{
         .collection('wedding')
         .doc(weddingID)
         .collection("task")
-        .add(task.toEntity().toDocument());
+        .doc(task.id)
+        .set(task.toEntity().toDocument());
   }
 
   @override

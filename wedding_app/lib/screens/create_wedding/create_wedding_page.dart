@@ -57,7 +57,9 @@ class _CreateWeddingPageState extends State<CreateWeddingPage> {
       initialDate: _selectedDate != 'Chọn ngày: '
           ? new DateFormat("dd-MM-yyyy").parse(_selectedDate)
           : DateTime.now(),
-      firstDate: DateTime.now(),
+      firstDate: !widget.isEditing
+          ? DateTime.now()
+          : DateTime.now().subtract(Duration(days: 100)),
       lastDate: DateTime(DateTime.now().year + 3),
     );
     if (d != null)
