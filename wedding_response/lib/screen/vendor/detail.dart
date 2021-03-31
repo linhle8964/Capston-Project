@@ -18,13 +18,12 @@ class Detail extends StatelessWidget {
         children: [
 
           Hero(
-            tag:  AssetImage('/assets/B&G.jpg'),
+            tag: property.frontImage,
             child: Container(
               height: size.height * 0.5,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  //image: AssetImage(property.frontImage),
-                  image: AssetImage('/assets/B&G.jpg'),
+                  image: AssetImage(property.frontImage),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -35,8 +34,8 @@ class Detail extends StatelessWidget {
                     end: Alignment.bottomCenter,
 
                     colors: [
-                        Colors.transparent,
-                        Colors.black.withOpacity(0.7),
+                      Colors.transparent,
+                      Colors.black.withOpacity(0.7),
                     ],
                   ),
                 ),
@@ -241,7 +240,7 @@ class Detail extends StatelessWidget {
                                 width: 65,
                                 decoration: BoxDecoration(
                                   image: DecorationImage(
-                                    image: AssetImage('/assets/thanks.jpg'),
+                                    image: AssetImage(property.ownerImage),
                                     fit: BoxFit.cover,
                                   ),
                                   shape: BoxShape.circle,
@@ -257,7 +256,7 @@ class Detail extends StatelessWidget {
                                 children: [
 
                                   Text(
-                                   property.name,
+                                    property.name,
                                     style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold,
@@ -391,7 +390,7 @@ class Detail extends StatelessWidget {
             Radius.circular(10),
           ),
           image: DecorationImage(
-            image: AssetImage(url), 
+            image: AssetImage(url),
             fit: BoxFit.cover,
           ),
         ),

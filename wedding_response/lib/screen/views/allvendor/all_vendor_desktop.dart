@@ -6,17 +6,23 @@ import 'package:flutter_web_diary/model/vendor.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_web_diary/screen/vendor/filter.dart';
 import 'package:flutter_web_diary/screen/vendor/detail.dart';
+import 'package:flutter_web_diary/util/hex_color.dart';
+import 'package:search_page/search_page.dart';
 
-class Search extends StatefulWidget {
+class AllVendorPageDesktop extends StatefulWidget {
   @override
-  _SearchState createState() => _SearchState();
+  _AllVendorPageDesktopState createState() => _AllVendorPageDesktopState();
 }
 
-class _SearchState extends State<Search> {
+class _AllVendorPageDesktopState extends State<AllVendorPageDesktop> {
   List<Vendor> properties = [];
   List<Category> _categorys = [];
+  String _defaultChoiceIndex = "";
+  static final GlobalKey<ScaffoldState> scaffoldKey =
+  new GlobalKey<ScaffoldState>();
 
   void initState() {
+    _defaultChoiceIndex = "";
     BlocProvider.of<CateBloc>(context).add(LoadTodos());
     BlocProvider.of<VendorBloc>(context).add(LoadVendor());
   }
@@ -24,45 +30,16 @@ class _SearchState extends State<Search> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        backgroundColor: hexToColor("#d86a77"),
+        actions: _buildActions(context),
+        title: _buildTitle(context),
+      ),
       backgroundColor: Colors.white,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: EdgeInsets.only(top: 48, left: 24, right: 24, bottom: 16),
-            child: TextField(
-              style: TextStyle(
-                fontSize: 28,
-                height: 1,
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-              ),
-              decoration: InputDecoration(
-                hintText: 'Search',
-                hintStyle: TextStyle(
-                  fontSize: 28,
-                  color: Colors.grey[400],
-                ),
-                enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey[400]),
-                ),
-                focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey[400]),
-                ),
-                border: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.grey[400]),
-                ),
-                suffixIcon: Padding(
-                  padding: EdgeInsets.only(left: 16),
-                  child: Icon(
-                    Icons.search,
-                    color: Colors.grey[400],
-                    size: 28,
-                  ),
-                ),
-              ),
-            ),
-          ),
           Padding(
             padding: EdgeInsets.only(top: 16),
             child: Row(
@@ -84,8 +61,8 @@ class _SearchState extends State<Search> {
                                 scrollDirection: Axis.horizontal,
                                 itemCount: _categorys.length,
                                 itemBuilder: (context, index) {
-                                  return buildFilter(
-                                      _categorys[index].cateName);
+                                  return buildFilter(_categorys[index].cateName,
+                                      _categorys[index].id);
                                 });
                           },
                         ),
@@ -118,7 +95,7 @@ class _SearchState extends State<Search> {
                   child: Padding(
                     padding: EdgeInsets.only(left: 16, right: 24),
                     child: Text(
-                      "Filters",
+                      "desktop",
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -129,12 +106,6 @@ class _SearchState extends State<Search> {
               ],
             ),
           ),
-          Padding(
-            padding: EdgeInsets.only(right: 24, left: 24, top: 24, bottom: 12),
-            child: Row(
-              children: [],
-            ),
-          ),
           Expanded(
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 24),
@@ -142,12 +113,12 @@ class _SearchState extends State<Search> {
                 cubit: BlocProvider.of<VendorBloc>(context),
                 builder: (context, state) {
                   BlocProvider.of<VendorBloc>(context).add(LoadVendor());
-                  if(state is VendorLoaded){
-                    properties= state.vendors;
+                  if (state is VendorLoaded) {
+                    properties = state.vendors;
                     print("this is" + properties.toString());
                   }
-                  if(state is VendorLoading){
-                    return  CircularProgressIndicator();
+                  if (state is VendorLoading) {
+                    return CircularProgressIndicator();
                   }
                   return ListView(
                     physics: BouncingScrollPhysics(),
@@ -163,41 +134,54 @@ class _SearchState extends State<Search> {
     );
   }
 
-  Widget buildFilter(String filterName) {
+  Widget buildFilter(String filterName, String selectCate) {
+    bool _visible = false;
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 12),
-      margin: EdgeInsets.only(right: 12),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(
-            Radius.circular(5),
-          ),
-          border: Border.all(
-            color: Colors.grey[300],
-            width: 1,
-          )),
+      margin: EdgeInsets.only(right: 6),
       child: Center(
-        child: Text(
-          filterName,
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
+          child: ChoiceChip(
+            label: Text(
+              filterName,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            selected: this._defaultChoiceIndex == selectCate,
+            onSelected: (bool selected) {
+              setState(() {
+                if (selected) {
+                  this._defaultChoiceIndex = selectCate;
+
+                  buildProperties();
+                } else {
+                  this._defaultChoiceIndex = "";
+                }
+              });
+            },
+          )),
     );
   }
 
   List<Widget> buildProperties() {
     List<Widget> list = [];
     for (var i = 0; i < properties.length; i++) {
-      list.add(Hero(
-          tag: properties[i].frontImage,
-          child: buildProperty(properties[i], i)));
+      if (properties[i].cateID.trim().toString() == _defaultChoiceIndex) {
+        print(properties[i].cateID + " is equal " + _defaultChoiceIndex);
+        list.add(Hero(
+            tag: properties[i].frontImage,
+            child: buildProperty(properties[i])));
+      } else if (_defaultChoiceIndex == "") {
+        list.add(Hero(
+            tag: properties[i].frontImage,
+            child: buildProperty(properties[i])));
+      }
     }
     return list;
   }
 
-  Widget buildProperty(Vendor property, int index) {
+  Widget buildProperty(Vendor property) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -329,6 +313,88 @@ class _SearchState extends State<Search> {
         ),
       ),
     );
+  }
+
+  Widget _buildTitle(BuildContext context) {
+    var horizontalTitleAlignment = CrossAxisAlignment.center;
+
+    return new InkWell(
+      onTap: () => scaffoldKey.currentState.openDrawer(),
+      child: new Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+        child: new Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: horizontalTitleAlignment,
+          children: <Widget>[
+            const Text(
+              'DỊCH VỤ',
+              style: TextStyle(color: Colors.white),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  List<Widget> _buildActions(context) {
+    return <Widget>[
+      new IconButton(
+        icon: const Icon(
+          Icons.search,
+          color: Colors.white,
+        ),
+        onPressed: () {
+          showSearch(
+              context: context,
+              delegate: SearchPage<Vendor>(
+                searchLabel: "Tìm Kiếm",
+                barTheme: ThemeData(
+                  textTheme: TextTheme(
+                    title: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                    ),
+                  ),
+                  inputDecorationTheme: InputDecorationTheme(
+                    hintStyle: Theme.of(context)
+                        .textTheme
+                        .title
+                        .copyWith(color: Colors.white70, fontSize: 18),
+                  ),
+                  appBarTheme: AppBarTheme(
+                      elevation: 0.0,
+                      color: hexToColor("#d86a77")), //elevation did work
+                ),
+                suggestion: Center(
+                  child: Text(
+                    'Tìm kiếm theo tên dịch vụ',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600),
+                  ),
+                ),
+                failure: Center(
+                  child: Text(
+                    'Chưa có dịch vụ tìm thấy',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600),
+                  ),
+                ),
+                builder: (Vendor vendor) => Container(
+                  padding: EdgeInsets.symmetric(horizontal: 24),
+                  child: buildProperty(vendor),
+                ),
+                filter: (Vendor vendor) => [vendor.name],
+                items: properties,
+              ));
+        },
+      ),
+    ];
   }
 
   void _showBottomSheet() {

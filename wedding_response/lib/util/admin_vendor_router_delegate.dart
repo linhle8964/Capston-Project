@@ -13,7 +13,7 @@ import 'package:flutter_web_diary/model/user_wedding.dart';
 import 'package:flutter_web_diary/model/vendor.dart';
 import 'package:flutter_web_diary/model/wedding.dart';
 import 'package:flutter_web_diary/screen/vendor/detail.dart';
-import 'package:flutter_web_diary/screen/vendor/vendor_list.dart';
+import 'package:flutter_web_diary/screen/views/allvendor/all_vendor_page.dart';
 import 'package:flutter_web_diary/screen/views/error/error_page.dart';
 import 'package:flutter_web_diary/screen/views/home/home_view.dart';
 import 'package:flutter_web_diary/screen/views/input_details/input_details.dart';
@@ -52,7 +52,7 @@ class AdminVendorRouterDelegate extends RouterDelegate<AdminVendorRoutePath>
     if (show404) return AdminVendorRoutePath.unknown();
     //if (showDone) return WeddingGuestRoutePath.Done();
     if (_selectedUser == null && _selectedVendor == null) return AdminVendorRoutePath.Login();
-    if (_selectedUser != null && _selectedVendor == null) return AdminVendorRoutePath.AllVendor(_selectedVendor.id);
+    if (_selectedUser != null && _selectedVendor == null) return AdminVendorRoutePath.AllVendor(_selectedUser.id);
     if (_selectedUser != null && _selectedVendor != null)
       return AdminVendorRoutePath.inputDetails(_selectedUser.id, _selectedVendor.id);
   }
@@ -90,7 +90,7 @@ class AdminVendorRouterDelegate extends RouterDelegate<AdminVendorRoutePath>
             else if (_selectedUser != null && _selectedVendor == null)
                 MaterialPage(
                   key: ValueKey('AllVendor'),
-                  child: Search()
+                  child: AllVendorPage()
                 )
             else if (_selectedUser != null && _selectedVendor != null)
                 MaterialPage(

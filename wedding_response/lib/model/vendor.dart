@@ -9,6 +9,8 @@ class Vendor {
   String description;
   String frontImage;
   String ownerImage;
+  String email;
+  String phone;
 
   Vendor(this.id,
       {String label,
@@ -17,14 +19,19 @@ class Vendor {
         String location,
         String description,
         String frontImage,
-        String ownerImage})
+        String ownerImage,
+        String email,
+        String phone,
+      })
       : this.label = label,
         this.name = name,
         this.cateID = cateID,
         this.location = location,
         this.description = description,
         this.frontImage = frontImage,
-        this.ownerImage = ownerImage;
+        this.ownerImage = ownerImage,
+        this.email = email,
+        this.phone = phone;
 
 
 
@@ -36,7 +43,9 @@ class Vendor {
         this.location = map['location'],
         this.description = map['description'],
         this.frontImage = map['frontImage'],
-        this.ownerImage = map['ownerImage'];
+        this.ownerImage = map['ownerImage'],
+        this.email = map['email'],
+        this.phone = map['phone'];
 
   Map toMap() {
     return {
@@ -48,6 +57,8 @@ class Vendor {
       'description': this.description,
       'frontImage': this.frontImage,
       'ownerImage': this.ownerImage,
+      'email': this.email,
+      'phone': this.phone,
     };
   }
 
@@ -59,7 +70,10 @@ class Vendor {
         String location,
         String description,
         String frontImage,
-        String ownerImage}) {
+        String ownerImage,
+        String email,
+        String phone
+      }) {
     return Vendor(id ?? this.id,
         label:label ?? this.label,
         name:name?? this.name,
@@ -68,13 +82,15 @@ class Vendor {
         description:description ?? this.description,
         frontImage: frontImage?? this.frontImage,
         ownerImage: ownerImage?? this.ownerImage,
+        email: email?? this.email,
+        phone: phone?? this.phone,
         );
   }
 
 
   VendorEntity toEntity() {
     return VendorEntity(
-        id, label,name, cateID, location, description, frontImage, ownerImage);
+        id, label,name, cateID, location, description, frontImage, ownerImage,email,phone);
   }
 
   bool operator ==(o) =>
@@ -86,7 +102,9 @@ class Vendor {
           o.location == location &&
           o.description == description &&
           o.frontImage == frontImage &&
-          o.ownerImage == ownerImage;
+          o.ownerImage == ownerImage &&
+          o.email == email &&
+          o.phone == phone;
 
   static Vendor fromEntity(VendorEntity entity) {
     return Vendor(entity.id,
@@ -96,7 +114,10 @@ class Vendor {
         location:entity.location,
         description:entity.description,
         frontImage:entity.frontImage,
-        ownerImage:entity.ownerImage);
+        ownerImage:entity.ownerImage,
+        email:entity.email,
+        phone:entity.phone)
+    ;
   }
 
   @override
