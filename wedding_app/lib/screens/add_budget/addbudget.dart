@@ -154,7 +154,6 @@ class _AddBudgetState extends State<AddBudget> {
                                 child: TextFormField(
                                     controller: moneyController,
                                     keyboardType: TextInputType.number,
-
                                     onSaved: (input) => moneyController.text =
                                         input.replaceAll(",", ""),
                                     onChanged: (string) {
@@ -228,7 +227,18 @@ class _AddBudgetState extends State<AddBudget> {
                         child: TextFormField(
                             controller: payMoneyController,
                             keyboardType: TextInputType.number,
-                            onChanged: (string) {
+                            onChanged: (string){
+                              print( "test money" +moneyController.value.text);
+                              print("test " + moneyController.value.text.replaceAll(",", "")==string.replaceAll(",", "") );
+                              if (moneyController.value.text.replaceAll(",", "").trim()!=string.replaceAll(",", "").trim()) {
+                                setState(() {
+                                  _checkboxListTile = false;
+                                });
+                              } else if (moneyController.value.text.replaceAll(",", "").trim()==string.replaceAll(",", "").trim()) {
+                                setState(() {
+                                  _checkboxListTile = true;
+                                });
+                              }
                               print("test " + string);
                               string =
                                   '${_formatNumber(string.replaceAll(',', ''))}';
@@ -239,14 +249,11 @@ class _AddBudgetState extends State<AddBudget> {
                               );
                             },
                             validator: (val) {
-
                               if (val == "") {
                                 setState(() {
-                                  payMoneyController.text="0";
+                                  payMoneyController.text = "0";
                                   double.parse(val);
                                 });
-
-
                               } else if (double.parse(val.replaceAll(",", "")) >
                                   double.parse(moneyController.value.text
                                       .replaceAll(",", ""))) {

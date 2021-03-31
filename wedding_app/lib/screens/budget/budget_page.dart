@@ -286,7 +286,7 @@ class _BudgetListState extends State<BudgetList> {
                             BlocBuilder(
                                 cubit: BlocProvider.of<BudgetBloc>(context),
                                 builder: (context, state) {
-                                  BlocProvider.of<BudgetBloc>(context)..add(GetAllBudget(weddingId));
+                                  BlocProvider.of<BudgetBloc>(context).add(GetAllBudget(weddingID));
                                   if (state is BudgetLoaded) {
                                     sum = 0;
                                     _budgets = state.budgets;
