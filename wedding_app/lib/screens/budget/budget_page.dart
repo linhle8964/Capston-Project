@@ -34,6 +34,7 @@ class _BudgetListState extends State<BudgetList> {
   double _cateSum = 0;
   String weddingID;
   double pay = 0;
+  static double wedBudget=0;
   static final GlobalKey<ScaffoldState> scaffoldKey =
       new GlobalKey<ScaffoldState>();
   static const _locale = 'en';
@@ -83,6 +84,7 @@ class _BudgetListState extends State<BudgetList> {
     sum = 0;
     _cateSum = 0;
     pay = 0;
+    wedBudget=0;
   }
 
   Widget _buildTitle(BuildContext context) {
@@ -235,6 +237,8 @@ class _BudgetListState extends State<BudgetList> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           weddingID = snapshot.data;
+          BlocProvider.of<WeddingBloc>(context)
+              .add(LoadWeddingById(weddingID));
         }
         return Scaffold(
           appBar: AppBar(
@@ -283,8 +287,7 @@ class _BudgetListState extends State<BudgetList> {
                             BlocBuilder(
                                 cubit: BlocProvider.of<BudgetBloc>(context),
                                 builder: (context, state) {
-                                  BlocProvider.of<BudgetBloc>(context)
-                                      .add(GetAllBudget(weddingID));
+
                                   if (state is BudgetLoaded) {
                                     sum = 0;
                                     _budgets = state.budgets;
@@ -308,17 +311,16 @@ class _BudgetListState extends State<BudgetList> {
                         BlocBuilder(
                             cubit: BlocProvider.of<WeddingBloc>(context),
                             builder: (context, state) {
-                              BlocProvider.of<WeddingBloc>(context)
-                                  .add(LoadWeddingById(weddingID));
                               if (state is WeddingLoaded) {
                                 pay = 0;
                                 pay = state.wedding.budget;
+                                wedBudget=state.wedding.budget;
                               }
-                              if(state is WeddingLoading){
-                                return  CircularProgressIndicator();
+                              if (state is WeddingLoading) {
+                                return CircularProgressIndicator();
                               }
-                              if(state is WeddingNotLoaded){
-                                return  CircularProgressIndicator();
+                              if (state is WeddingNotLoaded) {
+                                return CircularProgressIndicator();
                               }
                               return Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -332,10 +334,9 @@ class _BudgetListState extends State<BudgetList> {
                                       cubit:
                                           BlocProvider.of<BudgetBloc>(context),
                                       builder: (context, state) {
-                                        BlocProvider.of<BudgetBloc>(context)
-                                            .add(GetAllBudget(weddingID));
                                         if (state is BudgetLoaded) {
                                           _budgets = state.budgets;
+                                          pay=wedBudget;
                                           for (int i = 0;
                                               i < _budgets.length;
                                               i++) {
@@ -343,9 +344,7 @@ class _BudgetListState extends State<BudgetList> {
                                           }
                                         }
                                         return Text(
-                                         _formatNumber(
-                                                        pay.toString()) +
-                                                    "₫",
+                                            _formatNumber(pay.toString()) + "₫",
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 color: pay < 0
@@ -375,8 +374,6 @@ class _BudgetListState extends State<BudgetList> {
                       return BlocBuilder(
                         cubit: BlocProvider.of<BudgetBloc>(context),
                         builder: (context, state) {
-                          BlocProvider.of<BudgetBloc>(context)
-                            ..add(GetAllBudget(weddingID));
                           if (state is BudgetLoaded) {
                             _budgets = state.budgets;
                           }
@@ -406,8 +403,6 @@ class _BudgetListState extends State<BudgetList> {
                                         cubit: BlocProvider.of<BudgetBloc>(
                                             context),
                                         builder: (context, state) {
-                                          BlocProvider.of<BudgetBloc>(context)
-                                            ..add(GetAllBudget(weddingID));
                                           if (state is BudgetLoaded) {
                                             _budgets = state.budgets;
                                           }
