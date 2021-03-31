@@ -41,7 +41,7 @@ class _SearchState extends State<Search> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: EdgeInsets.only(top: 16),
+            padding: EdgeInsets.only(top: 16,bottom: 16),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -90,7 +90,7 @@ class _SearchState extends State<Search> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    _showBottomSheet();
+
                   },
                   child: Padding(
                     padding: EdgeInsets.only(left: 16, right: 24),
@@ -167,6 +167,7 @@ class _SearchState extends State<Search> {
   List<Widget> buildProperties() {
     List<Widget> list = [];
     for (var i = 0; i < properties.length; i++) {
+      print('test' + properties[i].frontImage);
       if (properties[i].cateID.trim().toString() == _defaultChoiceIndex) {
         print(properties[i].cateID + " is equal " + _defaultChoiceIndex);
         list.add(Hero(
@@ -201,7 +202,7 @@ class _SearchState extends State<Search> {
           height: 210,
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage(property.frontImage),
+              image: NetworkImage(property.frontImage),
               fit: BoxFit.cover,
             ),
           ),
@@ -247,6 +248,9 @@ class _SearchState extends State<Search> {
                 ),
                 Column(
                   children: [
+                    SizedBox(
+                      height: 4,
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:wedding_app/bloc/invitation_card/bloc.dart';
+import 'package:wedding_app/bloc/vendor/bloc.dart';
 import 'package:wedding_app/firebase_repository/inviattion_card_firebase_repository.dart';
+import 'package:wedding_app/firebase_repository/vendor_firebase_repository.dart';
 import 'package:wedding_app/screens/choose_template_invitation/chooseTemplate_page.dart';
 
 import 'package:wedding_app/bloc/budget/bloc.dart';
@@ -14,6 +16,7 @@ import 'package:wedding_app/screens/create_wedding/create_wedding_argument.dart'
 
 import 'package:wedding_app/screens/create_wedding/create_wedding_page.dart';
 import 'package:wedding_app/screens/invite_collaborator/invite_collaborator.dart';
+import 'package:wedding_app/screens/list_collaborator/list_collaborator.dart';
 import 'package:wedding_app/screens/login/login_page.dart';
 import 'package:wedding_app/screens/navigator/navigator.dart';
 import 'package:bloc/bloc.dart';
@@ -81,6 +84,11 @@ class MyApp extends StatelessWidget {
           BlocProvider<BudgetBloc>(
             create: (BuildContext context) => BudgetBloc(
               budgetRepository: FirebaseBudgetRepository(),
+            ),
+          ),
+          BlocProvider<VendorBloc>(
+            create: (BuildContext context) => VendorBloc(
+             todosRepository: FirebaseVendorRepository()
             ),
           ),
           BlocProvider<CateBloc>(
@@ -172,6 +180,18 @@ class MyApp extends StatelessWidget {
                   }),
                 ],
                 child: InviteCollaboratorPage(),
+              );
+            },
+            '/list_collaborator': (context) {
+              return MultiBlocProvider(
+                providers: [
+                  BlocProvider<UserWeddingBloc>(create: (context) {
+                    return UserWeddingBloc(
+                      userWeddingRepository: FirebaseUserWeddingRepository(),
+                    )..add(LoadUserWeddingByWedding());
+                  }),
+                ],
+                child: ListCollaborator(),
               );
             },
             "/wedding_code": (context) {
