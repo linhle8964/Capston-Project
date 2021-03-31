@@ -3,6 +3,7 @@ import 'package:wedding_app/bloc/category/bloc.dart';
 import 'package:wedding_app/bloc/checklist/bloc.dart';
 import 'package:wedding_app/bloc/checklist/checklist_bloc.dart';
 import 'package:wedding_app/bloc/show_task/bloc.dart';
+import 'package:wedding_app/firebase_repository/notification_firebase_repository.dart';
 import 'package:wedding_app/screens/checklist/download_excel.dart';
 import 'package:wedding_app/screens/edit_task/edit_task.dart';
 import 'package:wedding_app/utils/get_data.dart';
@@ -217,6 +218,7 @@ class _ChecklistPageState extends State<ChecklistPage>
               BlocProvider<ChecklistBloc>(create: (BuildContext context) {
                 return ChecklistBloc(
                   taskRepository: FirebaseTaskRepository(),
+                  notificationRepository: NotificationFirebaseRepository(),
                 )..add(LoadSuccess(weddingID));
               }),
               BlocProvider<ShowTaskBloc>(
