@@ -34,7 +34,7 @@ class _BudgetListState extends State<BudgetList> {
   double _cateSum = 0;
   String weddingID;
   double pay = 0;
-  static double wedBudget=0;
+  static double wedBudget = 0;
   static final GlobalKey<ScaffoldState> scaffoldKey =
       new GlobalKey<ScaffoldState>();
   static const _locale = 'en';
@@ -84,7 +84,7 @@ class _BudgetListState extends State<BudgetList> {
     sum = 0;
     _cateSum = 0;
     pay = 0;
-    wedBudget=0;
+    wedBudget = 0;
   }
 
   Widget _buildTitle(BuildContext context) {
@@ -237,8 +237,7 @@ class _BudgetListState extends State<BudgetList> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           weddingID = snapshot.data;
-          BlocProvider.of<WeddingBloc>(context)
-              .add(LoadWeddingById(weddingID));
+          BlocProvider.of<WeddingBloc>(context).add(LoadWeddingById(weddingID));
         }
         return Scaffold(
           appBar: AppBar(
@@ -287,7 +286,7 @@ class _BudgetListState extends State<BudgetList> {
                             BlocBuilder(
                                 cubit: BlocProvider.of<BudgetBloc>(context),
                                 builder: (context, state) {
-
+                                  BlocProvider.of<BudgetBloc>(context)..add(GetAllBudget(weddingId));
                                   if (state is BudgetLoaded) {
                                     sum = 0;
                                     _budgets = state.budgets;
@@ -314,7 +313,7 @@ class _BudgetListState extends State<BudgetList> {
                               if (state is WeddingLoaded) {
                                 pay = 0;
                                 pay = state.wedding.budget;
-                                wedBudget=state.wedding.budget;
+                                wedBudget = state.wedding.budget;
                               }
                               if (state is WeddingLoading) {
                                 return CircularProgressIndicator();
@@ -336,7 +335,7 @@ class _BudgetListState extends State<BudgetList> {
                                       builder: (context, state) {
                                         if (state is BudgetLoaded) {
                                           _budgets = state.budgets;
-                                          pay=wedBudget;
+                                          pay = wedBudget;
                                           for (int i = 0;
                                               i < _budgets.length;
                                               i++) {
