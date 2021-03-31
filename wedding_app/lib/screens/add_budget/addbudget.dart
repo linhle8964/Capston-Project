@@ -112,6 +112,16 @@ class _AddBudgetState extends State<AddBudget> {
                                       ? "Bạn đang sửa kinh phí"
                                       : "Bạn đang thêm kinh phí",
                                   onPressedFunction: () {
+                                    print("test " + moneyController.value.text.replaceAll(",", "")==payMoneyController.value.text.replaceAll(",", "") );
+                                    if (moneyController.value.text.replaceAll(",", "").trim()!=payMoneyController.value.text.replaceAll(",", "").trim()) {
+                                      setState(() {
+                                        _checkboxListTile = false;
+                                      });
+                                    } else if (moneyController.value.text.replaceAll(",", "").trim()==payMoneyController.value.text.replaceAll(",", "").trim()) {
+                                      setState(() {
+                                        _checkboxListTile = true;
+                                      });
+                                    }
                                     updateBudget();
                                   },
                                 ));
@@ -213,8 +223,6 @@ class _AddBudgetState extends State<AddBudget> {
                                         setState(() {
                                           _checkboxListTile =
                                               !_checkboxListTile;
-                                          payMoneyController.text =
-                                              moneyController.value.text;
                                         });
                                       },
                                     ))),
@@ -228,7 +236,7 @@ class _AddBudgetState extends State<AddBudget> {
                             controller: payMoneyController,
                             keyboardType: TextInputType.number,
                             onChanged: (string){
-                              print( "test money" +moneyController.value.text);
+
                               print("test " + moneyController.value.text.replaceAll(",", "")==string.replaceAll(",", "") );
                               if (moneyController.value.text.replaceAll(",", "").trim()!=string.replaceAll(",", "").trim()) {
                                 setState(() {
@@ -280,7 +288,7 @@ class _AddBudgetState extends State<AddBudget> {
                                   borderSide: BorderSide(
                                       color: Colors.black, width: 2.0),
                                 ),
-                                hintText: 'Trả theo phần 1')),
+                                hintText: 'Số tiền đã trả')),
                       ),
                       Padding(
                         padding: EdgeInsets.only(left: 20, right: 20),
