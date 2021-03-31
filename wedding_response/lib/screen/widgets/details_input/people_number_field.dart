@@ -1,29 +1,21 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_web_diary/bloc/guests/guests_bloc.dart';
-import 'package:flutter_web_diary/bloc/guests/guests_state.dart';
-import 'package:flutter_web_diary/screen/views/home/home_view.dart';
+import 'package:flutter_web_diary/util/globle_variable.dart';
+import 'package:number_inc_dec/number_inc_dec.dart';
 
-class NumberInputWithIncrementDecrement extends StatefulWidget {
-  String initialValue;
-  NumberInputWithIncrementDecrement({Key key, @required this.initialValue})
+class NumberInputIncrementDecrement extends StatefulWidget {
+  int initial;
+  NumberInputIncrementDecrement({Key key, @required this.initial})
       : super(key: key);
 
   @override
-  _NumberInputWithIncrementDecrementState createState() =>
-      _NumberInputWithIncrementDecrementState();
+  _NumberInputIncrementDecrementState createState() =>
+      _NumberInputIncrementDecrementState();
 }
 
-class _NumberInputWithIncrementDecrementState
-    extends State<NumberInputWithIncrementDecrement> {
+class _NumberInputIncrementDecrementState
+    extends State<NumberInputIncrementDecrement> {
   TextEditingController _controller = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-   // Setting the initial value for the field.
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,26 +26,26 @@ class _NumberInputWithIncrementDecrementState
             children: <Widget>[
               Expanded(
                 flex: 1,
-                child: TextFormField(
-                  //enabled: widget.isEnable,
-                  //textAlign: TextAlign.center,
-                  decoration: InputDecoration(
-                    hintText: "Số người đi cùng",
-                    hintStyle: TextStyle(color: Colors.grey),
-                    filled: true,
-                    fillColor: Colors.white60,
-                    border: new OutlineInputBorder(
-                      borderSide: new BorderSide(color: Colors.grey),
-                    ),
+                child: NumberInputWithIncrementDecrement(
+                  controller: _controller,
+                  min: 0,
+                  max: 5,
+                  onDecrement: (num) => guestToUpdate.companion =num,
+                  onIncrement: (num) => guestToUpdate.companion =num,
+                  onSubmitted: (num) => guestToUpdate.companion =num,
+                  validator: (value) => value.isEmpty? "Nhập số người đi cùng bạn" :
+                  int.parse(value) > 5 ? 'Tối đa 5 người': null,
+                  numberFieldDecoration: InputDecoration(enabled: false,
+                      prefixText: "Số người đi cùng",contentPadding: EdgeInsets.only(left: 10) ),
+                  initialValue: widget.initial != null ? widget.initial : 0,
+                  widgetContainerDecoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(
+                          Radius.circular(5)
+                      ),
+                      border: Border.all(
+                        color: Colors.grey,
+                      )
                   ),
-                  //controller: _controller,
-                  keyboardType: TextInputType.numberWithOptions(
-                    decimal: false,
-                    signed: true,
-                  ),
-                  inputFormatters: <TextInputFormatter>[
-                    WhitelistingTextInputFormatter.digitsOnly
-                  ],
                 ),
               ),
             ],

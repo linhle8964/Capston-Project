@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_web_diary/model/guest.dart';
+import 'package:flutter_web_diary/model/notification.dart';
 
 abstract class GuestsEvent extends Equatable{
   const GuestsEvent();
@@ -74,3 +75,4 @@ class ToggleAll extends GuestsEvent{
   @override
   List<Object> get props => [guests];
 }
+

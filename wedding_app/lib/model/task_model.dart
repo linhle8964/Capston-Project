@@ -4,7 +4,7 @@ import 'package:equatable/equatable.dart';
 
 @immutable
 class Task extends Equatable{
-  final String id;
+   String id;
   final String name;
   final DateTime dueDate;
   final bool status;
@@ -12,8 +12,11 @@ class Task extends Equatable{
   final String category;
 
 //<editor-fold desc="Data Methods" defaultstate="collapsed">
+  String getDate(){
+    return "${dueDate.day}/${dueDate.month}/${dueDate.year}";
+  }
 
-  const Task({
+   Task({
     @required this.id,
     @required this.name,
     @required this.dueDate,

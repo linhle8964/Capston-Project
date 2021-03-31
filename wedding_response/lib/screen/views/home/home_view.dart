@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_diary/bloc/guests/bloc.dart';
+import 'package:flutter_web_diary/bloc/invitation/bloc.dart';
 import 'package:flutter_web_diary/bloc/wedding/bloc.dart';
 import 'package:flutter_web_diary/firebase_repository/guest_firebase_repository.dart';
+import 'package:flutter_web_diary/firebase_repository/invitation_firebase_repository.dart';
 import 'package:flutter_web_diary/firebase_repository/wedding_firebase_repository.dart';
 import 'package:flutter_web_diary/model/guest.dart';
 import 'package:flutter_web_diary/model/wedding.dart';
@@ -28,6 +30,11 @@ class HomeView extends StatelessWidget {
             weddingRepository: FirebaseWeddingRepository(),
           )..add(LoadWeddings()),
         ),
+        BlocProvider<InvitationBloc>(
+          create: (BuildContext context) => InvitationBloc(
+            invitationCardRepository: FirebaseInvitationCardRepository(),
+          )..add(LoadInvitationCard(selectedWedding.id)),
+        ),
       ],
       child: Builder(
         builder: (context) => BlocBuilder(
@@ -37,6 +44,7 @@ class HomeView extends StatelessWidget {
                 weddings.clear();
                 weddings = state.weddings;
                 if(weddings.contains(selectedWedding)){
+                  globleweddingID = selectedWedding.id;
                   return WillPopScope(
                     onWillPop: () async => false,
                     child: Scaffold(
@@ -55,7 +63,7 @@ class HomeView extends StatelessWidget {
               return Container(
                 color:  Colors.grey[100],
                 child: Center(child: Image.asset(
-                  "/favicon-32x32.png",
+                  "assets/favicon-32x32.png",
                 ),),
               );
             }),

@@ -5,8 +5,9 @@ import 'package:flutter_web_diary/screen/widgets/image_show/image_show.dart';
 
 class InputDetailsMobileTablet extends StatelessWidget {
   Guest guest;
+  String weddingID;
   ValueChanged<bool> onTapped;
-  InputDetailsMobileTablet({Key key, @required this.onTapped, @required this.guest}) : super(key: key);
+  InputDetailsMobileTablet({Key key, @required this.onTapped, @required this.guest,@required this.weddingID}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -17,7 +18,7 @@ class InputDetailsMobileTablet extends StatelessWidget {
           child: Center(
             child: Container(
                 color: Colors.grey[200],
-                child: DetailsInput(onTapped: onTapped,guest: guest,)),
+                child: DetailsInput(onTapped: onTapped,guest: guest,weddingID: weddingID,)),
           ),
         )
       ],

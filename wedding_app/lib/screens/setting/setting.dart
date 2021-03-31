@@ -16,7 +16,7 @@ import 'package:wedding_app/utils/show_snackbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wedding_app/widgets/confirm_dialog.dart';
 import 'package:android_alarm_manager/android_alarm_manager.dart';
-import 'package:wedding_app/widgets/notification.dart';
+import 'package:wedding_app/widgets/receive_notification.dart';
 import 'package:wedding_app/widgets/widget_key.dart';
 
 class SettingPage extends StatefulWidget {
@@ -60,6 +60,8 @@ class _SettingPageState extends State<SettingPage> {
                         builder: (ctx) => PersonDetailsDialog(
                               message: "Bạn có muốn đăng xuất?",
                               onPressedFunction: () async {
+                                NotificationManagement.ClearAllNotifications();
+                                var cancel = await AndroidAlarmManager.cancel(0);
                                 _logOut();
                               },
                             ));
