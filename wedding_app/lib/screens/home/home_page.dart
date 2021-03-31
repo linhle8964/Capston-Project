@@ -14,6 +14,7 @@ import 'package:wedding_app/notification/notification.dart';
 import 'package:wedding_app/screens/choose_template_invitation/chooseTemplate_page.dart';
 import 'package:wedding_app/model/wedding.dart';
 import 'package:wedding_app/screens/home/notification_button.dart';
+import 'package:wedding_app/screens/vendor/vendor_list.dart';
 import 'package:wedding_app/utils/count_home_item.dart';
 import 'package:wedding_app/utils/format_number.dart';
 import 'package:wedding_app/utils/get_share_preferences.dart';
@@ -186,6 +187,14 @@ class _HomePageState extends State<HomePage> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceEvenly,
                                       children: [
+                                        buildButtonColumn(Colors.blue,
+                                            Icons.add_rounded, 'GIAN HÀNG', () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) => Search()),
+                                              );
+                                            }),
                                         buildButtonColumn(Colors.blue,
                                             Icons.add_rounded, 'KHÁCH MỜI', () {}),
                                         buildButtonColumn(

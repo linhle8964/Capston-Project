@@ -314,6 +314,12 @@ class _BudgetListState extends State<BudgetList> {
                                 pay = 0;
                                 pay = state.wedding.budget;
                               }
+                              if(state is WeddingLoading){
+                                return  CircularProgressIndicator();
+                              }
+                              if(state is WeddingNotLoaded){
+                                return  CircularProgressIndicator();
+                              }
                               return Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[

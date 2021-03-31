@@ -153,6 +153,8 @@ class _AddBudgetState extends State<AddBudget> {
                                 width: queryData.size.width * 2 / 3,
                                 child: TextFormField(
                                     controller: moneyController,
+                                    keyboardType: TextInputType.number,
+
                                     onSaved: (input) => moneyController.text =
                                         input.replaceAll(",", ""),
                                     onChanged: (string) {
@@ -225,6 +227,7 @@ class _AddBudgetState extends State<AddBudget> {
                             EdgeInsets.only(left: 20, right: 20, bottom: 20),
                         child: TextFormField(
                             controller: payMoneyController,
+                            keyboardType: TextInputType.number,
                             onChanged: (string) {
                               print("test " + string);
                               string =
