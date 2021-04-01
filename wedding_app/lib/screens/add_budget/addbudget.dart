@@ -142,6 +142,13 @@ class _AddBudgetState extends State<AddBudget> {
                         padding: const EdgeInsets.all(20.0),
                         child: TextFormField(
                             controller: budgetNameController,
+                            validator: (val){
+                              if (val == ""){
+                                 showFailedSnackbar(context, "Tên quỹ không thể chống");
+                                 return "tên quy không thể chống";
+                              }
+                              return null;
+                            },
                             decoration: new InputDecoration(
                                 labelText: 'Tên Quỹ',
                                 focusedBorder: OutlineInputBorder(
@@ -177,20 +184,26 @@ class _AddBudgetState extends State<AddBudget> {
                                       );
                                     },
                                     validator: (val) {
-                                      if (double.parse(
+                                      if(val== ""){
+                                        showFailedSnackbar(context,"số tiền không thể chống");
+                                        return "số tiền không thể chống";
+                                      }else{
+                                        if (double.parse(
+                                            val.replaceAll(",", "")) <
+                                            1000) {
+                                          showFailedSnackbar(context,
+                                              "Xin Vui Lòng nhập lại quỹ");
+                                          print(double.parse(
                                               val.replaceAll(",", "")) <
-                                          1000) {
-                                        showFailedSnackbar(context,
-                                            "Xin Vui Lòng nhập lại quỹ");
-                                        print(double.parse(
-                                                val.replaceAll(",", "")) <
-                                            1000);
-                                        print("test val" +
-                                            double.parse(
-                                                    val.replaceAll(",", ""))
-                                                .toString());
-                                        return "Tiền phải lớn hơn 1000 đồng";
+                                              1000);
+                                          print("test val" +
+                                              double.parse(
+                                                  val.replaceAll(",", ""))
+                                                  .toString());
+                                          return "Tiền phải lớn hơn 1000 đồng";
+                                        }
                                       }
+
                                       return null;
                                     },
                                     decoration: new InputDecoration(
@@ -265,7 +278,6 @@ class _AddBudgetState extends State<AddBudget> {
                               } else if (double.parse(val.replaceAll(",", "")) >
                                   double.parse(moneyController.value.text
                                       .replaceAll(",", ""))) {
-                                print("falied ");
 
                                 showFailedSnackbar(
                                     context, "Xin Vui Lòng nhập lại quỹ");
@@ -402,6 +414,7 @@ class _AddBudgetState extends State<AddBudget> {
         print(budget.toString());
         if (budget != null && budgetNameController.text.trim().isNotEmpty) {
           BlocProvider.of<BudgetBloc>(context)..add(UpdateBudget(budget, id));
+          showSuccessSnackbar(context, "Sửa kinh phí thành công");
           Navigator.pop(context);
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -425,6 +438,7 @@ class _AddBudgetState extends State<AddBudget> {
               double.parse(payMoneyController.text.replaceAll(',', '')),
               1);
           BlocProvider.of<BudgetBloc>(context).add(CreateBudget(id, budget));
+          showSuccessSnackbar(context, "Thêm kinh phí thành công");
           Navigator.pop(context);
           _isSet = true;
         } else if (_isSet == false) {

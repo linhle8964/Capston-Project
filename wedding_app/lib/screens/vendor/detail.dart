@@ -221,8 +221,8 @@ class Detail extends StatelessWidget {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          buildFeature(Icons.hotel, "Chuẩn 3 sao"),
-                          buildFeature(Icons.local_parking, "có ô tô"),
+                          buildFeature(Icons.email, property.email),
+                          buildFeature(Icons.phone, property.phone),
                         ],
                       ),
                     ),
@@ -268,6 +268,7 @@ class Detail extends StatelessWidget {
   Widget buildFeature(IconData iconData, String text) {
     return Row(
       children: [
+
         Icon(
           iconData,
           color: Colors.yellow[700],
@@ -275,6 +276,7 @@ class Detail extends StatelessWidget {
         ),
         SizedBox(
           height: 8,
+          width: 16,
         ),
         Text(
           text,
