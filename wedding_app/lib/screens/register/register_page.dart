@@ -78,13 +78,19 @@ class _RegisterPageState extends State<RegisterPage> {
                             Padding(
                               padding: const EdgeInsets.fromLTRB(0, 0, 0, 30),
                               child: Container(
-                                child: FlutterLogo(),
-                                width: 70,
-                                height: 70,
-                                padding: EdgeInsets.all(15),
+                                child: Text(
+                                  "VWED",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                width: 80,
+                                height: 80,
+                                padding: EdgeInsets.symmetric(vertical: 30),
                                 decoration: BoxDecoration(
                                     shape: BoxShape.circle,
-                                    color: Color(0xffd8d8d8)),
+                                    color: hexToColor("#d86a77")),
                               ),
                             ),
                             Padding(
@@ -95,6 +101,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                     fontWeight: FontWeight.bold,
                                     color: Colors.black,
                                     fontSize: 20),
+                                textAlign: TextAlign.center,
                               ),
                             ),
                             Padding(
@@ -130,17 +137,10 @@ class _RegisterPageState extends State<RegisterPage> {
                                             color: Colors.grey, fontSize: 15)),
                                   ),
                                   GestureDetector(
-                                    onTap: onToggleShowPass,
-                                    child: Text(
-                                      _showPass
-                                          ? "Ẩn Mật khẩu"
-                                          : "Hiện Mật Khẩu",
-                                      style: TextStyle(
-                                          color: hexToColor("#d86a77"),
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                  )
+                                      onTap: onToggleShowPass,
+                                      child: _showPass
+                                          ? Icon(Icons.lock)
+                                          : Icon(Icons.lock_open))
                                 ],
                               ),
                             ),
@@ -152,7 +152,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
                                     primary: isRegisterButtonEnabled(state)
-                                        ? hexToColor("#d86a77")
+                                        ? Colors.blue
                                         : Colors.grey,
                                   ),
                                   onPressed: () =>
@@ -182,8 +182,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                       Text(
                                         'Đã có tài khoản? Đăng Nhập ngay',
                                         style: TextStyle(
-                                            color: hexToColor("#d86a77"),
-                                            fontSize: 16),
+                                            color: Colors.blue, fontSize: 16),
                                       ),
                                     ],
                                   ),

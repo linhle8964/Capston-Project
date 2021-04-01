@@ -1,13 +1,9 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:wedding_app/entity/notification_entity.dart';
-import 'package:wedding_app/entity/task_entity.dart';
 import 'package:equatable/equatable.dart';
-import 'package:wedding_app/model/task_model.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 @immutable
-class NotificationModel extends Equatable{
+class NotificationModel extends Equatable {
   String docID;
   String content;
   bool read;
@@ -17,15 +13,15 @@ class NotificationModel extends Equatable{
   bool isNew;
   int number;
 //<editor-fold desc="Data Methods" defaultstate="collapsed">
-  String getDate(){
+  String getDate() {
     return "${date.day}/${date.month}/${date.year}";
   }
   // đã hoàn thành: type =0
   // chưa hoàn thành: type =1
   // guest type=2
 
-
-  NotificationModel({this.docID,
+  NotificationModel({
+    this.docID,
     @required this.content,
     @required this.read,
     @required this.type,
@@ -53,8 +49,7 @@ class NotificationModel extends Equatable{
         (date == null || identical(date, this.date)) &&
         (detailsID == null || identical(detailsID, this.detailsID)) &&
         (isNew == null || identical(isNew, this.isNew)) &&
-        (number == null || identical(number, this.number))
-    ) {
+        (number == null || identical(number, this.number))) {
       return this;
     }
 
@@ -78,17 +73,16 @@ class NotificationModel extends Equatable{
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-          (other is NotificationModel &&
-              runtimeType == other.runtimeType &&
-              docID == other.docID &&
-              content == other.content &&
-              read == other.read &&
-              type == other.type &&
-              date == other.date &&
-              detailsID == other.detailsID &&
-              isNew == other.isNew &&
-              number == other.number
-          );
+      (other is NotificationModel &&
+          runtimeType == other.runtimeType &&
+          docID == other.docID &&
+          content == other.content &&
+          read == other.read &&
+          type == other.type &&
+          date == other.date &&
+          detailsID == other.detailsID &&
+          isNew == other.isNew &&
+          number == other.number);
 
   @override
   int get hashCode =>
@@ -99,10 +93,11 @@ class NotificationModel extends Equatable{
       date.hashCode ^
       detailsID.hashCode ^
       isNew.hashCode ^
-      number.hashCode ;
+      number.hashCode;
 
   NotificationEntity toEntity() {
-    return NotificationEntity(docID, content, read, type, date, detailsID, isNew,number);
+    return NotificationEntity(
+        docID, content, read, type, date, detailsID, isNew, number);
   }
 
   static NotificationModel fromEntity(NotificationEntity entity) {
@@ -119,6 +114,6 @@ class NotificationModel extends Equatable{
   }
 
   @override
-  List<Object> get props => [docID,content,read,type,date,detailsID,isNew,number];
-
+  List<Object> get props =>
+      [docID, content, read, type, date, detailsID, isNew, number];
 }

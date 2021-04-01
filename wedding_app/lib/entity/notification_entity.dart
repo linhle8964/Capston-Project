@@ -1,12 +1,10 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
 
 class NotificationEntity extends Equatable {
   final String docID;
   final String content;
-  final bool read ;
+  final bool read;
   final int type;
   final DateTime date;
   final String detailsID;
@@ -14,27 +12,11 @@ class NotificationEntity extends Equatable {
   final int number;
 
   @override
-  List<Object> get props => [
-    docID,
-    content,
-    read,
-    type,
-    date,
-    detailsID,
-    isNew,
-    number
-  ];
+  List<Object> get props =>
+      [docID, content, read, type, date, detailsID, isNew, number];
 
-  const NotificationEntity(
-      this.docID,
-      this.content,
-      this.read,
-      this.type,
-      this.date,
-      this.detailsID,
-      this.isNew,
-      this.number
-      );
+  const NotificationEntity(this.docID, this.content, this.read, this.type,
+      this.date, this.detailsID, this.isNew, this.number);
 
   @override
   String toString() {
@@ -87,8 +69,8 @@ class NotificationEntity extends Equatable {
       "content": content,
       "read": read,
       "type": type,
-      "date":date,
-      "details_id":detailsID,
+      "date": date,
+      "details_id": detailsID,
       "is_new": isNew,
       "number": number,
     };

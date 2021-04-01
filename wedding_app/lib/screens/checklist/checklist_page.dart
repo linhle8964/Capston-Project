@@ -4,9 +4,9 @@ import 'package:wedding_app/bloc/checklist/bloc.dart';
 import 'package:wedding_app/bloc/checklist/checklist_bloc.dart';
 import 'package:wedding_app/bloc/show_task/bloc.dart';
 import 'package:wedding_app/firebase_repository/notification_firebase_repository.dart';
+import 'package:wedding_app/model/user_wedding.dart';
 import 'package:wedding_app/screens/checklist/download_excel.dart';
 import 'package:wedding_app/screens/edit_task/edit_task.dart';
-import 'package:wedding_app/utils/get_data.dart';
 import 'package:wedding_app/utils/hex_color.dart';
 import 'package:wedding_app/firebase_repository/category_firebase_repository.dart';
 import 'package:wedding_app/firebase_repository/firebase_task_repository.dart';
@@ -18,6 +18,9 @@ import 'package:search_page/search_page.dart';
 import 'package:wedding_app/utils/show_snackbar.dart';
 
 class ChecklistPage extends StatefulWidget {
+  final UserWedding userWedding;
+
+  ChecklistPage({Key key, @required this.userWedding}) : super(key: key);
   @override
   _ChecklistPageState createState() => _ChecklistPageState();
 }
@@ -80,13 +83,13 @@ class _ChecklistPageState extends State<ChecklistPage>
 
   List<Widget> _buildActions(context, String weddingID) {
     return <Widget>[
-      new
-      IconButton(
+      new IconButton(
         icon: Icon(Icons.arrow_downward),
         onPressed: () {
           showMyAlertDialog(context);
         },
-      ),IconButton(
+      ),
+      IconButton(
         icon: const Icon(
           Icons.search,
           color: Colors.white,
@@ -97,12 +100,21 @@ class _ChecklistPageState extends State<ChecklistPage>
               delegate: SearchPage<Task>(
                 searchLabel: "Tìm Kiếm",
                 barTheme: ThemeData(
-                  textTheme: TextTheme(title: TextStyle( color: Colors.white, fontSize: 18,),),
-                  inputDecorationTheme: InputDecorationTheme(
-                    hintStyle:
-                    Theme.of(context).textTheme.title.copyWith(color: Colors.white70,fontSize: 18),
+                  textTheme: TextTheme(
+                    title: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                    ),
                   ),
-                    appBarTheme: AppBarTheme(elevation: 0.0, color: hexToColor("#d86a77")),//elevation did work
+                  inputDecorationTheme: InputDecorationTheme(
+                    hintStyle: Theme.of(context)
+                        .textTheme
+                        .title
+                        .copyWith(color: Colors.white70, fontSize: 18),
+                  ),
+                  appBarTheme: AppBarTheme(
+                      elevation: 0.0,
+                      color: hexToColor("#d86a77")), //elevation did work
                 ),
                 suggestion: Center(
                   child: Text(
@@ -173,14 +185,15 @@ class _ChecklistPageState extends State<ChecklistPage>
     AlertDialog dialog = AlertDialog(
       key: _containerKey,
       title: Text("Lưu lại"),
-      content: Text("Bạn có muốn lưu lại danh sách công việc dưới dạng file excel?"),
+      content:
+          Text("Bạn có muốn lưu lại danh sách công việc dưới dạng file excel?"),
       actions: [
         TextButton(
             style: TextButton.styleFrom(primary: hexToColor("#d86a77")),
             child: Text("Có"),
             onPressed: () {
               Navigator.of(_containerKey.currentContext).pop();
-              downloadFile(tasks,context);
+              downloadFile(tasks, context);
             }),
         TextButton(
             style: TextButton.styleFrom(
@@ -203,88 +216,73 @@ class _ChecklistPageState extends State<ChecklistPage>
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: getWeddingID(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          final String weddingID = snapshot.data;
-          return MultiBlocProvider(
-            providers: [
-              BlocProvider<CateBloc>(
-                create: (BuildContext context) => CateBloc(
-                  todosRepository: FirebaseCategoryRepository(),
-                )..add(LoadTodos()),
-              ),
-              BlocProvider<ChecklistBloc>(create: (BuildContext context) {
-                return ChecklistBloc(
-                  taskRepository: FirebaseTaskRepository(),
-                  notificationRepository: NotificationFirebaseRepository(),
-                )..add(LoadSuccess(weddingID));
-              }),
-              BlocProvider<ShowTaskBloc>(
-                create: (BuildContext context) => ShowTaskBloc(number1: 0),
-              ),
-            ],
-            child: Builder(
-              builder: (context) => BlocListener(
-                cubit: BlocProvider.of<ChecklistBloc>(context),
-                listener: (context, state) {
-                  if (state is TaskDeleted) {
-                    print("delete");
-                    BlocProvider.of<ShowTaskBloc>(context)..add(DeleteMonth());
-                    BlocProvider.of<ChecklistBloc>(context)
-                      ..add(LoadSuccess(weddingID));
-                    showSuccessSnackbar(context, "bạn đã xóa thành công");
-                  } else if (state is TaskAdded) {
-                    BlocProvider.of<ChecklistBloc>(context)
-                      ..add(LoadSuccess(weddingID));
-                    showSuccessSnackbar(context, "bạn đã thêm thành công");
-                  } else if (state is TaskUpdated) {
-                    BlocProvider.of<ChecklistBloc>(context)
-                      ..add(LoadSuccess(weddingID));
-                    showSuccessSnackbar(context, "bạn đã chỉnh sửa thành công");
-                  }
-                },
-                child: Scaffold(
-                  key: scaffoldKey,
-                  appBar: AppBar(
-                    centerTitle: true,
-                    backgroundColor: hexToColor("#d86a77"),
-                    title: _buildTitle(context),
-                    actions: _buildActions(context, weddingID),
-                  ),
-                  body: _body(weddingID),
-                  floatingActionButton: FloatingActionButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (_) => BlocProvider.value(
-                                        value:
-                                            BlocProvider.of<CateBloc>(context),
-                                        child: BlocProvider.value(
-                                            value:
-                                                BlocProvider.of<ChecklistBloc>(
-                                                    context),
-                                            child: AddTaskPage(
-                                                weddingID: weddingID)),
-                                      )),
-                            );
-                          },
-                          child: Icon(Icons.add),
-                          backgroundColor: hexToColor("#d86a77"),
-                        ),
-                  floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-                ),
-              ),
+    final String weddingID = widget.userWedding.weddingId;
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<CateBloc>(
+          create: (BuildContext context) => CateBloc(
+            todosRepository: FirebaseCategoryRepository(),
+          )..add(LoadTodos()),
+        ),
+        BlocProvider<ChecklistBloc>(create: (BuildContext context) {
+          return ChecklistBloc(
+            taskRepository: FirebaseTaskRepository(),
+            notificationRepository: NotificationFirebaseRepository(),
+          )..add(LoadSuccess(weddingID));
+        }),
+        BlocProvider<ShowTaskBloc>(
+          create: (BuildContext context) => ShowTaskBloc(number1: 0),
+        ),
+      ],
+      child: Builder(
+        builder: (context) => BlocListener(
+          cubit: BlocProvider.of<ChecklistBloc>(context),
+          listener: (context, state) {
+            if (state is TaskDeleted) {
+              print("delete");
+              BlocProvider.of<ShowTaskBloc>(context)..add(DeleteMonth());
+              BlocProvider.of<ChecklistBloc>(context)
+                ..add(LoadSuccess(weddingID));
+              showSuccessSnackbar(context, "bạn đã xóa thành công");
+            } else if (state is TaskAdded) {
+              BlocProvider.of<ChecklistBloc>(context)
+                ..add(LoadSuccess(weddingID));
+              showSuccessSnackbar(context, "bạn đã thêm thành công");
+            } else if (state is TaskUpdated) {
+              BlocProvider.of<ChecklistBloc>(context)
+                ..add(LoadSuccess(weddingID));
+              showSuccessSnackbar(context, "bạn đã chỉnh sửa thành công");
+            }
+          },
+          child: Scaffold(
+            key: scaffoldKey,
+            appBar: AppBar(
+              centerTitle: true,
+              backgroundColor: hexToColor("#d86a77"),
+              title: _buildTitle(context),
+              actions: _buildActions(context, weddingID),
             ),
-          );
-        } else {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        }
-      },
+            body: _body(weddingID),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => BlocProvider.value(
+                            value: BlocProvider.of<CateBloc>(context),
+                            child: BlocProvider.value(
+                                value: BlocProvider.of<ChecklistBloc>(context),
+                                child: AddTaskPage(weddingID: weddingID)),
+                          )),
+                );
+              },
+              child: Icon(Icons.add),
+              backgroundColor: hexToColor("#d86a77"),
+            ),
+            floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+          ),
+        ),
+      ),
     );
   }
 

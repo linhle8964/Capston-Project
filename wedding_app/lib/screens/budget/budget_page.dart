@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:wedding_app/bloc/budget/bloc.dart';
 import 'package:wedding_app/bloc/category/bloc.dart';
@@ -43,7 +41,7 @@ class _BudgetListState extends State<BudgetList> {
             child: Text("Có"),
             onPressed: () {
               Navigator.of(_containerKey.currentContext).pop();
-              downloadFile(_budgets,_categorys,context);
+              downloadFile(_budgets, _categorys, context);
             }),
         TextButton(
             style: TextButton.styleFrom(
@@ -121,88 +119,79 @@ class _BudgetListState extends State<BudgetList> {
                     showMyAlertDialog(context);
                   },
                 ),
-                IconButton(
-                  icon: Icon(Icons.search),
-                  onPressed: () => showSearch(
-                      context: context,
-                      delegate: SearchPage<Budget>(
-                        barTheme: ThemeData(
-                            appBarTheme: AppBarTheme(
-                                elevation: 0.0, color: hexToColor("#d86a77"))),
-                        searchLabel: "Tìm Kiếm",
-                        builder: (Budget budget) => InkWell(
-                            onTap: () {
-                              Navigator.pop(context);
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) => BlocProvider.value(
-                                          value: BlocProvider.of<CateBloc>(
-                                              context),
-                                          child: BlocProvider.value(
-                                              value:
-                                                  BlocProvider.of<BudgetBloc>(
-                                                      context),
-                                              child: AddBudget(
-                                                isEditing: true,
-                                                budget: budget,
-                                              )),
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () => showSearch(
+                context: context,
+                delegate: SearchPage<Budget>(
+                  barTheme: ThemeData(
+                      appBarTheme: AppBarTheme(
+                          elevation: 0.0, color: hexToColor("#d86a77"))),
+                  searchLabel: "Tìm Kiếm",
+                  builder: (Budget budget) => InkWell(
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => BlocProvider.value(
+                                    value: BlocProvider.of<CateBloc>(context),
+                                    child: BlocProvider.value(
+                                        value: BlocProvider.of<BudgetBloc>(
+                                            context),
+                                        child: AddBudget(
+                                          isEditing: true,
+                                          budget: budget,
                                         )),
-                              );
-                            },
-                            child: Card(
-                              child: Container(
-                                height: 60,
-                                padding: EdgeInsets.only(left: 15, right: 15),
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      child: Text(budget.budgetName,
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold)),
-                                    ),
-                                    Flexible(
-                                        fit: FlexFit.tight, child: SizedBox()),
-                                    Visibility(
-                                        visible: budget.isComplete,
-                                        child: SizedBox(
-                                          child: Container(
-                                            padding: EdgeInsets.only(
-                                                left: 5,
-                                                right: 5,
-                                                top: 3,
-                                                bottom: 3),
-                                            decoration: new BoxDecoration(
-                                              color: Colors.greenAccent,
-                                              borderRadius:
-                                                  BorderRadius.circular(16),
-                                            ),
-                                            child: Text(" Hoàn Thành ",
-                                                style: TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 15,
-                                                    fontWeight:
-                                                        FontWeight.normal)),
-                                          ),
-                                        )),
-                                    Text(
-                                      (budget.money - budget.payMoney).toString() +
-                                          "₫",
-                                      style: TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold),
-                                    )
-                                  ],
-                                ),
+                                  )),
+                        );
+                      },
+                      child: Card(
+                        child: Container(
+                          height: 60,
+                          padding: EdgeInsets.only(left: 15, right: 15),
+                          child: Row(
+                            children: [
+                              Container(
+                                child: Text(budget.budgetName,
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold)),
                               ),
-                              //
-                            )),
-                        filter: (Budget budget) =>
-                            [budget.budgetName, budget.money.toString()],
-                        items: _budgets,
+                              Flexible(fit: FlexFit.tight, child: SizedBox()),
+                              Visibility(
+                                  visible: budget.isComplete,
+                                  child: SizedBox(
+                                    child: Container(
+                                      padding: EdgeInsets.only(
+                                          left: 5, right: 5, top: 3, bottom: 3),
+                                      decoration: new BoxDecoration(
+                                        color: Colors.greenAccent,
+                                        borderRadius: BorderRadius.circular(16),
+                                      ),
+                                      child: Text(" Hoàn Thành ",
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.normal)),
+                                    ),
+                                  )),
+                              Text(
+                                (budget.money - budget.payMoney).toString() +
+                                    "₫",
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold),
+                              )
+                            ],
+                          ),
+                        ),
+                        //
                       )),
-                )
+                  filter: (Budget budget) =>
+                      [budget.budgetName, budget.money.toString()],
+                  items: _budgets,
+                )),
+          )
         ],
       ),
       body: Stack(
@@ -481,6 +470,4 @@ class _BudgetListState extends State<BudgetList> {
       ),
     );
   }
-
-
 }
