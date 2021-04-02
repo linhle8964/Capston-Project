@@ -73,10 +73,10 @@ class DeleteBudget extends BudgetEvent {
   DeleteBudget(this.weddingId, this.budgetId);
 }
 
-class BudgetUpdated extends BudgetEvent {
+class UpadatedBudget extends BudgetEvent {
   final List<Budget> budgets;
 
-  const BudgetUpdated(this.budgets);
+  const UpadatedBudget(this.budgets);
 
   @override
   List<Object> get props => [budgets];

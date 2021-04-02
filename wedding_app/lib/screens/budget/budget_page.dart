@@ -33,6 +33,7 @@ class _BudgetListState extends State<BudgetList> {
   String weddingID;
   double pay = 0;
   static double wedBudget = 0;
+  static double wedBudget1 = 0;
   static final GlobalKey<ScaffoldState> scaffoldKey =
       new GlobalKey<ScaffoldState>();
   static const _locale = 'en';
@@ -76,7 +77,7 @@ class _BudgetListState extends State<BudgetList> {
 
   @override
   void initState() {
-    BlocProvider.of<CateBloc>(context).add(LoadTodos());
+    wedBudget1 = 0;
     sum = 0;
     _iSDone = true;
     _cateSum = 0;
@@ -234,7 +235,9 @@ class _BudgetListState extends State<BudgetList> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           weddingID = snapshot.data;
-
+          BlocProvider.of<CateBloc>(context).add(LoadTodos());
+          BlocProvider.of<BudgetBloc>(context)
+              .add(GetAllBudget(weddingID));
         }
         return Scaffold(
           appBar: AppBar(
@@ -283,14 +286,15 @@ class _BudgetListState extends State<BudgetList> {
                             BlocBuilder(
                                 cubit: BlocProvider.of<BudgetBloc>(context),
                                 builder: (context, state) {
-                                  BlocProvider.of<BudgetBloc>(context)
-                                      .add(GetAllBudget(weddingID));
                                   if (state is BudgetLoaded) {
                                     sum = 0;
                                     _budgets = state.budgets;
+
                                     for (int i = 0; i < _budgets.length; i++) {
                                       sum += (_budgets[i].money -
                                           _budgets[i].payMoney);
+                                    }
+                                    wedBudget1=sum;
                                       return Visibility(
                                           visible: _iSDone,
                                           child: Text(
@@ -300,7 +304,7 @@ class _BudgetListState extends State<BudgetList> {
                                                   fontWeight:
                                                       FontWeight.bold)));
                                       ;
-                                    }
+
                                   }
                                   if (state is BudgetLoading) {
                                     return Column(
