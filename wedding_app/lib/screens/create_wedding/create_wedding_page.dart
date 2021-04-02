@@ -177,7 +177,7 @@ class _CreateWeddingPageState extends State<CreateWeddingPage> {
                               } else {
                                 String message = "";
                                 if (!state.isFormValid) {
-                                  message = "Bạn chưa điền đúng các thông ton";
+                                  message = "Bạn chưa điền đúng các thông tin";
                                 } else if (_selectedDate == 'Chọn ngày: ' ||
                                     _selectedTime == 'Chọn giờ: ' ||
                                     isPopulated) {
