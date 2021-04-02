@@ -22,6 +22,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:wedding_app/screens/pick_wedding/pick_wedding_screen.dart';
 import 'package:wedding_app/screens/pick_wedding/wedding_code.dart';
+import 'package:wedding_app/screens/privacy_term/pdfview_page.dart';
 import 'package:wedding_app/screens/register/register_page.dart';
 import 'package:wedding_app/screens/reset_password/reset_password.dart';
 import 'package:wedding_app/screens/splash_page.dart';
@@ -209,6 +210,12 @@ class MyApp extends StatelessWidget {
                     ResetPasswordBloc(userRepository: FirebaseUserRepository()),
                 child: ResetPasswordPage(),
               );
+            },
+            "/privacy_policy": (context) {
+              return PDFViewPage(name: "privacy");
+            },
+            "/term": (context) {
+              return PDFViewPage(name: "term");
             }
           },
           title: 'Wedding App',

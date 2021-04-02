@@ -6,6 +6,7 @@ import 'package:wedding_app/bloc/user_wedding/bloc.dart';
 import 'package:wedding_app/bloc/wedding/bloc.dart';
 import 'package:wedding_app/model/user_wedding.dart';
 import 'package:wedding_app/screens/create_wedding/create_wedding_argument.dart';
+import 'package:wedding_app/screens/privacy_term/pdfview_page.dart';
 import 'package:wedding_app/screens/setting/custom_button.dart';
 import 'package:wedding_app/screens/setting/setting_item.dart';
 import 'package:wedding_app/utils/alert_dialog.dart';
@@ -147,8 +148,11 @@ class _SettingPageState extends State<SettingPage> {
                                 context, "/invite_collaborator");
                           }, "Chia sẻ quyền quản lý")
                         : Container(),
-                    SettingItem(null, "Chính sách bảo mật"),
-                    SettingItem(null, "Điều khoản"),
+                    SettingItem(
+                        () => Navigator.pushNamed(context, "/privacy_policy"),
+                        "Chính sách bảo mật"),
+                    SettingItem(() => Navigator.pushNamed(context, "/term"),
+                        "Điều khoản"),
                     SettingItem(null, "Hỗ trợ"),
                     SettingItem(null, "Đánh giá ứng dụng"),
                   ],
