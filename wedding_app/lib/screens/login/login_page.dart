@@ -9,7 +9,6 @@ import 'package:wedding_app/widgets/widget_key.dart';
 import 'package:flutter/scheduler.dart';
 
 class LoginPage extends StatefulWidget {
-  // This widget is the root of your application.
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -50,8 +49,8 @@ class _LoginPageState extends State<LoginPage> {
         }
         if (state.isSuccess) {
           SchedulerBinding.instance.addPostFrameCallback((_) {
-            showSuccessSnackbar(context, state.message);
             BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
+            showSuccessSnackbar(context, state.message);
           });
         }
         if (state.isFailure) {

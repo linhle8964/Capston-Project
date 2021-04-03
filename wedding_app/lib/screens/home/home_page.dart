@@ -49,7 +49,11 @@ class _HomePageState extends State<HomePage> {
   @override
   Future<void> initState() {
     super.initState();
-    AndroidAlarmManager.periodic(Duration(seconds: 3), 0, showprint,);
+    AndroidAlarmManager.periodic(
+      Duration(seconds: 3),
+      0,
+      showprint,
+    );
     showprint();
   }
 
@@ -93,7 +97,8 @@ class _HomePageState extends State<HomePage> {
                     ),
                     backgroundColor: Colors.white,
                     body: SafeArea(
-                      minimum: const EdgeInsets.only(top: 5, left: 10, right: 10),
+                      minimum:
+                          const EdgeInsets.only(top: 5, left: 10, right: 10),
                       child: SingleChildScrollView(
                         child: BlocBuilder(
                           cubit: BlocProvider.of<WeddingBloc>(context),
@@ -112,16 +117,17 @@ class _HomePageState extends State<HomePage> {
                                   Container(
                                     decoration: const BoxDecoration(
                                       image: DecorationImage(
-                                          image:
-                                              AssetImage('assets/image/home_top.jpg'),
+                                          image: AssetImage(
+                                              'assets/image/home_top.jpg'),
                                           fit: BoxFit.cover),
                                     ),
                                     height: 180,
                                     alignment: Alignment.center,
                                     child: CountdownTimer(
-                                      endTime:
-                                          wedding.weddingDate.millisecondsSinceEpoch,
-                                      widgetBuilder: (_, CurrentRemainingTime time) {
+                                      endTime: wedding
+                                          .weddingDate.millisecondsSinceEpoch,
+                                      widgetBuilder:
+                                          (_, CurrentRemainingTime time) {
                                         if (time == null) {
                                           return Text(
                                             'Chúc 2 bạn hạnh phúc',
@@ -131,12 +137,32 @@ class _HomePageState extends State<HomePage> {
                                                 color: Colors.white),
                                           );
                                         }
-                                        return Text(
-                                          ' ${(time.days == null) ? '' : (time.days.toString() + ' ngày,')}  ${(time.hours == null) ? '0' : time.hours} :  ${(time.min == null) ? '0' : time.min} : ${time.sec}',
-                                          style: TextStyle(
-                                              fontSize: 24,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.white),
+                                        return Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              ' ${(time.days == null) ? '' : (time.days.toString() + ' ngày')}',
+                                              style: TextStyle(
+                                                  fontSize: 24,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.white),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                            SizedBox(
+                                              height: 10.0,
+                                            ),
+                                            Text(
+                                              ' ${(time.hours == null) ? '0' : time.hours} :  ${(time.min == null) ? '0' : time.min} : ${time.sec}',
+                                              style: TextStyle(
+                                                  fontSize: 24,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.white),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ],
                                         );
                                       },
                                     ),
@@ -152,11 +178,14 @@ class _HomePageState extends State<HomePage> {
                                             children: [
                                               isAdmin(userWedding.role)
                                                   ? TextButton(
-                                                      style: TextButton.styleFrom(
-                                                          primary: Colors.black),
+                                                      style:
+                                                          TextButton.styleFrom(
+                                                              primary:
+                                                                  Colors.black),
                                                       child: Container(
                                                         padding:
-                                                            const EdgeInsets.all(5),
+                                                            const EdgeInsets
+                                                                .all(5),
                                                         child: Text(
                                                           'Gửi link đám cưới cho khách',
                                                           style: TextStyle(
@@ -166,12 +195,14 @@ class _HomePageState extends State<HomePage> {
                                                         ),
                                                         decoration: BoxDecoration(
                                                             border: Border.all(
-                                                                color: main_color,
+                                                                color:
+                                                                    main_color,
                                                                 width: 2)),
                                                       ),
                                                       onPressed: () async {
                                                         shareGuestResponseLink(
-                                                            context, wedding.id);
+                                                            context,
+                                                            wedding.id);
                                                       },
                                                     )
                                                   : Container()
@@ -187,7 +218,7 @@ class _HomePageState extends State<HomePage> {
                                           MainAxisAlignment.spaceEvenly,
                                       children: [
                                         buildButtonColumn(Colors.blue,
-                                            Icons.add_rounded, 'KHÁCH MỜI', () {}),
+                                            Icons.search, 'DỊCH VỤ', () {}),
                                         buildButtonColumn(
                                           Colors.pink[400],
                                           Icons.assignment_ind_outlined,
@@ -210,16 +241,16 @@ class _HomePageState extends State<HomePage> {
                                               builder: (context, state) {
                                                 int number = 0;
                                                 if (state
-                                                is NotificationsLoaded) {
+                                                    is NotificationsLoaded) {
                                                   List<NotificationModel>
-                                                  notifications =
+                                                      notifications =
                                                       state.notifications;
                                                   if (notifications != null) {
                                                     for (int i = 0;
-                                                    i <
-                                                        notifications
-                                                            .length;
-                                                    i++) {
+                                                        i <
+                                                            notifications
+                                                                .length;
+                                                        i++) {
                                                       if (notifications[i]
                                                           .isNew) number++;
                                                     }
@@ -233,12 +264,15 @@ class _HomePageState extends State<HomePage> {
                                                         MaterialPageRoute(
                                                             builder: (_) => BlocProvider
                                                                 .value(
-                                                                value: BlocProvider.of<NotificationBloc>(context),
-                                                                child: NotificationPage(
-                                                                  weddingID:
-                                                                  wedding
-                                                                      .id,
-                                                                ))),
+                                                                    value: BlocProvider.of<
+                                                                            NotificationBloc>(
+                                                                        context),
+                                                                    child:
+                                                                        NotificationPage(
+                                                                      weddingID:
+                                                                          wedding
+                                                                              .id,
+                                                                    ))),
                                                       );
                                                     },
                                                     icon: Icons.add_alarm,
@@ -250,7 +284,8 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                   ),
                                   BlocBuilder(
-                                    cubit: BlocProvider.of<ChecklistBloc>(context),
+                                    cubit:
+                                        BlocProvider.of<ChecklistBloc>(context),
                                     builder: (context, state) {
                                       if (state is TasksLoaded) {
                                         return Container(
@@ -273,7 +308,8 @@ class _HomePageState extends State<HomePage> {
                                                   'Việc đã xong ',
                                                   state.tasks.isEmpty
                                                       ? "0"
-                                                      : countFinisedTask(state.tasks)
+                                                      : countFinisedTask(
+                                                              state.tasks)
                                                           .toString()),
                                             ],
                                           ),
@@ -307,7 +343,8 @@ class _HomePageState extends State<HomePage> {
                                                   state.budgets.length == 0
                                                       ? "0"
                                                       : formatNumber(
-                                                          countBudget(state.budgets)
+                                                          countBudget(
+                                                                  state.budgets)
                                                               .toString())),
                                             ],
                                           ),
