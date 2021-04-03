@@ -3,13 +3,11 @@ class Validation {
     return text != null && text.length >= length;
   }
 
-  static bool isNameValid(String name){
-    return RegExp(
-        r'^[a-zA-Z\s]+$')
-        .hasMatch(name);
+  static bool isNameValid(String name) {
+    return RegExp(r'^[a-zA-Z\s]{1,20}$').hasMatch(name);
   }
 
-  static bool isAddressValid(String address){
+  static bool isAddressValid(String address) {
     return RegExp(r'[!@#<>?":_`~;[\]\\|=+)(*&^%\s-]').hasMatch(address);
   }
 
@@ -20,7 +18,8 @@ class Validation {
   }
 
   static bool isPasswordValid(String password) {
-    return RegExp(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$').hasMatch(password);
+    return RegExp(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,20}$')
+        .hasMatch(password);
   }
 
   static bool isBudgetValid(String budget) {

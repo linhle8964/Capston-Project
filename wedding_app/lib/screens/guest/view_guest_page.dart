@@ -6,7 +6,6 @@ import 'package:wedding_app/firebase_repository/guest_firebase_repository.dart';
 import 'package:wedding_app/model/guest.dart';
 import 'package:wedding_app/model/user_wedding.dart';
 import 'package:wedding_app/screens/guest/ListGuest.dart';
-import 'package:wedding_app/screens/privacy_term/pdfview_page.dart';
 import 'package:wedding_app/utils/format_number.dart';
 import 'package:wedding_app/utils/get_share_preferences.dart';
 import 'package:wedding_app/utils/hex_color.dart';
@@ -15,6 +14,8 @@ import 'package:permission_handler/permission_handler.dart';
 import 'ListGuestMoney.dart';
 
 class ViewGuestPage extends StatefulWidget {
+  final UserWedding userWedding;
+  ViewGuestPage({Key key, @required this.userWedding}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return _ViewGuestPageState();
@@ -27,7 +28,6 @@ class _ViewGuestPageState extends State<ViewGuestPage>
       new GlobalKey<ScaffoldState>();
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  UserWedding userWedding;
   List<Guest> _data = [];
   List<Guest> _guests = [];
   List<Guest> _tempguests = [];
@@ -50,7 +50,7 @@ class _ViewGuestPageState extends State<ViewGuestPage>
   }
 
   void _handleTabSelection() {
-    if(_tabController.indexIsChanging){
+    if (_tabController.indexIsChanging) {
       setState(() {
         _selectedTab = _tabController.index;
       });
@@ -73,202 +73,187 @@ class _ViewGuestPageState extends State<ViewGuestPage>
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: getUserWedding(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            userWedding = snapshot.data;
-            final String weddingId = userWedding.weddingId;
-            return BlocProvider<GuestsBloc>(
-              create: (context) {
-                return GuestsBloc(
-                  guestsRepository: FirebaseGuestRepository(),
-                )..add(LoadGuests(weddingId));
-              },
-              child: Builder(
-                  builder: (context) {
-                    if(isAdmin(userWedding.role)){
-                      return BlocListener(
-                        cubit: BlocProvider.of<GuestsBloc>(context),
-                        listener: (context, state) {},
-                        child: DefaultTabController(
-                          length: 2,
-                          child: Scaffold(
-                            key: scaffoldKey,
-                            appBar: new AppBar(
-                              backgroundColor: hexToColor("#d86a77"),
-                              title: const Text("Khách mời"),
-                              actions: <Widget>[
-                                IconButton(
-                                  icon: const Icon(
-                                    Icons.download_outlined,
-                                    color: Colors.white,
-                                  ),
-                                  onPressed: () {
-                                    print("Excel");
-                                  },
-                                ),
-                                IconButton(
-                                  icon: const Icon(
-                                    Icons.search,
-                                    color: Colors.white,
-                                  ),
-                                  onPressed: () {
-                                    SearchGuest(context, weddingId);
-                                  },
-                                ),
-                                _typePopup(_selectedTab, weddingId),
-                              ],
-                              bottom: TabBar(
-                                controller: _tabController,
-                                indicator: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50), // Creates border
-                                  color: Colors.greenAccent,),
-                                tabs: [
-                                  Tab(
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Icon(
-                                          Icons.assignment,
-                                          color: Colors.white,
-                                        ),
-                                        Text(
-                                          'Thông tin',
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Tab(
-                                    child: GestureDetector(
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Icon(
-                                            Icons.monetization_on_outlined,
-                                            color: Colors.white,
-                                          ),
-                                          Text(
-                                            'Tiền mừng',
-                                            style: TextStyle(color: Colors.white),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ],
+    final UserWedding userWedding = widget.userWedding;
+    final String weddingId = userWedding.weddingId;
+    return BlocProvider<GuestsBloc>(
+      create: (context) {
+        return GuestsBloc(
+          guestsRepository: FirebaseGuestRepository(),
+        )..add(LoadGuests(weddingId));
+      },
+      child: Builder(builder: (context) {
+        if (isAdmin(userWedding.role)) {
+          return BlocListener(
+            cubit: BlocProvider.of<GuestsBloc>(context),
+            listener: (context, state) {},
+            child: DefaultTabController(
+              length: 2,
+              child: Scaffold(
+                key: scaffoldKey,
+                appBar: new AppBar(
+                  backgroundColor: hexToColor("#d86a77"),
+                  title: const Text("Khách mời"),
+                  actions: <Widget>[
+                    IconButton(
+                      icon: const Icon(
+                        Icons.download_outlined,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
+                        print("Excel");
+                      },
+                    ),
+                    IconButton(
+                      icon: const Icon(
+                        Icons.search,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
+                        SearchGuest(context, weddingId);
+                      },
+                    ),
+                    _typePopup(_selectedTab, weddingId),
+                  ],
+                  bottom: TabBar(
+                    controller: _tabController,
+                    indicator: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50), // Creates border
+                      color: Colors.greenAccent,
+                    ),
+                    tabs: [
+                      Tab(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.assignment,
+                              color: Colors.white,
+                            ),
+                            Text(
+                              'Thông tin',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Tab(
+                        child: GestureDetector(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.monetization_on_outlined,
+                                color: Colors.white,
                               ),
-                            ),
-                            body: TabBarView(
-                                physics: NeverScrollableScrollPhysics(),
-                                controller: _tabController,
-                                children: [
-                                  BlocProvider<GuestsBloc>(
-                                      create: (context) {
-                                        return GuestsBloc(
-                                          guestsRepository: FirebaseGuestRepository(),
-                                        )..add(LoadGuests(weddingId));
-                                      },
-                                      child: _infoTab(weddingId)
-                                  ),
-                                  BlocProvider<GuestsBloc>(
-                                    create: (context) {
-                                      return GuestsBloc(
-                                        guestsRepository: FirebaseGuestRepository(),
-                                      )..add(LoadGuests(weddingId));
-                                    },
-                                    child: _moneyTab(weddingId),
-                                  ),
-                                ]
-                            ),
-                            floatingActionButton: FloatingActionButton(
-                              child: Icon(Icons.add),
-                              backgroundColor: hexToColor("#d86a77"),
-                              onPressed: () {
-                                print('invite guest');
-                                if(_tabController.index == 0)
-                                  AddGuestDialog(context, weddingId);
-                                else if (_tabController.index == 1)
-                                  addMoneyDialog(context, weddingId);
-                              },
-                            ),
-                            floatingActionButtonLocation:
-                            FloatingActionButtonLocation.endFloat,
+                              Text(
+                                'Tiền mừng',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ],
                           ),
                         ),
-                      );
-                    }else{
-                      return BlocListener(
-                        cubit: BlocProvider.of<GuestsBloc>(context),
-                        listener: (context, state) {},
-                        child: DefaultTabController(
-                          length: 2,
-                          child: Scaffold(
-                            key: scaffoldKey,
-                            appBar: new AppBar(
-                              backgroundColor: hexToColor("#d86a77"),
-                              title: const Text("Khách mời"),
-                              actions: <Widget>[
-                                IconButton(
-                                  icon: const Icon(
-                                    Icons.download_outlined,
-                                    color: Colors.white,
-                                  ),
-                                  onPressed: () {
-                                    print("Excel");
-                                  },
-                                ),
-                                IconButton(
-                                  icon: const Icon(
-                                    Icons.search,
-                                    color: Colors.white,
-                                  ),
-                                  onPressed: () {
-                                    SearchGuest(context, weddingId);
-                                  },
-                                ),
-                                _typePopup(_selectedTab, weddingId),
-                              ],
-                            ),
-                            body: _infoTab(weddingId),
-                            floatingActionButton: FloatingActionButton(
-                              child: Icon(Icons.add),
-                              backgroundColor: hexToColor("#d86a77"),
-                              onPressed: () {
-                                print('invite guest');
-                                if(_tabController.index == 0)
-                                  AddGuestDialog(context, weddingId);
-                                else if (_tabController.index == 1)
-                                  addMoneyDialog(context, weddingId);
-                              },
-                            ),
-                            floatingActionButtonLocation:
-                            FloatingActionButtonLocation.endFloat,
-                          ),
-                        ),
-                      );
-                    }
-                  }
+                      ),
+                    ],
+                  ),
+                ),
+                body: TabBarView(
+                    physics: NeverScrollableScrollPhysics(),
+                    controller: _tabController,
+                    children: [
+                      BlocProvider<GuestsBloc>(
+                          create: (context) {
+                            return GuestsBloc(
+                              guestsRepository: FirebaseGuestRepository(),
+                            )..add(LoadGuests(weddingId));
+                          },
+                          child: _infoTab(weddingId)),
+                      BlocProvider<GuestsBloc>(
+                        create: (context) {
+                          return GuestsBloc(
+                            guestsRepository: FirebaseGuestRepository(),
+                          )..add(LoadGuests(weddingId));
+                        },
+                        child: _moneyTab(weddingId),
+                      ),
+                    ]),
+                floatingActionButton: FloatingActionButton(
+                  child: Icon(Icons.add),
+                  backgroundColor: hexToColor("#d86a77"),
+                  onPressed: () {
+                    print('invite guest');
+                    if (_tabController.index == 0)
+                      AddGuestDialog(context, weddingId);
+                    else if (_tabController.index == 1)
+                      addMoneyDialog(context, weddingId);
+                  },
+                ),
+                floatingActionButtonLocation:
+                    FloatingActionButtonLocation.endFloat,
               ),
-            );
-          } else {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        });
+            ),
+          );
+        } else {
+          return BlocListener(
+            cubit: BlocProvider.of<GuestsBloc>(context),
+            listener: (context, state) {},
+            child: DefaultTabController(
+              length: 2,
+              child: Scaffold(
+                key: scaffoldKey,
+                appBar: new AppBar(
+                  backgroundColor: hexToColor("#d86a77"),
+                  title: const Text("Khách mời"),
+                  actions: <Widget>[
+                    IconButton(
+                      icon: const Icon(
+                        Icons.download_outlined,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
+                        print("Excel");
+                      },
+                    ),
+                    IconButton(
+                      icon: const Icon(
+                        Icons.search,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
+                        SearchGuest(context, weddingId);
+                      },
+                    ),
+                    _typePopup(_selectedTab, weddingId),
+                  ],
+                ),
+                body: _infoTab(weddingId),
+                floatingActionButton: FloatingActionButton(
+                  child: Icon(Icons.add),
+                  backgroundColor: hexToColor("#d86a77"),
+                  onPressed: () {
+                    print('invite guest');
+                    if (_tabController.index == 0)
+                      AddGuestDialog(context, weddingId);
+                    else if (_tabController.index == 1)
+                      addMoneyDialog(context, weddingId);
+                  },
+                ),
+                floatingActionButtonLocation:
+                    FloatingActionButtonLocation.endFloat,
+              ),
+            ),
+          );
+        }
+      }),
+    );
   }
 
-  Widget _typePopup(int tabIndex, String weddingId){
-    if(tabIndex == 0){
+  Widget _typePopup(int tabIndex, String weddingId) {
+    if (tabIndex == 0) {
       return PopupMenuButton<String>(
         itemBuilder: (context) {
           return _typeItems.map((String choice) {
             return PopupMenuItem<String>(
-              value: _typeItems
-                  .indexOf(choice)
-                  .toString(),
+              value: _typeItems.indexOf(choice).toString(),
               child: Text(choice),
             );
           }).toList();
@@ -277,11 +262,10 @@ class _ViewGuestPageState extends State<ViewGuestPage>
           _selectedTypeItem = int.parse(choice);
           statusPage = -1;
           print(_selectedTypeItem);
-          BlocProvider.of<GuestsBloc>(ctx)
-              ..add(LoadGuests(weddingId));
+          BlocProvider.of<GuestsBloc>(ctx)..add(LoadGuests(weddingId));
         },
       );
-    }else{
+    } else {
       return SizedBox.shrink();
     }
   }
@@ -468,7 +452,7 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                                     )),
                                   ],
                                 ),
-                                ListGuest(_data, userWedding)
+                                ListGuest(_data, widget.userWedding)
                               ],
                             );
                           })),
@@ -476,74 +460,74 @@ class _ViewGuestPageState extends State<ViewGuestPage>
               } else {
                 return Center(child: LoadingIndicator());
               }
-            }
-            )
-    );
+            }));
   }
 
   Widget _moneyTab(String weddingId) {
     return Builder(
-      builder: (context) => BlocBuilder(
-        cubit: BlocProvider.of<GuestsBloc>(context),
-        buildWhen: (previous, current) {
-          if (current is GuestUpdated) {
-            return false;
-          } else {
-            return true;
-          }
-        },
-          builder: (context, state) {
-            if (state is GuestsLoaded) {
-              _guests.clear();
-              _guests = state.guests;
-              _tempguests = _guests;
-              return SafeArea(
-                minimum: const EdgeInsets.only(top: 5, left: 10, right: 10),
-                child: SingleChildScrollView(
-                    child: BlocBuilder(
-                        cubit: BlocProvider.of<GuestsBloc>(context),
-                        builder: (context, state) {
-                          _data.clear();
-                          for (int i = 0; i < _tempguests.length; i++) {
-                            if (_tempguests[i].money > 0) {
-                              _data.add(_tempguests[i]);
+        builder: (context) => BlocBuilder(
+            cubit: BlocProvider.of<GuestsBloc>(context),
+            buildWhen: (previous, current) {
+              if (current is GuestUpdated) {
+                return false;
+              } else {
+                return true;
+              }
+            },
+            builder: (context, state) {
+              if (state is GuestsLoaded) {
+                _guests.clear();
+                _guests = state.guests;
+                _tempguests = _guests;
+                return SafeArea(
+                  minimum: const EdgeInsets.only(top: 5, left: 10, right: 10),
+                  child: SingleChildScrollView(
+                      child: BlocBuilder(
+                          cubit: BlocProvider.of<GuestsBloc>(context),
+                          builder: (context, state) {
+                            _data.clear();
+                            for (int i = 0; i < _tempguests.length; i++) {
+                              if (_tempguests[i].money > 0) {
+                                _data.add(_tempguests[i]);
+                              }
                             }
-                          }
-                          return Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Container(
-                                decoration: const BoxDecoration(
-                                  image: DecorationImage(
-                                      image:
-                                      AssetImage('assets/image/money_back.jpg'),
-                                      fit: BoxFit.cover),
+                            return Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Container(
+                                  decoration: const BoxDecoration(
+                                    image: DecorationImage(
+                                        image: AssetImage(
+                                            'assets/image/money_back.jpg'),
+                                        fit: BoxFit.cover),
+                                  ),
+                                  height: 50,
+                                  alignment: Alignment.center,
+                                  child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          formatCurrency(countMoney()),
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white),
+                                        ),
+                                      ]),
                                 ),
-                                height: 50,
-                                alignment: Alignment.center,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        formatCurrency(countMoney()),
-                                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
-                                      ),
-                                    ]),
-                              ),
-                              ListGuestMoney(_data, weddingId)
-                            ],
-                          );
-                        })),
-              );
-            } else {
-              return Center(child: LoadingIndicator());
-            }
-          }
-      )
-    );
+                                ListGuestMoney(_data, weddingId)
+                              ],
+                            );
+                          })),
+                );
+              } else {
+                return Center(child: LoadingIndicator());
+              }
+            }));
   }
 
-  String countMoney(){
+  String countMoney() {
     int count = 0;
     for (int i = 0; i < _tempguests.length; i++) {
       if (_tempguests[i].money > 0) {
@@ -582,33 +566,35 @@ class _ViewGuestPageState extends State<ViewGuestPage>
             ],
             child: Builder(
                 builder: (context) => BlocListener(
-                  cubit: BlocProvider.of<GuestsBloc>(context),
-                  listener: (context, state) {},
-                  child: Builder(
-                      builder: (context) => BlocBuilder(
-                          cubit: BlocProvider.of<GuestsBloc>(context),
-                          buildWhen: (previous, current) {
-                            if (current is GuestUpdated) {
-                              return false;
-                            } else {
-                              return true;
-                            }
-                          },
-                          builder: (context, state) {
-                            if (state is GuestsLoaded) {
-                              _listSearch.clear();
-                              _guests = state.guests;
-                              _tempguests = _guests;
-                              return StatefulBuilder(
-                                  builder: (context, setState) {
+                      cubit: BlocProvider.of<GuestsBloc>(context),
+                      listener: (context, state) {},
+                      child: Builder(
+                          builder: (context) => BlocBuilder(
+                              cubit: BlocProvider.of<GuestsBloc>(context),
+                              buildWhen: (previous, current) {
+                                if (current is GuestUpdated) {
+                                  return false;
+                                } else {
+                                  return true;
+                                }
+                              },
+                              builder: (context, state) {
+                                if (state is GuestsLoaded) {
+                                  _listSearch.clear();
+                                  _guests = state.guests;
+                                  _tempguests = _guests;
+                                  return StatefulBuilder(
+                                      builder: (context, setState) {
                                     _listSearch.clear();
                                     for (var guest in _tempguests) {
                                       var name = guest.name.toLowerCase();
                                       var phone = guest.phone.toLowerCase();
                                       var money = guest.money;
-                                      if ((name.contains(_searchQuery.toLowerCase())
-                                          || phone.contains(_searchQuery.toLowerCase()))
-                                          && money == 0) {
+                                      if ((name.contains(
+                                                  _searchQuery.toLowerCase()) ||
+                                              phone.contains(_searchQuery
+                                                  .toLowerCase())) &&
+                                          money == 0) {
                                         _listSearch.add(guest);
                                         print(guest);
                                       }
@@ -616,41 +602,41 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                                     return SingleChildScrollView(
                                         child: MultiBlocProvider(
                                             providers: [
-                                              BlocProvider<GuestsBloc>(
-                                                create: (context) {
-                                                  return GuestsBloc(
-                                                    guestsRepository:
+                                          BlocProvider<GuestsBloc>(
+                                            create: (context) {
+                                              return GuestsBloc(
+                                                guestsRepository:
                                                     FirebaseGuestRepository(),
-                                                  )..add(LoadGuests(weddingId));
-                                                },
-                                              ),
-                                            ],
+                                              )..add(LoadGuests(weddingId));
+                                            },
+                                          ),
+                                        ],
                                             child: AlertDialog(
                                               contentPadding: EdgeInsets.all(1),
                                               content: Form(
                                                 key: _formKey,
                                                 child: Container(
                                                     height:
-                                                    MediaQuery.of(context)
-                                                        .size
-                                                        .height -
-                                                        190,
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height -
+                                                            190,
                                                     width: 2000,
                                                     child: Column(
                                                         mainAxisSize:
-                                                        MainAxisSize.min,
+                                                            MainAxisSize.min,
                                                         children: <Widget>[
                                                           TextFormField(
-                                                            //controller: ,
+                                                              //controller: ,
                                                               initialValue:
-                                                              _searchQuery,
+                                                                  _searchQuery,
                                                               decoration:
-                                                              InputDecoration(
+                                                                  InputDecoration(
                                                                 labelText:
-                                                                "Tìm kiếm khách mời",
+                                                                    "Tìm kiếm khách mời",
                                                                 fillColor:
-                                                                Colors
-                                                                    .white,
+                                                                    Colors
+                                                                        .white,
                                                                 filled: true,
                                                               ),
                                                               onChanged:
@@ -665,11 +651,12 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                                                           Builder(builder:
                                                               (context) {
                                                             if (_listSearch
-                                                                .length !=
+                                                                    .length !=
                                                                 0) {
                                                               return ListGuest(
                                                                   _listSearch,
-                                                                  userWedding);
+                                                                  widget
+                                                                      .userWedding);
                                                             } else {
                                                               return Column(
                                                                 children: [
@@ -680,15 +667,15 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                                                                     child: Text(
                                                                       'Không có khách mời phù hợp !',
                                                                       textAlign:
-                                                                      TextAlign
-                                                                          .center,
+                                                                          TextAlign
+                                                                              .center,
                                                                       style: TextStyle(
                                                                           color: Colors
                                                                               .grey,
                                                                           fontSize:
-                                                                          20,
+                                                                              20,
                                                                           fontWeight:
-                                                                          FontWeight.w600),
+                                                                              FontWeight.w600),
                                                                     ),
                                                                   ),
                                                                 ],
@@ -707,11 +694,11 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                                               ],
                                             )));
                                   });
-                            } else {
-                              return Center(child: LoadingIndicator());
-                            }
-                          })),
-                )),
+                                } else {
+                                  return Center(child: LoadingIndicator());
+                                }
+                              })),
+                    )),
           );
         });
   }
@@ -1271,9 +1258,11 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                                               content: Form(
                                                 key: _formKey,
                                                 child: Container(
-                                                    height: MediaQuery.of(context)
+                                                    height:
+                                                        MediaQuery.of(context)
                                                                 .size
-                                                                .height - 190,
+                                                                .height -
+                                                            190,
                                                     width: 2000,
                                                     child: Column(
                                                         mainAxisSize:
@@ -1308,7 +1297,8 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                                                                 0) {
                                                               return ListGuest(
                                                                   _listSearch,
-                                                                  userWedding);
+                                                                  widget
+                                                                      .userWedding);
                                                             } else {
                                                               return Column(
                                                                 children: [

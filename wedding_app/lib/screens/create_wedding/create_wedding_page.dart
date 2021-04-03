@@ -160,8 +160,9 @@ class _CreateWeddingPageState extends State<CreateWeddingPage> {
                               size: 40,
                               color: Colors.white,
                             ),
-                            onPressed: () => isSubmitButtonEnabled(state)
-                                ? showDialog(
+                            onPressed: () {
+                              if (isSubmitButtonEnabled(state)) {
+                                showDialog(
                                     context: context,
                                     barrierDismissible: false,
                                     builder: (BuildContext context) =>
@@ -172,12 +173,22 @@ class _CreateWeddingPageState extends State<CreateWeddingPage> {
                                           onPressedFunction: () async {
                                             _save(state);
                                           },
-                                        ))
-                                : showSuccessAlertDialog(
-                                    context,
-                                    "Thông báo",
-                                    "Bạn chưa điền đầy đủ thông tin",
-                                    () => Navigator.pop(context))),
+                                        ));
+                              } else {
+                                String message = "";
+                                if (!state.isFormValid) {
+                                  message = "Bạn chưa điền đúng các thông tin";
+                                } else if (_selectedDate == 'Chọn ngày: ' ||
+                                    _selectedTime == 'Chọn giờ: ' ||
+                                    isPopulated) {
+                                  message = "Bạn chưa điền đủ các thông tin";
+                                } else {
+                                  message = "Bạn chưa điền đủ các thông tin";
+                                }
+                                showSuccessAlertDialog(context, "Thông báo",
+                                    message, () => Navigator.pop(context));
+                              }
+                            }),
                       ],
                     ),
                     body: SingleChildScrollView(

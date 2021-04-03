@@ -21,27 +21,27 @@ class NotificationPage extends StatefulWidget {
   _NotificationPageState createState() => _NotificationPageState();
 }
 
-int time1 =1;
-int time2 =1;
-class _NotificationPageState extends State<NotificationPage> {
+int time1 = 1;
+int time2 = 1;
 
+class _NotificationPageState extends State<NotificationPage> {
   Future<bool> _onWillPop() async {
     var state = BlocProvider.of<NotificationBloc>(context).state;
-    if(state is NotificationsLoaded){
+    if (state is NotificationsLoaded) {
       List<NotificationModel> notifications = state.notifications;
-      BlocProvider.of<NotificationBloc>(context)..add(UpdateNewNotifications(widget.weddingID, notifications));
+      BlocProvider.of<NotificationBloc>(context)
+        ..add(UpdateNewNotifications(widget.weddingID, notifications));
     }
     return true;
   }
 
-
   @override
   void initState() {
-    time1=1;
-    time2=1;
-    // TODO: implement initState
+    time1 = 1;
+    time2 = 1;
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -117,22 +117,40 @@ class _NotificationPageState extends State<NotificationPage> {
                                     state.notifications;
                                 List<NotificationModel> newNotifications = [];
                                 List<NotificationModel> oldNotifications = [];
-                                for(int i=0; i< notifications.length; i++){
-                                  if(notifications[i].isNew) newNotifications.add(notifications[i]);
-                                  else oldNotifications.add(notifications[i]);
+                                for (int i = 0; i < notifications.length; i++) {
+                                  if (notifications[i].isNew)
+                                    newNotifications.add(notifications[i]);
+                                  else
+                                    oldNotifications.add(notifications[i]);
                                 }
                                 if (notifications.isNotEmpty) {
                                   return SingleChildScrollView(
                                     physics: ScrollPhysics(),
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        ListNotifications(notifications: newNotifications, weddingID: weddingID,isOld: 1,),
+                                        ListNotifications(
+                                          notifications: newNotifications,
+                                          weddingID: weddingID,
+                                          isOld: 1,
+                                        ),
                                         Container(
                                             margin: EdgeInsets.only(left: 12),
-                                            child: Text("Trước đó", style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),)),
-                                        SizedBox(height: 10,),
-                                        ListNotifications(notifications: oldNotifications, weddingID: weddingID,isOld: 2,),
+                                            child: Text(
+                                              "Trước đó",
+                                              style: TextStyle(
+                                                  fontSize: 17,
+                                                  fontWeight: FontWeight.w500),
+                                            )),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        ListNotifications(
+                                          notifications: oldNotifications,
+                                          weddingID: weddingID,
+                                          isOld: 2,
+                                        ),
                                       ],
                                     ),
                                   );
@@ -175,14 +193,13 @@ class _NotificationPageState extends State<NotificationPage> {
             context: context,
             barrierDismissible: false,
             builder: (BuildContext context) => PersonDetailsDialog(
-              message: "Bạn đang xóa tất cả thông báo",
-              onPressedFunction: () {
-                BlocProvider.of<NotificationBloc>(ctx)
-                  ..add(DeleteAllNotifications(weddingID, notifications));
-              },
-            ));
+                  message: "Bạn đang xóa tất cả thông báo",
+                  onPressedFunction: () {
+                    BlocProvider.of<NotificationBloc>(ctx)
+                      ..add(DeleteAllNotifications(weddingID, notifications));
+                  },
+                ));
       }
     }
   }
-
 }

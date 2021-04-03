@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:wedding_app/bloc/reset_password/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wedding_app/utils/alert_dialog.dart';
-import 'package:wedding_app/utils/hex_color.dart';
 import 'package:wedding_app/utils/show_snackbar.dart';
 
 class ResetPasswordPage extends StatefulWidget {
@@ -80,7 +79,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             primary: isRegisterButtonEnabled(state)
-                                ? hexToColor("#d86a77")
+                                ? Colors.blue
                                 : Colors.grey,
                           ),
                           onPressed: () => isRegisterButtonEnabled(state)
