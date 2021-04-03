@@ -24,7 +24,7 @@ class BudgetBloc extends Bloc<BudgetEvent, BudgetState> {
       yield* _mapUpdateWeddingToState(event);
     } else if (event is DeleteBudget) {
       yield* _mapDeleteWeddingToState(event);
-    } else if (event is BudgetUpdated) {
+    } else if (event is UpadatedBudget) {
       yield* _mapWeddingUpdatedToState(event);
     } else if (event is LoadBudgetbyCateId) {
       yield* _mapGetBudgetByCateIdToState(event);
@@ -55,7 +55,7 @@ class BudgetBloc extends Bloc<BudgetEvent, BudgetState> {
     _streamSubscription = _budgetRepository
         .getBudgetByCateId(event.weddingId, event.cateId)
         .listen(
-          (budgets) => add(BudgetUpdated(budgets)),
+          (budgets) => add(UpadatedBudget(budgets)),
         );
     yield Success("Load thanh cong");
   }
@@ -63,7 +63,7 @@ class BudgetBloc extends Bloc<BudgetEvent, BudgetState> {
   Stream<BudgetState> _mapGetAllBudgetToState(GetAllBudget event) async* {
     _streamSubscription =
         _budgetRepository.getAllBudget(event.weddingId).listen(
-              (budgets) => add(BudgetUpdated(budgets)),
+              (budgets) => add(UpadatedBudget(budgets)),
             );
   }
 
@@ -76,7 +76,7 @@ class BudgetBloc extends Bloc<BudgetEvent, BudgetState> {
     _budgetRepository.deleteBudget(event.weddingId, event.budgetId);
   }
 
-  Stream<BudgetState> _mapWeddingUpdatedToState(BudgetUpdated event) async* {
+  Stream<BudgetState> _mapWeddingUpdatedToState(UpadatedBudget event) async* {
     yield BudgetLoaded(event.budgets);
   }
 
