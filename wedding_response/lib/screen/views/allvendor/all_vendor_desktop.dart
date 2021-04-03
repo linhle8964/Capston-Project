@@ -6,6 +6,9 @@ import 'package:flutter_web_diary/model/vendor.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_web_diary/screen/vendor/filter.dart';
 import 'package:flutter_web_diary/screen/vendor/detail.dart';
+import 'package:flutter_web_diary/screen/views/detail/vendor_detail_mobile.dart';
+import 'package:flutter_web_diary/screen/views/detail/vendor_detail_page.dart';
+import 'package:flutter_web_diary/screen/widgets/centered_view/centered_view.dart';
 import 'package:flutter_web_diary/util/hex_color.dart';
 import 'package:search_page/search_page.dart';
 
@@ -19,8 +22,8 @@ class _AllVendorPageDesktopState extends State<AllVendorPageDesktop> {
   List<Category> _categorys = [];
   String _defaultChoiceIndex = "";
   static final GlobalKey<ScaffoldState> scaffoldKey =
-  new GlobalKey<ScaffoldState>();
-
+      new GlobalKey<ScaffoldState>();
+  
   void initState() {
     _defaultChoiceIndex = "";
     BlocProvider.of<CateBloc>(context).add(LoadTodos());
@@ -29,7 +32,8 @@ class _AllVendorPageDesktopState extends State<AllVendorPageDesktop> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return CenteredView(
+    child:Scaffold(
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: hexToColor("#d86a77"),
@@ -41,7 +45,7 @@ class _AllVendorPageDesktopState extends State<AllVendorPageDesktop> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: EdgeInsets.only(top: 16),
+            padding: EdgeInsets.only(top: 16,bottom: 16),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -90,12 +94,12 @@ class _AllVendorPageDesktopState extends State<AllVendorPageDesktop> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    _showBottomSheet();
+
                   },
                   child: Padding(
                     padding: EdgeInsets.only(left: 16, right: 24),
                     child: Text(
-                      "desktop",
+                      "Filters",
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -131,7 +135,18 @@ class _AllVendorPageDesktopState extends State<AllVendorPageDesktop> {
           ),
         ],
       ),
-    );
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => {
+           Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => VendorDetailPage(isEditing: false)),
+        )
+        },
+        label: Text('Thêm dịch vụ'),
+        icon: Icon(Icons.add),
+        backgroundColor: hexToColor("#d86a77"),
+      ),
+    ));
   }
 
   Widget buildFilter(String filterName, String selectCate) {
@@ -141,32 +156,33 @@ class _AllVendorPageDesktopState extends State<AllVendorPageDesktop> {
       margin: EdgeInsets.only(right: 6),
       child: Center(
           child: ChoiceChip(
-            label: Text(
-              filterName,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            selected: this._defaultChoiceIndex == selectCate,
-            onSelected: (bool selected) {
-              setState(() {
-                if (selected) {
-                  this._defaultChoiceIndex = selectCate;
+        label: Text(
+          filterName,
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        selected: this._defaultChoiceIndex == selectCate,
+        onSelected: (bool selected) {
+          setState(() {
+            if (selected) {
+              this._defaultChoiceIndex = selectCate;
 
-                  buildProperties();
-                } else {
-                  this._defaultChoiceIndex = "";
-                }
-              });
-            },
-          )),
+              buildProperties();
+            } else {
+              this._defaultChoiceIndex = "";
+            }
+          });
+        },
+      )),
     );
   }
 
   List<Widget> buildProperties() {
     List<Widget> list = [];
     for (var i = 0; i < properties.length; i++) {
+      print('test' + properties[i].frontImage);
       if (properties[i].cateID.trim().toString() == _defaultChoiceIndex) {
         print(properties[i].cateID + " is equal " + _defaultChoiceIndex);
         list.add(Hero(
@@ -186,7 +202,7 @@ class _AllVendorPageDesktopState extends State<AllVendorPageDesktop> {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => Detail(property: property)),
+          MaterialPageRoute(builder: (context) => VendorDetailPage(isEditing: true,vendor: property,)),
         );
       },
       child: Card(
@@ -201,7 +217,7 @@ class _AllVendorPageDesktopState extends State<AllVendorPageDesktop> {
           height: 210,
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage(property.frontImage),
+              image: NetworkImage(property.frontImage),
               fit: BoxFit.cover,
             ),
           ),
@@ -247,6 +263,9 @@ class _AllVendorPageDesktopState extends State<AllVendorPageDesktop> {
                 ),
                 Column(
                   children: [
+                    SizedBox(
+                      height: 4,
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -345,8 +364,10 @@ class _AllVendorPageDesktopState extends State<AllVendorPageDesktop> {
         ),
         onPressed: () {
           showSearch(
+
               context: context,
               delegate: SearchPage<Vendor>(
+
                 searchLabel: "Tìm Kiếm",
                 barTheme: ThemeData(
                   textTheme: TextTheme(

@@ -26,13 +26,13 @@ class AllVendorPage extends StatelessWidget {
             onWillPop: () async => false,
             child: Scaffold(
               backgroundColor: Colors.grey[100],
-              body: CenteredView(
-                child: ScreenTypeLayout(
+              body:  ScreenTypeLayout(
                   mobile: AllVendorPageMobile(),
                   tablet: AllVendorPageMobile(),
-                  desktop: AllVendorPageDesktop(),
+                  desktop: CenteredView(child:AllVendorPageDesktop(),)
+                  
                 ),
-              ),
+              
             ),
           ),
     );

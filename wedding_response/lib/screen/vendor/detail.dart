@@ -1,29 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_web_diary/model/vendor.dart';
 
-
 class Detail extends StatelessWidget {
-
   final Vendor property;
 
   Detail({@required this.property});
 
   @override
   Widget build(BuildContext context) {
-
     Size size = MediaQuery.of(context).size;
 
     return Scaffold(
       body: Stack(
         children: [
-
           Hero(
             tag: property.frontImage,
             child: Container(
               height: size.height * 0.5,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage(property.frontImage),
+                  image: NetworkImage(property.frontImage),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -32,7 +28,6 @@ class Detail extends StatelessWidget {
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-
                     colors: [
                       Colors.transparent,
                       Colors.black.withOpacity(0.7),
@@ -42,19 +37,16 @@ class Detail extends StatelessWidget {
               ),
             ),
           ),
-
           Container(
-            height: (size.height * 0.35)+25,
+            height: (size.height * 0.35) + 25,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 24, vertical: 48),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-
                       GestureDetector(
                         onTap: () {
                           Navigator.pop(context);
@@ -65,21 +57,12 @@ class Detail extends StatelessWidget {
                           size: 24,
                         ),
                       ),
-
-                      Icon(
-                        Icons.notifications_none,
-                        color: Colors.white,
-                        size: 28,
-                      ),
-
                     ],
                   ),
                 ),
-
                 Expanded(
                   child: Container(),
                 ),
-
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
                   child: Container(
@@ -90,7 +73,9 @@ class Detail extends StatelessWidget {
                       ),
                     ),
                     width: 80,
-                    padding: EdgeInsets.symmetric(vertical: 4,),
+                    padding: EdgeInsets.symmetric(
+                      vertical: 4,
+                    ),
                     child: Center(
                       child: Text(
                         "FOR " + property.label,
@@ -103,13 +88,11 @@ class Detail extends StatelessWidget {
                     ),
                   ),
                 ),
-
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 24),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-
                       Text(
                         property.name,
                         style: TextStyle(
@@ -119,45 +102,25 @@ class Detail extends StatelessWidget {
                         ),
                       ),
 
-                      Container(
-                        height: 50,
-                        width: 50,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Center(
-                          child: Icon(
-                            Icons.favorite,
-                            color: Colors.yellow[700],
-                            size: 20,
-                          ),
-                        ),
-                      ),
-
                     ],
                   ),
                 ),
-
                 Padding(
-                  padding: EdgeInsets.only(left: 24, right: 24, top: 8, bottom: 16,),
+                  padding:
+                      EdgeInsets.only(left: 24, right: 24, top: 8, bottom: 16),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-
                       Row(
                         children: [
-
                           Icon(
                             Icons.location_on,
                             color: Colors.white,
                             size: 16,
                           ),
-
                           SizedBox(
                             width: 4,
                           ),
-
                           Text(
                             property.location,
                             style: TextStyle(
@@ -166,53 +129,29 @@ class Detail extends StatelessWidget {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-
                           SizedBox(
                             width: 8,
                           ),
-
                           Icon(
                             Icons.zoom_out_map,
                             color: Colors.white,
                             size: 16,
                           ),
-
                           SizedBox(
                             width: 4,
                           ),
-
-
                         ],
                       ),
-
-                      Row(
-                        children: [
-
-                          Icon(
-                            Icons.star,
-                            color: Colors.yellow[700],
-                            size: 16,
-                          ),
-
-                          SizedBox(
-                            width: 4,
-                          ),
-
-                        ],
-                      ),
-
                     ],
                   ),
                 ),
-
               ],
             ),
           ),
-
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
-              height: size.height * 0.65,
+              height: size.height * 0.60,
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.only(
@@ -225,36 +164,30 @@ class Detail extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-
                     Padding(
                       padding: EdgeInsets.all(24),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-
                           Row(
                             children: [
-
                               Container(
                                 height: 65,
                                 width: 65,
                                 decoration: BoxDecoration(
                                   image: DecorationImage(
-                                    image: AssetImage(property.ownerImage),
+                                    image: NetworkImage(property.ownerImage),
                                     fit: BoxFit.cover,
                                   ),
                                   shape: BoxShape.circle,
                                 ),
                               ),
-
                               SizedBox(
                                 width: 16,
                               ),
-
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-
                                   Text(
                                     property.name,
                                     style: TextStyle(
@@ -262,11 +195,9 @@ class Detail extends StatelessWidget {
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-
                                   SizedBox(
                                     height: 4,
                                   ),
-
                                   Text(
                                     property.cateID,
                                     style: TextStyle(
@@ -274,47 +205,47 @@ class Detail extends StatelessWidget {
                                       color: Colors.grey[500],
                                     ),
                                   ),
-
                                 ],
                               ),
-
                             ],
                           ),
-
-
-
                         ],
                       ),
                     ),
-
                     Padding(
-                      padding: EdgeInsets.only(right: 24, left: 24, bottom: 24,),
-                      child: Row(
+                      padding: EdgeInsets.only(
+                        right: 24,
+                        left: 24,
+                        bottom: 24,
+                      ),
+                      child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-
                           buildFeature(Icons.hotel, "Chuẩn 3 sao"),
-                          buildFeature(Icons.event, "2 phòng event lớn"),
-                          buildFeature(Icons.kitchen, "thực đơn "),
                           buildFeature(Icons.local_parking, "có ô tô"),
-
                         ],
                       ),
                     ),
-
                     Padding(
-                      padding: EdgeInsets.only(right: 24, left: 24, bottom: 16,),
+                      padding: EdgeInsets.only(
+                        right: 24,
+                        left: 24,
+                        bottom: 16,
+                      ),
                       child: Text(
-                        "Description",
+                        "Giới Thiệu",
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
-
                     Padding(
-                      padding: EdgeInsets.only(right: 24, left: 24, bottom: 24,),
+                      padding: EdgeInsets.only(
+                        right: 24,
+                        left: 24,
+                        bottom: 24,
+                      ),
                       child: Text(
                         property.description,
                         style: TextStyle(
@@ -324,41 +255,27 @@ class Detail extends StatelessWidget {
                       ),
                     ),
 
-                    Padding(
-                      padding: EdgeInsets.only(right: 24, left: 24, bottom: 16,),
-                      child: Text(
-                        "Photos",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
                   ],
                 ),
               ),
             ),
           ),
-
         ],
       ),
     );
   }
 
-  Widget buildFeature(IconData iconData, String text){
-    return Column(
+  Widget buildFeature(IconData iconData, String text) {
+    return Row(
       children: [
-
         Icon(
           iconData,
           color: Colors.yellow[700],
           size: 28,
         ),
-
         SizedBox(
           height: 8,
         ),
-
         Text(
           text,
           style: TextStyle(
@@ -366,21 +283,22 @@ class Detail extends StatelessWidget {
             fontSize: 14,
           ),
         ),
-
       ],
     );
   }
 
-  List<Widget> buildPhotos(List<String> images){
+  List<Widget> buildPhotos(List<String> images) {
     List<Widget> list = [];
-    list.add(SizedBox(width: 24,));
+    list.add(SizedBox(
+      width: 24,
+    ));
     for (var i = 0; i < images.length; i++) {
       list.add(buildPhoto(images[i]));
     }
     return list;
   }
 
-  Widget buildPhoto(String url){
+  Widget buildPhoto(String url) {
     return AspectRatio(
       aspectRatio: 3 / 2,
       child: Container(
@@ -397,5 +315,4 @@ class Detail extends StatelessWidget {
       ),
     );
   }
-
 }

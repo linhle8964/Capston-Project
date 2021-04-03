@@ -6,6 +6,9 @@ import 'package:flutter_web_diary/model/vendor.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_web_diary/screen/vendor/filter.dart';
 import 'package:flutter_web_diary/screen/vendor/detail.dart';
+import 'package:flutter_web_diary/screen/views/allvendor/all_vendor_page.dart';
+import 'package:flutter_web_diary/screen/views/detail/vendor_detail_mobile.dart';
+import 'package:flutter_web_diary/screen/views/detail/vendor_detail_page.dart';
 import 'package:flutter_web_diary/util/hex_color.dart';
 import 'package:search_page/search_page.dart';
 
@@ -19,7 +22,7 @@ class _AllVendorPageMobileState extends State<AllVendorPageMobile> {
   List<Category> _categorys = [];
   String _defaultChoiceIndex = "";
   static final GlobalKey<ScaffoldState> scaffoldKey =
-  new GlobalKey<ScaffoldState>();
+      new GlobalKey<ScaffoldState>();
 
   void initState() {
     _defaultChoiceIndex = "";
@@ -35,13 +38,14 @@ class _AllVendorPageMobileState extends State<AllVendorPageMobile> {
         backgroundColor: hexToColor("#d86a77"),
         actions: _buildActions(context),
         title: _buildTitle(context),
+        leading: Icon(Icons.add_alarm_outlined,color: hexToColor("#d86a77") ,),
       ),
       backgroundColor: Colors.white,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: EdgeInsets.only(top: 16),
+            padding: EdgeInsets.only(top: 16,bottom: 16),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -90,7 +94,7 @@ class _AllVendorPageMobileState extends State<AllVendorPageMobile> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    _showBottomSheet();
+
                   },
                   child: Padding(
                     padding: EdgeInsets.only(left: 16, right: 24),
@@ -131,6 +135,17 @@ class _AllVendorPageMobileState extends State<AllVendorPageMobile> {
           ),
         ],
       ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => {
+           Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => VendorDetailPage(isEditing: false)),
+        )
+        },
+        label: Text('Thêm dịch vụ'),
+        icon: Icon(Icons.add),
+        backgroundColor: hexToColor("#d86a77"),
+      ),
     );
   }
 
@@ -141,32 +156,33 @@ class _AllVendorPageMobileState extends State<AllVendorPageMobile> {
       margin: EdgeInsets.only(right: 6),
       child: Center(
           child: ChoiceChip(
-            label: Text(
-              filterName,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            selected: this._defaultChoiceIndex == selectCate,
-            onSelected: (bool selected) {
-              setState(() {
-                if (selected) {
-                  this._defaultChoiceIndex = selectCate;
+        label: Text(
+          filterName,
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        selected: this._defaultChoiceIndex == selectCate,
+        onSelected: (bool selected) {
+          setState(() {
+            if (selected) {
+              this._defaultChoiceIndex = selectCate;
 
-                  buildProperties();
-                } else {
-                  this._defaultChoiceIndex = "";
-                }
-              });
-            },
-          )),
+              buildProperties();
+            } else {
+              this._defaultChoiceIndex = "";
+            }
+          });
+        },
+      )),
     );
   }
 
   List<Widget> buildProperties() {
     List<Widget> list = [];
     for (var i = 0; i < properties.length; i++) {
+      print('test' + properties[i].frontImage);
       if (properties[i].cateID.trim().toString() == _defaultChoiceIndex) {
         print(properties[i].cateID + " is equal " + _defaultChoiceIndex);
         list.add(Hero(
@@ -186,7 +202,7 @@ class _AllVendorPageMobileState extends State<AllVendorPageMobile> {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => Detail(property: property)),
+          MaterialPageRoute(builder: (context) => VendorDetailPage(isEditing: true,vendor: property,)),
         );
       },
       child: Card(
@@ -201,7 +217,7 @@ class _AllVendorPageMobileState extends State<AllVendorPageMobile> {
           height: 210,
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage(property.frontImage),
+              image: NetworkImage(property.frontImage),
               fit: BoxFit.cover,
             ),
           ),
@@ -247,6 +263,9 @@ class _AllVendorPageMobileState extends State<AllVendorPageMobile> {
                 ),
                 Column(
                   children: [
+                    SizedBox(
+                      height: 4,
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -346,7 +365,8 @@ class _AllVendorPageMobileState extends State<AllVendorPageMobile> {
         onPressed: () {
           showSearch(
               context: context,
-              delegate: SearchPage<Vendor>(
+              delegate: 
+              SearchPage<Vendor>(
                 searchLabel: "Tìm Kiếm",
                 barTheme: ThemeData(
                   textTheme: TextTheme(

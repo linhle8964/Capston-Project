@@ -11,6 +11,18 @@ abstract class VendorEvent extends Equatable {
 
 class LoadVendor extends VendorEvent {}
 
+class GetAllVendor extends VendorEvent {
+  const GetAllVendor();
+}
+
+class GetVendorById extends VendorEvent {
+  final String vendorId;
+  
+  GetVendorById(this.vendorId);
+
+  List<Object> get props => [vendorId];
+}
+
 class AddVendor extends VendorEvent {
   final Vendor vendor;
 
@@ -40,17 +52,9 @@ class UpdateVendor extends VendorEvent {
 }
 
 class DeleteVendor extends VendorEvent {
-  final Vendor vendor;
+  final String vendorId;
 
-  const DeleteVendor(this.vendor);
-
-  @override
-  List<Object> get props => [vendor];
-
-  @override
-  String toString() {
-    return 'DeleteVendor{vendor: $vendor}';
-  }
+  const DeleteVendor(this.vendorId);
 }
 
 class ClearCompleted extends VendorEvent {}

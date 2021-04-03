@@ -14,6 +14,7 @@ import 'package:flutter_web_diary/model/vendor.dart';
 import 'package:flutter_web_diary/model/wedding.dart';
 import 'package:flutter_web_diary/screen/vendor/detail.dart';
 import 'package:flutter_web_diary/screen/views/allvendor/all_vendor_page.dart';
+import 'package:flutter_web_diary/screen/views/detail/vendor_detail_page.dart';
 import 'package:flutter_web_diary/screen/views/error/error_page.dart';
 import 'package:flutter_web_diary/screen/views/home/home_view.dart';
 import 'package:flutter_web_diary/screen/views/input_details/input_details.dart';
@@ -95,7 +96,7 @@ class AdminVendorRouterDelegate extends RouterDelegate<AdminVendorRoutePath>
             else if (_selectedUser != null && _selectedVendor != null)
                 MaterialPage(
                     key: ValueKey('inputDetails'),
-                    child: Detail(property: _selectedVendor,)
+                    child: VendorDetailPage(vendor: _selectedVendor,isEditing: true,)
                 ),
         ],
         onPopPage: (route, result) {
@@ -126,7 +127,7 @@ class AdminVendorRouterDelegate extends RouterDelegate<AdminVendorRoutePath>
     } else if (path.isInputDetailsPage) {
       _selectedUser = UserWedding(path.adminID);
 
-      _selectedVendor = Vendor(path.vendorID);
+      _selectedVendor = Vendor("", "","" ,"","","","","","" ,id: path.vendorID);
 
     } else if (path.isLoginPage){
       _selectedUser = null;

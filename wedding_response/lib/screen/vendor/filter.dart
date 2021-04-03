@@ -66,7 +66,7 @@ class _FilterState extends State<Filter> {
                   },
                   onStateChanged:(value) {
                     setState(() {
-                      stateValue = value;
+                       stateValue = value;
                     });
                   },
                   onCityChanged:(value) {
