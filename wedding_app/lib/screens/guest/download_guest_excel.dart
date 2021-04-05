@@ -164,7 +164,7 @@ downloadFile(List<Guest> guests, BuildContext context, String role) async {
         if(guests[i].money==0){
           dataList.add('Khách chưa mừng');
         }else{
-          dataList.add(guests[i].money.toString());
+          dataList.add(guests[i].money.toString()+'000');
         }
         sheetObject.merge(CellIndex.indexByString("A"+(4+i).toString()), CellIndex.indexByString("B"+(4+i).toString()));
         sheetObject.merge(CellIndex.indexByString("C"+(4+i).toString()), CellIndex.indexByString("E"+(4+i).toString()));
