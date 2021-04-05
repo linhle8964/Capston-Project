@@ -1,4 +1,4 @@
-import 'package:flutter_web_diary/entity/vendor_entity.dart';
+import 'package:wedding_app/entity/vendor_entity.dart';
 
 class Vendor {
   String id;

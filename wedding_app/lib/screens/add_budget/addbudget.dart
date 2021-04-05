@@ -35,6 +35,8 @@ class _AddBudgetState extends State<AddBudget> {
     return preferences.getString("wedding_id");
   }
 
+  String paymoney = "0";
+  bool isCheck = false;
   CateBloc _cateBloc;
   Category holder;
   Category selectedCate;
@@ -71,7 +73,6 @@ class _AddBudgetState extends State<AddBudget> {
       moneyController.text =
           isEditing ? _formatNumber(widget.budget.money.toString()) : "";
       _checkboxListTile = isEditing ? widget.budget.isComplete : false;
-      holder = Category(widget.budget.cateID, "");
     });
   }
 
@@ -85,7 +86,6 @@ class _AddBudgetState extends State<AddBudget> {
     return BlocBuilder(
         cubit: BlocProvider.of<BudgetBloc>(context),
         builder: (context, state) {
-          print(ModalRoute.of(context).settings.name.toString());
           return Scaffold(
               appBar: AppBar(
                 backgroundColor: hexToColor("#d86a77"),
@@ -112,12 +112,26 @@ class _AddBudgetState extends State<AddBudget> {
                                       ? "Bạn đang sửa kinh phí"
                                       : "Bạn đang thêm kinh phí",
                                   onPressedFunction: () {
-                                    print("test " + moneyController.value.text.replaceAll(",", "")==payMoneyController.value.text.replaceAll(",", "") );
-                                    if (moneyController.value.text.replaceAll(",", "").trim()!=payMoneyController.value.text.replaceAll(",", "").trim()) {
+                                    print("test " +
+                                            moneyController.value.text
+                                                .replaceAll(",", "") ==
+                                        payMoneyController.value.text
+                                            .replaceAll(",", ""));
+                                    if (moneyController.value.text
+                                            .replaceAll(",", "")
+                                            .trim() !=
+                                        payMoneyController.value.text
+                                            .replaceAll(",", "")
+                                            .trim()) {
                                       setState(() {
                                         _checkboxListTile = false;
                                       });
-                                    } else if (moneyController.value.text.replaceAll(",", "").trim()==payMoneyController.value.text.replaceAll(",", "").trim()) {
+                                    } else if (moneyController.value.text
+                                            .replaceAll(",", "")
+                                            .trim() ==
+                                        payMoneyController.value.text
+                                            .replaceAll(",", "")
+                                            .trim()) {
                                       setState(() {
                                         _checkboxListTile = true;
                                       });
@@ -142,10 +156,11 @@ class _AddBudgetState extends State<AddBudget> {
                         padding: const EdgeInsets.all(20.0),
                         child: TextFormField(
                             controller: budgetNameController,
-                            validator: (val){
-                              if (val == ""){
-                                 showFailedSnackbar(context, "Tên quỹ không thể chống");
-                                 return "tên quy không thể chống";
+                            validator: (val) {
+                              if (val == "") {
+                                showFailedSnackbar(
+                                    context, "Tên quỹ không thể chống");
+                                return "tên quy không thể chống";
                               }
                               return null;
                             },
@@ -184,21 +199,22 @@ class _AddBudgetState extends State<AddBudget> {
                                       );
                                     },
                                     validator: (val) {
-                                      if(val== ""){
-                                        showFailedSnackbar(context,"số tiền không thể chống");
+                                      if (val == "") {
+                                        showFailedSnackbar(
+                                            context, "số tiền không thể chống");
                                         return "số tiền không thể chống";
-                                      }else{
+                                      } else {
                                         if (double.parse(
-                                            val.replaceAll(",", "")) <
+                                                val.replaceAll(",", "")) <
                                             1000) {
                                           showFailedSnackbar(context,
                                               "Xin Vui Lòng nhập lại quỹ");
                                           print(double.parse(
-                                              val.replaceAll(",", "")) <
+                                                  val.replaceAll(",", "")) <
                                               1000);
                                           print("test val" +
                                               double.parse(
-                                                  val.replaceAll(",", ""))
+                                                      val.replaceAll(",", ""))
                                                   .toString());
                                           return "Tiền phải lớn hơn 1000 đồng";
                                         }
@@ -236,6 +252,8 @@ class _AddBudgetState extends State<AddBudget> {
                                         setState(() {
                                           _checkboxListTile =
                                               !_checkboxListTile;
+                                          payMoneyController.text =
+                                              moneyController.text;
                                         });
                                       },
                                     ))),
@@ -248,14 +266,22 @@ class _AddBudgetState extends State<AddBudget> {
                         child: TextFormField(
                             controller: payMoneyController,
                             keyboardType: TextInputType.number,
-                            onChanged: (string){
-
-                              print("test " + moneyController.value.text.replaceAll(",", "")==string.replaceAll(",", "") );
-                              if (moneyController.value.text.replaceAll(",", "").trim()!=string.replaceAll(",", "").trim()) {
+                            onChanged: (string) {
+                              print("test " +
+                                      moneyController.value.text
+                                          .replaceAll(",", "") ==
+                                  string.replaceAll(",", ""));
+                              if (moneyController.value.text
+                                      .replaceAll(",", "")
+                                      .trim() !=
+                                  string.replaceAll(",", "").trim()) {
                                 setState(() {
                                   _checkboxListTile = false;
                                 });
-                              } else if (moneyController.value.text.replaceAll(",", "").trim()==string.replaceAll(",", "").trim()) {
+                              } else if (moneyController.value.text
+                                      .replaceAll(",", "")
+                                      .trim() ==
+                                  string.replaceAll(",", "").trim()) {
                                 setState(() {
                                   _checkboxListTile = true;
                                 });
@@ -278,7 +304,6 @@ class _AddBudgetState extends State<AddBudget> {
                               } else if (double.parse(val.replaceAll(",", "")) >
                                   double.parse(moneyController.value.text
                                       .replaceAll(",", ""))) {
-
                                 showFailedSnackbar(
                                     context, "Xin Vui Lòng nhập lại quỹ");
                                 print(double.parse(val.replaceAll(",", "")) <
@@ -416,12 +441,11 @@ class _AddBudgetState extends State<AddBudget> {
           BlocProvider.of<BudgetBloc>(context)..add(UpdateBudget(budget, id));
           showSuccessSnackbar(context, "Sửa kinh phí thành công");
           Navigator.pop(context);
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('có lỗi xảy ra'),
-            ),
-          );
+
+        } else if (selectedCate == null) {
+          showFailedSnackbar(context, "Thư mục không thể trống");
+        } else if (budget.budgetName == null) {
+          showFailedSnackbar(context, "Tên quỹ không thể trống");
         }
       } else if (isEditing != true) {
         bool _isSet = false;
@@ -440,13 +464,12 @@ class _AddBudgetState extends State<AddBudget> {
           BlocProvider.of<BudgetBloc>(context).add(CreateBudget(id, budget));
           showSuccessSnackbar(context, "Thêm kinh phí thành công");
           Navigator.pop(context);
+
           _isSet = true;
-        } else if (_isSet == false) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('có lỗi xảy ra'),
-            ),
-          );
+        } else if (selectedCate == null && _isSet == false) {
+          showFailedSnackbar(context, "Thư mục không thể trống");
+        } else if (budgetNameController.text == null && _isSet == false) {
+          showFailedSnackbar(context, "Tên quỹ không thể trống");
         }
       }
     }

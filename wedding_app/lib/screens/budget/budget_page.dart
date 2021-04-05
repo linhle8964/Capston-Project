@@ -77,6 +77,7 @@ class _BudgetListState extends State<BudgetList> {
 
   @override
   void initState() {
+
     wedBudget1 = 0;
     sum = 0;
     _iSDone = true;
@@ -233,12 +234,13 @@ class _BudgetListState extends State<BudgetList> {
     return FutureBuilder(
       future: getWeddingId(),
       builder: (context, snapshot) {
+        print("test " +snapshot.hasData.toString());
         if (snapshot.hasData) {
           weddingID = snapshot.data;
           BlocProvider.of<CateBloc>(context).add(LoadTodos());
-          BlocProvider.of<BudgetBloc>(context)
-              .add(GetAllBudget(weddingID));
+          BlocProvider.of<BudgetBloc>(context).add(GetAllBudget(weddingID));
         }
+
         return Scaffold(
           appBar: AppBar(
             centerTitle: true,
@@ -286,6 +288,7 @@ class _BudgetListState extends State<BudgetList> {
                             BlocBuilder(
                                 cubit: BlocProvider.of<BudgetBloc>(context),
                                 builder: (context, state) {
+
                                   if (state is BudgetLoaded) {
                                     sum = 0;
                                     _budgets = state.budgets;
@@ -294,17 +297,14 @@ class _BudgetListState extends State<BudgetList> {
                                       sum += (_budgets[i].money -
                                           _budgets[i].payMoney);
                                     }
-                                    wedBudget1=sum;
-                                      return Visibility(
-                                          visible: _iSDone,
-                                          child: Text(
-                                              _formatNumber(sum.toString()) +
-                                                  "₫",
-                                              style: TextStyle(
-                                                  fontWeight:
-                                                      FontWeight.bold)));
-                                      ;
-
+                                    wedBudget1 = sum;
+                                    return Visibility(
+                                        visible: _iSDone,
+                                        child: Text(
+                                            _formatNumber(sum.toString()) + "₫",
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold)));
+                                    ;
                                   }
                                   if (state is BudgetLoading) {
                                     return Column(

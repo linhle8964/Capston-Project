@@ -199,7 +199,7 @@ class Detail extends StatelessWidget {
                                     height: 4,
                                   ),
                                   Text(
-                                    property.cateID,
+                                    property.location,
                                     style: TextStyle(
                                       fontSize: 18,
                                       color: Colors.grey[500],

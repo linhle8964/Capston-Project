@@ -4,6 +4,7 @@ import 'package:wedding_app/bloc/invitation_card/bloc.dart';
 import 'package:wedding_app/bloc/vendor/bloc.dart';
 import 'package:wedding_app/firebase_repository/inviattion_card_firebase_repository.dart';
 import 'package:wedding_app/firebase_repository/vendor_firebase_repository.dart';
+import 'package:wedding_app/screens/budget/budget_page.dart';
 import 'package:wedding_app/screens/choose_template_invitation/chooseTemplate_page.dart';
 
 import 'package:wedding_app/bloc/budget/bloc.dart';
@@ -216,6 +217,28 @@ class MyApp extends StatelessWidget {
                 create: (BuildContext context) =>
                     ResetPasswordBloc(userRepository: FirebaseUserRepository()),
                 child: ResetPasswordPage(),
+              );
+            },
+            "/budget_list": (context) {
+              return MultiBlocProvider(
+                providers: [
+                  BlocProvider<BudgetBloc>(
+                    create: (BuildContext context) => BudgetBloc(
+                      budgetRepository: FirebaseBudgetRepository(),
+                    ),
+                  ),
+                  BlocProvider<VendorBloc>(
+                    create: (BuildContext context) => VendorBloc(
+                        todosRepository: FirebaseVendorRepository()
+                    ),
+                  ),
+                  BlocProvider<CateBloc>(
+                    create: (BuildContext context) => CateBloc(
+                      todosRepository: FirebaseCategoryRepository(),
+                    ),
+                  ),
+                ],
+                child: BudgetList(),
               );
             },
             "/privacy_policy": (context) {
