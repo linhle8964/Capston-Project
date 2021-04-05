@@ -189,17 +189,17 @@ class _ChecklistPageState extends State<ChecklistPage>
           Text("Bạn có muốn lưu lại danh sách công việc dưới dạng file excel?"),
       actions: [
         TextButton(
-            style: TextButton.styleFrom(primary: hexToColor("#d86a77")),
-            child: Text("Có"),
+            style: TextButton.styleFrom(backgroundColor: hexToColor("#d86a77")),
+            child: Text("Có",style: TextStyle(color: Colors.white),),
             onPressed: () {
               Navigator.of(_containerKey.currentContext).pop();
               downloadFile(tasks, context);
             }),
         TextButton(
             style: TextButton.styleFrom(
-              primary: hexToColor("#d86a77"),
+              backgroundColor: hexToColor("#d86a77"),
             ),
-            child: Text("Không"),
+            child: Text("Không",style: TextStyle(color: Colors.white),),
             onPressed: () {
               Navigator.of(_containerKey.currentContext).pop();
             }),
