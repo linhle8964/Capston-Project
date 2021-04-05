@@ -92,7 +92,7 @@ class _SettingPageState extends State<SettingPage> {
                     barrierDismissible: false,
                     builder: (ctx) => PersonDetailsDialog(
                           message:
-                              "Bạn là người dùng còn lại duy nhất trong đám cưới. Nếu bạn rời thì đám cưới sẽ bị xóa. Bạn có muốn rời?",
+                              "Bạn là Admin còn lại duy nhất trong đám cưới. Nếu bạn rời thì đám cưới sẽ bị xóa. Bạn có muốn rời?",
                           onPressedFunction: () async {
                             SharedPreferences preferences =
                                 await SharedPreferences.getInstance();
