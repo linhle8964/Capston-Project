@@ -18,7 +18,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class VendorDetailPage extends StatelessWidget {
   final bool isEditing;
   final Vendor vendor;
-  const VendorDetailPage({Key key, @required this.isEditing, this.vendor})
+  const VendorDetailPage({Key key,  this.isEditing, this.vendor})
       : super(key: key);
 
   @override
@@ -35,7 +35,29 @@ class VendorDetailPage extends StatelessWidget {
         builder: (context) => BlocBuilder(
             cubit: BlocProvider.of<VendorBloc>(context),
             builder: (context, state) {
-              if (state is VendorLoaded) {
+              if(isEditing == false){
+                return WillPopScope(
+                      onWillPop: () async => false,
+                      child: Scaffold(
+                        backgroundColor: Colors.grey[100],
+                        body: ScreenTypeLayout(
+                          mobile: VendorDetailMobilePage(
+                            
+                            isEditing: true,
+                          ),
+                          tablet: VendorDetailMobilePage(
+                            
+                            isEditing: true,
+                          ),
+                          desktop: VendorDetailDesktopPage(
+                          
+                            isEditing: true,
+                          ),
+                        ),
+                      ),
+                    );
+              }else{
+                  if (state is VendorLoaded) {
                 if (vendor.label == "") {
                   Vendor _vendor;
                   for (int i = 0; i < state.vendors.length; i++) {
@@ -73,8 +95,7 @@ class VendorDetailPage extends StatelessWidget {
                 onWillPop: () async => false,
                 child: Scaffold(
                   backgroundColor: Colors.grey[100],
-                  body: CenteredView(
-                    child: ScreenTypeLayout(
+                  body: ScreenTypeLayout(
                       mobile: VendorDetailMobilePage(
                             vendor: vendor,
                             isEditing: true,
@@ -88,7 +109,7 @@ class VendorDetailPage extends StatelessWidget {
                             isEditing: true,
                           ),
                     ),
-                  ),
+                  
                 ),
               );
               }
@@ -98,7 +119,10 @@ class VendorDetailPage extends StatelessWidget {
                   "/favicon-32x32.png",
                 ),),
               );
-            }),
+              }
+              
+            }
+            ),
       ),
     );
   }

@@ -6,6 +6,7 @@ import 'package:flutter_web_diary/model/vendor.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_web_diary/screen/vendor/filter.dart';
 import 'package:flutter_web_diary/screen/vendor/detail.dart';
+import 'package:flutter_web_diary/screen/views/addVendor/add_vendor_page.dart';
 import 'package:flutter_web_diary/screen/views/allvendor/all_vendor_page.dart';
 import 'package:flutter_web_diary/screen/views/detail/vendor_detail_mobile.dart';
 import 'package:flutter_web_diary/screen/views/detail/vendor_detail_page.dart';
@@ -13,11 +14,16 @@ import 'package:flutter_web_diary/util/hex_color.dart';
 import 'package:search_page/search_page.dart';
 
 class AllVendorPageMobile extends StatefulWidget {
+  final ValueChanged<Vendor> onTapped;
+  final ValueChanged<bool> onAdd;
+   AllVendorPageMobile({Key key,@required this.onTapped,this.onAdd}) : super(key: key);
   @override
   _AllVendorPageMobileState createState() => _AllVendorPageMobileState();
 }
 
 class _AllVendorPageMobileState extends State<AllVendorPageMobile> {
+  ValueChanged<Vendor> get onTapped => widget.onTapped;
+  ValueChanged<bool> get onAdd => widget.onAdd;
   List<Vendor> properties = [];
   List<Category> _categorys = [];
   String _defaultChoiceIndex = "";
@@ -136,11 +142,12 @@ class _AllVendorPageMobileState extends State<AllVendorPageMobile> {
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => {
-           Navigator.push(
+        onPressed: () {
+          onAdd(true);
+          Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => VendorDetailPage(isEditing: false)),
-        )
+          MaterialPageRoute(builder: (context) => AddVendorPage()),
+        );
         },
         label: Text('Thêm dịch vụ'),
         icon: Icon(Icons.add),
@@ -200,6 +207,7 @@ class _AllVendorPageMobileState extends State<AllVendorPageMobile> {
   Widget buildProperty(Vendor property) {
     return GestureDetector(
       onTap: () {
+        onTapped(property);
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => VendorDetailPage(isEditing: true,vendor: property,)),

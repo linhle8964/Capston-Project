@@ -13,6 +13,7 @@ import 'package:flutter_web_diary/model/user_wedding.dart';
 import 'package:flutter_web_diary/model/vendor.dart';
 import 'package:flutter_web_diary/model/wedding.dart';
 import 'package:flutter_web_diary/screen/vendor/detail.dart';
+import 'package:flutter_web_diary/screen/views/addVendor/add_vendor_page.dart';
 import 'package:flutter_web_diary/screen/views/allvendor/all_vendor_page.dart';
 import 'package:flutter_web_diary/screen/views/detail/vendor_detail_page.dart';
 import 'package:flutter_web_diary/screen/views/error/error_page.dart';
@@ -33,17 +34,17 @@ class AdminVendorRouterDelegate extends RouterDelegate<AdminVendorRoutePath>
   //String _selectedVendorID;
   bool show404 = false;
   bool showDone = false;
+  bool add = false;
   bool login = false;
-
   void _handleTap(Vendor vendor) {
-    _selectedVendor = vendor;
+    _selectedVendor = Vendor(vendor.label, vendor.name,vendor.cateID ,vendor.location,vendor.description,vendor.frontImage,vendor.ownerImage,vendor.email,vendor.phone,id: vendor.id);
     notifyListeners();
   }
-
-  void _tapSubmitSuccess(bool b) {
-    showDone = b;
+  void _handleAdd(bool add1){
+    add = add1;
     notifyListeners();
   }
+  
 
   @override
   GlobalKey<NavigatorState> get navigatorKey => GlobalKey<NavigatorState>();
@@ -51,9 +52,9 @@ class AdminVendorRouterDelegate extends RouterDelegate<AdminVendorRoutePath>
   @override
   AdminVendorRoutePath get currentConfiguration {
     if (show404) return AdminVendorRoutePath.unknown();
-    //if (showDone) return WeddingGuestRoutePath.Done();
-    if (_selectedUser == null && _selectedVendor == null) return AdminVendorRoutePath.Login();
-    if (_selectedUser != null && _selectedVendor == null) return AdminVendorRoutePath.AllVendor(_selectedUser.id);
+    if (_selectedUser != null && add) return AdminVendorRoutePath.add(_selectedUser.id);
+    if (_selectedUser == null && _selectedVendor == null) return AdminVendorRoutePath.login();
+    if (_selectedUser != null && _selectedVendor == null) return AdminVendorRoutePath.allVendor(_selectedUser.id);
     if (_selectedUser != null && _selectedVendor != null)
       return AdminVendorRoutePath.inputDetails(_selectedUser.id, _selectedVendor.id);
   }
@@ -88,11 +89,16 @@ class AdminVendorRouterDelegate extends RouterDelegate<AdminVendorRoutePath>
                 key: ValueKey('Login'),
                 child: LoginPage()
               )
-            else if (_selectedUser != null && _selectedVendor == null)
+            else if (_selectedUser != null && _selectedVendor == null && add)            
+                MaterialPage(
+                  key: ValueKey('AddVendor'),
+                  child: AddVendorPage(),
+                )
+            else if(_selectedUser != null && _selectedVendor == null && !add)
                 MaterialPage(
                   key: ValueKey('AllVendor'),
-                  child: AllVendorPage()
-                )
+                  child: AllVendorPage(onTapped: _handleTap,onAdd: _handleAdd,)
+                )                                
             else if (_selectedUser != null && _selectedVendor != null)
                 MaterialPage(
                     key: ValueKey('inputDetails'),
@@ -106,7 +112,7 @@ class AdminVendorRouterDelegate extends RouterDelegate<AdminVendorRoutePath>
           _selectedVendor = null;
           _selectedUser = null;
           show404 = false;
-          showDone = false;
+          add = false;
           notifyListeners();
           return true;
         },
@@ -143,13 +149,13 @@ class AdminVendorRouterDelegate extends RouterDelegate<AdminVendorRoutePath>
       return;
     }
 
-    if (path.isDone) {
-      showDone = true;
+    if (path.isAdd) {
+      add = true;
       return;
     }
 
 
-    show404 = false;
+    add = false;
     showDone = false;
   }
 

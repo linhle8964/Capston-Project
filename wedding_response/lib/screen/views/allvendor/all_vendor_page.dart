@@ -4,6 +4,7 @@ import 'package:flutter_web_diary/bloc/authentication/bloc.dart';
 import 'package:flutter_web_diary/bloc/login/bloc.dart';
 import 'package:flutter_web_diary/bloc/vendor/bloc.dart';
 import 'package:flutter_web_diary/firebase_repository/vendor_firebase_repository.dart';
+import 'package:flutter_web_diary/model/vendor.dart';
 import 'package:flutter_web_diary/screen/views/allvendor/all_vendor_desktop.dart';
 import 'package:flutter_web_diary/screen/views/allvendor/all_vendor_mobile.dart';
 import 'package:flutter_web_diary/screen/widgets/centered_view/centered_view.dart';
@@ -11,7 +12,9 @@ import 'package:responsive_builder/responsive_builder.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AllVendorPage extends StatelessWidget {
-
+  final ValueChanged<Vendor> onTapped;
+  final ValueChanged<bool> onAdd;
+   AllVendorPage({Key key, this.onTapped, this.onAdd}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,9 +30,9 @@ class AllVendorPage extends StatelessWidget {
             child: Scaffold(
               backgroundColor: Colors.grey[100],
               body:  ScreenTypeLayout(
-                  mobile: AllVendorPageMobile(),
-                  tablet: AllVendorPageMobile(),
-                  desktop: CenteredView(child:AllVendorPageDesktop(),)
+                  mobile: AllVendorPageMobile(onTapped: onTapped,onAdd: onAdd,),
+                  tablet: AllVendorPageMobile(onTapped: onTapped,onAdd: onAdd),
+                  desktop: CenteredView(child:AllVendorPageDesktop(onTapped: onTapped,onAdd: onAdd),)
                   
                 ),
               

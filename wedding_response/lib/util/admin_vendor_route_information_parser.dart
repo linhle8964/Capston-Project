@@ -8,28 +8,38 @@ class AdminVendorRouteInformationParser extends RouteInformationParser<AdminVend
     final uri = Uri.parse(routeInfo.location);
     // Handle '/'
     if (uri.pathSegments.length == 0 ) {
-      return AdminVendorRoutePath.Login();
+      return AdminVendorRoutePath.login();
     }
     // Handle '/login'
     if (uri.pathSegments.length == 1 && uri.pathSegments.first != 'admin') {
       final login = uri.pathSegments.first;
       if (login == null) return AdminVendorRoutePath.unknown();
       if(login != "login" ) return  AdminVendorRoutePath.unknown();
-      return AdminVendorRoutePath.Login();
+      return AdminVendorRoutePath.login();
     }
     // Handle '/admin'
     if (uri.pathSegments.length == 1 && uri.pathSegments.first != 'login') {
       final admin = uri.pathSegments.first;
       if (admin == null) return AdminVendorRoutePath.unknown();
       if(admin != 'admin') return  AdminVendorRoutePath.unknown();
-      return  AdminVendorRoutePath.AllVendor(admin);
+      return  AdminVendorRoutePath.allVendor(admin);
     }
     // Handle '/admin/:vendorID'
-    if (uri.pathSegments.length == 2) {
+    if (uri.pathSegments.length == 2 && uri.pathSegments.elementAt(1)!='add') {
       final admin = uri.pathSegments.first;
       final vendorID = uri.pathSegments.elementAt(1);
       if (admin == 'admin' && vendorID !=null) return AdminVendorRoutePath.inputDetails(admin,vendorID);
-      else if (admin == 'admin' && vendorID ==null) return AdminVendorRoutePath.AllVendor(admin);
+      else if (admin == 'admin' && vendorID ==null) return AdminVendorRoutePath.allVendor(admin);
+
+      return AdminVendorRoutePath.unknown();
+    }
+
+    // Handle '/admin/add'
+    if (uri.pathSegments.length == 2 && uri.pathSegments.elementAt(1) =='add')  {
+      final admin = uri.pathSegments.first;
+      final add = uri.pathSegments.elementAt(1);
+      if (admin == 'admin' && add =='add') return AdminVendorRoutePath.add(admin);
+      else if (admin == 'admin' && add ==null) return AdminVendorRoutePath.allVendor(admin);
 
       return AdminVendorRoutePath.unknown();
     }
@@ -51,6 +61,9 @@ class AdminVendorRouteInformationParser extends RouteInformationParser<AdminVend
     }
     if (path.isLoginPage) {
       return RouteInformation(location: '/login');
+    }
+    if(path.isAdd){
+      return RouteInformation(location: '/admin/add');
     }
 
 

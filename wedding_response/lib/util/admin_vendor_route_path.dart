@@ -2,33 +2,32 @@ class AdminVendorRoutePath {
   final String adminID;
   final String vendorID;
   final bool isUnknown;
-  final bool isDone;
+  final bool isAdd;
+  
 
 
-
-  AdminVendorRoutePath.inputDetails(this.adminID, this.vendorID) : isUnknown = false, isDone = false;
-  AdminVendorRoutePath.Login()
+  AdminVendorRoutePath.inputDetails(this.adminID, this.vendorID) : isUnknown = false, isAdd = false;
+  AdminVendorRoutePath.login()
       : adminID = null,
         vendorID = null,
         isUnknown = false,
-        isDone= false;
-  AdminVendorRoutePath.AllVendor(this.adminID)
+        isAdd= false;
+  AdminVendorRoutePath.allVendor(this.adminID)
       :vendorID = null,
         isUnknown = false,
-        isDone= false;
+        isAdd= false;
   AdminVendorRoutePath.unknown()
       : adminID = null,
         vendorID = null,
         isUnknown = true,
-        isDone= false;
+        isAdd= false;
 
-  AdminVendorRoutePath.Done()
-      : adminID = null,
-        vendorID = null,
+  AdminVendorRoutePath.add(this.adminID)
+      : vendorID = null,
         isUnknown = false,
-        isDone= true;
+        isAdd= true;
 
-
+  bool get isAddPage => adminID != null && vendorID == null && isAdd == true;
   bool get isLoginPage => adminID == null && vendorID == null && isUnknown == false;
 
   bool get isInputDetailsPage => adminID != null && vendorID != null;
