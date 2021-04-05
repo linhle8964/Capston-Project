@@ -58,7 +58,7 @@ class _BudgetListState extends State<BudgetList> {
             }),
         TextButton(
             style: TextButton.styleFrom(
-              primary: hexToColor("#d86a77"),
+              backgroundColor: hexToColor("#d86a77"),
             ),
             child: Text("Không",style: TextStyle(color: Colors.white),),
             onPressed: () {
