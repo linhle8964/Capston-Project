@@ -192,8 +192,6 @@ downloadFile(List<Guest> guests, BuildContext context, String role) async {
         dataCell7.value = dataList[7];
       }
     }
-
-
     bool downloaded = await savefile(
         excel, 'Guest_${DateTime.now().microsecondsSinceEpoch}.xlsx');
     if (downloaded) {
