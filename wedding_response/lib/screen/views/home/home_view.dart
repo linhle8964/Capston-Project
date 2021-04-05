@@ -43,22 +43,33 @@ class HomeView extends StatelessWidget {
               if(state is WeddingLoaded){
                 weddings.clear();
                 weddings = state.weddings;
-                if(weddings.contains(selectedWedding)){
-                  globleweddingID = selectedWedding.id;
-                  return WillPopScope(
-                    onWillPop: () async => false,
-                    child: Scaffold(
-                      backgroundColor: Colors.grey[100],
-                      body: CenteredView(
-                        child: ScreenTypeLayout(
-                          mobile: HomeViewTabletMobile(weddingID: selectedWedding.id ,onTapped: onTapped,),
-                          tablet: HomeViewTabletMobile(weddingID: selectedWedding.id,onTapped: onTapped,),
-                          desktop: HomeViewDesktop(weddingID: selectedWedding.id,onTapped: onTapped,),
+                for(int i =0; i< weddings.length;i++){
+                  if(weddings[i].id == selectedWedding.id){
+                    globleweddingID = selectedWedding.id;
+                    if(weddings[i].weddingDate.isAfter(DateTime.now())){
+                      return WillPopScope(
+                        onWillPop: () async => false,
+                        child: Scaffold(
+                          backgroundColor: Colors.grey[100],
+                          body: CenteredView(
+                            child: ScreenTypeLayout(
+                              mobile: HomeViewTabletMobile(weddingID: selectedWedding.id ,onTapped: onTapped,),
+                              tablet: HomeViewTabletMobile(weddingID: selectedWedding.id,onTapped: onTapped,),
+                              desktop: HomeViewDesktop(weddingID: selectedWedding.id,onTapped: onTapped,),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  );}
-                else return UnknownScreen();
+                      );
+                    }else {
+                      return Scaffold(
+                        body: Center(
+                          child: Text('Đám cưới đã diễn ra !!!'),
+                        ),
+                      );
+                    }
+                  }
+                }
+                return UnknownScreen();
               }
               return Container(
                 color:  Colors.grey[100],

@@ -97,9 +97,9 @@ class WeddingGuestRouterDelegate extends RouterDelegate<WeddingGuestRoutePath>
     }
 
     if (path.isRegisterPage) {
-      _selectedWedding = Wedding(path.weddingID);
+      _selectedWedding = Wedding(path.weddingID, null);
     } else if (path.isInputDetailsPage) {
-      _selectedWedding = Wedding(path.weddingID);
+      _selectedWedding = Wedding(path.weddingID, null);
       _selectedGuestID = path.guestID;
     } else {
       _selectedGuestID = null;
