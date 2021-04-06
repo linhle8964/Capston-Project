@@ -27,8 +27,8 @@ class _BudgetListState extends State<BudgetList> {
   bool _isShow = false;
   bool _iSDone = false;
   List<Category> _categorys = [];
-  List<Budget> _list=[];
-  static List<Budget> _budgets = [];
+  static List<Budget> _list = [];
+  List<Budget> _budgets = [];
   double sum = 0;
   double _cateSum = 0;
   String weddingID;
@@ -84,9 +84,9 @@ class _BudgetListState extends State<BudgetList> {
       weddingID = prefs.getString("wedding_id");
     });
     BlocProvider.of<CateBloc>(context).add(LoadTodos());
-    _budgets = [];
     wedBudget1 = 0;
     sum = 0;
+    _list = [];
     _iSDone = true;
     _cateSum = 0;
     pay = 0;
@@ -241,12 +241,9 @@ class _BudgetListState extends State<BudgetList> {
     return BlocBuilder(
       cubit: BlocProvider.of<WeddingBloc>(context),
       builder: (context, state) {
-
         if (state is WeddingLoaded) {
-
           wedBudget = state.wedding.budget;
-          BlocProvider.of<BudgetBloc>(context)
-              .add(GetAllBudget(weddingID));
+
           return Scaffold(
             appBar: AppBar(
               centerTitle: true,
@@ -256,342 +253,790 @@ class _BudgetListState extends State<BudgetList> {
               actions: _buildActions(context, weddingID),
               elevation: 0.0,
             ),
-            body: Stack(
-              alignment: Alignment.center,
-              children: <Widget>[
-                Positioned(
-                    top: 0,
-                    child: ClipPath(
-                      clipper: CustomShape(),
-                      child: Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 200,
+            body: BlocBuilder(
+              cubit: BlocProvider.of<BudgetBloc>(context),
+              builder: (context, state) {
+                if (state is BudgetLoaded) {
+                  _budgets = state.budgets;
+                  return Stack(
+                    alignment: Alignment.center,
+                    children: <Widget>[
+                      Positioned(
+                          top: 0,
+                          child: ClipPath(
+                            clipper: CustomShape(),
+                            child: Container(
+                              width: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .width,
+                              height: 200,
+                            ),
+                          )),
+                      Positioned(
+                        top: 30,
+                        left: 15,
+                        right: 15,
+                        child: Card(
+                          elevation: 8,
+                          color: Colors.white,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Container(
+                            width: MediaQuery
+                                .of(context)
+                                .size
+                                .height * .90,
+                            height: 100,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Icon(
+                                      Icons.account_balance,
+                                      color: Colors.deepPurple,
+                                      size: 45,
+                                    ),
+                                    BlocBuilder(
+                                        cubit: BlocProvider.of<BudgetBloc>(
+                                            context),
+                                        builder: (context, state) {
+                                          if (state is BudgetLoaded) {
+                                            _list = state.budgets;
+                                            sum = 0;
+                                            for (int i = 0;
+                                            i < _budgets.length;
+                                            i++) {
+                                              sum += (_budgets[i].money -
+                                                  _budgets[i].payMoney);
+                                            }
+                                            wedBudget1 = sum;
+                                            return Visibility(
+                                                visible: _iSDone,
+                                                child: Text(
+                                                    _formatNumber(
+                                                        sum.toString()) +
+                                                        "₫",
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                        FontWeight.bold)));
+                                            ;
+                                          }
+                                          if (state is BudgetLoading) {
+                                            return Column(
+                                              children: [
+                                                Expanded(
+                                                    child: Center(
+                                                        child:
+                                                        CircularProgressIndicator())),
+                                              ],
+                                            );
+                                          }
+
+                                          return Container();
+                                        })
+                                  ],
+                                ),
+                                Container(
+                                  height: 100,
+                                  width: 2,
+                                  color: Colors.deepPurple,
+                                ),
+                                BlocBuilder(
+                                    cubit: BlocProvider.of<BudgetBloc>(context),
+                                    builder: (context, state) {
+                                      if (state is BudgetLoaded) {
+                                        pay = 0;
+
+                                        pay = wedBudget;
+                                        return Column(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                          children: <Widget>[
+                                            Icon(
+                                              Icons.account_balance_wallet,
+                                              color: Colors.deepPurple,
+                                              size: 45,
+                                            ),
+                                            BlocBuilder(
+                                                cubit:
+                                                BlocProvider.of<BudgetBloc>(
+                                                    context),
+                                                builder: (context, state) {
+                                                  if (state is BudgetLoaded) {
+                                                    pay = wedBudget;
+                                                    for (int i = 0;
+                                                    i < _budgets.length;
+                                                    i++) {
+                                                      pay -=
+                                                          _budgets[i].payMoney;
+                                                    }
+                                                    return Visibility(
+                                                      visible: _iSDone,
+                                                      child: Text(
+                                                          _formatNumber(pay
+                                                              .toString()) +
+                                                              "₫",
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                              FontWeight
+                                                                  .bold,
+                                                              color: pay < 0
+                                                                  ? Colors.red
+                                                                  : Colors
+                                                                  .black)),
+                                                    );
+                                                  } else if (state
+                                                  is BudgetLoading) {
+                                                    return Column(
+                                                      children: [
+                                                        Expanded(
+                                                            child: Center(
+                                                                child:
+                                                                CircularProgressIndicator())),
+                                                      ],
+                                                    );
+                                                  }
+                                                  return Container();
+                                                })
+                                          ],
+                                        );
+                                      }
+                                      if (state is WeddingLoading) {
+                                        return Column(
+                                          children: [
+                                            Expanded(
+                                                child: Center(
+                                                    child:
+                                                    CircularProgressIndicator())),
+                                          ],
+                                        );
+                                      }
+                                      return Container();
+                                    }),
+                              ],
+                            ),
+                          ),
+                        ),
                       ),
-                    )),
-                Positioned(
-                  top: 30,
-                  left: 15,
-                  right: 15,
-                  child: Card(
-                    elevation: 8,
-                    color: Colors.white,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Container(
-                      width: MediaQuery.of(context).size.height * .90,
-                      height: 100,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: <Widget>[
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Icon(
-                                Icons.account_balance,
-                                color: Colors.deepPurple,
-                                size: 45,
-                              ),
-                              BlocBuilder(
+                      Positioned(
+                        top: 180,
+                        left: 15,
+                        right: 15,
+                        bottom: 15,
+                        child: Container(
+                          child: BlocBuilder(
+                            cubit: BlocProvider.of<CateBloc>(context),
+                            builder: (context, state) {
+                              if (state is TodosLoaded) {
+                                _categorys = state.cates;
+                                return BlocBuilder(
                                   cubit: BlocProvider.of<BudgetBloc>(context),
                                   builder: (context, state) {
-
                                     if (state is BudgetLoaded) {
-                                      _budgets=state.budgets;
-                                      sum = 0;
-                                      for (int i = 0;
-                                          i < _budgets.length;
-                                          i++) {
-                                        sum += (_budgets[i].money -
-                                            _budgets[i].payMoney);
-                                      }
-                                      wedBudget1 = sum;
-                                      return Visibility(
-                                          visible: _iSDone,
-                                          child: Text(
-                                              _formatNumber(sum.toString()) +
-                                                  "₫",
-                                              style: TextStyle(
-                                                  fontWeight:
-                                                      FontWeight.bold)));
-                                      ;
-                                    }
-                                    if (state is BudgetLoading) {
+                                      return ListView.builder(
+                                          itemCount: _categorys.length,
+                                          itemBuilder: (context, index) {
+                                            Category item = _categorys[index];
+                                            _cateSum = 0;
+                                            for (int i = 0;
+                                            i < _budgets.length;
+                                            i++) {
+                                              if (item.id ==
+                                                  _budgets[i].cateID) {
+                                                _cateSum += _budgets[i].money -
+                                                    _budgets[i].payMoney;
+                                              }
+                                            }
+
+                                            return Column(
+                                              children: <Widget>[
+                                                Container(
+                                                  child: ListTile(
+                                                    title: Text(item.cateName +
+                                                        " | " +
+                                                        _formatNumber(_cateSum
+                                                            .toString()) +
+                                                        " ₫"),
+                                                  ),
+                                                ),
+                                                BlocBuilder(
+                                                    cubit: BlocProvider.of<
+                                                        BudgetBloc>(context),
+                                                    builder: (context, state) {
+                                                      if (state
+                                                      is BudgetLoaded) {
+                                                        _budgets =
+                                                            state.budgets;
+                                                        return ListView.builder(
+                                                            shrinkWrap: true,
+                                                            itemCount:
+                                                            _budgets.length,
+                                                            itemBuilder:
+                                                                (context, i) {
+                                                              Budget low =
+                                                              Budget(
+                                                                  "",
+                                                                  "",
+                                                                  false,
+                                                                  1,
+                                                                  1,
+                                                                  1);
+                                                              if (item.id ==
+                                                                  _budgets[i]
+                                                                      .cateID) {
+                                                                low =
+                                                                _budgets[i];
+                                                                _isShow = true;
+                                                              } else {
+                                                                _isShow = false;
+                                                              }
+
+                                                              return Visibility(
+                                                                  visible:
+                                                                  _isShow,
+                                                                  child: InkWell(
+                                                                      onTap: () {
+                                                                        Navigator
+                                                                            .push(
+                                                                          context,
+                                                                          MaterialPageRoute(
+                                                                              builder: (
+                                                                                  _) =>
+                                                                                  BlocProvider
+                                                                                      .value(
+                                                                                    value: BlocProvider
+                                                                                        .of<
+                                                                                        CateBloc>(
+                                                                                        context),
+                                                                                    child: BlocProvider
+                                                                                        .value(
+                                                                                        value: BlocProvider
+                                                                                            .of<
+                                                                                            BudgetBloc>(
+                                                                                            context),
+                                                                                        child: AddBudget(
+                                                                                          isEditing: true,
+                                                                                          budget: low,
+                                                                                        )),
+                                                                                  )),
+                                                                        );
+                                                                      },
+                                                                      child: Card(
+                                                                        child:
+                                                                        Container(
+                                                                          height:
+                                                                          60,
+                                                                          padding: EdgeInsets
+                                                                              .only(
+                                                                              left: 15,
+                                                                              right: 15),
+                                                                          child:
+                                                                          Row(
+                                                                            children: [
+                                                                              Container(
+                                                                                child: Text(
+                                                                                    low
+                                                                                        .budgetName,
+                                                                                    style: TextStyle(
+                                                                                        fontSize: 20,
+                                                                                        fontWeight: FontWeight
+                                                                                            .bold)),
+                                                                              ),
+                                                                              Flexible(
+                                                                                  fit: FlexFit
+                                                                                      .tight,
+                                                                                  child: SizedBox()),
+                                                                              Visibility(
+                                                                                  visible: low
+                                                                                      .payMoney !=
+                                                                                      0 &&
+                                                                                      low
+                                                                                          .isComplete ==
+                                                                                          false,
+                                                                                  child: SizedBox(
+                                                                                    child: Container(
+                                                                                      padding: EdgeInsets
+                                                                                          .only(
+                                                                                          left: 5,
+                                                                                          right: 5,
+                                                                                          top: 3,
+                                                                                          bottom: 3),
+                                                                                      decoration: new BoxDecoration(
+                                                                                        color: Colors
+                                                                                            .redAccent,
+                                                                                        borderRadius: BorderRadius
+                                                                                            .circular(
+                                                                                            16),
+                                                                                      ),
+                                                                                      child: Text(
+                                                                                          "Đã trả một phần",
+                                                                                          style: TextStyle(
+                                                                                              color: Colors
+                                                                                                  .white,
+                                                                                              fontSize: 15,
+                                                                                              fontWeight: FontWeight
+                                                                                                  .normal)),
+                                                                                    ),
+                                                                                  )),
+                                                                              Visibility(
+                                                                                  visible: low
+                                                                                      .isComplete,
+                                                                                  child: SizedBox(
+                                                                                    child: Container(
+                                                                                      padding: EdgeInsets
+                                                                                          .only(
+                                                                                          left: 5,
+                                                                                          right: 5,
+                                                                                          top: 3,
+                                                                                          bottom: 3),
+                                                                                      decoration: new BoxDecoration(
+                                                                                        color: Colors
+                                                                                            .greenAccent,
+                                                                                        borderRadius: BorderRadius
+                                                                                            .circular(
+                                                                                            16),
+                                                                                      ),
+                                                                                      child: Text(
+                                                                                          " Hoàn Thành ",
+                                                                                          style: TextStyle(
+                                                                                              color: Colors
+                                                                                                  .black,
+                                                                                              fontSize: 15,
+                                                                                              fontWeight: FontWeight
+                                                                                                  .normal)),
+                                                                                    ),
+                                                                                  )),
+                                                                              Text(
+                                                                                _formatNumber(
+                                                                                    (low
+                                                                                        .money -
+                                                                                        low
+                                                                                            .payMoney)
+                                                                                        .toString()) +
+                                                                                    "₫",
+                                                                                style: TextStyle(
+                                                                                    fontSize: 20,
+                                                                                    fontWeight: FontWeight
+                                                                                        .bold),
+                                                                              )
+                                                                            ],
+                                                                          ),
+                                                                        ),
+                                                                        //
+                                                                      )));
+                                                            });
+                                                      }
+                                                      if (state
+                                                      is BudgetLoading) {
+                                                        return Column(
+                                                          children: [
+                                                            Expanded(
+                                                                child: Center(
+                                                                    child:
+                                                                    CircularProgressIndicator())),
+                                                          ],
+                                                        );
+                                                      }
+                                                      return Container();
+                                                    }),
+                                              ],
+                                            );
+                                          });
+                                    } else if (state is BudgetLoading) {
                                       return Column(
                                         children: [
                                           Expanded(
                                               child: Center(
                                                   child:
-                                                      CircularProgressIndicator())),
+                                                  CircularProgressIndicator())),
                                         ],
                                       );
                                     }
-
                                     return Container();
-                                  })
-                            ],
-                          ),
-                          Container(
-                            height: 100,
-                            width: 2,
-                            color: Colors.deepPurple,
-                          ),
-                          BlocBuilder(
-                              cubit: BlocProvider.of<BudgetBloc>(context),
-                              builder: (context, state) {
-                                if (state is BudgetLoaded) {
-                                  pay = 0;
-                                  pay = wedBudget;
-                                  return Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Icon(
-                                        Icons.account_balance_wallet,
-                                        color: Colors.deepPurple,
-                                        size: 45,
-                                      ),
-                                      BlocBuilder(
-                                          cubit: BlocProvider.of<BudgetBloc>(
-                                              context),
-                                          builder: (context, state) {
-                                            if (state is BudgetLoaded) {
-                                              pay = wedBudget;
-                                              for (int i = 0;
-                                                  i < _budgets.length;
-                                                  i++) {
-                                                pay -= _budgets[i].payMoney;
-                                              }
-                                              return Visibility(
-                                                visible: _iSDone,
-                                                child: Text(
-                                                    _formatNumber(
-                                                            pay.toString()) +
-                                                        "₫",
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        color: pay < 0
-                                                            ? Colors.red
-                                                            : Colors.black)),
-                                              );
-                                            } else if (state is BudgetLoading) {
-                                              return Column(
-                                                children: [
-                                                  Expanded(
-                                                      child: Center(
-                                                          child:
-                                                              CircularProgressIndicator())),
-                                                ],
-                                              );
-                                            }
-                                            return Container();
-                                          })
-                                    ],
-                                  );
-                                }
-                                if (state is WeddingLoading) {
-                                  return Column(
-                                    children: [
-                                      Expanded(
-                                          child: Center(
-                                              child:
-                                                  CircularProgressIndicator())),
-                                    ],
-                                  );
-                                }
-                                return Container();
-                              }),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                Positioned(
-                  top: 180,
-                  left: 15,
-                  right: 15,
-                  bottom: 15,
-                  child: Container(
-                    child: BlocBuilder(
-                      cubit: BlocProvider.of<CateBloc>(context),
-                      builder: (context, state) {
-                        if (state is TodosLoaded) {
-                          _categorys = state.cates;
-                          return BlocBuilder(
-                            cubit: BlocProvider.of<BudgetBloc>(context),
-                            builder: (context, state) {
-                              if (state is BudgetLoaded) {
-                                return ListView.builder(
-                                    itemCount: _categorys.length,
-                                    itemBuilder: (context, index) {
-                                      Category item = _categorys[index];
-                                      _cateSum = 0;
-                                      for (int i = 0;
-                                          i < _budgets.length;
-                                          i++) {
-                                        if (item.id == _budgets[i].cateID) {
-                                          _cateSum += _budgets[i].money -
-                                              _budgets[i].payMoney;
-                                        }
-                                      }
-
-                                      return Column(
-                                        children: <Widget>[
-                                          Container(
-                                            child: ListTile(
-                                              title: Text(item.cateName +
-                                                  " | " +
-                                                  _formatNumber(
-                                                      _cateSum.toString()) +
-                                                  " ₫"),
-                                            ),
-                                          ),
-                                          BlocBuilder(
-                                              cubit:
-                                                  BlocProvider.of<BudgetBloc>(
-                                                      context),
-                                              builder: (context, state) {
-                                                if (state is BudgetLoaded) {
-                                                  _budgets=state.budgets;
-                                                  return ListView.builder(
-                                                      shrinkWrap: true,
-                                                      itemCount:
-                                                          _budgets.length,
-                                                      itemBuilder:
-                                                          (context, i) {
-                                                        Budget low = Budget("",
-                                                            "", false, 1, 1, 1);
-                                                        if (item.id ==
-                                                            _budgets[i]
-                                                                .cateID) {
-                                                          low = _budgets[i];
-                                                          _isShow = true;
-                                                        } else {
-                                                          _isShow = false;
-                                                        }
-
-                                                        return Visibility(
-                                                            visible: _isShow,
-                                                            child: InkWell(
-                                                                onTap: () {
-                                                                  Navigator
-                                                                      .push(
-                                                                    context,
-                                                                    MaterialPageRoute(
-                                                                        builder: (_) =>
-                                                                            BlocProvider.value(
-                                                                              value: BlocProvider.of<CateBloc>(context),
-                                                                              child: BlocProvider.value(
-                                                                                  value: BlocProvider.of<BudgetBloc>(context),
-                                                                                  child: AddBudget(
-                                                                                    isEditing: true,
-                                                                                    budget: low,
-                                                                                  )),
-                                                                            )),
-                                                                  );
-                                                                },
-                                                                child: Card(
-                                                                  child:
-                                                                      Container(
-                                                                    height: 60,
-                                                                    padding: EdgeInsets.only(
-                                                                        left:
-                                                                            15,
-                                                                        right:
-                                                                            15),
-                                                                    child: Row(
-                                                                      children: [
-                                                                        Container(
-                                                                          child: Text(
-                                                                              low.budgetName,
-                                                                              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                                                                        ),
-                                                                        Flexible(
-                                                                            fit:
-                                                                                FlexFit.tight,
-                                                                            child: SizedBox()),
-                                                                        Visibility(
-                                                                            visible:
-                                                                                low.payMoney != 0 && low.isComplete == false,
-                                                                            child: SizedBox(
-                                                                              child: Container(
-                                                                                padding: EdgeInsets.only(left: 5, right: 5, top: 3, bottom: 3),
-                                                                                decoration: new BoxDecoration(
-                                                                                  color: Colors.redAccent,
-                                                                                  borderRadius: BorderRadius.circular(16),
-                                                                                ),
-                                                                                child: Text("Đã trả một phần", style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.normal)),
-                                                                              ),
-                                                                            )),
-                                                                        Visibility(
-                                                                            visible:
-                                                                                low.isComplete,
-                                                                            child: SizedBox(
-                                                                              child: Container(
-                                                                                padding: EdgeInsets.only(left: 5, right: 5, top: 3, bottom: 3),
-                                                                                decoration: new BoxDecoration(
-                                                                                  color: Colors.greenAccent,
-                                                                                  borderRadius: BorderRadius.circular(16),
-                                                                                ),
-                                                                                child: Text(" Hoàn Thành ", style: TextStyle(color: Colors.black, fontSize: 15, fontWeight: FontWeight.normal)),
-                                                                              ),
-                                                                            )),
-                                                                        Text(
-                                                                          _formatNumber((low.money - low.payMoney).toString()) +
-                                                                              "₫",
-                                                                          style: TextStyle(
-                                                                              fontSize: 20,
-                                                                              fontWeight: FontWeight.bold),
-                                                                        )
-                                                                      ],
-                                                                    ),
-                                                                  ),
-                                                                  //
-                                                                )));
-                                                      });
-                                                }
-                                                if (state is BudgetLoading) {
-                                                  return Column(
-                                                    children: [
-                                                      Expanded(
-                                                          child: Center(
-                                                              child:
-                                                                  CircularProgressIndicator())),
-                                                    ],
-                                                  );
-                                                }
-                                                return Container();
-                                              }),
-                                        ],
-                                      );
-                                    });
-                              } else if (state is BudgetLoading) {
+                                  },
+                                );
+                              } else if (state is TodosLoading) {
                                 return Column(
                                   children: [
                                     Expanded(
                                         child: Center(
                                             child:
-                                                CircularProgressIndicator())),
+                                            CircularProgressIndicator())),
                                   ],
                                 );
                               }
                               return Container();
                             },
-                          );
-                        } else if (state is TodosLoading) {
-                          return Column(
-                            children: [
-                              Expanded(
-                                  child: Center(
-                                      child: CircularProgressIndicator())),
-                            ],
-                          );
-                        }
-                        return Container();
-                      },
-                    ),
-                  ),
-                )
-              ],
+                          ),
+                        ),
+                      )
+                    ],
+                  );
+                }
+                else if (state is BudgetLoading) {
+                  return Column(
+                    children: [
+                      Expanded(
+                          child: Center(child: CircularProgressIndicator())),
+                    ],
+                  );
+                }
+                else{
+
+                  BlocProvider.of<BudgetBloc>(context).add(GetAllBudget(weddingID));
+                  return Stack(
+                    alignment: Alignment.center,
+                    children: <Widget>[
+                      Positioned(
+                          top: 0,
+                          child: ClipPath(
+                            clipper: CustomShape(),
+                            child: Container(
+                              width: MediaQuery.of(context).size.width,
+                              height: 200,
+                            ),
+                          )),
+                      Positioned(
+                        top: 30,
+                        left: 15,
+                        right: 15,
+                        child: Card(
+                          elevation: 8,
+                          color: Colors.white,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Container(
+                            width: MediaQuery.of(context).size.height * .90,
+                            height: 100,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: <Widget>[
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Icon(
+                                      Icons.account_balance,
+                                      color: Colors.deepPurple,
+                                      size: 45,
+                                    ),
+                                    BlocBuilder(
+                                        cubit: BlocProvider.of<BudgetBloc>(
+                                            context),
+                                        builder: (context, state) {
+                                          if (state is BudgetLoaded) {
+
+                                            _list = state.budgets;
+                                            sum = 0;
+                                            for (int i = 0;
+                                            i < _budgets.length;
+                                            i++) {
+                                              sum += (_budgets[i].money -
+                                                  _budgets[i].payMoney);
+                                            }
+                                            wedBudget1 = sum;
+                                            return Visibility(
+                                                visible: _iSDone,
+                                                child: Text(
+                                                    _formatNumber(
+                                                        sum.toString()) +
+                                                        "₫",
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                        FontWeight.bold)));
+                                            ;
+                                          }
+                                          if (state is BudgetLoading) {
+                                            return Column(
+                                              children: [
+                                                Expanded(
+                                                    child: Center(
+                                                        child:
+                                                        CircularProgressIndicator())),
+                                              ],
+                                            );
+                                          }
+
+                                          return Container();
+                                        })
+                                  ],
+                                ),
+                                Container(
+                                  height: 100,
+                                  width: 2,
+                                  color: Colors.deepPurple,
+                                ),
+                                BlocBuilder(
+                                    cubit: BlocProvider.of<BudgetBloc>(context),
+                                    builder: (context, state) {
+                                      if (state is BudgetLoaded) {
+                                        pay = 0;
+
+                                        pay = wedBudget;
+                                        return Column(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                          children: <Widget>[
+                                            Icon(
+                                              Icons.account_balance_wallet,
+                                              color: Colors.deepPurple,
+                                              size: 45,
+                                            ),
+                                            BlocBuilder(
+                                                cubit:
+                                                BlocProvider.of<BudgetBloc>(
+                                                    context),
+                                                builder: (context, state) {
+                                                  if (state is BudgetLoaded) {
+                                                    pay = wedBudget;
+                                                    for (int i = 0;
+                                                    i < _budgets.length;
+                                                    i++) {
+                                                      pay -=
+                                                          _budgets[i].payMoney;
+                                                    }
+                                                    return Visibility(
+                                                      visible: _iSDone,
+                                                      child: Text(
+                                                          _formatNumber(pay
+                                                              .toString()) +
+                                                              "₫",
+                                                          style: TextStyle(
+                                                              fontWeight:
+                                                              FontWeight
+                                                                  .bold,
+                                                              color: pay < 0
+                                                                  ? Colors.red
+                                                                  : Colors
+                                                                  .black)),
+                                                    );
+                                                  } else if (state
+                                                  is BudgetLoading) {
+                                                    return Column(
+                                                      children: [
+                                                        Expanded(
+                                                            child: Center(
+                                                                child:
+                                                                CircularProgressIndicator())),
+                                                      ],
+                                                    );
+                                                  }
+                                                  return Container();
+                                                })
+                                          ],
+                                        );
+                                      }
+                                      if (state is WeddingLoading) {
+                                        return Column(
+                                          children: [
+                                            Expanded(
+                                                child: Center(
+                                                    child:
+                                                    CircularProgressIndicator())),
+                                          ],
+                                        );
+                                      }
+                                      return Container();
+                                    }),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        top: 180,
+                        left: 15,
+                        right: 15,
+                        bottom: 15,
+                        child: Container(
+                          child: BlocBuilder(
+                            cubit: BlocProvider.of<CateBloc>(context),
+                            builder: (context, state) {
+                              if (state is TodosLoaded) {
+                                _categorys = state.cates;
+                                return BlocBuilder(
+                                  cubit: BlocProvider.of<BudgetBloc>(context),
+                                  builder: (context, state) {
+                                    if (state is BudgetLoaded) {
+                                      return ListView.builder(
+                                          itemCount: _categorys.length,
+                                          itemBuilder: (context, index) {
+                                            Category item = _categorys[index];
+                                            _cateSum = 0;
+                                            for (int i = 0;
+                                            i < _budgets.length;
+                                            i++) {
+                                              if (item.id ==
+                                                  _budgets[i].cateID) {
+                                                _cateSum += _budgets[i].money -
+                                                    _budgets[i].payMoney;
+                                              }
+                                            }
+
+                                            return Column(
+                                              children: <Widget>[
+                                                Container(
+                                                  child: ListTile(
+                                                    title: Text(item.cateName +
+                                                        " | " +
+                                                        _formatNumber(_cateSum
+                                                            .toString()) +
+                                                        " ₫"),
+                                                  ),
+                                                ),
+                                                BlocBuilder(
+                                                    cubit: BlocProvider.of<
+                                                        BudgetBloc>(context),
+                                                    builder: (context, state) {
+                                                      if (state
+                                                      is BudgetLoaded) {
+                                                        _budgets =
+                                                            state.budgets;
+                                                        return ListView.builder(
+                                                            shrinkWrap: true,
+                                                            itemCount:
+                                                            _budgets.length,
+                                                            itemBuilder:
+                                                                (context, i) {
+                                                              Budget low =
+                                                              Budget(
+                                                                  "",
+                                                                  "",
+                                                                  false,
+                                                                  1,
+                                                                  1,
+                                                                  1);
+                                                              if (item.id ==
+                                                                  _budgets[i]
+                                                                      .cateID) {
+                                                                low =
+                                                                _budgets[i];
+                                                                _isShow = true;
+                                                              } else {
+                                                                _isShow = false;
+                                                              }
+
+                                                              return Visibility(
+                                                                  visible:
+                                                                  _isShow,
+                                                                  child: InkWell(
+                                                                      onTap: () {
+                                                                        Navigator
+                                                                            .push(
+                                                                          context,
+                                                                          MaterialPageRoute(
+                                                                              builder: (_) => BlocProvider.value(
+                                                                                value: BlocProvider.of<CateBloc>(context),
+                                                                                child: BlocProvider.value(
+                                                                                    value: BlocProvider.of<BudgetBloc>(context),
+                                                                                    child: AddBudget(
+                                                                                      isEditing: true,
+                                                                                      budget: low,
+                                                                                    )),
+                                                                              )),
+                                                                        );
+                                                                      },
+                                                                      child: Card(
+                                                                        child:
+                                                                        Container(
+                                                                          height:
+                                                                          60,
+                                                                          padding: EdgeInsets.only(
+                                                                              left: 15,
+                                                                              right: 15),
+                                                                          child:
+                                                                          Row(
+                                                                            children: [
+                                                                              Container(
+                                                                                child: Text(low.budgetName, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                                                                              ),
+                                                                              Flexible(fit: FlexFit.tight, child: SizedBox()),
+                                                                              Visibility(
+                                                                                  visible: low.payMoney != 0 && low.isComplete == false,
+                                                                                  child: SizedBox(
+                                                                                    child: Container(
+                                                                                      padding: EdgeInsets.only(left: 5, right: 5, top: 3, bottom: 3),
+                                                                                      decoration: new BoxDecoration(
+                                                                                        color: Colors.redAccent,
+                                                                                        borderRadius: BorderRadius.circular(16),
+                                                                                      ),
+                                                                                      child: Text("Đã trả một phần", style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.normal)),
+                                                                                    ),
+                                                                                  )),
+                                                                              Visibility(
+                                                                                  visible: low.isComplete,
+                                                                                  child: SizedBox(
+                                                                                    child: Container(
+                                                                                      padding: EdgeInsets.only(left: 5, right: 5, top: 3, bottom: 3),
+                                                                                      decoration: new BoxDecoration(
+                                                                                        color: Colors.greenAccent,
+                                                                                        borderRadius: BorderRadius.circular(16),
+                                                                                      ),
+                                                                                      child: Text(" Hoàn Thành ", style: TextStyle(color: Colors.black, fontSize: 15, fontWeight: FontWeight.normal)),
+                                                                                    ),
+                                                                                  )),
+                                                                              Text(
+                                                                                _formatNumber((low.money - low.payMoney).toString()) + "₫",
+                                                                                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                                                                              )
+                                                                            ],
+                                                                          ),
+                                                                        ),
+                                                                        //
+                                                                      )));
+                                                            });
+                                                      }
+                                                      if (state
+                                                      is BudgetLoading) {
+                                                        return Column(
+                                                          children: [
+                                                            Expanded(
+                                                                child: Center(
+                                                                    child:
+                                                                    CircularProgressIndicator())),
+                                                          ],
+                                                        );
+                                                      }
+                                                      return Container();
+                                                    }),
+                                              ],
+                                            );
+                                          });
+                                    } else if (state is BudgetLoading) {
+                                      return Column(
+                                        children: [
+                                          Expanded(
+                                              child: Center(
+                                                  child:
+                                                  CircularProgressIndicator())),
+                                        ],
+                                      );
+                                    }
+                                    return Container();
+                                  },
+                                );
+                              } else if (state is TodosLoading) {
+                                return Column(
+                                  children: [
+                                    Expanded(
+                                        child: Center(
+                                            child:
+                                            CircularProgressIndicator())),
+                                  ],
+                                );
+                              }
+                              return Container();
+                            },
+                          ),
+                        ),
+                      )
+                    ],
+                  );
+                }
+
+              },
             ),
             floatingActionButton: FloatingActionButton(
               onPressed: () {
