@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_web_diary/bloc/authentication/bloc.dart';
 import 'package:flutter_web_diary/bloc/login/bloc.dart';
 import 'package:flutter_web_diary/firebase_repository/user_firebase_repository.dart';
+import 'package:flutter_web_diary/screen/views/allvendor/all_vendor_page.dart';
 
 import 'package:flutter_web_diary/screen/views/error/error_page.dart';
 import 'package:flutter_web_diary/screen/views/login/login_page_desktop.dart';
@@ -36,7 +37,10 @@ class LoginPage extends StatelessWidget {
           if (state.isSuccess) {
             FocusScope.of(context).unfocus();
             showSuccessSnackbar(context, state.message);
-            BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AllVendorPage()),
+            );
           }
           if (state.isFailure) {
             FocusScope.of(context).unfocus();

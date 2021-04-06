@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_web_diary/bloc/login/bloc.dart';
 import 'package:flutter_web_diary/bloc/authentication/bloc.dart';
 import 'package:flutter_web_diary/firebase_repository/user_firebase_repository.dart';
+import 'package:flutter_web_diary/screen/views/allvendor/all_vendor_page.dart';
 import 'package:flutter_web_diary/util/show_snackbar.dart';
 import 'package:flutter_web_diary/util/alert_dialog.dart';
 
@@ -55,7 +56,10 @@ class _LoginPageMobileState extends State<LoginPageMobile> {
               if (state.isSuccess) {
                 FocusScope.of(context).unfocus();
                 showSuccessSnackbar(context, state.message);
-                BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
+               Navigator.push(
+                 context,
+                  MaterialPageRoute(builder: (context) => AllVendorPage()),
+              );
               }
               if (state.isFailure) {
                 FocusScope.of(context).unfocus();
@@ -163,46 +167,7 @@ class _LoginPageMobileState extends State<LoginPageMobile> {
                                 ),
                               ),
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 20, 0, 10),
-                            child: Container(
-                              height: 20,
-                              width: double.infinity,
-                              child: new InkWell(
-                                onTap: () {
-                                  Navigator.pushNamed(context, '/register');
-                                },
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      'Chưa có tài khoản? Đăng Kí ngay',
-                                      style: TextStyle(
-                                          color: Colors.blue, fontSize: 16),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                            child: Container(
-                              height: 20,
-                              width: double.infinity,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  Text(
-                                    "Quên Mật Khẩu?",
-                                    style:
-                                    TextStyle(fontSize: 15, color: Colors.blue),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
+                          ),                                               
                         ],
                       ),
                     );
