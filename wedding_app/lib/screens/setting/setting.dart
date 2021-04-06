@@ -131,6 +131,9 @@ class _SettingPageState extends State<SettingPage> {
               child: IntrinsicHeight(
                 child: Column(
                   children: <Widget>[
+                    SettingItem((){
+                      Navigator.pushNamed(context, "/budget_list");
+                    },"test"),
                     SettingItem(
                         () async => Navigator.pushNamed(
                             context, "/create_wedding",
