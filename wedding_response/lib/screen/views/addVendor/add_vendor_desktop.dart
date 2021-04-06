@@ -178,7 +178,7 @@ class _AddVendorDesktopPageState extends State<AddVendorDesktopPage> {
                             Container(
                                 padding: EdgeInsets.only(
                                     left: 20, right: 20, bottom: 20),
-                                width: queryData.size.width / 2,
+                                width: queryData.size.width / 3.2,
                                 child: TextFormField(
                                     controller: labelController,
                                     validator: (val) {
@@ -204,7 +204,7 @@ class _AddVendorDesktopPageState extends State<AddVendorDesktopPage> {
                             Container(
                                 padding: EdgeInsets.only(
                                     left: 20, right: 20, bottom: 20),
-                                width: queryData.size.width / 2,
+                                width: queryData.size.width / 3.2,
                                 child: TextFormField(
                                     controller: phoneController,
                                     validator: (val) {

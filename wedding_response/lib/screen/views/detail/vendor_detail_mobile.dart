@@ -694,38 +694,7 @@ class _VendorDetailMobilePageState extends State<VendorDetailMobilePage> {
             ),
           );
         }
-      } else if (isEditing != true) {
-        bool _isSet = false;
-
-        if (selectedCate != null &&
-            selectedCate.cateName.trim().isNotEmpty &&
-            labelController.text.trim().isNotEmpty &&
-            vendorNameController.text.trim().isNotEmpty &&
-            locationController.text.trim().isNotEmpty &&
-            descriptionController.text.trim().isNotEmpty &&
-            phoneController.text.trim().isNotEmpty &&
-            emailController.text.trim().isNotEmpty) {
-          Vendor vendor = new Vendor(
-              labelController.text,
-              vendorNameController.text,
-              selectedCate == null ? initialCate.id : selectedCate.id,
-              locationController.text,
-              descriptionController.text,
-              frontImageUrl,
-              ownerImageUrl,
-              emailController.text,
-              phoneController.text);
-          BlocProvider.of<VendorBloc>(context).add(AddVendor(vendor));
-          Navigator.pop(context);
-          _isSet = true;
-        } else if (_isSet == false) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('có lỗi xảy ra'),
-            ),
-          );
-        }
-      }
+      } 
     }
   }
 }

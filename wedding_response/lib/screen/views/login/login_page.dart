@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_web_diary/bloc/authentication/bloc.dart';
 import 'package:flutter_web_diary/bloc/login/bloc.dart';
 import 'package:flutter_web_diary/firebase_repository/user_firebase_repository.dart';
+import 'package:flutter_web_diary/firebase_repository/user_wedding_firebase_repository.dart';
+import 'package:flutter_web_diary/model/vendor.dart';
 import 'package:flutter_web_diary/screen/views/allvendor/all_vendor_page.dart';
 
 import 'package:flutter_web_diary/screen/views/error/error_page.dart';
@@ -16,14 +18,17 @@ import 'package:responsive_builder/responsive_builder.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LoginPage extends StatelessWidget {
-
-
+  final ValueChanged<Vendor> onTapped;
+  final ValueChanged<bool> onAdd;
+  final ValueChanged<bool> onlogin;
+   LoginPage({Key key, this.onTapped, this.onAdd,this.onlogin}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
         BlocProvider<LoginBloc>(
             create: (BuildContext context) => LoginBloc(
+              userWeddingRepository: FirebaseUserWeddingRepository(),
               userRepository: FirebaseUserRepository(),
             )),
       ],
@@ -37,16 +42,15 @@ class LoginPage extends StatelessWidget {
           if (state.isSuccess) {
             FocusScope.of(context).unfocus();
             showSuccessSnackbar(context, state.message);
+            onlogin(false);
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => AllVendorPage()),
+              MaterialPageRoute(builder: (context) => AllVendorPage(onTapped: onTapped,onAdd: onAdd,)),
             );
           }
           if (state.isFailure) {
             FocusScope.of(context).unfocus();
-            showSuccessAlertDialog(context, "Có lỗi", state.message, () {
-              Navigator.pop(context);
-            });
+            showFailedSnackbar(context, 'Có lỗi xảy ra');
           }
         },
         child: WillPopScope(
@@ -55,9 +59,9 @@ class LoginPage extends StatelessWidget {
             backgroundColor: Colors.grey[100],
             body: CenteredView(
               child: ScreenTypeLayout(
-                mobile: LoginPageMobile(),
-                tablet: LoginPageMobile(),
-                desktop: LoginPageDesktop(),
+                mobile: LoginPageMobile(onTapped: onTapped,onAdd: onAdd,onlogin: onlogin,),
+                tablet: LoginPageMobile(onTapped: onTapped,onAdd: onAdd,onlogin: onlogin,),
+                desktop: LoginPageDesktop(onTapped: onTapped,onAdd: onAdd,onlogin: onlogin,),
               ),
             ),
           ),

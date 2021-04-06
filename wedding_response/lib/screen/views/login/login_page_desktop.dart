@@ -4,16 +4,26 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_web_diary/bloc/login/bloc.dart';
 import 'package:flutter_web_diary/bloc/authentication/bloc.dart';
 import 'package:flutter_web_diary/firebase_repository/user_firebase_repository.dart';
+import 'package:flutter_web_diary/firebase_repository/user_wedding_firebase_repository.dart';
+import 'package:flutter_web_diary/model/vendor.dart';
+import 'package:flutter_web_diary/screen/views/allvendor/all_vendor_page.dart';
 import 'package:flutter_web_diary/util/show_snackbar.dart';
 import 'package:flutter_web_diary/util/alert_dialog.dart';
 
 class LoginPageDesktop extends StatefulWidget {
+   final ValueChanged<bool> onlogin;
+  final ValueChanged<Vendor> onTapped;
+  final ValueChanged<bool> onAdd;
+   LoginPageDesktop({Key key, this.onTapped, this.onAdd,this.onlogin}) : super(key: key);
   // This widget is the root of your application.
   @override
   _LoginPageDesktopState createState() => _LoginPageDesktopState();
 }
 
 class _LoginPageDesktopState extends State<LoginPageDesktop> {
+  ValueChanged<Vendor> get onTapped => widget.onTapped;
+  ValueChanged<bool> get onAdd => widget.onAdd;
+  ValueChanged<bool> get onlogin => widget.onlogin;
   bool _showPass = false;
   TextEditingController _emailController = new TextEditingController();
   TextEditingController _passController = new TextEditingController();
@@ -42,6 +52,7 @@ class _LoginPageDesktopState extends State<LoginPageDesktop> {
       providers: [
         BlocProvider<LoginBloc>(
             create: (BuildContext context) => LoginBloc(
+                  userWeddingRepository: FirebaseUserWeddingRepository(),
                   userRepository: FirebaseUserRepository(),
                 )),
       ],
@@ -56,13 +67,15 @@ class _LoginPageDesktopState extends State<LoginPageDesktop> {
           if (state.isSuccess) {
             FocusScope.of(context).unfocus();
             showSuccessSnackbar(context, state.message);
-            BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
+             this.onlogin(false);
+           Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => AllVendorPage(onTapped: onTapped,onAdd: onAdd,)),
+            );
           }
           if (state.isFailure) {
             FocusScope.of(context).unfocus();
-            showSuccessAlertDialog(context, "Có lỗi", state.message, () {
-              Navigator.pop(context);
-            });
+            showFailedSnackbar(context, state.message);
           }
         },
 

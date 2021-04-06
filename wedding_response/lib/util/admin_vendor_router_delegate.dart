@@ -6,6 +6,7 @@ import 'package:flutter_web_diary/bloc/login/login_bloc.dart';
 import 'package:flutter_web_diary/bloc/vendor/bloc.dart';
 import 'package:flutter_web_diary/firebase_repository/category_firebase_repository.dart';
 import 'package:flutter_web_diary/firebase_repository/user_firebase_repository.dart';
+import 'package:flutter_web_diary/firebase_repository/user_wedding_firebase_repository.dart';
 import 'package:flutter_web_diary/firebase_repository/vendor_firebase_repository.dart';
 import 'package:flutter_web_diary/firebase_repository/wedding_firebase_repository.dart';
 import 'package:flutter_web_diary/model/guest.dart';
@@ -35,13 +36,18 @@ class AdminVendorRouterDelegate extends RouterDelegate<AdminVendorRoutePath>
   bool show404 = false;
   bool showDone = false;
   bool add = false;
-  bool login = false;
+  bool _login = true;
   void _handleTap(Vendor vendor) {
     _selectedVendor = Vendor(vendor.label, vendor.name,vendor.cateID ,vendor.location,vendor.description,vendor.frontImage,vendor.ownerImage,vendor.email,vendor.phone,id: vendor.id);
     notifyListeners();
   }
   void _handleAdd(bool add1){
     add = add1;
+    notifyListeners();
+  }
+  void _handlelogin(bool login){
+    _login = login;
+    _selectedUser = UserWedding('admin');
     notifyListeners();
   }
   
@@ -65,6 +71,7 @@ class AdminVendorRouterDelegate extends RouterDelegate<AdminVendorRoutePath>
       providers: [
         BlocProvider<LoginBloc>(
             create: (BuildContext context) => LoginBloc(
+              userWeddingRepository: FirebaseUserWeddingRepository(),
               userRepository: FirebaseUserRepository(),
             )),
         BlocProvider<VendorBloc>(
@@ -81,20 +88,25 @@ class AdminVendorRouterDelegate extends RouterDelegate<AdminVendorRoutePath>
       child: Navigator(
         key: navigatorKey,
         pages: [
-          MaterialPage(key: ValueKey('Login'), child: LoginPage()),
+          
           if (show404)
             MaterialPage(key: ValueKey('UnknownPage'), child: UnknownScreen())
-          else if (_selectedUser == null && _selectedVendor == null)
+          else if ( _selectedVendor == null && !add && _login)
               MaterialPage(
                 key: ValueKey('Login'),
-                child: LoginPage()
+                child: LoginPage(onTapped: _handleTap,onAdd: _handleAdd,onlogin: _handlelogin,)
               )
-            else if (_selectedUser != null && _selectedVendor == null && add)            
+              else if(_selectedUser == null && !_login)
+                 MaterialPage(
+                key: ValueKey('Login'),
+                child: LoginPage(onTapped: _handleTap,onAdd: _handleAdd,onlogin: _handlelogin,)
+                 )            
+            else if (_selectedUser != null && _selectedVendor == null && add && !_login)            
                 MaterialPage(
                   key: ValueKey('AddVendor'),
                   child: AddVendorPage(),
                 )
-            else if(_selectedUser != null && _selectedVendor == null && !add)
+            else if(_selectedUser != null && _selectedVendor == null && !add && !_login)
                 MaterialPage(
                   key: ValueKey('AllVendor'),
                   child: AllVendorPage(onTapped: _handleTap,onAdd: _handleAdd,)
@@ -110,9 +122,10 @@ class AdminVendorRouterDelegate extends RouterDelegate<AdminVendorRoutePath>
             return false;
           }
           _selectedVendor = null;
-          _selectedUser = null;
+          _selectedUser = UserWedding('admin');
           show404 = false;
           add = false;
+          _login= false;
           notifyListeners();
           return true;
         },
