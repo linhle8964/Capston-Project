@@ -297,10 +297,7 @@ class _AddBudgetState extends State<AddBudget> {
                             },
                             validator: (val) {
                               if (val == "") {
-                                setState(() {
-                                  payMoneyController.text = "0";
-                                  double.parse(val);
-                                });
+                               payMoneyController.text="0";
                               } else if (double.parse(val.replaceAll(",", "")) >
                                   double.parse(moneyController.value.text
                                       .replaceAll(",", ""))) {
@@ -433,7 +430,8 @@ class _AddBudgetState extends State<AddBudget> {
             selectedCate == null ? initialCate.id : selectedCate.id,
             _checkboxListTile,
             double.parse(moneyController.text.replaceAll(',', '')),
-            double.parse(payMoneyController.text.replaceAll(',', '')),
+
+            payMoneyController.text==null?double.parse("0"):double.parse(payMoneyController.text.replaceAll(',', '')),
             1,
             id: widget.budget.id);
         print(budget.toString());
@@ -452,14 +450,13 @@ class _AddBudgetState extends State<AddBudget> {
         if (selectedCate != null &&
             selectedCate.cateName.trim().isNotEmpty &&
             budgetNameController.text.trim().isNotEmpty &&
-            moneyController.text.trim().isNotEmpty &&
-            payMoneyController.text.trim().isNotEmpty) {
+            moneyController.text.trim().isNotEmpty) {
           Budget budget = new Budget(
               budgetNameController.text,
               selectedCate.id,
               _checkboxListTile,
               double.parse(moneyController.text.replaceAll(',', '')),
-              double.parse(payMoneyController.text.replaceAll(',', '')),
+              payMoneyController.text==null?double.parse("0"):double.parse(payMoneyController.text.replaceAll(',', '')),
               1);
           BlocProvider.of<BudgetBloc>(context).add(CreateBudget(id, budget));
           showSuccessSnackbar(context, "Thêm kinh phí thành công");
