@@ -1119,7 +1119,9 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                 List<Contact> listAvaiContacts = [];
                 if (guests.isEmpty) {
                   for (int i = 0; i < listContacts.length; i++) {
-                    listAvaiContacts.add(listContacts[i]);
+                    if (listContacts[i].phones.isNotEmpty) {
+                      listAvaiContacts.add(listContacts[i]);
+                    }
                   }
                 } else {
                   for (int i = 0; i < listContacts.length; i++) {
