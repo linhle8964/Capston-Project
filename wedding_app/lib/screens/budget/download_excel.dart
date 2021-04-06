@@ -154,8 +154,8 @@ showCompleteDialog(BuildContext context) {
     content: Text("File của bạn đã được lưu lại!"),
     actions: [
       TextButton(
-          style: TextButton.styleFrom(primary: hexToColor("#d86a77")),
-          child: Text("Hoàn thành"),
+          style: TextButton.styleFrom(backgroundColor: hexToColor("#d86a77")),
+          child: Text("Hoàn thành",style: TextStyle(color: Colors.white),),
           onPressed: () {
             Navigator.of(_containerKey.currentContext).pop();
           }),
@@ -178,8 +178,8 @@ showErrorEmtyDialog(BuildContext context) {
     content: Text("Bạn chưa có khoản chi tiêu nào cho đám cưới này"),
     actions: [
       TextButton(
-          style: TextButton.styleFrom(primary: hexToColor("#d86a77")),
-          child: Text("Đóng"),
+          style: TextButton.styleFrom(backgroundColor: hexToColor("#d86a77")),
+          child: Text("Đóng",style: TextStyle(color: Colors.white),),
           onPressed: () {
             Navigator.of(_containerKey.currentContext).pop();
           }),
@@ -204,8 +204,8 @@ showErrorUnAuthorDialog(BuildContext context) {
     Text("Bạn cần cấp quyền cho ứng dụng để thực hiện chức năng này!"),
     actions: [
       TextButton(
-          style: TextButton.styleFrom(primary: hexToColor("#d86a77")),
-          child: Text("Đóng"),
+          style: TextButton.styleFrom(backgroundColor: hexToColor("#d86a77")),
+          child: Text("Đóng",style: TextStyle(color: Colors.white),),
           onPressed: () {
             Navigator.of(_containerKey.currentContext).pop();
           }),

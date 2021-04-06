@@ -222,7 +222,7 @@ class _FillInfoPageState extends State<FillInfoPage> {
                             Padding(
                               padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
                               child: TextButton(
-                                style: TextButton.styleFrom(primary: hexToColor("#d86a77")),
+                                style: TextButton.styleFrom(backgroundColor: hexToColor("#d86a77")),
                                 child: Text('Tạo thiệp mời',
                                     style: TextStyle(color: Colors.white)),
                                 onPressed: onSaveClick,

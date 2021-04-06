@@ -6,6 +6,7 @@ import 'package:wedding_app/firebase_repository/guest_firebase_repository.dart';
 import 'package:wedding_app/model/guest.dart';
 import 'package:wedding_app/model/user_wedding.dart';
 import 'package:wedding_app/screens/guest/ListGuest.dart';
+import 'package:wedding_app/screens/guest/download_guest_excel.dart';
 import 'package:wedding_app/utils/format_number.dart';
 import 'package:wedding_app/utils/get_share_preferences.dart';
 import 'package:wedding_app/utils/hex_color.dart';
@@ -56,7 +57,39 @@ class _ViewGuestPageState extends State<ViewGuestPage>
       });
     }
   }
+  showMyAlertDialog(BuildContext context) {
+    GlobalKey _containerKey = GlobalKey();
+    // Create AlertDialog
+    AlertDialog dialog = AlertDialog(
+      key: _containerKey,
+      title: Text("Lưu lại"),
+      content: Text("Bạn có muốn lưu lại danh sách khách dưới dạng file excel?"),
+      actions: [
+        TextButton(
+            style: TextButton.styleFrom(backgroundColor: hexToColor("#d86a77")),
+            child: Text("Có",style: TextStyle(color: Colors.white),),
+            onPressed: () {
+              Navigator.of(_containerKey.currentContext).pop();
+              downloadFile(_data, context, widget.userWedding.role);
+            }),
+        TextButton(
+            style: TextButton.styleFrom(
+              backgroundColor: hexToColor("#d86a77"),
+            ),
+            child: Text("Không",style: TextStyle(color: Colors.white),),
+            onPressed: () {
+              Navigator.of(_containerKey.currentContext).pop();
+            }),
+      ],
+    );
 
+    // Call showDialog function to show dialog.
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return dialog;
+        });
+  }
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
@@ -100,7 +133,7 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                         color: Colors.white,
                       ),
                       onPressed: () {
-                        print("Excel");
+                        showMyAlertDialog(context);
                       },
                     ),
                     IconButton(
@@ -210,7 +243,7 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                         color: Colors.white,
                       ),
                       onPressed: () {
-                        print("Excel");
+                        showMyAlertDialog(context);
                       },
                     ),
                     IconButton(

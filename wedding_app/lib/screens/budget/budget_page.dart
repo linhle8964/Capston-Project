@@ -52,17 +52,17 @@ class _BudgetListState extends State<BudgetList> {
       content: Text("Bạn có muốn lưu lại kinh phí dưới dạng file excel?"),
       actions: [
         TextButton(
-            style: TextButton.styleFrom(primary: hexToColor("#d86a77")),
-            child: Text("Có"),
+            style: TextButton.styleFrom(backgroundColor: hexToColor("#d86a77")),
+            child: Text("Có",style: TextStyle(color: Colors.white),),
             onPressed: () {
               Navigator.of(_containerKey.currentContext).pop();
               downloadFile(_budgets, _categorys, context);
             }),
         TextButton(
             style: TextButton.styleFrom(
-              primary: hexToColor("#d86a77"),
+              backgroundColor: hexToColor("#d86a77"),
             ),
-            child: Text("Không"),
+            child: Text("Không",style: TextStyle(color: Colors.white),),
             onPressed: () {
               Navigator.of(_containerKey.currentContext).pop();
             }),
