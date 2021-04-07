@@ -118,7 +118,12 @@ class _SearchState extends State<Search> {
                     print("this is" + properties.toString());
                   }
                   if (state is VendorLoading) {
-                    return CircularProgressIndicator();
+                    return Column(
+                      children: [
+                        Expanded(
+                            child: Center(child: CircularProgressIndicator())),
+                      ],
+                    );
                   }
                   return ListView(
                     physics: BouncingScrollPhysics(),
