@@ -71,7 +71,7 @@ class _LoginPageState extends State<LoginPage> {
                       width / 15, height / 10, width / 15, 0),
                   color: Colors.white,
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       Padding(

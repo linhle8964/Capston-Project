@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:wedding_app/bloc/register/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wedding_app/utils/alert_dialog.dart';
-import 'package:wedding_app/utils/hex_color.dart';
 import 'package:wedding_app/utils/show_snackbar.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -34,6 +33,8 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: BlocListener(
@@ -63,134 +64,108 @@ class _RegisterPageState extends State<RegisterPage> {
               cubit: _registerBloc,
               builder: (context, state) {
                 return Container(
-                  padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
+                  padding: EdgeInsets.fromLTRB(
+                      width / 15, height / 5, width / 15, 0),
                   color: Colors.white,
                   child: SingleChildScrollView(
                     scrollDirection: Axis.vertical,
                     child: ConstrainedBox(
                       constraints: BoxConstraints(
                           minHeight: MediaQuery.of(context).size.height),
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 30),
-                              child: Container(
-                                child: Text(
-                                  "VWED",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                                width: 80,
-                                height: 80,
-                                padding: EdgeInsets.symmetric(vertical: 30),
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: hexToColor("#d86a77")),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                              child: Text(
-                                "Đăng ký để bắt đầu thực hiện đám cưới của bạn nào.",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                    fontSize: 20),
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
-                            Padding(
-                                padding: const EdgeInsets.fromLTRB(0, 0, 0, 40),
-                                child: TextField(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Text(
+                            "Đăng ký để bắt đầu thực hiện đám cưới của bạn nào.",
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                                fontSize: 20),
+                            textAlign: TextAlign.center,
+                          ),
+                          TextField(
+                            style: TextStyle(fontSize: 18, color: Colors.black),
+                            controller: _emailController,
+                            decoration: InputDecoration(
+                                labelText: 'E-mail',
+                                errorText: !state.isEmailValid
+                                    ? "Email không hợp lệ "
+                                    : null,
+                                labelStyle: TextStyle(
+                                    color: Colors.grey, fontSize: 15)),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
+                            child: Stack(
+                              alignment: AlignmentDirectional.centerEnd,
+                              children: <Widget>[
+                                TextField(
                                   style: TextStyle(
                                       fontSize: 18, color: Colors.black),
-                                  controller: _emailController,
+                                  controller: _passController,
+                                  obscureText: !_showPass,
                                   decoration: InputDecoration(
-                                      labelText: 'E-mail',
-                                      errorText: !state.isEmailValid
-                                          ? "Email không hợp lệ "
+                                      labelText: 'Mật khẩu',
+                                      errorText: !state.isPasswordValid
+                                          ? "Mật khẩu không hợp lệ"
                                           : null,
                                       labelStyle: TextStyle(
                                           color: Colors.grey, fontSize: 15)),
-                                )),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
-                              child: Stack(
-                                alignment: AlignmentDirectional.centerEnd,
-                                children: <Widget>[
-                                  TextField(
-                                    style: TextStyle(
-                                        fontSize: 18, color: Colors.black),
-                                    controller: _passController,
-                                    obscureText: !_showPass,
-                                    decoration: InputDecoration(
-                                        labelText: 'Mật khẩu',
-                                        errorText: !state.isPasswordValid
-                                            ? "Mật khẩu không hợp lệ"
-                                            : null,
-                                        labelStyle: TextStyle(
-                                            color: Colors.grey, fontSize: 15)),
-                                  ),
-                                  GestureDetector(
-                                      onTap: onToggleShowPass,
-                                      child: _showPass
-                                          ? Icon(Icons.lock)
-                                          : Icon(Icons.lock_open))
-                                ],
-                              ),
+                                ),
+                                GestureDetector(
+                                    onTap: onToggleShowPass,
+                                    child: _showPass
+                                        ? Icon(Icons.lock)
+                                        : Icon(Icons.lock_open))
+                              ],
                             ),
-                            Padding(
-                              padding: const EdgeInsets.all(7.0),
-                              child: SizedBox(
-                                width: double.infinity,
-                                height: 30,
-                                child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                    primary: isRegisterButtonEnabled(state)
-                                        ? Colors.blue
-                                        : Colors.grey,
-                                  ),
-                                  onPressed: () =>
-                                      isRegisterButtonEnabled(state)
-                                          ? _onFormSubmitted()
-                                          : null,
-                                  child: Text(
-                                    'Đăng Kí ',
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 16),
-                                  ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(7.0),
+                            child: SizedBox(
+                              width: double.infinity,
+                              height: 30,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  primary: isRegisterButtonEnabled(state)
+                                      ? Colors.blue
+                                      : Colors.grey,
+                                ),
+                                onPressed: () => isRegisterButtonEnabled(state)
+                                    ? _onFormSubmitted()
+                                    : null,
+                                child: Text(
+                                  'Đăng Kí ',
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 16),
                                 ),
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.all(7.0),
-                              child: SizedBox(
-                                width: double.infinity,
-                                height: 30,
-                                child: new InkWell(
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        'Đã có tài khoản? Đăng Nhập ngay',
-                                        style: TextStyle(
-                                            color: Colors.blue, fontSize: 16),
-                                      ),
-                                    ],
-                                  ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(7.0),
+                            child: SizedBox(
+                              width: double.infinity,
+                              height: 30,
+                              child: new InkWell(
+                                onTap: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      'Đã có tài khoản? Đăng Nhập ngay',
+                                      style: TextStyle(
+                                          color: Colors.blue, fontSize: 16),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
