@@ -7,13 +7,7 @@ void main() {
     const loginButtonKey = WidgetKey.loginButtonKey;
     const emailTextFieldKey = WidgetKey.loginEmailTextFieldKey;
     const passwordTextFieldKey = WidgetKey.loginPasswordTextFieldKey;
-    const loadingSnackbarkey = WidgetKey.loadingSnackbarKey;
-    const successSnackbarKey = WidgetKey.successSnackbarKey;
-    const alertDialogKey = WidgetKey.alertDialogKey;
-    const alertOkButton = WidgetKey.alertDialogOkButtonKey;
     const showPasswordButtonKey = WidgetKey.loginShowPasswordButtonKey;
-    const bottomNavigationBarKey = WidgetKey.bottomNavigationBarKey;
-    const navigateHomeButtomKey = WidgetKey.navigateHomeButtonKey;
     const navigateTaskButtonKey = WidgetKey.navigateTaskButtonKey;
     const navigateBudgetButtonKey = WidgetKey.navigateBudgetButtonKey;
     const navigateGuestButtonKey = WidgetKey.navigateGuestButtonKey;
@@ -34,6 +28,43 @@ void main() {
       }
     });
 
+    test('log in', () async {
+      // login with user who invalid email
+      await driver.tap(find.byValueKey(emailTextFieldKey));
+      await driver.enterText("linhlche13097@fpt.edu.vn");
+      await Future.delayed(Duration(seconds: 2));
+      await driver.tap(find.byValueKey(passwordTextFieldKey));
+      await driver.enterText("linhle8964");
+      await Future.delayed(Duration(seconds: 2));
+      await driver.tap(find.byValueKey(showPasswordButtonKey));
+      await Future.delayed(Duration(seconds: 2));
+
+      await driver.runUnsynchronized(() async {
+        await driver.tap(find.byValueKey(loginButtonKey));
+        expect(await isPresent(find.byValueKey(WidgetKey.loadingSnackbarKey), driver), isTrue);
+        expect(await isPresent(find.byValueKey(WidgetKey.alertDialogKey), driver), isTrue);
+      });
+      await driver.tap(find.byValueKey(WidgetKey.alertDialogOkButtonKey));
+
+      // login with user who invalid password
+      await driver.tap(find.byValueKey(emailTextFieldKey));
+      await driver.enterText("linhlche130970@fpt.edu.vn");
+      await Future.delayed(Duration(seconds: 2));
+      await driver.tap(find.byValueKey(passwordTextFieldKey));
+      await driver.enterText("linhle8963");
+      await Future.delayed(Duration(seconds: 2));
+      await driver.tap(find.byValueKey(showPasswordButtonKey));
+      await Future.delayed(Duration(seconds: 2));
+
+      await driver.runUnsynchronized(() async {
+        await driver.tap(find.byValueKey(loginButtonKey));
+        expect(await isPresent(find.byValueKey(WidgetKey.loadingSnackbarKey), driver), isTrue);
+        expect(await isPresent(find.byValueKey(WidgetKey.alertDialogKey), driver), isTrue);
+      });
+      await driver.tap(find.byValueKey(WidgetKey.alertDialogOkButtonKey));
+
+    });
+
     test('demo', () async {
       // login with user who have wedding
       await driver.tap(find.byValueKey(emailTextFieldKey));
@@ -45,13 +76,11 @@ void main() {
       await driver.tap(find.byValueKey(showPasswordButtonKey));
       await Future.delayed(Duration(seconds: 2));
 
-      await driver.tap(find.byValueKey(loginButtonKey));
-      expect(
-          await isPresent(
-              find.byValueKey(WidgetKey.loadingSnackbarKey), driver),
-          isTrue);
-      expect(
-          await isPresent(find.byValueKey(successSnackbarKey), driver), isTrue);
+      await driver.runUnsynchronized(() async {
+        await driver.tap(find.byValueKey(loginButtonKey));
+        expect(await isPresent(find.byValueKey(WidgetKey.loadingSnackbarKey), driver), isTrue);
+        expect(await isPresent(find.byValueKey(WidgetKey.successSnackbarKey), driver), isTrue);
+      });
       await driver.tap(find.byValueKey(navigateTaskButtonKey));
       await Future.delayed(Duration(seconds: 1));
       await driver.tap(find.byValueKey(navigateBudgetButtonKey));
@@ -60,15 +89,15 @@ void main() {
       await Future.delayed(Duration(seconds: 1));
       await driver.tap(find.byValueKey(navigateSettingButtonKey));
       await Future.delayed(Duration(seconds: 1));
-      await driver.tap(find.byValueKey(WidgetKey.logoutButtonKey));
+      await driver.tap(find.byValueKey(WidgetKey.navigateHomeButtonKey));
       await Future.delayed(Duration(seconds: 1));
-      await driver.tap(find.byValueKey(WidgetKey.noConfirmButtonKey));
-      await driver.tap(find.byValueKey(WidgetKey.logoutButtonKey));
+      await driver.tap(find.byValueKey(WidgetKey.invitationCardButtonKey));
       await Future.delayed(Duration(seconds: 1));
-      await driver.tap(find.byValueKey(WidgetKey.yesConfirmButtonKey));
-      await Future.delayed(Duration(seconds: 2));
+      await driver.tap(find.byValueKey(WidgetKey.createInvitationCardTabKey));
+      await Future.delayed(Duration(seconds: 1));
+      await driver.tap(find.byValueKey(WidgetKey.uploadInvitationCardTabkey));
     });
-  }, timeout: Timeout.none);
+  },);
 }
 
 Future<bool> isPresent(

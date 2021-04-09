@@ -25,6 +25,7 @@ import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wedding_app/widgets/receive_notification.dart';
+import 'package:wedding_app/widgets/widget_key.dart';
 import 'button_column.dart';
 import 'info_column.dart';
 
@@ -198,7 +199,7 @@ class _HomePageState extends State<HomePage> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceEvenly,
                                       children: [
-                                        buildButtonColumn(Colors.blue,
+                                        buildButtonColumn(Key(WidgetKey.vendorButtonKey) ,Colors.blue,
                                             Icons.search, 'Dịch vụ', () {
                                           Navigator.push(
                                             context,
@@ -206,7 +207,7 @@ class _HomePageState extends State<HomePage> {
                                                 builder: (context) => Search()),
                                           );
                                         }),
-                                        buildButtonColumn(
+                                        buildButtonColumn(Key(WidgetKey.invitationCardButtonKey) ,
                                           Colors.pink[400],
                                           Icons.assignment_ind_outlined,
                                           'THIỆP MỜI',

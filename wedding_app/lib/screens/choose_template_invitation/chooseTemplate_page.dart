@@ -16,6 +16,7 @@ import 'package:wedding_app/screens/choose_template_invitation/fill_info_page.da
 import 'package:permission_handler/permission_handler.dart';
 import 'package:dio/dio.dart';
 import 'package:wedding_app/utils/hex_color.dart';
+import 'package:wedding_app/widgets/widget_key.dart';
 import '../../bloc/invitation_card/bloc.dart';
 import '../../widgets/loading_indicator.dart';
 import 'package:path_provider/path_provider.dart';
@@ -58,6 +59,7 @@ class _ChooseTemplatePageState extends State<ChooseTemplatePage> {
             bottom: TabBar(
               tabs: [
                 Tab(
+                  key: Key(WidgetKey.myInvitationCardTabKey),
                   child: Center(
                       child: Text(
                     'Thiệp mời của bạn',
@@ -65,6 +67,7 @@ class _ChooseTemplatePageState extends State<ChooseTemplatePage> {
                   )),
                 ),
                 Tab(
+                  key: Key(WidgetKey.createInvitationCardTabKey),
                   child: Center(
                       child: Text(
                     'Tạo Thiệp Mời',
@@ -72,6 +75,7 @@ class _ChooseTemplatePageState extends State<ChooseTemplatePage> {
                   )),
                 ),
                 Tab(
+                  key: Key(WidgetKey.uploadInvitationCardTabkey),
                   child: Center(
                       child: Text('Tải Lên Thiệp Có Sẵn',
                           style: TextStyle(color: Colors.white))),
