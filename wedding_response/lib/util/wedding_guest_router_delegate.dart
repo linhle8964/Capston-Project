@@ -8,6 +8,7 @@ import 'package:flutter_web_diary/screen/views/input_details/input_details.dart'
 import 'package:flutter_web_diary/screen/views/success/success_page.dart';
 import 'package:flutter_web_diary/util/wedding_route_path.dart';
 
+
 class WeddingGuestRouterDelegate extends RouterDelegate<WeddingGuestRoutePath>
     with
         ChangeNotifier,
@@ -97,9 +98,9 @@ class WeddingGuestRouterDelegate extends RouterDelegate<WeddingGuestRoutePath>
     }
 
     if (path.isRegisterPage) {
-      _selectedWedding = Wedding(path.weddingID);
+      _selectedWedding = Wedding(path.weddingID, null);
     } else if (path.isInputDetailsPage) {
-      _selectedWedding = Wedding(path.weddingID);
+      _selectedWedding = Wedding(path.weddingID, null);
       _selectedGuestID = path.guestID;
     } else {
       _selectedGuestID = null;
