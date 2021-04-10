@@ -125,7 +125,7 @@ class _AllVendorPageMobileState extends State<AllVendorPageMobile> {
                   BlocProvider.of<VendorBloc>(context).add(LoadVendor());
                   if (state is VendorLoaded) {
                     properties = state.vendors;
-                    print("this is" + properties.toString());
+                    
                   }
                   if (state is VendorLoading) {
                     return CircularProgressIndicator();
@@ -189,9 +189,9 @@ class _AllVendorPageMobileState extends State<AllVendorPageMobile> {
   List<Widget> buildProperties() {
     List<Widget> list = [];
     for (var i = 0; i < properties.length; i++) {
-      print('test' + properties[i].frontImage);
+      
       if (properties[i].cateID.trim().toString() == _defaultChoiceIndex) {
-        print(properties[i].cateID + " is equal " + _defaultChoiceIndex);
+        
         list.add(Hero(
             tag: properties[i].frontImage,
             child: buildProperty(properties[i])));

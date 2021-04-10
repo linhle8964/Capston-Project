@@ -32,7 +32,7 @@ class AllVendorPage extends StatelessWidget {
               body:  ScreenTypeLayout(
                   mobile: AllVendorPageMobile(onTapped: onTapped,onAdd: onAdd,),
                   tablet: AllVendorPageMobile(onTapped: onTapped,onAdd: onAdd),
-                  desktop: CenteredView(child:AllVendorPageDesktop(onTapped: onTapped,onAdd: onAdd),)
+                  desktop: AllVendorPageDesktop(onTapped: onTapped,onAdd: onAdd),
                   
                 ),
               

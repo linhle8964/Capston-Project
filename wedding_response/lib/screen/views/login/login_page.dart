@@ -8,6 +8,7 @@ import 'package:flutter_web_diary/model/vendor.dart';
 import 'package:flutter_web_diary/screen/views/allvendor/all_vendor_page.dart';
 
 import 'package:flutter_web_diary/screen/views/error/error_page.dart';
+import 'package:flutter_web_diary/screen/views/home/home_view.dart';
 import 'package:flutter_web_diary/screen/views/login/login_page_desktop.dart';
 import 'package:flutter_web_diary/screen/views/login/login_page_mobile.dart';
 import 'package:flutter_web_diary/screen/widgets/centered_view/centered_view.dart';
@@ -21,7 +22,8 @@ class LoginPage extends StatelessWidget {
   final ValueChanged<Vendor> onTapped;
   final ValueChanged<bool> onAdd;
   final ValueChanged<bool> onlogin;
-   LoginPage({Key key, this.onTapped, this.onAdd,this.onlogin}) : super(key: key);
+  final ValueChanged<bool> onHome;
+   LoginPage({Key key, this.onTapped, this.onAdd,this.onlogin,this.onHome}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -37,15 +39,16 @@ class LoginPage extends StatelessWidget {
         listener: (context, state) {
           if (state.isSubmitting) {
             FocusScope.of(context).unfocus();
-            showProcessingSnackbar(context, state.message);
+          //  showProcessingSnackbar(context, state.message);
           }
           if (state.isSuccess) {
             FocusScope.of(context).unfocus();
             showSuccessSnackbar(context, state.message);
             onlogin(false);
+            this.onHome(true);
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => AllVendorPage(onTapped: onTapped,onAdd: onAdd,)),
+              MaterialPageRoute(builder: (context) => HomeView(onTapped: onTapped,onAdd: onAdd,onHome: onHome,)),
             );
           }
           if (state.isFailure) {
@@ -59,9 +62,9 @@ class LoginPage extends StatelessWidget {
             backgroundColor: Colors.grey[100],
             body: CenteredView(
               child: ScreenTypeLayout(
-                mobile: LoginPageMobile(onTapped: onTapped,onAdd: onAdd,onlogin: onlogin,),
-                tablet: LoginPageMobile(onTapped: onTapped,onAdd: onAdd,onlogin: onlogin,),
-                desktop: LoginPageDesktop(onTapped: onTapped,onAdd: onAdd,onlogin: onlogin,),
+                mobile: LoginPageMobile(onTapped: onTapped,onAdd: onAdd,onlogin: onlogin,onHome: onHome,),
+                tablet: LoginPageMobile(onTapped: onTapped,onAdd: onAdd,onlogin: onlogin,onHome: onHome,),
+                desktop: LoginPageDesktop(onTapped: onTapped,onAdd: onAdd,onlogin: onlogin,onHome: onHome,),
               ),
             ),
           ),

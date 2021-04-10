@@ -97,7 +97,7 @@ class _AddVendorMobilePageState extends State<AddVendorMobilePage> {
     return BlocBuilder(
         cubit: BlocProvider.of<VendorBloc>(context),
         builder: (context, state) {
-          print(ModalRoute.of(context).settings.name.toString());
+          
           return Scaffold(
               appBar: AppBar(
                 leading: Icon(
@@ -214,6 +214,10 @@ class _AddVendorMobilePageState extends State<AddVendorMobilePage> {
                                         showFailedSnackbar(context,
                                             "Xin vui lòng nhập số điện thoại chỉ gồm các chữ số");
                                         return "Số điện thoại chỉ được phép có số";
+                                      }else if(val.length!=10){
+                                        showFailedSnackbar(context,
+                                            "Xin vui lòng nhập số điện thoại gồm 10 chữ số");
+                                        return "Số điện thoại chỉ được phép có 10 chữ số";
                                       }
                                       return null;
                                     },
@@ -273,7 +277,7 @@ class _AddVendorMobilePageState extends State<AddVendorMobilePage> {
                             builder: (context, state) {
                               if (state is TodosLoaded) {
                                 _values2 = state.cates;
-                                print(state.cates.toString());
+                                
                                 
                                 return DropdownButtonFormField(
                                   value:  selectedCate,
@@ -291,6 +295,14 @@ class _AddVendorMobilePageState extends State<AddVendorMobilePage> {
                                   onChanged: (val) =>
                                       setState(() => selectedCate = val),
                                   onSaved: (val) => selectedCate = val,
+                                  validator: (val) {
+                              if (val == null) {
+                                showFailedSnackbar(
+                                    context, "Xin Vui Lòng Chọn Loại Dịch Vụ");
+                                return "Loại dịch vụ không được để trống";
+                              }
+                              return null;
+                            },
                                 );
                               } else if (state is TodosLoading) {
                                 return LoadingIndicator();
@@ -325,11 +337,11 @@ class _AddVendorMobilePageState extends State<AddVendorMobilePage> {
                                 hintText: 'Địa chỉ')),
                       ),
                       Container(
-                        height: 120,
+                        
                         padding:
                             const EdgeInsets.only(left: 20, right: 20, top: 20),
                         child: TextFormField(
-                            maxLines: maxLines,
+                           
                             controller: descriptionController,
                             validator: (val) {
                               if (val == "") {

@@ -7,6 +7,7 @@ import 'package:flutter_web_diary/firebase_repository/user_firebase_repository.d
 import 'package:flutter_web_diary/firebase_repository/user_wedding_firebase_repository.dart';
 import 'package:flutter_web_diary/model/vendor.dart';
 import 'package:flutter_web_diary/screen/views/allvendor/all_vendor_page.dart';
+import 'package:flutter_web_diary/screen/views/home/home_view.dart';
 import 'package:flutter_web_diary/util/show_snackbar.dart';
 import 'package:flutter_web_diary/util/alert_dialog.dart';
 
@@ -14,7 +15,8 @@ class LoginPageMobile extends StatefulWidget {
   final ValueChanged<Vendor> onTapped;
   final ValueChanged<bool> onAdd;
   final ValueChanged<bool> onlogin;
-   LoginPageMobile({Key key, this.onTapped, this.onAdd,this.onlogin}) : super(key: key);
+  final ValueChanged<bool> onHome;
+   LoginPageMobile({Key key, this.onTapped, this.onAdd,this.onlogin,this.onHome}) : super(key: key);
   // This widget is the root of your application.
   @override
   _LoginPageMobileState createState() => _LoginPageMobileState();
@@ -24,6 +26,7 @@ class _LoginPageMobileState extends State<LoginPageMobile> {
   ValueChanged<Vendor> get onTapped => widget.onTapped;
   ValueChanged<bool> get onAdd => widget.onAdd;
   ValueChanged<bool> get onlogin => widget.onlogin;
+   ValueChanged<bool> get onHome => widget.onHome;
   bool _showPass = false;
   TextEditingController _emailController = new TextEditingController();
   TextEditingController _passController = new TextEditingController();
@@ -61,15 +64,16 @@ class _LoginPageMobileState extends State<LoginPageMobile> {
             listener: (context, state) {
               if (state.isSubmitting) {
                 FocusScope.of(context).unfocus();
-                showProcessingSnackbar(context, state.message);
+               // showProcessingSnackbar(context, state.message);
               }
               if (state.isSuccess) {
                 FocusScope.of(context).unfocus();
-                showSuccessSnackbar(context, state.message);
+                //showSuccessSnackbar(context, state.message);
                 this.onlogin(false);
+                this.onHome(true);
                Navigator.push(
                  context,
-                  MaterialPageRoute(builder: (context) => AllVendorPage(onTapped: onTapped,onAdd: onAdd,)),
+                  MaterialPageRoute(builder: (context) => HomeView(onTapped: onTapped,onAdd: onAdd,onHome: onHome,)),
               );
               }
               if (state.isFailure) {

@@ -11,14 +11,22 @@ class AdminVendorRouteInformationParser extends RouteInformationParser<AdminVend
       return AdminVendorRoutePath.login();
     }
     // Handle '/login'
-    if (uri.pathSegments.length == 1 && uri.pathSegments.first != 'admin') {
+    if (uri.pathSegments.length == 1 && uri.pathSegments.first != 'admin'&& uri.pathSegments.first != 'home') {
       final login = uri.pathSegments.first;
       if (login == null) return AdminVendorRoutePath.unknown();
       if(login != "login" ) return  AdminVendorRoutePath.unknown();
       return AdminVendorRoutePath.login();
     }
+    // Handle '/home'
+    if (uri.pathSegments.length == 1 && uri.pathSegments.first != 'admin' &&  uri.pathSegments.first != 'login') {
+      final home = uri.pathSegments.first;
+      if (home == null) return AdminVendorRoutePath.unknown();
+      if(home != "home" ) return  AdminVendorRoutePath.unknown();
+      return AdminVendorRoutePath.home(home);
+    }
+
     // Handle '/admin'
-    if (uri.pathSegments.length == 1 && uri.pathSegments.first != 'login') {
+    if (uri.pathSegments.length == 1 && uri.pathSegments.first != 'login'&& uri.pathSegments.first != 'home') {
       final admin = uri.pathSegments.first;
       if (admin == null) return AdminVendorRoutePath.unknown();
       if(admin != 'admin') return  AdminVendorRoutePath.unknown();
@@ -53,6 +61,9 @@ class AdminVendorRouteInformationParser extends RouteInformationParser<AdminVend
     if (path.isUnknown) {
       return RouteInformation(location: '/404');
     }
+    if(path.isHome){
+      return RouteInformation(location: '/home');
+    }
     if (path.isAllVendorPage) {
       return RouteInformation(location: '/admin');
     }
@@ -65,6 +76,7 @@ class AdminVendorRouteInformationParser extends RouteInformationParser<AdminVend
     if(path.isAdd){
       return RouteInformation(location: '/admin/add');
     }
+    
 
 
     return null;

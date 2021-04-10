@@ -100,7 +100,7 @@ class _VendorDetailMobilePageState extends State<VendorDetailMobilePage> {
     return BlocBuilder(
         cubit: BlocProvider.of<VendorBloc>(context),
         builder: (context, state) {
-          print(ModalRoute.of(context).settings.name.toString());
+          
           return Scaffold(
               appBar: AppBar(
                 leading: Icon(
@@ -255,6 +255,10 @@ class _VendorDetailMobilePageState extends State<VendorDetailMobilePage> {
                                         showFailedSnackbar(context,
                                             "Xin vui lòng nhập số điện thoại chỉ gồm các chữ số");
                                         return "Số điện thoại chỉ được phép có số";
+                                      }else if(val.length!=10){
+                                        showFailedSnackbar(context,
+                                            "Xin vui lòng nhập số điện thoại gồm 10 chữ số");
+                                        return "Số điện thoại chỉ được phép có 10 chữ số";
                                       }
                                       return null;
                                     },
@@ -314,7 +318,7 @@ class _VendorDetailMobilePageState extends State<VendorDetailMobilePage> {
                             builder: (context, state) {
                               if (state is TodosLoaded) {
                                 _values2 = state.cates;
-                                print(state.cates.toString());
+                                
                                 if (isEditing == true && state is TodosLoaded) {
                                   for (int i = 0; i < state.cates.length; i++) {
                                     String id = state.cates[i].id;
@@ -376,11 +380,11 @@ class _VendorDetailMobilePageState extends State<VendorDetailMobilePage> {
                                 hintText: 'Địa chỉ')),
                       ),
                       Container(
-                        height: 120,
+                        
                         padding:
                             const EdgeInsets.only(left: 20, right: 20, top: 20),
                         child: TextFormField(
-                            maxLines: maxLines,
+                            
                             controller: descriptionController,
                             validator: (val) {
                               if (val == "") {
@@ -683,7 +687,7 @@ class _VendorDetailMobilePageState extends State<VendorDetailMobilePage> {
           phoneController.text,
           id: widget.vendor.id,
         );
-        print(vendor.toString());
+        
         if (vendor != null && vendorNameController.text.trim().isNotEmpty) {
           BlocProvider.of<VendorBloc>(context)..add(UpdateVendor(vendor));
           Navigator.pop(context);

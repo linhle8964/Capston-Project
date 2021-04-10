@@ -12,7 +12,7 @@ import 'package:flutter_web_diary/screen/views/detail/vendor_detail_page.dart';
 import 'package:flutter_web_diary/screen/widgets/centered_view/centered_view.dart';
 import 'package:flutter_web_diary/util/hex_color.dart';
 import 'package:search_page/search_page.dart';
-
+import 'package:flutter/cupertino.dart';
 class AllVendorPageDesktop extends StatefulWidget {
   final ValueChanged<Vendor> onTapped;
   final ValueChanged<bool> onAdd;
@@ -38,8 +38,9 @@ class _AllVendorPageDesktopState extends State<AllVendorPageDesktop> {
 
   @override
   Widget build(BuildContext context) {
-    return CenteredView(
-    child:Scaffold(
+    MediaQueryData queryData;
+    queryData = MediaQuery.of(context);
+    return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: hexToColor("#d86a77"),
@@ -47,101 +48,106 @@ class _AllVendorPageDesktopState extends State<AllVendorPageDesktop> {
         title: _buildTitle(context),
       ),
       backgroundColor: Colors.white,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: EdgeInsets.only(top: 16,bottom: 16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: Container(
-                    height: 32,
-                    child: Stack(
-                      children: [
-                        BlocBuilder(
-                          cubit: BlocProvider.of<CateBloc>(context),
-                          builder: (context, state) {
-                            if (state is TodosLoaded) {
-                              _categorys = state.cates;
-                            }
-                            return ListView.builder(
-                                physics: BouncingScrollPhysics(),
-                                scrollDirection: Axis.horizontal,
-                                itemCount: _categorys.length,
-                                itemBuilder: (context, index) {
-                                  return buildFilter(_categorys[index].cateName,
-                                      _categorys[index].id);
-                                });
-                          },
-                        ),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: Container(
-                            width: 28,
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.centerRight,
-                                end: Alignment.centerLeft,
-                                colors: [
-                                  Theme.of(context).scaffoldBackgroundColor,
-                                  Theme.of(context)
-                                      .scaffoldBackgroundColor
-                                      .withOpacity(0.0),
-                                ],
+      body: Padding(
+        padding:  EdgeInsets.fromLTRB(queryData.size.width / 20, queryData.size.height/40, queryData.size.width / 20, 0),
+
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(top: 16,bottom: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Container(
+                      height: 32,
+                      child: Stack(
+                        children: [
+                          BlocBuilder(
+                            cubit: BlocProvider.of<CateBloc>(context),
+                            builder: (context, state) {
+                              if (state is TodosLoaded) {
+                                _categorys = state.cates;
+                              }
+                              return ListView.builder(
+                                  physics: BouncingScrollPhysics(),
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: _categorys.length,
+                                  itemBuilder: (context, index) {
+                                    return buildFilter(_categorys[index].cateName,
+                                        _categorys[index].id);
+                                  });
+                            },
+                          ),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Container(
+                              width: 28,
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  begin: Alignment.centerRight,
+                                  end: Alignment.centerLeft,
+                                  colors: [
+                                    Theme.of(context).scaffoldBackgroundColor,
+                                    Theme.of(context)
+                                        .scaffoldBackgroundColor
+                                        .withOpacity(0.0),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-
-                  },
-                  child: Padding(
-                    padding: EdgeInsets.only(left: 16, right: 24),
-                    child: Text(
-                      "Filters",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+                        ],
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 24),
-              child: BlocBuilder(
-                cubit: BlocProvider.of<VendorBloc>(context),
-                builder: (context, state) {
-                  BlocProvider.of<VendorBloc>(context).add(LoadVendor());
-                  if (state is VendorLoaded) {
-                    properties = state.vendors;
-                    print("this is" + properties.toString());
-                  }
-                  if (state is VendorLoading) {
-                    return CircularProgressIndicator();
-                  }
-                  return ListView(
-                    physics: BouncingScrollPhysics(),
-                    scrollDirection: Axis.vertical,
-                    children: buildProperties(),
-                  );
-                },
+                  GestureDetector(
+                    onTap: () {
+
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 16, right: 24),
+                      child: Text(
+                        "Filters",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-          ),
-        ],
+            Expanded(
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 24),
+                child: BlocBuilder(
+                  cubit: BlocProvider.of<VendorBloc>(context),
+                  builder: (context, state) {
+                    BlocProvider.of<VendorBloc>(context).add(LoadVendor());
+                    if (state is VendorLoaded) {
+                      properties = state.vendors;
+                      
+                    }
+                    if (state is VendorLoading) {
+                      return CircularProgressIndicator();
+                    }
+                    return ListView(
+                      physics: BouncingScrollPhysics(),
+                      scrollDirection: Axis.vertical,
+                      children: buildProperties(),
+                    );
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton.extended(
+        
         onPressed: () => {
           onAdd(true),
            Navigator.push(
@@ -153,7 +159,7 @@ class _AllVendorPageDesktopState extends State<AllVendorPageDesktop> {
         icon: Icon(Icons.add),
         backgroundColor: hexToColor("#d86a77"),
       ),
-    ));
+    );
   }
 
   Widget buildFilter(String filterName, String selectCate) {
@@ -189,9 +195,9 @@ class _AllVendorPageDesktopState extends State<AllVendorPageDesktop> {
   List<Widget> buildProperties() {
     List<Widget> list = [];
     for (var i = 0; i < properties.length; i++) {
-      print('test' + properties[i].frontImage);
+      
       if (properties[i].cateID.trim().toString() == _defaultChoiceIndex) {
-        print(properties[i].cateID + " is equal " + _defaultChoiceIndex);
+        
         list.add(Hero(
             tag: properties[i].frontImage,
             child: buildProperty(properties[i])));

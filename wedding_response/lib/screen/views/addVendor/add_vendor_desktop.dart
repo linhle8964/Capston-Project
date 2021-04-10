@@ -94,12 +94,11 @@ class _AddVendorDesktopPageState extends State<AddVendorDesktopPage> {
     MediaQueryData queryData;
     queryData = MediaQuery.of(context);
     int maxLines = 3;
-
-    return CenteredView(
-    child:BlocBuilder(
+   
+    return BlocBuilder(
         cubit: BlocProvider.of<VendorBloc>(context),
         builder: (context, state) {
-          print(ModalRoute.of(context).settings.name.toString());
+         
           return Scaffold(
               appBar: AppBar(
                 leading: Icon(
@@ -140,300 +139,269 @@ class _AddVendorDesktopPageState extends State<AddVendorDesktopPage> {
                           )),
                 ],
               ),
-              body: SingleChildScrollView(
-                  child: SizedBox(
-                height: queryData.size.height,
-                width: queryData.size.width,
-                child: Form(
-                  key: _formkey,
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: TextFormField(
-                            controller: vendorNameController,
-                            validator: (val) {
-                              if (val == "") {
-                                showFailedSnackbar(
-                                    context, "Xin Vui Lòng Nhập Tên Dịch Vụ");
-                                return "Tên Dịch Vụ không được để trống";
-                              }
-                              return null;
-                            },
-                            decoration: new InputDecoration(
-                                labelText: 'Tên Dịch Vụ',
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Colors.blue, width: 2.0),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Colors.black, width: 2.0),
-                                ),
-                                hintText: 'Tên Dịch Vụ')),
-                      ),
-                      Container(
-                        child: Row(
-                          children: [
-                            Container(
-                                padding: EdgeInsets.only(
-                                    left: 20, right: 20, bottom: 20),
-                                width: queryData.size.width / 3.2,
-                                child: TextFormField(
-                                    controller: labelController,
-                                    validator: (val) {
-                                      if (val == "") {
-                                        showFailedSnackbar(context,
-                                            "Xin Vui Lòng Nhập Nhãn Hiệu ");
-                                        return "Nhãn Hiệu không được để trống";
-                                      }
-                                      return null;
-                                    },
-                                    decoration: new InputDecoration(
-                                      labelText: 'Nhãn Hiệu',
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: Colors.blue, width: 2.0),
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: Colors.black, width: 2.0),
-                                      ),
-                                      hintText: 'Nhãn Hiệu',
-                                    ))),
-                            Container(
-                                padding: EdgeInsets.only(
-                                    left: 20, right: 20, bottom: 20),
-                                width: queryData.size.width / 3.2,
-                                child: TextFormField(
-                                    controller: phoneController,
-                                    validator: (val) {
-                                      if (val == "") {
-                                        showFailedSnackbar(context,
-                                            "Xin Vui Lòng Nhập Số Điện Thoại");
-                                        return "Số điện thoại không được để trống";
-                                      } else if (!numRegex.hasMatch(val)) {
-                                        showFailedSnackbar(context,
-                                            "Xin vui lòng nhập số điện thoại chỉ gồm các chữ số");
-                                        return "Số điện thoại chỉ được phép có số";
-                                      }
-                                      return null;
-                                    },
-                                    decoration: new InputDecoration(
-                                      labelText: 'Số điện thoại',
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: Colors.blue, width: 2.0),
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: Colors.black, width: 2.0),
-                                      ),
-                                      hintText: 'Số điện thoại',
-                                    ))),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding:
-                            EdgeInsets.only(left: 20, right: 20, bottom: 20),
-                        child: TextFormField(
-                            controller: emailController,
-                            validator: (val) {
-                              if (val == "") {
-                                showFailedSnackbar(
-                                    context, "Xin Vui Lòng Nhập email");
-                                return "Email không được để trống";
-                              } else if (!emailRegex.hasMatch(val)) {
-                                showFailedSnackbar(
-                                    context, "Email không hợp lệ");
-                                return "Email không hợp lệ";
-                              }
-                              return null;
-                            },
-                            decoration: new InputDecoration(
-                                labelText: 'Email',
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Colors.blue, width: 2.0),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Colors.black, width: 2.0),
-                                ),
-                                hintText: 'Email')),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 20, right: 20),
-                        child: Container(
-                          padding: EdgeInsets.only(left: 20, right: 20),
-                          decoration: BoxDecoration(
-                              border:
-                                  Border.all(color: Colors.black, width: 2)),
-                          child: BlocBuilder(
-                            cubit: _cateBloc,
-                            builder: (context, state) {
-                              if (state is TodosLoaded) {
-                                _values2 = state.cates;
-                                print(state.cates.toString());
-                                
-                                return DropdownButtonFormField(
-                                  value:  selectedCate,
-                                  icon: Icon(Icons.arrow_downward),
-                                  iconSize: 24,
-                                  elevation: 16,
-                                  isExpanded: true,
-                                  style: TextStyle(color: Colors.deepPurple),
-                                  items: _values2.map((Category cate) {
-                                    return DropdownMenuItem<Category>(
-                                      value: cate,
-                                      child: Text(cate.cateName),
-                                    );
-                                  }).toList(),
-                                  onChanged: (val) =>
-                                      setState(() => selectedCate = val),
-                                  onSaved: (val) => selectedCate = val,
-                                );
-                              } else if (state is TodosLoading) {
-                                return LoadingIndicator();
-                              } else if (state is TodosNotLoaded) {}
-                              return LoadingIndicator();
-                            },
+              body: Padding(
+                padding:  EdgeInsets.fromLTRB(queryData.size.width*5 / 20, queryData.size.height/40, queryData.size.width*5 / 20, 0),
+
+                child: Center(
+                child: SingleChildScrollView(
+                    child: SizedBox(
+                      
+                  height: queryData.size.height,
+                  width: queryData.size.width,
+                  child: Form(
+                    key: _formkey,
+                    child: Column(
+                      children: [
+                        Container(
+                          child: Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: TextFormField(
+                                controller: vendorNameController,
+                                validator: (val) {
+                                  if (val == "") {
+                                    showFailedSnackbar(
+                                        context, "Xin Vui Lòng Nhập Tên Dịch Vụ");
+                                    return "Tên Dịch Vụ không được để trống";
+                                  }
+                                  return null;
+                                },
+                                decoration: new InputDecoration(
+                                    labelText: 'Tên Dịch Vụ',
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Colors.blue, width: 2.0),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: Colors.black, width: 2.0),
+                                    ),
+                                    hintText: 'Tên Dịch Vụ')),
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 20, right: 20, top: 20),
-                        child: TextFormField(
-                            controller: locationController,
-                            validator: (val) {
-                              if (val == "") {
-                                showFailedSnackbar(
-                                    context, "Xin Vui Lòng Nhập Địa Chỉ");
-                                return "Địa chỉ không được để trống";
-                              }
-                              return null;
-                            },
-                            decoration: new InputDecoration(
-                                labelText: 'Địa chỉ',
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Colors.blue, width: 2.0),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Colors.black, width: 2.0),
-                                ),
-                                hintText: 'Địa chỉ')),
-                      ),
-                      Container(
-                        height: 120,
-                        padding:
-                            const EdgeInsets.only(left: 20, right: 20, top: 20),
-                        child: TextFormField(
-                            maxLines: maxLines,
-                            controller: descriptionController,
-                            validator: (val) {
-                              if (val == "") {
-                                showFailedSnackbar(
-                                    context, "Xin Vui Lòng Nhập Miêu Tả ");
-                                return "Miêu Tả  không được để trống";
-                              }
-                              return null;
-                            },
-                            decoration: new InputDecoration(
-                                labelText: 'Miêu Tả',
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Colors.blue, width: 2.0),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: Colors.black, width: 2.0),
-                                ),
-                                hintText: 'Miêu Tả')),
-                      ),
-                      Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                          child: Padding(
-                            padding: const EdgeInsets.all(0.0),
-                            child: _frontImageData.length == 0
-                                ? Container(
-                                    child: Row(
-                                    children: <Widget>[
-                                      Container(
-                                          padding: EdgeInsets.only(
-                                              left: 20, right: 40, bottom: 20),
-                                          width: queryData.size.width / 2,
-                                          child: TextFormField(
-                                              enabled: false,
-                                              controller: frontImageController,
-                                              decoration: new InputDecoration(
-                                                focusedBorder:
-                                                    OutlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      color: Colors.blue,
-                                                      width: 2.0),
-                                                ),
-                                                enabledBorder:
-                                                    OutlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      color: Colors.black,
-                                                      width: 2.0),
-                                                ),
-                                                hintText: 'Ảnh Dịch Vụ',
-                                              ))),
-                                      TextButton(
-                                        style: TextButton.styleFrom(
-                                            primary: hexToColor("#d86a77")),
-                                        onPressed: () => !uploading
-                                            ? chooseImage(true)
-                                            : null,
-                                        child: Text(
-                                          'Chọn ảnh dịch vụ ',
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 20),
+                        Container(
+                          child: Row(
+                            children: [
+                              Container(
+                                  padding: EdgeInsets.only(
+                                      left: 20, right: 20, bottom: 20),
+                                  width: queryData.size.width / 4,
+                                  child: TextFormField(
+                                      controller: labelController,
+                                      validator: (val) {
+                                        if (val == "") {
+                                          showFailedSnackbar(context,
+                                              "Xin Vui Lòng Nhập Nhãn Hiệu ");
+                                          return "Nhãn Hiệu không được để trống";
+                                        }
+                                        return null;
+                                      },
+                                      decoration: new InputDecoration(
+                                        labelText: 'Nhãn Hiệu',
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Colors.blue, width: 2.0),
                                         ),
-                                      ),
-                                    ],
-                                  ))
-                                : Container(
-                                    child: Row(
-                                      children: [
-                                        Container(
-                                            padding: EdgeInsets.only(
-                                                left: 20,
-                                                right: 20,
-                                                bottom: 20),
-                                            width: queryData.size.width / 2,
-                                            child: TextFormField(
-                                                enabled: false,
-                                                controller:
-                                                    frontImageController,
-                                                decoration: new InputDecoration(
-                                                  labelText:
-                                                      _frontImageName.length ==
-                                                              0
-                                                          ? ""
-                                                          : _frontImageName[
-                                                              _frontImageName
-                                                                      .length -
-                                                                  1],
-                                                  focusedBorder:
-                                                      OutlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                        color: Colors.blue,
-                                                        width: 2.0),
-                                                  ),
-                                                  enabledBorder:
-                                                      OutlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                        color: Colors.black,
-                                                        width: 2.0),
-                                                  ),
-                                                  hintText: 'Ảnh Dịch Vụ',
-                                                ))),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Colors.black, width: 2.0),
+                                        ),
+                                        hintText: 'Nhãn Hiệu',
+                                      ))),
+                              Container(
+                                  padding: EdgeInsets.only(
+                                      left: 20, right: 20, bottom: 20),
+                                  width: queryData.size.width / 4,
+                                  child: TextFormField(
+                                      controller: phoneController,
+                                      validator: (val) {
+                                        if (val == "") {
+                                          showFailedSnackbar(context,
+                                              "Xin Vui Lòng Nhập Số Điện Thoại");
+                                          return "Số điện thoại không được để trống";
+                                        } else if (!numRegex.hasMatch(val)) {
+                                          showFailedSnackbar(context,
+                                              "Xin vui lòng nhập số điện thoại chỉ gồm các chữ số");
+                                          return "Số điện thoại chỉ được phép có số";
+                                        }else if(val.length!=10){
+                                          showFailedSnackbar(context,
+                                              "Xin vui lòng nhập số điện thoại gồm 10 chữ số");
+                                          return "Số điện thoại chỉ được phép có 10 chữ số";
+                                        }
+                                        return null;
+                                      },
+                                      decoration: new InputDecoration(
+                                        labelText: 'Số điện thoại',
+                                        focusedBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Colors.blue, width: 2.0),
+                                        ),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Colors.black, width: 2.0),
+                                        ),
+                                        hintText: 'Số điện thoại',
+                                      ))),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding:
+                              EdgeInsets.only(left: 20, right: 20, bottom: 20),
+                          child: TextFormField(
+                              controller: emailController,
+                              validator: (val) {
+                                if (val == "") {
+                                  showFailedSnackbar(
+                                      context, "Xin Vui Lòng Nhập email");
+                                  return "Email không được để trống";
+                                } else if (!emailRegex.hasMatch(val)) {
+                                  showFailedSnackbar(
+                                      context, "Email không hợp lệ");
+                                  return "Email không hợp lệ";
+                                }
+                                return null;
+                              },
+                              decoration: new InputDecoration(
+                                  labelText: 'Email',
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.blue, width: 2.0),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.black, width: 2.0),
+                                  ),
+                                  hintText: 'Email')),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 20, right: 20),
+                          child: Container(
+                            padding: EdgeInsets.only(left: 20, right: 20),
+                            decoration: BoxDecoration(
+                                border:
+                                    Border.all(color: Colors.black, width: 2)),
+                            child: BlocBuilder(
+                              cubit: _cateBloc,
+                              builder: (context, state) {
+                                if (state is TodosLoaded) {
+                                  _values2 = state.cates;
+                                  
+                                  
+                                  return DropdownButtonFormField(
+                                    value:  selectedCate,
+                                    icon: Icon(Icons.arrow_downward),
+                                    iconSize: 24,
+                                    elevation: 16,
+                                    isExpanded: true,
+                                    style: TextStyle(color: Colors.deepPurple),
+                                    items: _values2.map((Category cate) {
+                                      return DropdownMenuItem<Category>(
+                                        value: cate,
+                                        child: Text(cate.cateName),
+                                      );
+                                    }).toList(),
+                                    onChanged: (val) =>
+                                        setState(() => selectedCate = val),
+                                    onSaved: (val) => selectedCate = val,
+                                    validator: (val) {
+                                if (val == null) {
+                                  showFailedSnackbar(
+                                      context, "Xin Vui Lòng Chọn Loại Dịch Vụ");
+                                  return "Loại dịch vụ không được để trống";
+                                }
+                                return null;
+                              },
+                                  );
+                                } else if (state is TodosLoading) {
+                                  return LoadingIndicator();
+                                } else if (state is TodosNotLoaded) {}
+                                return LoadingIndicator();
+                              },
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 20, right: 20, top: 20),
+                          child: TextFormField(
+                              controller: locationController,
+                              validator: (val) {
+                                if (val == "") {
+                                  showFailedSnackbar(
+                                      context, "Xin Vui Lòng Nhập Địa Chỉ");
+                                  return "Địa chỉ không được để trống";
+                                }
+                                return null;
+                              },
+                              decoration: new InputDecoration(
+                                  labelText: 'Địa chỉ',
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.blue, width: 2.0),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.black, width: 2.0),
+                                  ),
+                                  hintText: 'Địa chỉ')),
+                        ),
+                        Container(
+                          
+                          padding:
+                              const EdgeInsets.only(left: 20, right: 20, top: 20),
+                          child: TextFormField(
+                              
+                              controller: descriptionController,
+                              validator: (val) {
+                                if (val == "") {
+                                  showFailedSnackbar(
+                                      context, "Xin Vui Lòng Nhập Miêu Tả ");
+                                  return "Miêu Tả  không được để trống";
+                                }
+                                return null;
+                              },
+                              decoration: new InputDecoration(
+                                  labelText: 'Miêu Tả',
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.blue, width: 2.0),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: Colors.black, width: 2.0),
+                                  ),
+                                  hintText: 'Miêu Tả')),
+                        ),
+                        Padding(
+                            padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+                            child: Padding(
+                              padding: const EdgeInsets.all(0.0),
+                              child: _frontImageData.length == 0
+                                  ? Container(
+                                      child: Row(
+                                      children: <Widget>[
+                                        Padding(
+                                          padding: const EdgeInsets.all(10.0),
+                                          child: Container(                                           
+                                              width: queryData.size.width / 5,
+                                              child: TextFormField(
+                                                  enabled: false,
+                                                  controller: frontImageController,
+                                                  decoration: new InputDecoration(
+                                                    focusedBorder:
+                                                        OutlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                          color: Colors.blue,
+                                                          width: 2.0),
+                                                    ),
+                                                    enabledBorder:
+                                                        OutlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                          color: Colors.black,
+                                                          width: 2.0),
+                                                    ),
+                                                    hintText: 'Ảnh Dịch Vụ',
+                                                  ))),
+                                        ),
                                         TextButton(
                                           style: TextButton.styleFrom(
                                               primary: hexToColor("#d86a77")),
@@ -446,112 +414,163 @@ class _AddVendorDesktopPageState extends State<AddVendorDesktopPage> {
                                                 color: Colors.black,
                                                 fontSize: 20),
                                           ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                          )),
-                      Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                          child: Padding(
-                            padding: const EdgeInsets.all(0.0),
-                            child: _frontImageData.length == 0
-                                ? Container(
-                                    child: Row(
-                                    children: <Widget>[
-                                      Container(
-                                          padding: EdgeInsets.only(
-                                              left: 20, right: 20, bottom: 20),
-                                          width: queryData.size.width / 2,
-                                          child: TextFormField(
-                                              enabled: false,
-                                              controller: ownerImageController,
-                                              decoration: new InputDecoration(
-                                                focusedBorder:
-                                                    OutlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      color: Colors.blue,
-                                                      width: 2.0),
-                                                ),
-                                                enabledBorder:
-                                                    OutlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                      color: Colors.black,
-                                                      width: 2.0),
-                                                ),
-                                                hintText: 'Ảnh Logo',
-                                              ))),
-                                      TextButton(
-                                        onPressed: () => !uploading
-                                            ? chooseImage(true)
-                                            : null,
-                                        child: Text(
-                                          'Chọn ảnh Logo ',
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 20),
                                         ),
+                                      ],
+                                    ))
+                                  : Container(
+                                      child: Row(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(1.0),
+                                            child: Container(                                          
+                                                width: queryData.size.width / 5,
+                                                child: TextFormField(
+                                                    enabled: false,
+                                                    controller:
+                                                        frontImageController,
+                                                    decoration: new InputDecoration(
+                                                      labelText:
+                                                          _frontImageName.length ==
+                                                                  0
+                                                              ? ""
+                                                              : _frontImageName[
+                                                                  _frontImageName
+                                                                          .length -
+                                                                      1],
+                                                      focusedBorder:
+                                                          OutlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                            color: Colors.blue,
+                                                            width: 2.0),
+                                                      ),
+                                                      enabledBorder:
+                                                          OutlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                            color: Colors.black,
+                                                            width: 2.0),
+                                                      ),
+                                                      hintText: 'Ảnh Dịch Vụ',
+                                                    ))),
+                                          ),
+                                          TextButton(
+                                            style: TextButton.styleFrom(
+                                                primary: hexToColor("#d86a77")),
+                                            onPressed: () => !uploading
+                                                ? chooseImage(true)
+                                                : null,
+                                            child: Text(
+                                              'Chọn ảnh dịch vụ ',
+                                              style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 20),
+                                            ),
+                                          )
+                                        ],
                                       ),
-                                    ],
-                                  ))
-                                : Container(
-                                    child: Row(
-                                      children: [
-                                        Container(
-                                            padding: EdgeInsets.only(
-                                                left: 20,
-                                                right: 20,
-                                                bottom: 20),
-                                            width: queryData.size.width / 2,
-                                            child: TextFormField(
-                                                enabled: false,
-                                                controller:
-                                                    ownerImageController,
-                                                decoration: new InputDecoration(
-                                                  labelText:
-                                                      _ownerImageName.length ==
-                                                              0
-                                                          ? ""
-                                                          : _ownerImageName[
-                                                              _ownerImageName
-                                                                      .length -
-                                                                  1],
-                                                  focusedBorder:
-                                                      OutlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                        color: Colors.blue,
-                                                        width: 2.0),
-                                                  ),
-                                                  enabledBorder:
-                                                      OutlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                        color: Colors.black,
-                                                        width: 2.0),
-                                                  ),
-                                                  hintText: 'Ảnh Dịch Vụ',
-                                                ))),
+                                    ),
+                            )),
+                        Padding(
+                            padding: const EdgeInsets.fromLTRB(20, 0, 0, 0),
+                            child: Padding(
+                              padding: const EdgeInsets.all(0.0),
+                              child: _frontImageData.length == 0
+                                  ? Container(
+                                      child: Row(
+                                      children: <Widget>[
+                                        Padding(
+                                          padding: const EdgeInsets.all(10.0),
+                                          child: Container(                                             
+                                              width: queryData.size.width / 5,
+                                              child: TextFormField(
+                                                  enabled: false,
+                                                  controller: ownerImageController,
+                                                  decoration: new InputDecoration(
+                                                    focusedBorder:
+                                                        OutlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                          color: Colors.blue,
+                                                          width: 2.0),
+                                                    ),
+                                                    enabledBorder:
+                                                        OutlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                          color: Colors.black,
+                                                          width: 2.0),
+                                                    ),
+                                                    hintText: 'Ảnh Logo',
+                                                  ))),
+                                        ),
                                         TextButton(
-                                          style: TextButton.styleFrom(
-                                              primary: hexToColor("#d86a77")),
                                           onPressed: () => !uploading
-                                              ? chooseImage(false)
+                                              ? chooseImage(true)
                                               : null,
                                           child: Text(
-                                            'Chọn ảnh logo ',
+                                            'Chọn ảnh Logo ',
                                             style: TextStyle(
                                                 color: Colors.black,
                                                 fontSize: 20),
                                           ),
-                                        )
+                                        ),
                                       ],
+                                    ))
+                                  : Container(
+                                      child: Row(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(10.0),
+                                            child: Container(                                             
+                                                width: queryData.size.width / 5,
+                                                child: TextFormField(
+                                                    enabled: false,
+                                                    controller:
+                                                        ownerImageController,
+                                                    decoration: new InputDecoration(
+                                                      labelText:
+                                                          _ownerImageName.length ==
+                                                                  0
+                                                              ? ""
+                                                              : _ownerImageName[
+                                                                  _ownerImageName
+                                                                          .length -
+                                                                      1],
+                                                      focusedBorder:
+                                                          OutlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                            color: Colors.blue,
+                                                            width: 2.0),
+                                                      ),
+                                                      enabledBorder:
+                                                          OutlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                            color: Colors.black,
+                                                            width: 2.0),
+                                                      ),
+                                                      hintText: 'Ảnh Dịch Vụ',
+                                                    ))),
+                                          ),
+                                          TextButton(
+                                            style: TextButton.styleFrom(
+                                                primary: hexToColor("#d86a77")),
+                                            onPressed: () => !uploading
+                                                ? chooseImage(false)
+                                                : null,
+                                            child: Text(
+                                              'Chọn ảnh logo ',
+                                              style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 20),
+                                            ),
+                                          )
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                          )),
-                    ],
+                            )),
+                      ],
+                    ),
                   ),
-                ),
-              )));
-        }));
+                ))),
+              ));
+        });
   }
 
   void chooseImage(bool type) async {

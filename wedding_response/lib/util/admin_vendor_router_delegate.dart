@@ -37,6 +37,7 @@ class AdminVendorRouterDelegate extends RouterDelegate<AdminVendorRoutePath>
   bool showDone = false;
   bool add = false;
   bool _login = true;
+  bool _home = false;
   void _handleTap(Vendor vendor) {
     _selectedVendor = Vendor(vendor.label, vendor.name,vendor.cateID ,vendor.location,vendor.description,vendor.frontImage,vendor.ownerImage,vendor.email,vendor.phone,id: vendor.id);
     notifyListeners();
@@ -47,7 +48,11 @@ class AdminVendorRouterDelegate extends RouterDelegate<AdminVendorRoutePath>
   }
   void _handlelogin(bool login){
     _login = login;
-    _selectedUser = UserWedding('admin');
+    _selectedUser = UserWedding('home');
+    notifyListeners();
+  }
+  void _handleHome(bool home){
+    _home = home;
     notifyListeners();
   }
   
@@ -59,6 +64,7 @@ class AdminVendorRouterDelegate extends RouterDelegate<AdminVendorRoutePath>
   AdminVendorRoutePath get currentConfiguration {
     if (show404) return AdminVendorRoutePath.unknown();
     if (_selectedUser != null && add) return AdminVendorRoutePath.add(_selectedUser.id);
+    if (_selectedUser != null && _home) return AdminVendorRoutePath.home(_selectedUser.id);
     if (_selectedUser == null && _selectedVendor == null) return AdminVendorRoutePath.login();
     if (_selectedUser != null && _selectedVendor == null) return AdminVendorRoutePath.allVendor(_selectedUser.id);
     if (_selectedUser != null && _selectedVendor != null)
@@ -94,13 +100,18 @@ class AdminVendorRouterDelegate extends RouterDelegate<AdminVendorRoutePath>
           else if ( _selectedVendor == null && !add && _login)
               MaterialPage(
                 key: ValueKey('Login'),
-                child: LoginPage(onTapped: _handleTap,onAdd: _handleAdd,onlogin: _handlelogin,)
+                child: LoginPage(onTapped: _handleTap,onAdd: _handleAdd,onlogin: _handlelogin,onHome: _handleHome,)
               )
               else if(_selectedUser == null && !_login)
                  MaterialPage(
                 key: ValueKey('Login'),
-                child: LoginPage(onTapped: _handleTap,onAdd: _handleAdd,onlogin: _handlelogin,)
-                 )            
+                child: LoginPage(onTapped: _handleTap,onAdd: _handleAdd,onlogin: _handlelogin,onHome: _handleHome,)
+                 )     
+              else if (_selectedUser != null && _selectedVendor == null && !add && !_login && _home)            
+                MaterialPage(
+                  key: ValueKey('Home'),
+                  child: HomeView(onTapped: _handleTap,onAdd: _handleAdd,onHome: _handleHome,)
+                )          
             else if (_selectedUser != null && _selectedVendor == null && add && !_login)            
                 MaterialPage(
                   key: ValueKey('AddVendor'),
@@ -121,6 +132,17 @@ class AdminVendorRouterDelegate extends RouterDelegate<AdminVendorRoutePath>
           if (!route.didPop(result)) {
             return false;
           }
+          if(route.toString().contains('Home')){
+            print(route.toString());
+          _selectedVendor = null;
+          _selectedUser = null;
+          show404 = false;
+          add = false;
+          _login= true;
+          notifyListeners();
+          return true;
+          }else if(route.toString().contains('inputDetails')){
+            print(route.toString());
           _selectedVendor = null;
           _selectedUser = UserWedding('admin');
           show404 = false;
@@ -128,6 +150,8 @@ class AdminVendorRouterDelegate extends RouterDelegate<AdminVendorRoutePath>
           _login= false;
           notifyListeners();
           return true;
+          }
+         return false;
         },
       ),
 
@@ -141,32 +165,51 @@ class AdminVendorRouterDelegate extends RouterDelegate<AdminVendorRoutePath>
 
     if (path.isAllVendorPage) {
       _selectedUser = UserWedding(path.adminID);
-
-
+      add =false;
+      _login=false;
+      _home=false;
+      _selectedVendor = null;
+      show404 = false;
     } else if (path.isInputDetailsPage) {
       _selectedUser = UserWedding(path.adminID);
-
       _selectedVendor = Vendor("", "","" ,"","","","","","" ,id: path.vendorID);
-
+      add =false;
+      _login=false;
+      _home=false;
+      show404 = false;
     } else if (path.isLoginPage){
       _selectedUser = null;
       _selectedVendor = null;
+      add =false;
+      _login=true;
+      _home=false;
       show404 = false;
       return;
+    }else if(path.isHome){
+      _selectedUser=UserWedding(path.adminID);
+      _selectedVendor = null;
+       show404 = false;
+       add =false;
+      _login=false;
+      _home=true;
+    }else if(path.isAdd){
+      _selectedUser=UserWedding(path.adminID);
+      _selectedVendor = null;
+       show404 = false;
+       add =true;
+      _login=false;
+      _home=false;
     }
 
     if (path.isUnknown) {
       _selectedUser = null;
       _selectedVendor = null;
       show404 = true;
+      add =false;
+      _login=false;
+      _home=false;
       return;
     }
-
-    if (path.isAdd) {
-      add = true;
-      return;
-    }
-
 
     add = false;
     showDone = false;
