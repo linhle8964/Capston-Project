@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:wedding_app/model/user_wedding.dart';
 import 'package:wedding_app/repository/user_wedding_repository.dart';
+import 'package:wedding_app/utils/get_share_preferences.dart';
 import 'bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -53,7 +54,7 @@ class UserWeddingBloc extends Bloc<UserWeddingEvent, UserWeddingState> {
       List<UserWedding> listUserWedding = await _userWeddingRepository
           .getAllWeddingAdminByWedding(userWedding.weddingId);
 
-      if (listUserWedding.length <= 1) {
+      if (listUserWedding.length <= 1 && isAdmin(userWedding.role)) {
         yield UserWeddingEmpty();
       } else {
         _userWeddingRepository.updateUserWedding(new UserWedding(

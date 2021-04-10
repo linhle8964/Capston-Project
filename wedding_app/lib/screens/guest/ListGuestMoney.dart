@@ -3,7 +3,6 @@ import 'package:wedding_app/bloc/guests/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wedding_app/firebase_repository/guest_firebase_repository.dart';
 import 'package:wedding_app/model/guest.dart';
-import 'package:wedding_app/utils/hex_color.dart';
 
 import '../../model/guest.dart';
 
@@ -18,7 +17,6 @@ class ListGuestMoney extends StatefulWidget {
 }
 
 class _ListGuestMoneyState extends State<ListGuestMoney> {
-
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   String getType(int type) {
@@ -143,112 +141,128 @@ class _ListGuestMoneyState extends State<ListGuestMoney> {
           return StatefulBuilder(builder: (context, setState) {
             return SingleChildScrollView(
                 child: MultiBlocProvider(
-                  providers: [
-                    BlocProvider<GuestsBloc>(
-                      create: (context) {
-                        return GuestsBloc(
-                          guestsRepository: FirebaseGuestRepository(),
-                        )..add(LoadGuests(weddingId));
-                      },
-                    ),
-                  ],
-                  child: AlertDialog(
-                    content: Form(
-                      key: _formKey,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
+              providers: [
+                BlocProvider<GuestsBloc>(
+                  create: (context) {
+                    return GuestsBloc(
+                      guestsRepository: FirebaseGuestRepository(),
+                    )..add(LoadGuests(weddingId));
+                  },
+                ),
+              ],
+              child: AlertDialog(
+                content: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        _name,
+                      ),
+                      Text(
+                        _description,
+                      ),
+                      Text(
+                        _phone,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
+                          Icon(Icons.home_outlined),
                           Text(
-                            _name,
+                            getType(widget.guests[index].type),
                           ),
-                          Text(
-                            _description,
-                          ),
-                          Text(
-                            _phone,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(Icons.home_outlined),
-                              Text(
-                                getType(widget.guests[index].type),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.monetization_on_outlined,
-                                color: Colors.amber,
-                              ),
-                              Text(
-                                'Số tiền mừng:'
-                              ),
-                            ],
-                          ),
-                          Builder(builder: (context) {
-                            return Container(
-                              child: Row(
-                                children: <Widget>[
-                                  Expanded(
-                                    flex: 2,
-                                    child: TextFormField(
-                                      textAlign: TextAlign.end,
-                                      initialValue: _money.toString(),
-                                      keyboardType: TextInputType.number,
-                                      onSaved: (input) =>
-                                      _money = int.parse(input),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 1,
-                                    child: Row(
-                                      children: <Widget>[
-                                        Text(
-                                            '.000vnđ'
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
-                            );
-                          }),
                         ],
                       ),
-                    ),
-                    actions: <Widget>[
-                      Builder(
-                        builder: (context) => TextButton(
-                          child: Text('Lưu'),
-                          onPressed: () {
-                            if (_formKey.currentState.validate()) {
-                              _formKey.currentState.save();
-                              updateGuest(context, widget.guests[index].id, _name, _description, _status, _phone, _type, _companion, _congrat, _money, weddingId);
-                              Navigator.of(context).pop();
-                            }
-                          },
-                        ),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.monetization_on_outlined,
+                            color: Colors.amber,
+                          ),
+                          Text('Số tiền mừng:'),
+                        ],
                       ),
-                      TextButton(
-                        child: Text('Hủy'),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
+                      Builder(builder: (context) {
+                        return Container(
+                          child: Row(
+                            children: <Widget>[
+                              Expanded(
+                                flex: 2,
+                                child: TextFormField(
+                                  textAlign: TextAlign.end,
+                                  initialValue: _money.toString(),
+                                  keyboardType: TextInputType.number,
+                                  onSaved: (input) => _money = int.parse(input),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: Row(
+                                  children: <Widget>[
+                                    Text('.000vnđ'),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                        );
+                      }),
                     ],
                   ),
-                ));
+                ),
+                actions: <Widget>[
+                  Builder(
+                    builder: (context) => TextButton(
+                      child: Text('Lưu'),
+                      onPressed: () {
+                        if (_formKey.currentState.validate()) {
+                          _formKey.currentState.save();
+                          updateGuest(
+                              context,
+                              widget.guests[index].id,
+                              _name,
+                              _description,
+                              _status,
+                              _phone,
+                              _type,
+                              _companion,
+                              _congrat,
+                              _money,
+                              weddingId);
+                          Navigator.of(context).pop();
+                        }
+                      },
+                    ),
+                  ),
+                  TextButton(
+                    child: Text('Hủy'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              ),
+            ));
           });
         });
   }
 
-  void updateGuest(var context, String id, String name, String description, int status, String phone, int type, int companion, String congrat, int money, String weddingId) {
+  void updateGuest(
+      var context,
+      String id,
+      String name,
+      String description,
+      int status,
+      String phone,
+      int type,
+      int companion,
+      String congrat,
+      int money,
+      String weddingId) {
     Guest guest = new Guest(
         name, description, status, phone, type, companion, congrat, money,
         id: id);
     BlocProvider.of<GuestsBloc>(context)..add(UpdateGuest(guest, weddingId));
   }
-
 }

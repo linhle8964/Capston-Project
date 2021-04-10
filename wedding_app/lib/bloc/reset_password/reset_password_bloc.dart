@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:wedding_app/bloc/reset_password/bloc.dart';
+import 'package:wedding_app/firebase_repository/user_firebase_repository.dart';
 import 'package:wedding_app/repository/user_repository.dart';
 import 'package:wedding_app/utils/validations.dart';
 
@@ -30,9 +31,11 @@ class ResetPasswordBloc extends Bloc<ResetPasswordEvent, ResetPasswordState> {
   Stream<ResetPasswordState> _mapSubmittedToState(String email) async* {
     yield ResetPasswordState.loading();
     try {
-      _userRepository.resetPassword(email).then((value) => add(
-          ShowSuccessMessage(
-              message: "Gửi thành công. Quý khách hãy kiểm tra email")));
+      await _userRepository.resetPassword(email);
+      yield ResetPasswordState.success(
+          message: "Gửi thành công. Quý khách hãy kiểm tra email");
+    } on EmailNotFoundException {
+      yield ResetPasswordState.failure(message: "Email chưa được đăng ký");
     } catch (e) {
       print("[ERROR] : $e");
       yield ResetPasswordState.failure(message: "Có lỗi xảy ra");

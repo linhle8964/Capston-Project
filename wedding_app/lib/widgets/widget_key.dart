@@ -31,5 +31,14 @@ class WidgetKey{
   // confirm dialog
   static const String yesConfirmButtonKey = "yes_confirm_button";
   static const String noConfirmButtonKey = "no_confirm_button";
+
+  //home screen
+  static const String invitationCardButtonKey = "invitation_card_button";
+  static const String vendorButtonKey = "vendor_button";
+
+  //choose template screen
+  static const String myInvitationCardTabKey = "my_invitation_card_tab";
+  static const String createInvitationCardTabKey = "create_invitation_card_tab";
+  static const String uploadInvitationCardTabkey = "upload_invitation_card_tab";
 }
 

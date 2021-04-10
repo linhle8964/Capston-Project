@@ -16,6 +16,7 @@ import 'package:wedding_app/screens/choose_template_invitation/fill_info_page.da
 import 'package:permission_handler/permission_handler.dart';
 import 'package:dio/dio.dart';
 import 'package:wedding_app/utils/hex_color.dart';
+import 'package:wedding_app/widgets/widget_key.dart';
 import '../../bloc/invitation_card/bloc.dart';
 import '../../widgets/loading_indicator.dart';
 import 'package:path_provider/path_provider.dart';
@@ -58,6 +59,7 @@ class _ChooseTemplatePageState extends State<ChooseTemplatePage> {
             bottom: TabBar(
               tabs: [
                 Tab(
+                  key: Key(WidgetKey.myInvitationCardTabKey),
                   child: Center(
                       child: Text(
                     'Thiệp mời của bạn',
@@ -65,6 +67,7 @@ class _ChooseTemplatePageState extends State<ChooseTemplatePage> {
                   )),
                 ),
                 Tab(
+                  key: Key(WidgetKey.createInvitationCardTabKey),
                   child: Center(
                       child: Text(
                     'Tạo Thiệp Mời',
@@ -72,6 +75,7 @@ class _ChooseTemplatePageState extends State<ChooseTemplatePage> {
                   )),
                 ),
                 Tab(
+                  key: Key(WidgetKey.uploadInvitationCardTabkey),
                   child: Center(
                       child: Text('Tải Lên Thiệp Có Sẵn',
                           style: TextStyle(color: Colors.white))),
@@ -148,7 +152,7 @@ class _ChooseTemplatePageState extends State<ChooseTemplatePage> {
                                 width: double.infinity,
                                 height: 40,
                                 child: TextButton(
-                                  style: TextButton.styleFrom(primary: hexToColor("#d86a77")),
+                                  style: TextButton.styleFrom(backgroundColor: hexToColor("#d86a77")),
                                   onPressed: _image.length > 0
                                       ? () {
                                           setState(() {
@@ -259,8 +263,8 @@ class _ChooseTemplatePageState extends State<ChooseTemplatePage> {
           Text("Bạn cần cấp quyền cho ứng dụng để thực hiện chức năng này!"),
       actions: [
         TextButton(
-            style: TextButton.styleFrom(primary: hexToColor("#d86a77")),
-            child: Text("Đóng"),
+            style: TextButton.styleFrom(backgroundColor: hexToColor("#d86a77")),
+            child: Text("Đóng",style: TextStyle(color: Colors.white),),
             onPressed: () {
               uploading = false;
               Navigator.of(_containerKey.currentContext).pop();
@@ -285,8 +289,8 @@ class _ChooseTemplatePageState extends State<ChooseTemplatePage> {
       content: Text("Bạn cần chọn ảnh có dung lượng nhỏ hơn 5MB"),
       actions: [
         TextButton(
-            style: TextButton.styleFrom(primary: hexToColor("#d86a77")),
-            child: Text("Đóng"),
+            style: TextButton.styleFrom(backgroundColor: hexToColor("#d86a77")),
+            child: Text("Đóng",style: TextStyle(color: Colors.white),),
             onPressed: () {
               uploading = false;
               Navigator.of(_containerKey.currentContext).pop();
@@ -311,8 +315,8 @@ class _ChooseTemplatePageState extends State<ChooseTemplatePage> {
       content: Text("Mẫu thiệp mới của bạn đã được lưu lại!"),
       actions: [
         TextButton(
-            style: TextButton.styleFrom(primary: hexToColor("#d86a77")),
-            child: Text("Hoàn thành"),
+            style: TextButton.styleFrom(backgroundColor: hexToColor("#d86a77")),
+            child: Text("Hoàn thành",style: TextStyle(color: Colors.white),),
             onPressed: () {
               uploading = false;
 
@@ -438,9 +442,9 @@ class MyCardState extends State<MyCard> {
       actions: [
         TextButton(
             style: TextButton.styleFrom(
-              primary: hexToColor("#d86a77"),
+              backgroundColor: hexToColor("#d86a77"),
             ),
-            child: Text("Đóng"),
+            child: Text("Đóng",style: TextStyle(color: Colors.white),),
             onPressed: () {
               Navigator.of(_containerKey.currentContext).pop();
             }),
@@ -464,8 +468,8 @@ class MyCardState extends State<MyCard> {
       content: Text("Mẫu thiệp mới của bạn đã được lưu lại!"),
       actions: [
         TextButton(
-            style: TextButton.styleFrom(primary: hexToColor("#d86a77")),
-            child: Text("Hoàn thành"),
+            style: TextButton.styleFrom(backgroundColor: hexToColor("#d86a77")),
+            child: Text("Hoàn thành",style: TextStyle(color: Colors.white),),
             onPressed: () {
               Navigator.of(_containerKey.currentContext).pop();
             }),

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:url_strategy/url_strategy.dart';
 import 'package:flutter_web_diary/util/wedding_guest_router_delegate.dart';
 import 'package:flutter_web_diary/util/wedding_route_information_parser.dart';
-
+import 'package:url_strategy/url_strategy.dart';
 
 void main() async {
   setPathUrlStrategy();

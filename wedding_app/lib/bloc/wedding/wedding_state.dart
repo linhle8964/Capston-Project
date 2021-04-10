@@ -6,7 +6,7 @@ abstract class WeddingState extends Equatable {
   const WeddingState([this.isSubmitted]);
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [isSubmitted];
 }
 
 class WeddingLoading extends WeddingState {}

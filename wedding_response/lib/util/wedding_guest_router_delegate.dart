@@ -8,6 +8,7 @@ import 'package:flutter_web_diary/screen/views/input_details/input_details.dart'
 import 'package:flutter_web_diary/screen/views/success/success_page.dart';
 import 'package:flutter_web_diary/util/wedding_route_path.dart';
 
+
 class WeddingGuestRouterDelegate extends RouterDelegate<WeddingGuestRoutePath>
     with
         ChangeNotifier,
