@@ -18,10 +18,6 @@ void main() {
     emailVerified: false,
   );
 
-  final invalidEmailUser = mock_user.MockUser(
-    email: "linhle8963@gmail.com",
-    emailVerified: true,
-  );
   group("LoginBloc", () {
     MockUserRepository mockUserRepository;
     LoginBloc loginBloc;

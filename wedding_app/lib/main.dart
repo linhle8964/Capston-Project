@@ -177,6 +177,7 @@ class MyApp extends StatelessWidget {
                     return InviteEmailBloc(
                       inviteEmailRepository: FirebaseInviteEmailRepository(),
                       userWeddingRepository: FirebaseUserWeddingRepository(),
+                      userRepository: FirebaseUserRepository(),
                     );
                   }),
                 ],
@@ -206,7 +207,8 @@ class MyApp extends StatelessWidget {
                   BlocProvider<InviteEmailBloc>(
                     create: (context) => InviteEmailBloc(
                         inviteEmailRepository: FirebaseInviteEmailRepository(),
-                        userWeddingRepository: FirebaseUserWeddingRepository()),
+                        userWeddingRepository: FirebaseUserWeddingRepository(),
+                        userRepository: FirebaseUserRepository()),
                   ),
                 ],
                 child: WeddingCodePage(),

@@ -101,10 +101,22 @@ void main() {
     MockWeddingRepository mockWeddingRepository;
     MockUserWeddingRepository mockUserWeddingRepository;
     MockInviteEmailRepository mockInviteEmailRepository;
+    MockFirebaseAuth mockFirebaseAuth;
     setUp(() {
       mockWeddingRepository = MockWeddingRepository();
       mockUserWeddingRepository = MockUserWeddingRepository();
       mockInviteEmailRepository = MockInviteEmailRepository();
+      mockFirebaseAuth = MockFirebaseAuth();
+    });
+
+    test("initial state is empty", () {
+      expect(
+          WeddingBloc(
+                  weddingRepository: mockWeddingRepository,
+                  userWeddingRepository: mockUserWeddingRepository,
+                  inviteEmailRepository: mockInviteEmailRepository)
+              .state,
+          WeddingLoading());
     });
 
     test('throws AssertionError when weddingRepository is null', () {
@@ -125,7 +137,7 @@ void main() {
           throwsA(isA<AssertionError>()));
     });
 
-    blocTest("create wedding",
+    blocTest("load wedding by id",
         build: () {
           //when(mockFirebaseAuth.currentUser).thenAnswer((_) => user);
           return WeddingBloc(
@@ -133,7 +145,46 @@ void main() {
               userWeddingRepository: mockUserWeddingRepository,
               inviteEmailRepository: mockInviteEmailRepository);
         },
+        act: (bloc) => bloc.add(LoadWeddingById(wedding.id)),
+        expect: []);
+
+    blocTest("create wedding",
+        build: () {
+          when(mockFirebaseAuth.currentUser).thenThrow((_) => Exception());
+          return WeddingBloc(
+              weddingRepository: mockWeddingRepository,
+              userWeddingRepository: mockUserWeddingRepository,
+              inviteEmailRepository: mockInviteEmailRepository);
+        },
         act: (bloc) => bloc.add(CreateWedding(wedding)),
+        expect: <WeddingState>[
+          Loading("Đang xử lý dữ liệu"),
+          //  Success("Tạo thành công")
+        ]);
+
+    blocTest("update wedding",
+        build: () {
+          //when(mockFirebaseAuth.currentUser).thenAnswer((_) => user);
+          return WeddingBloc(
+              weddingRepository: mockWeddingRepository,
+              userWeddingRepository: mockUserWeddingRepository,
+              inviteEmailRepository: mockInviteEmailRepository);
+        },
+        act: (bloc) => bloc.add(UpdateWedding(wedding)),
+        expect: [
+          Loading("Đang xử lý dữ liệu"),
+          //  Success("Tạo thành công")
+        ]);
+
+    blocTest("delete wedding",
+        build: () {
+          //when(mockFirebaseAuth.currentUser).thenAnswer((_) => user);
+          return WeddingBloc(
+              weddingRepository: mockWeddingRepository,
+              userWeddingRepository: mockUserWeddingRepository,
+              inviteEmailRepository: mockInviteEmailRepository);
+        },
+        act: (bloc) => bloc.add(DeleteWedding(wedding.id)),
         expect: [
           Loading("Đang xử lý dữ liệu"),
           //  Success("Tạo thành công")
