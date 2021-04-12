@@ -246,8 +246,8 @@ class _InvitationCardPageState extends State<InvitationCardPage> {
       content: Text("Bạn có muốn lưu lại mẫu thiệp này?"),
       actions: [
         TextButton(
-            style: TextButton.styleFrom(primary: hexToColor("#d86a77")),
-            child: Text("Có"),
+            style: TextButton.styleFrom(backgroundColor: hexToColor("#d86a77")),
+            child: Text("Có",style: TextStyle(color: Colors.white),),
             onPressed: () {
               Navigator.of(_containerKey.currentContext).pop();
               takeScreenShot();
@@ -261,9 +261,9 @@ class _InvitationCardPageState extends State<InvitationCardPage> {
             }),
         TextButton(
             style: TextButton.styleFrom(
-              primary: hexToColor("#d86a77"),
+              backgroundColor: hexToColor("#d86a77"),
             ),
-            child: Text("Không"),
+            child: Text("Không",style: TextStyle(color: Colors.white),),
             onPressed: () {
               Navigator.of(_containerKey.currentContext).pop();
             }),

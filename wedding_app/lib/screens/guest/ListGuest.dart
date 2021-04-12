@@ -3,22 +3,23 @@ import 'package:wedding_app/bloc/guests/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wedding_app/firebase_repository/guest_firebase_repository.dart';
 import 'package:wedding_app/model/guest.dart';
+import 'package:wedding_app/model/user_wedding.dart';
+import 'package:wedding_app/utils/get_share_preferences.dart';
 import 'package:wedding_app/utils/hex_color.dart';
 
 import '../../model/guest.dart';
 
 class ListGuest extends StatefulWidget {
   final List<Guest> guests;
-  final String weddingId;
+  final UserWedding userWedding;
 
-  ListGuest(this.guests, this.weddingId);
+  ListGuest(this.guests, this.userWedding);
 
   @override
   _ListGuestState createState() => _ListGuestState();
 }
 
 class _ListGuestState extends State<ListGuest> {
-
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   String getStatus(int stt) {
@@ -71,110 +72,114 @@ class _ListGuestState extends State<ListGuest> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MediaQuery.of(context).size.height - 250,
+      height: isAdmin(widget.userWedding.role)
+          ? MediaQuery.of(context).size.height - 250
+          : MediaQuery.of(context).size.height - 200,
       child: ListView.builder(
         itemCount: widget.guests.length,
         itemBuilder: (context, index) {
           return new ListTile(
-            title: Stack(
-              children: [
-                new Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    color: Colors.white,
-                    elevation: 5,
-                    child: Row(
-                      children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.all(5),
-                        ),
-                        Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Padding(padding: EdgeInsets.only(top: 5)),
-                              Text(
-                                widget.guests[index].name,
-                                overflow: TextOverflow.fade,
-                                maxLines: 1,
-                                softWrap: false,
-                              ),
-                              Padding(padding: EdgeInsets.all(2)),
-                              Text(
-                                widget.guests[index].description,
-                                overflow: TextOverflow.fade,
-                                maxLines: 1,
-                                softWrap: false,
-                              ),
-                              Builder(builder: (context) {
-                                if (widget.guests[index].status == 1 ||
-                                    widget.guests[index].status == 0) {
-                                  return Row(
-                                    children: [
-                                      Icon(Icons.home_outlined),
-                                      Text(
-                                        getType(widget.guests[index].type),
-                                      ),
-                                    ],
-                                  );
-                                } else {
-                                  return SizedBox.shrink();
-                                }
-                              }),
-                              Padding(padding: EdgeInsets.only(bottom: 5)),
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                          child: Row(
-                            children: <Widget>[
-                              Container(
-                                padding: const EdgeInsets.all(4),
-                                child: Text(
-                                  getStatus(widget.guests[index].status),
-                                  style: TextStyle(
-                                    color: hexToColor(
-                                        getColor(widget.guests[index].status)),
-                                  ),
-                                ),
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                        color: hexToColor(
-                                            getColor(widget.guests[index].status)),
-                                        width: 2),
-                                    borderRadius:
-                                    BorderRadius.all(Radius.circular(10))),
-                              ),
-                              _companionPart(widget.guests[index]),
-                              Padding(padding: EdgeInsets.only(right: 10)),
-                            ],
-                          ),
-                        ),
-                      ],
-                    )
-                ),
-                Positioned(
-                  top: 0,
-                  right: 0,
-                  child: Center(
-                      child:  IconButton (
-                          icon: Icon(
-                            Icons.monetization_on_outlined,
-                            color: Colors.amber,
-                          ),
-                          onPressed: () {
-                            showGuestMoneyDialog(context, index, widget.weddingId);
-                          }
-                      )
+            title: Stack(children: [
+              new Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                ),
-              ]
-            ),
+                  color: Colors.white,
+                  elevation: 5,
+                  child: Row(
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.all(5),
+                      ),
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Padding(padding: EdgeInsets.only(top: 5)),
+                            Text(
+                              widget.guests[index].name,
+                              overflow: TextOverflow.fade,
+                              maxLines: 1,
+                              softWrap: false,
+                            ),
+                            Padding(padding: EdgeInsets.all(2)),
+                            Text(
+                              widget.guests[index].description,
+                              overflow: TextOverflow.fade,
+                              maxLines: 1,
+                              softWrap: false,
+                            ),
+                            Builder(builder: (context) {
+                              if (widget.guests[index].status == 1 ||
+                                  widget.guests[index].status == 0) {
+                                return Row(
+                                  children: [
+                                    Icon(Icons.home_outlined),
+                                    Text(
+                                      getType(widget.guests[index].type),
+                                    ),
+                                  ],
+                                );
+                              } else {
+                                return SizedBox.shrink();
+                              }
+                            }),
+                            Padding(padding: EdgeInsets.only(bottom: 5)),
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        child: Row(
+                          children: <Widget>[
+                            Container(
+                              padding: const EdgeInsets.all(4),
+                              child: Text(
+                                getStatus(widget.guests[index].status),
+                                style: TextStyle(
+                                  color: hexToColor(
+                                      getColor(widget.guests[index].status)),
+                                ),
+                              ),
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      color: hexToColor(getColor(
+                                          widget.guests[index].status)),
+                                      width: 2),
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10))),
+                            ),
+                            _companionPart(widget.guests[index]),
+                            Padding(padding: EdgeInsets.only(right: 10)),
+                          ],
+                        ),
+                      ),
+                    ],
+                  )),
+              Builder(builder: (context) {
+                if (isAdmin(widget.userWedding.role)) {
+                  return Positioned(
+                    top: 0,
+                    right: 0,
+                    child: Center(
+                        child: IconButton(
+                            icon: Icon(
+                              Icons.monetization_on_outlined,
+                              color: Colors.amber,
+                            ),
+                            onPressed: () {
+                              showGuestMoneyDialog(
+                                  context, index, widget.userWedding.weddingId);
+                            })),
+                  );
+                } else {
+                  return SizedBox.shrink();
+                }
+              }),
+            ]),
             onTap: () {
               print(widget.guests[index].name);
-              showGuestInfoDialog(context, index, widget.weddingId);
+              showGuestInfoDialog(context, index, widget.userWedding.weddingId);
             },
           );
         },
@@ -465,103 +470,109 @@ class _ListGuestState extends State<ListGuest> {
           return StatefulBuilder(builder: (context, setState) {
             return SingleChildScrollView(
                 child: MultiBlocProvider(
-                  providers: [
-                    BlocProvider<GuestsBloc>(
-                      create: (context) {
-                        return GuestsBloc(
-                          guestsRepository: FirebaseGuestRepository(),
-                        )..add(LoadGuests(weddingId));
-                      },
-                    ),
-                  ],
-                  child: AlertDialog(
-                    content: Form(
-                      key: _formKey,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
+              providers: [
+                BlocProvider<GuestsBloc>(
+                  create: (context) {
+                    return GuestsBloc(
+                      guestsRepository: FirebaseGuestRepository(),
+                    )..add(LoadGuests(weddingId));
+                  },
+                ),
+              ],
+              child: AlertDialog(
+                content: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        _name,
+                      ),
+                      Text(
+                        _description,
+                      ),
+                      Text(
+                        _phone,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
+                          Icon(Icons.home_outlined),
                           Text(
-                            _name,
+                            getType(widget.guests[index].type),
                           ),
-                          Text(
-                            _description,
-                          ),
-                          Text(
-                            _phone,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(Icons.home_outlined),
-                              Text(
-                                getType(widget.guests[index].type),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Icon(
-                                Icons.monetization_on_outlined,
-                                color: Colors.amber,
-                              ),
-                              Text(
-                                  'Số tiền mừng:'
-                              ),
-                            ],
-                          ),
-                          Builder(builder: (context) {
-                            return Container(
-                              child: Row(
-                                children: <Widget>[
-                                  Expanded(
-                                    flex: 2,
-                                    child: TextFormField(
-                                      textAlign: TextAlign.end,
-                                      initialValue: _money.toString(),
-                                      keyboardType: TextInputType.number,
-                                      onSaved: (input) =>
-                                      _money = int.parse(input),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    flex: 1,
-                                    child: Row(
-                                      children: <Widget>[
-                                        Text(
-                                            '.000vnđ'
-                                        ),
-                                      ],
-                                    ),
-                                  )
-                                ],
-                              ),
-                            );
-                          }),
                         ],
                       ),
-                    ),
-                    actions: <Widget>[
-                      Builder(
-                        builder: (context) => TextButton(
-                          child: Text('Lưu'),
-                          onPressed: () {
-                            if (_formKey.currentState.validate()) {
-                              _formKey.currentState.save();
-                              updateGuest(context, widget.guests[index].id, _name, _description, _status, _phone, _type, _companion, _congrat, _money, weddingId);
-                              Navigator.of(context).pop();
-                            }
-                          },
-                        ),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.monetization_on_outlined,
+                            color: Colors.amber,
+                          ),
+                          Text('Số tiền mừng:'),
+                        ],
                       ),
-                      TextButton(
-                        child: Text('Hủy'),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
+                      Builder(builder: (context) {
+                        return Container(
+                          child: Row(
+                            children: <Widget>[
+                              Expanded(
+                                flex: 2,
+                                child: TextFormField(
+                                  textAlign: TextAlign.end,
+                                  initialValue: _money.toString(),
+                                  keyboardType: TextInputType.number,
+                                  onSaved: (input) => _money = int.parse(input),
+                                ),
+                              ),
+                              Expanded(
+                                flex: 1,
+                                child: Row(
+                                  children: <Widget>[
+                                    Text('.000vnđ'),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                        );
+                      }),
                     ],
                   ),
-                ));
+                ),
+                actions: <Widget>[
+                  Builder(
+                    builder: (context) => TextButton(
+                      child: Text('Lưu'),
+                      onPressed: () {
+                        if (_formKey.currentState.validate()) {
+                          _formKey.currentState.save();
+                          updateGuest(
+                              context,
+                              widget.guests[index].id,
+                              _name,
+                              _description,
+                              _status,
+                              _phone,
+                              _type,
+                              _companion,
+                              _congrat,
+                              _money,
+                              weddingId);
+                          Navigator.of(context).pop();
+                        }
+                      },
+                    ),
+                  ),
+                  TextButton(
+                    child: Text('Hủy'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              ),
+            ));
           });
         });
   }
@@ -638,5 +649,4 @@ class _ListGuestState extends State<ListGuest> {
     Guest guest = new Guest("", "", 0, "", 0, 0, "", 0, id: guestId);
     BlocProvider.of<GuestsBloc>(context)..add(DeleteGuest(guest, weddingId));
   }
-
 }

@@ -33,7 +33,7 @@ class _ChooseToComeState extends State<ChooseToCome> {
         //if status = 1.0 -> disable text field
         // status = 2 --> enable text field
         if(status ==1)
-          NumberInputWithIncrementDecrement(initialValue: widget.guest.companion.toString()),
+          NumberInputIncrementDecrement(initial: widget.guest.companion),
       ],
     );
   }

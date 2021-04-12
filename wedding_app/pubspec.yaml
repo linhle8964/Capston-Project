@@ -27,6 +27,7 @@ dependencies:
   flutter_countdown_timer: ^3.0.1
   contacts_service: ^0.4.6
   permission_handler: ^6.1.0
+  flutter_pdfview: ^1.1.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -74,6 +75,9 @@ dev_dependencies:
   share: ^2.0.1
   integration_test: ^1.0.2+2
   country_state_city_picker: ^1.2.7
+  number_inc_dec: ^0.6.6
+  url_strategy: ^0.2.0
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -96,6 +100,7 @@ flutter:
     - assets/cardTemplate/
     - assets/edit_invitation/
     - assets/image/
+    - assets/pdf/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

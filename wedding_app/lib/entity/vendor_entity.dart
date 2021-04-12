@@ -11,14 +11,15 @@ class VendorEntity extends Equatable {
   final String description;
   final String frontImage;
   final String ownerImage;
-
+  final String email;
+  final String phone;
 
   VendorEntity(this.id, this.label, this.name, this.cateID, this.location,
-      this.description, this.frontImage, this.ownerImage);
+      this.description, this.frontImage, this.ownerImage,this.email,this.phone);
 
   @override
   List<Object> get props =>
-      [id, label,name, cateID, location, description, frontImage, ownerImage];
+      [id, label,name, cateID, location, description, frontImage, ownerImage,email,phone];
 
   Map<String, Object> toJson() {
     return {
@@ -30,6 +31,8 @@ class VendorEntity extends Equatable {
       "description": description,
       "frontImage": frontImage,
       "ownerImage": ownerImage,
+      "email": email,
+      "phone": phone,
     };
   }
 
@@ -43,6 +46,8 @@ class VendorEntity extends Equatable {
       json["description"] as String,
       json["frontImage"] as String,
       json["ownerImage"] as String,
+      json["email"] as String,
+      json["phone"] as String,
     );
   }
 
@@ -55,7 +60,9 @@ class VendorEntity extends Equatable {
         snapshot.get("location"),
         snapshot.get("description"),
         snapshot.get("frontImage"),
-        snapshot.get("ownerImage")
+        snapshot.get("ownerImage"),
+        snapshot.get("email"),
+        snapshot.get("phone")
     );
   }
 
@@ -74,6 +81,8 @@ class VendorEntity extends Equatable {
       "description": description,
       "frontImage": frontImage,
       "ownerImage": ownerImage,
+      "email": email,
+      "phone": phone,
     };
   }
 }

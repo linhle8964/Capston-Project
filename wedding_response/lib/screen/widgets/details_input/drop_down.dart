@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_web_diary/screen/views/input_details/choose_to_come.dart';
 import 'package:flutter_web_diary/util/globle_variable.dart';
 
 class DropDownCustom extends StatelessWidget {
@@ -32,8 +31,10 @@ class DropDownCustom extends StatelessWidget {
           onTapped(val);
         },
         value: initialValue ==1  ? "Sẽ tới" : initialValue ==2 ? "Không tới" : null,
+        validator: (val) => val == null? "Hãy chọn đi hay không" : null,
         onSaved: (val) {
           selected = val;
+          guestToUpdate.status = status;
         },
         decoration: InputDecoration(
           hintText: "Bạn sẽ tham gia chứ",

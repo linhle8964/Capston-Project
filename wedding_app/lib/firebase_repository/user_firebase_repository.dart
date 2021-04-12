@@ -133,6 +133,17 @@ class FirebaseUserRepository extends UserRepository {
 
   @override
   Future<void> resetPassword(String email) async {
-    await _firebaseAuth.sendPasswordResetEmail(email: email);
+    try {
+      await _firebaseAuth.sendPasswordResetEmail(email: email);
+    } on FirebaseAuthException catch (e) {
+      // print(e.code.toString());
+      if (e.code == 'user-not-found') {
+        print("throw");
+        throw EmailNotFoundException();
+      }
+    } catch (e) {
+      print("Error: $e");
+      throw Exception("Có lỗi xảy ra");
+    }
   }
 }

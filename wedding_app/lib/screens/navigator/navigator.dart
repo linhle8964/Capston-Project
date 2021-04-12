@@ -7,6 +7,8 @@ import 'package:wedding_app/bloc/wedding/bloc.dart';
 import 'package:wedding_app/firebase_repository/firebase_task_repository.dart';
 import 'package:wedding_app/firebase_repository/guest_firebase_repository.dart';
 import 'package:wedding_app/firebase_repository/invite_email_firebase_repository.dart';
+import 'package:wedding_app/firebase_repository/notification_firebase_repository.dart';
+import 'package:wedding_app/model/user_wedding.dart';
 import 'package:wedding_app/screens/budget/budget_page.dart';
 import 'package:wedding_app/screens/checklist/checklist_page.dart';
 import 'package:wedding_app/screens/guest/view_guest_page.dart';
@@ -14,6 +16,8 @@ import 'package:wedding_app/screens/home/home_page.dart';
 import 'package:wedding_app/firebase_repository/user_wedding_firebase_repository.dart';
 import 'package:wedding_app/firebase_repository/wedding_firebase_repository.dart';
 import 'package:wedding_app/screens/setting/setting.dart';
+import 'package:wedding_app/screens/splash_page.dart';
+import 'package:wedding_app/utils/get_share_preferences.dart';
 import 'package:wedding_app/widgets/widget_key.dart';
 
 class NavigatorPage extends StatefulWidget {
@@ -23,13 +27,7 @@ class NavigatorPage extends StatefulWidget {
 
 class _NavigatorPageState extends State<NavigatorPage> {
   int _selectedIndex = 0;
-  final List<Widget> _children = [
-    HomePage(),
-    ChecklistPage(),
-    BudgetList(),
-    ViewGuestPage(),
-    SettingPage(),
-  ];
+
   void onTabTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -54,6 +52,7 @@ class _NavigatorPageState extends State<NavigatorPage> {
         BlocProvider<ChecklistBloc>(
           create: (BuildContext context) => ChecklistBloc(
             taskRepository: FirebaseTaskRepository(),
+            notificationRepository: NotificationFirebaseRepository(),
           ),
         ),
         BlocProvider<GuestsBloc>(
@@ -62,49 +61,70 @@ class _NavigatorPageState extends State<NavigatorPage> {
           ),
         )
       ],
-      child: Scaffold(
-        body: _children[_selectedIndex],
-        bottomNavigationBar: BottomNavigationBar(
-            key: Key(WidgetKey.bottomNavigationBarKey),
-            items: [
-              BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.home,
-                    key: Key(WidgetKey.navigateHomeButtonKey),
-                  ),
-                  label: "Trang chủ"),
-              BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.check_box,
-                    key: Key(WidgetKey.navigateTaskButtonKey),
-                  ),
-                  label: "Công việc"),
-              BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.account_balance_wallet_outlined,
-                    key: Key(WidgetKey.navigateBudgetButtonKey),
-                  ),
-                  label: "Kinh phí"),
-              BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.people,
-                    key: Key(WidgetKey.navigateGuestButtonKey),
-                  ),
-                  label: "Khách mời"),
-              BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.settings,
-                    key: Key(WidgetKey.navigateSettingButtonKey),
-                  ),
-                  label: "Cài đặt"),
-            ],
-            currentIndex: _selectedIndex,
-            selectedItemColor: Colors.red,
-            unselectedItemColor: Colors.grey.shade600,
-            selectedLabelStyle: TextStyle(fontWeight: FontWeight.w600),
-            unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w600),
-            type: BottomNavigationBarType.fixed,
-            onTap: onTabTapped),
+      child: FutureBuilder(
+        future: getUserWedding(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            UserWedding userWedding = snapshot.data;
+            List<Widget> _children = [
+              HomePage(),
+              ChecklistPage(
+                userWedding: userWedding,
+              ),
+              BudgetList(),
+              ViewGuestPage(
+                userWedding: userWedding,
+              ),
+              SettingPage(userWedding: userWedding),
+            ];
+            return Scaffold(
+              body: _children[_selectedIndex],
+              bottomNavigationBar: BottomNavigationBar(
+                  key: Key(WidgetKey.bottomNavigationBarKey),
+                  items: [
+                    BottomNavigationBarItem(
+                        icon: Icon(
+                          Icons.home,
+                          key: Key(WidgetKey.navigateHomeButtonKey),
+                        ),
+                        label: "Trang chủ"),
+                    BottomNavigationBarItem(
+                        icon: Icon(
+                          Icons.check_box,
+                          key: Key(WidgetKey.navigateTaskButtonKey),
+                        ),
+                        label: "Công việc"),
+                    BottomNavigationBarItem(
+                        icon: Icon(
+                          Icons.account_balance_wallet_outlined,
+                          key: Key(WidgetKey.navigateBudgetButtonKey),
+                        ),
+                        label: "Kinh phí"),
+                    BottomNavigationBarItem(
+                        icon: Icon(
+                          Icons.people,
+                          key: Key(WidgetKey.navigateGuestButtonKey),
+                        ),
+                        label: "Khách mời"),
+                    BottomNavigationBarItem(
+                        icon: Icon(
+                          Icons.settings,
+                          key: Key(WidgetKey.navigateSettingButtonKey),
+                        ),
+                        label: "Cài đặt"),
+                  ],
+                  currentIndex: _selectedIndex,
+                  selectedItemColor: Colors.red,
+                  unselectedItemColor: Colors.grey.shade600,
+                  selectedLabelStyle: TextStyle(fontWeight: FontWeight.w600),
+                  unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w600),
+                  type: BottomNavigationBarType.fixed,
+                  onTap: onTabTapped),
+            );
+          } else {
+            return SplashPage();
+          }
+        },
       ),
     );
   }

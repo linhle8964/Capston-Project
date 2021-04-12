@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_web_diary/bloc/authentication/authentication_event.dart';
 import 'package:flutter_web_diary/entity/wedding_entity.dart';
@@ -22,7 +23,6 @@ import 'package:universal_platform/universal_platform.dart';
 import 'package:desktop_window/desktop_window.dart';
 void main() async {
   setPathUrlStrategy();
-  
   return runApp(MyApp());
 }
 
@@ -32,9 +32,11 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+
   final _routerDelegate = AdminVendorRouterDelegate();
   final _routeInformationParser = AdminVendorRouteInformationParser();
   
+
   @override
   void initState() {
     // TODO: implement initState
@@ -58,30 +60,14 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers:[
-        BlocProvider<AuthenticationBloc>(
-          create: (context) {
-            return AuthenticationBloc(
-              userRepository: FirebaseUserRepository(),
-              userWeddingRepository: FirebaseUserWeddingRepository(),
-              weddingRepository: FirebaseWeddingRepository(),
-            )..add(AppStarted());
-          },
-        ),
-      ],
-
-
-
-      child: MaterialApp.router(
-        title: 'Wedding Invitation',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-          textTheme: Theme.of(context).textTheme.apply(fontFamily: 'Open Sans'),
-        ),
-        routerDelegate: _routerDelegate,
-        routeInformationParser: _routeInformationParser,
+    return MaterialApp.router(
+      title: 'Wedding Invitation',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        textTheme: Theme.of(context).textTheme.apply(fontFamily: 'Open Sans'),
       ),
+      routerDelegate: _routerDelegate,
+      routeInformationParser: _routeInformationParser,
     );
   }
 }

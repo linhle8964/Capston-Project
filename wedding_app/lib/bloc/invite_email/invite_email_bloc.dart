@@ -3,6 +3,7 @@ import 'package:bloc/bloc.dart';
 import 'package:wedding_app/model/invite_email.dart';
 import 'package:wedding_app/model/user_wedding.dart';
 import 'package:wedding_app/repository/invite_email_repository.dart';
+import 'package:wedding_app/repository/user_repository.dart';
 import 'package:wedding_app/repository/user_wedding_repository.dart';
 import 'package:wedding_app/utils/random_string.dart';
 import 'package:wedding_app/utils/validations.dart';
@@ -15,15 +16,18 @@ import 'package:mailer/smtp_server.dart';
 
 class InviteEmailBloc extends Bloc<InviteEmailEvent, InviteEmailState> {
   final InviteEmailRepository _inviteEmailRepository;
-  final FirebaseAuth auth = FirebaseAuth.instance;
+  final UserRepository _userRepository;
   final UserWeddingRepository _userWeddingRepository;
 
   InviteEmailBloc(
       {@required InviteEmailRepository inviteEmailRepository,
+        @required UserRepository userRepository,
       @required UserWeddingRepository userWeddingRepository})
       : assert(inviteEmailRepository != null),
+        assert(userRepository != null),
         assert(userWeddingRepository != null),
         _inviteEmailRepository = inviteEmailRepository,
+        _userRepository = userRepository,
         _userWeddingRepository = userWeddingRepository,
         super(InviteEmailLoading());
 
@@ -43,7 +47,7 @@ class InviteEmailBloc extends Bloc<InviteEmailEvent, InviteEmailState> {
 
     String code = getRandomString(6);
 
-    User user = auth.currentUser;
+    User user = await _userRepository.getUser();
     String from = user.email;
     String to = event.email;
     String title = "Bạn nhận được lời mời tham dự chỉnh sửa đám cưới";
@@ -131,7 +135,7 @@ class InviteEmailBloc extends Bloc<InviteEmailEvent, InviteEmailState> {
       SubmittedCode event) async* {
     yield InviteEmailProcessing();
     try {
-      final User user = auth.currentUser;
+      final User user = await _userRepository.getUser();
       InviteEmail inviteEmail =
           await _inviteEmailRepository.getInviteEmailByCode(event.code);
       if (inviteEmail.to == user.email) {

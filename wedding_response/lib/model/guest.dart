@@ -64,6 +64,7 @@ class Guest{
 
   @override
   String toString() {
-    return name + description + status.toString() + phone +companion.toString()+congrat+money.toString()+type.toString();
+    return name +"|"+ description +"|"+ status.toString() +"|"+ phone +"|"+companion.toString()+"|"
+        +congrat+"|"+money.toString()+"|"+type.toString();
   }
 }
