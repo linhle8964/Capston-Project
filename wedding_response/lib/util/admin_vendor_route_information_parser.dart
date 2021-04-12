@@ -33,7 +33,7 @@ class AdminVendorRouteInformationParser extends RouteInformationParser<AdminVend
       return  AdminVendorRoutePath.allVendor(admin);
     }
     // Handle '/admin/:vendorID'
-    if (uri.pathSegments.length == 2 && uri.pathSegments.elementAt(1)!='add') {
+    if (uri.pathSegments.length == 2 && uri.pathSegments.elementAt(1)!='add' && uri.pathSegments.elementAt(0)!='guest') {
       final admin = uri.pathSegments.first;
       final vendorID = uri.pathSegments.elementAt(1);
       if (admin == 'admin' && vendorID !=null) return AdminVendorRoutePath.inputDetailsVendor(admin,vendorID);
@@ -49,6 +49,26 @@ class AdminVendorRouteInformationParser extends RouteInformationParser<AdminVend
       if (admin == 'admin' && add =='add') return AdminVendorRoutePath.add(admin);
       else if (admin == 'admin' && add ==null) return AdminVendorRoutePath.allVendor(admin);
 
+      return AdminVendorRoutePath.unknown();
+    }
+
+    // Handle '/:weddingID'
+    if (uri.pathSegments.length == 2) {
+      if (uri.pathSegments.first != 'guest') return AdminVendorRoutePath.unknown();
+      final weddingID = uri.pathSegments.elementAt(1);
+      print(weddingID);
+      if (weddingID == null) return AdminVendorRoutePath.unknown();
+      if(weddingID == "done") return AdminVendorRoutePath.Done();
+      return AdminVendorRoutePath.register(weddingID);
+    }
+    // Handle '/:weddingID/:guestID'
+    if (uri.pathSegments.length == 3) {
+      if (uri.pathSegments.first != 'guest') return AdminVendorRoutePath.unknown();
+      final weddingID = uri.pathSegments.elementAt(1);
+      final guestID = uri.pathSegments.elementAt(2);
+      print(weddingID + "-" + guestID);
+      if (weddingID != null && guestID !=null) {return AdminVendorRoutePath.inputDetails(weddingID,guestID);}
+      if (weddingID != null && guestID == null) {return AdminVendorRoutePath.register(weddingID);}
       return AdminVendorRoutePath.unknown();
     }
 
@@ -76,7 +96,15 @@ class AdminVendorRouteInformationParser extends RouteInformationParser<AdminVend
     if(path.isAdd){
       return RouteInformation(location: '/admin/add');
     }
-    
+    if (path.isRegisterPage) {
+      return RouteInformation(location: '/guest/${path.weddingID}');
+    }
+    if (path.isInputDetailsPage) {
+      return RouteInformation(location: '/guest/${path.weddingID}/${path.guestID}');
+    }
+    if (path.isDone) {
+      return RouteInformation(location: '/guest/done');
+    }
 
 
     return null;

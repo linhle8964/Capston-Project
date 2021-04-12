@@ -74,7 +74,7 @@ class _LoginPageDesktopState extends State<LoginPageDesktop> {
              this.onHome(true);
            Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => HomeViewGuest(onHome: onHome,onAdd: onAdd,onTapped: onTapped,)),
+              MaterialPageRoute(builder: (context) => HomeViewVendor(onHome: onHome,onAdd: onAdd,onTapped: onTapped,)),
             );
           }
           if (state.isFailure) {

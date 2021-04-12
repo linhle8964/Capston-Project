@@ -73,7 +73,7 @@ class _LoginPageMobileState extends State<LoginPageMobile> {
                 this.onHome(true);
                Navigator.push(
                  context,
-                  MaterialPageRoute(builder: (context) => HomeViewGuest(onTapped: onTapped,onAdd: onAdd,onHome: onHome,)),
+                  MaterialPageRoute(builder: (context) => HomeViewVendor(onTapped: onTapped,onAdd: onAdd,onHome: onHome,)),
               );
               }
               if (state.isFailure) {
