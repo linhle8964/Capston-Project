@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_web_diary/model/vendor.dart';
 import 'package:flutter_web_diary/screen/views/allvendor/all_vendor_page.dart';
-import 'package:flutter_web_diary/screen/views/detail/vendor_detail_page.dart';
+import 'package:flutter_web_diary/screen/views/vendorDetail/vendor_detail_page.dart';
 import 'package:flutter_web_diary/screen/widgets/menu_item.dart';
 import 'package:flutter_web_diary/screen/widgets/constant.dart';
 import 'package:flutter_web_diary/util/hex_color.dart';

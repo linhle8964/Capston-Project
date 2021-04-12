@@ -8,7 +8,7 @@ import 'package:flutter_web_diary/model/vendor.dart';
 import 'package:flutter_web_diary/screen/views/allvendor/all_vendor_page.dart';
 
 import 'package:flutter_web_diary/screen/views/error/error_page.dart';
-import 'package:flutter_web_diary/screen/views/home/home_view.dart';
+import 'package:flutter_web_diary/screen/views/homeVendor/home_view.dart';
 import 'package:flutter_web_diary/screen/views/login/login_page_desktop.dart';
 import 'package:flutter_web_diary/screen/views/login/login_page_mobile.dart';
 import 'package:flutter_web_diary/screen/widgets/centered_view/centered_view.dart';
@@ -48,7 +48,7 @@ class LoginPage extends StatelessWidget {
             this.onHome(true);
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => HomeView(onTapped: onTapped,onAdd: onAdd,onHome: onHome,)),
+              MaterialPageRoute(builder: (context) => HomeViewGuest(onTapped: onTapped,onAdd: onAdd,onHome: onHome,)),
             );
           }
           if (state.isFailure) {

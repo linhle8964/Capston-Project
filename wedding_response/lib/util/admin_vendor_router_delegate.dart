@@ -13,12 +13,11 @@ import 'package:flutter_web_diary/model/guest.dart';
 import 'package:flutter_web_diary/model/user_wedding.dart';
 import 'package:flutter_web_diary/model/vendor.dart';
 import 'package:flutter_web_diary/model/wedding.dart';
-import 'package:flutter_web_diary/screen/vendor/detail.dart';
 import 'package:flutter_web_diary/screen/views/addVendor/add_vendor_page.dart';
 import 'package:flutter_web_diary/screen/views/allvendor/all_vendor_page.dart';
-import 'package:flutter_web_diary/screen/views/detail/vendor_detail_page.dart';
+import 'package:flutter_web_diary/screen/views/vendorDetail/vendor_detail_page.dart';
 import 'package:flutter_web_diary/screen/views/error/error_page.dart';
-import 'package:flutter_web_diary/screen/views/home/home_view.dart';
+import 'package:flutter_web_diary/screen/views/homeVendor/home_view.dart';
 import 'package:flutter_web_diary/screen/views/input_details/input_details.dart';
 import 'package:flutter_web_diary/screen/views/login/login_page.dart';
 import 'package:flutter_web_diary/screen/views/success/success_page.dart';
@@ -64,11 +63,11 @@ class AdminVendorRouterDelegate extends RouterDelegate<AdminVendorRoutePath>
   AdminVendorRoutePath get currentConfiguration {
     if (show404) return AdminVendorRoutePath.unknown();
     if (_selectedUser != null && add) return AdminVendorRoutePath.add(_selectedUser.id);
-    if (_selectedUser != null && _home) return AdminVendorRoutePath.home(_selectedUser.id);
+    if (_selectedUser != null && _home) return AdminVendorRoutePath.homeVendor(_selectedUser.id);
     if (_selectedUser == null && _selectedVendor == null) return AdminVendorRoutePath.login();
     if (_selectedUser != null && _selectedVendor == null) return AdminVendorRoutePath.allVendor(_selectedUser.id);
     if (_selectedUser != null && _selectedVendor != null)
-      return AdminVendorRoutePath.inputDetails(_selectedUser.id, _selectedVendor.id);
+      return AdminVendorRoutePath.inputDetailsVendor(_selectedUser.id, _selectedVendor.id);
   }
 
   @override
@@ -109,8 +108,8 @@ class AdminVendorRouterDelegate extends RouterDelegate<AdminVendorRoutePath>
                  )     
               else if (_selectedUser != null && _selectedVendor == null && !add && !_login && _home)            
                 MaterialPage(
-                  key: ValueKey('Home'),
-                  child: HomeView(onTapped: _handleTap,onAdd: _handleAdd,onHome: _handleHome,)
+                  key: ValueKey('HomeVendor'),
+                  child: HomeViewGuest(onTapped: _handleTap,onAdd: _handleAdd,onHome: _handleHome,)
                 )          
             else if (_selectedUser != null && _selectedVendor == null && add && !_login)            
                 MaterialPage(
@@ -124,7 +123,7 @@ class AdminVendorRouterDelegate extends RouterDelegate<AdminVendorRoutePath>
                 )                                
             else if (_selectedUser != null && _selectedVendor != null)
                 MaterialPage(
-                    key: ValueKey('inputDetails'),
+                    key: ValueKey('inputDetailsVendor'),
                     child: VendorDetailPage(vendor: _selectedVendor,isEditing: true,)
                 ),
         ],
@@ -170,7 +169,7 @@ class AdminVendorRouterDelegate extends RouterDelegate<AdminVendorRoutePath>
       _home=false;
       _selectedVendor = null;
       show404 = false;
-    } else if (path.isInputDetailsPage) {
+    } else if (path.isInputDetailsVendorPage) {
       _selectedUser = UserWedding(path.adminID);
       _selectedVendor = Vendor("", "","" ,"","","","","","" ,id: path.vendorID);
       add =false;
@@ -185,7 +184,7 @@ class AdminVendorRouterDelegate extends RouterDelegate<AdminVendorRoutePath>
       _home=false;
       show404 = false;
       return;
-    }else if(path.isHome){
+    }else if(path.isHomeVendorPage){
       _selectedUser=UserWedding(path.adminID);
       _selectedVendor = null;
        show404 = false;

@@ -8,18 +8,18 @@ import 'package:flutter_web_diary/model/guest.dart';
 import 'package:flutter_web_diary/model/vendor.dart';
 import 'package:flutter_web_diary/model/wedding.dart';
 import 'package:flutter_web_diary/screen/views/error/error_page.dart';
-import 'package:flutter_web_diary/screen/views/home/home_view_desktop.dart';
-import 'package:flutter_web_diary/screen/views/home/home_view_tablet_mobile.dart';
+import 'package:flutter_web_diary/screen/views/homeVendor/home_view_desktop.dart';
+import 'package:flutter_web_diary/screen/views/homeVendor/home_view_tablet_mobile.dart';
 import 'package:flutter_web_diary/screen/widgets/centered_view/centered_view.dart';
 import 'package:flutter_web_diary/util/globle_variable.dart';
 import 'package:responsive_builder/responsive_builder.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class HomeView extends StatelessWidget {
+class HomeViewGuest extends StatelessWidget {
  final ValueChanged<Vendor> onTapped;
   final ValueChanged<bool> onAdd;
    final ValueChanged<bool> onHome;
-   HomeView({Key key, this.onTapped, this.onAdd,this.onHome}) : super(key: key);
+   HomeViewGuest({Key key, this.onTapped, this.onAdd,this.onHome}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

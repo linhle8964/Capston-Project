@@ -22,7 +22,7 @@ class AdminVendorRouteInformationParser extends RouteInformationParser<AdminVend
       final home = uri.pathSegments.first;
       if (home == null) return AdminVendorRoutePath.unknown();
       if(home != "home" ) return  AdminVendorRoutePath.unknown();
-      return AdminVendorRoutePath.home(home);
+      return AdminVendorRoutePath.homeVendor(home);
     }
 
     // Handle '/admin'
@@ -36,7 +36,7 @@ class AdminVendorRouteInformationParser extends RouteInformationParser<AdminVend
     if (uri.pathSegments.length == 2 && uri.pathSegments.elementAt(1)!='add') {
       final admin = uri.pathSegments.first;
       final vendorID = uri.pathSegments.elementAt(1);
-      if (admin == 'admin' && vendorID !=null) return AdminVendorRoutePath.inputDetails(admin,vendorID);
+      if (admin == 'admin' && vendorID !=null) return AdminVendorRoutePath.inputDetailsVendor(admin,vendorID);
       else if (admin == 'admin' && vendorID ==null) return AdminVendorRoutePath.allVendor(admin);
 
       return AdminVendorRoutePath.unknown();
@@ -61,13 +61,13 @@ class AdminVendorRouteInformationParser extends RouteInformationParser<AdminVend
     if (path.isUnknown) {
       return RouteInformation(location: '/404');
     }
-    if(path.isHome){
+    if(path.isHomeVendorPage){
       return RouteInformation(location: '/home');
     }
     if (path.isAllVendorPage) {
       return RouteInformation(location: '/admin');
     }
-    if (path.isInputDetailsPage) {
+    if (path.isInputDetailsVendorPage) {
       return RouteInformation(location: '/admin/${path.vendorID}');
     }
     if (path.isLoginPage) {

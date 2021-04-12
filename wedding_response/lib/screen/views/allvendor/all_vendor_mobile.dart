@@ -4,12 +4,10 @@ import 'package:flutter_web_diary/bloc/vendor/bloc.dart';
 import 'package:flutter_web_diary/model/category.dart';
 import 'package:flutter_web_diary/model/vendor.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_web_diary/screen/vendor/filter.dart';
-import 'package:flutter_web_diary/screen/vendor/detail.dart';
 import 'package:flutter_web_diary/screen/views/addVendor/add_vendor_page.dart';
 import 'package:flutter_web_diary/screen/views/allvendor/all_vendor_page.dart';
-import 'package:flutter_web_diary/screen/views/detail/vendor_detail_mobile.dart';
-import 'package:flutter_web_diary/screen/views/detail/vendor_detail_page.dart';
+import 'package:flutter_web_diary/screen/views/vendorDetail/vendor_detail_mobile.dart';
+import 'package:flutter_web_diary/screen/views/vendorDetail/vendor_detail_page.dart';
 import 'package:flutter_web_diary/util/hex_color.dart';
 import 'package:search_page/search_page.dart';
 
@@ -425,22 +423,5 @@ class _AllVendorPageMobileState extends State<AllVendorPageMobile> {
     ];
   }
 
-  void _showBottomSheet() {
-    showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(30),
-            topRight: Radius.circular(30),
-          ),
-        ),
-        builder: (BuildContext context) {
-          return Wrap(
-            children: [
-              Filter(),
-            ],
-          );
-        });
-  }
+
 }

@@ -10,8 +10,8 @@ import 'package:flutter_web_diary/screen/views/addVendor/add_vendor_desktop.dart
 import 'package:flutter_web_diary/screen/views/addVendor/add_vendor_mobile.dart';
 import 'package:flutter_web_diary/screen/views/allvendor/all_vendor_desktop.dart';
 import 'package:flutter_web_diary/screen/views/allvendor/all_vendor_mobile.dart';
-import 'package:flutter_web_diary/screen/views/detail/vendor_detail_desktop.dart';
-import 'package:flutter_web_diary/screen/views/detail/vendor_detail_mobile.dart';
+import 'package:flutter_web_diary/screen/views/vendorDetail/vendor_detail_desktop.dart';
+import 'package:flutter_web_diary/screen/views/vendorDetail/vendor_detail_mobile.dart';
 import 'package:flutter_web_diary/screen/views/error/error_page.dart';
 import 'package:flutter_web_diary/screen/widgets/centered_view/centered_view.dart';
 import 'package:responsive_builder/responsive_builder.dart';

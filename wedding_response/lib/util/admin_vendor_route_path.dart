@@ -7,7 +7,7 @@ class AdminVendorRoutePath {
   
 
 
-  AdminVendorRoutePath.inputDetails(this.adminID, this.vendorID) : isUnknown = false, isAdd = false, isHome = false;
+  AdminVendorRoutePath.inputDetailsVendor(this.adminID, this.vendorID) : isUnknown = false, isAdd = false, isHome = false;
   AdminVendorRoutePath.login()
       : adminID = null,
         vendorID = null,
@@ -32,7 +32,7 @@ class AdminVendorRoutePath {
         isHome = false,
         isAdd= true;
 
-  AdminVendorRoutePath.home(this.adminID)
+  AdminVendorRoutePath.homeVendor(this.adminID)
       : vendorID = null,
         isUnknown = false,
         isHome = true,
@@ -40,8 +40,7 @@ class AdminVendorRoutePath {
 
   bool get isAddPage => adminID != null && vendorID == null && isAdd == true;
   bool get isLoginPage => adminID == null && vendorID == null && isUnknown == false;
-  bool get isHomePage => adminID != null && vendorID == null && isAdd == false && isHome == true;
-  bool get isInputDetailsPage => adminID != null && vendorID != null;
-
+  bool get isHomeVendorPage => adminID != null && vendorID == null && isAdd == false && isHome == true;
+  bool get isInputDetailsVendorPage => adminID != null && vendorID != null;
   bool get isAllVendorPage => adminID != null && vendorID == null  && isAdd == false && isHome == false;
 }

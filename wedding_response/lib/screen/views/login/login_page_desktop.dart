@@ -7,7 +7,7 @@ import 'package:flutter_web_diary/firebase_repository/user_firebase_repository.d
 import 'package:flutter_web_diary/firebase_repository/user_wedding_firebase_repository.dart';
 import 'package:flutter_web_diary/model/vendor.dart';
 import 'package:flutter_web_diary/screen/views/allvendor/all_vendor_page.dart';
-import 'package:flutter_web_diary/screen/views/home/home_view.dart';
+import 'package:flutter_web_diary/screen/views/homeVendor/home_view.dart';
 import 'package:flutter_web_diary/util/show_snackbar.dart';
 import 'package:flutter_web_diary/util/alert_dialog.dart';
 
@@ -74,7 +74,7 @@ class _LoginPageDesktopState extends State<LoginPageDesktop> {
              this.onHome(true);
            Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => HomeView(onHome: onHome,onAdd: onAdd,onTapped: onTapped,)),
+              MaterialPageRoute(builder: (context) => HomeViewGuest(onHome: onHome,onAdd: onAdd,onTapped: onTapped,)),
             );
           }
           if (state.isFailure) {
