@@ -2,14 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_web_diary/bloc/login/bloc.dart';
-import 'package:flutter_web_diary/bloc/authentication/bloc.dart';
 import 'package:flutter_web_diary/firebase_repository/user_firebase_repository.dart';
 import 'package:flutter_web_diary/firebase_repository/user_wedding_firebase_repository.dart';
 import 'package:flutter_web_diary/model/vendor.dart';
-import 'package:flutter_web_diary/screen/views/allvendor/all_vendor_page.dart';
 import 'package:flutter_web_diary/screen/views/homeVendor/home_view.dart';
 import 'package:flutter_web_diary/util/show_snackbar.dart';
-import 'package:flutter_web_diary/util/alert_dialog.dart';
 
 class LoginPageMobile extends StatefulWidget {
   final ValueChanged<Vendor> onTapped;

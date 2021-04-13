@@ -1,9 +1,8 @@
-import 'dart:io';
+
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_web_diary/screen/widgets/centered_view/centered_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_web_diary/bloc/vendor/bloc.dart';
@@ -15,13 +14,9 @@ import 'package:flutter_web_diary/util/show_snackbar.dart';
 import 'package:flutter_web_diary/screen/widgets/confirm_dialog.dart';
 import 'package:flutter_web_diary/screen/widgets/loading_indicator.dart';
 import 'package:intl/intl.dart';
-import 'package:transparent_image/transparent_image.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:path_provider/path_provider.dart';
-
 class VendorDetailDesktopPage extends StatefulWidget {
   final bool isEditing;
   final Vendor vendor;

@@ -8,7 +8,6 @@ import 'package:flutter_web_diary/firebase_repository/category_firebase_reposito
 import 'package:flutter_web_diary/firebase_repository/user_firebase_repository.dart';
 import 'package:flutter_web_diary/firebase_repository/user_wedding_firebase_repository.dart';
 import 'package:flutter_web_diary/firebase_repository/vendor_firebase_repository.dart';
-import 'package:flutter_web_diary/firebase_repository/wedding_firebase_repository.dart';
 import 'package:flutter_web_diary/model/guest.dart';
 import 'package:flutter_web_diary/model/user_wedding.dart';
 import 'package:flutter_web_diary/model/vendor.dart';
@@ -21,8 +20,6 @@ import 'package:flutter_web_diary/screen/views/homeVendor/home_view.dart';
 import 'package:flutter_web_diary/screen/views/input_details/input_details.dart';
 import 'package:flutter_web_diary/screen/views/login/login_page.dart';
 import 'package:flutter_web_diary/screen/views/success/success_page.dart';
-import 'package:flutter_web_diary/util/admin_login_route_path.dart';
-import 'package:flutter_web_diary/util/globle_variable.dart';
 import 'package:flutter_web_diary/util/admin_vendor_route_path.dart';
 import 'package:flutter_web_diary/screen/views/home/home_view.dart';
 class AdminVendorRouterDelegate extends RouterDelegate<AdminVendorRoutePath>
