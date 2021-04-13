@@ -5,6 +5,7 @@ import 'package:wedding_app/model/user_wedding.dart';
 import 'package:wedding_app/repository/invite_email_repository.dart';
 import 'package:wedding_app/repository/user_repository.dart';
 import 'package:wedding_app/repository/user_wedding_repository.dart';
+import 'package:wedding_app/utils/message_const.dart';
 import 'package:wedding_app/utils/random_string.dart';
 import 'package:wedding_app/utils/validations.dart';
 import 'bloc.dart';
@@ -67,9 +68,9 @@ class InviteEmailBloc extends Bloc<InviteEmailEvent, InviteEmailState> {
 
       if (!valid) {
         if (!Validation.isEmailValid(event.email)) {
-          yield InviteEmailError(message: "Email không đúng");
+          yield InviteEmailError(message: MessageConst.invalidEmail);
         } else if (checkInviteEmail != null) {
-          yield InviteEmailError(message: "Email này đã được mời");
+          yield InviteEmailError(message: MessageConst.emailAlreadyInvited);
         }
       } else {
         InviteEmail inviteEmail = new InviteEmail(
@@ -86,25 +87,25 @@ class InviteEmailBloc extends Bloc<InviteEmailEvent, InviteEmailState> {
           if (userWedding.weddingId == weddingId) {
             // đã có đám cưới
             yield InviteEmailError(
-                message: "Người dùng này đã có trong đám cưới");
+                message: MessageConst.userAlreadyInWeddingError);
           } else {
             // chưa có đám cưới
             await _sendEmail(inviteEmail).then((value) =>
                 _inviteEmailRepository.createInviteEmail(inviteEmail));
 
-            yield InviteEmailSuccess(message: "Thành công");
+            yield InviteEmailSuccess(message: MessageConst.commonSuccess);
           }
         } else {
           // người dùng chưa có tài khoản
           await _sendEmail(inviteEmail).then(
               (value) => _inviteEmailRepository.createInviteEmail(inviteEmail));
 
-          yield InviteEmailSuccess(message: "Thành công");
+          yield InviteEmailSuccess(message: MessageConst.commonSuccess);
         }
       }
     } catch (e) {
       print("[ERROR]" + e);
-      yield InviteEmailError(message: "Có lỗi xảy ra");
+      yield InviteEmailError(message: MessageConst.commonError);
     }
   }
 
@@ -149,17 +150,17 @@ class InviteEmailBloc extends Bloc<InviteEmailEvent, InviteEmailState> {
             id: userWedding.id);
         _userWeddingRepository
             .updateUserWedding(newUserWedding)
-            .then((value) async {
+            .then((_) async {
           await _inviteEmailRepository.deleteInviteEmailByEmail(
               inviteEmail.to, inviteEmail.weddingId);
         });
-        yield InviteEmailSuccess(message: "Thành công");
+        yield InviteEmailSuccess(message: MessageConst.commonSuccess);
       } else {
-        yield InviteEmailError(message: "Mã không đúng");
+        yield InviteEmailError(message: MessageConst.codeNotFound);
       }
     } catch (e) {
-      print(e);
-      yield InviteEmailError(message: "Có lỗi xảy ra");
+      print(e.toString());
+      yield InviteEmailError(message: MessageConst.commonError);
     }
   }
 }
