@@ -8,7 +8,7 @@ import 'package:wedding_app/model/guest.dart';
 import 'package:wedding_app/model/notification.dart';
 import 'package:wedding_app/model/task_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:wedding_app/notification/notification.dart';
+import 'package:wedding_app/screens/notification/notification.dart';
 
 import 'notification_dialog.dart';
 

@@ -8,7 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:wedding_app/repository/user_repository.dart';
 import 'package:wedding_app/repository/user_wedding_repository.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:wedding_app/utils/message_const.dart';
+import 'file:///C:/Users/ADMIN/Documents/Git/Capston-Project/wedding_app/lib/const/message_const.dart';
 import '../mock.dart';
 import '../mock_user.dart' as mock_user;
 import 'package:cloud_firestore_mocks/cloud_firestore_mocks.dart';

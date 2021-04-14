@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wedding_app/const/route_name.dart';
 import 'package:wedding_app/model/wedding.dart';
 import 'package:wedding_app/screens/create_wedding/create_wedding_argument.dart';
 import 'package:wedding_app/utils/hex_color.dart';
@@ -46,13 +47,13 @@ class PickWeddingPage extends StatelessWidget {
                           side: BorderSide(color: Colors.red)),
                     ),
                     onPressed: () =>
-                        Navigator.pushNamed(context, "/create_wedding", arguments: CreateWeddingArguments(isEditing: false, wedding: new Wedding("", "", DateTime.now(), "", "")))),
+                        Navigator.pushNamed(context, RouteName.createWedding, arguments: CreateWeddingArguments(isEditing: false, wedding: new Wedding("", "", DateTime.now(), "", "")))),
               ),
               SizedBox(
                 width: width / 2,
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, "/wedding_code");
+                    Navigator.pushNamed(context, RouteName.weddingCode);
                   },
                   style: ElevatedButton.styleFrom(
                     primary: hexToColor("#d86a77"),

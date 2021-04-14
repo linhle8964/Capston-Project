@@ -10,7 +10,7 @@ import 'package:wedding_app/bloc/wedding/bloc.dart';
 import 'package:wedding_app/firebase_repository/notification_firebase_repository.dart';
 import 'package:wedding_app/model/notification.dart';
 import 'package:wedding_app/model/user_wedding.dart';
-import 'package:wedding_app/notification/notification.dart';
+import 'package:wedding_app/screens/notification/notification.dart';
 import 'package:wedding_app/screens/choose_template_invitation/chooseTemplate_page.dart';
 import 'package:wedding_app/model/wedding.dart';
 import 'package:wedding_app/screens/home/notification_button.dart';
@@ -25,7 +25,7 @@ import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wedding_app/widgets/receive_notification.dart';
-import 'package:wedding_app/widgets/widget_key.dart';
+import 'file:///C:/Users/ADMIN/Documents/Git/Capston-Project/wedding_app/lib/const/widget_key.dart';
 import 'button_column.dart';
 import 'info_column.dart';
 
@@ -41,7 +41,6 @@ showprint() async {
   String weddingID = prefs.getString("wedding_id");
   await Firebase.initializeApp();
   NotificationManagement.executeAlarm(weddingID);
-  print("CALLING");
 }
 
 class _HomePageState extends State<HomePage> {

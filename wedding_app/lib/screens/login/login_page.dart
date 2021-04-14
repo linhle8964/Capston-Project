@@ -5,7 +5,7 @@ import 'package:wedding_app/bloc/login/bloc.dart';
 import 'package:wedding_app/bloc/authentication/bloc.dart';
 import 'package:wedding_app/utils/alert_dialog.dart';
 import 'package:wedding_app/utils/show_snackbar.dart';
-import 'package:wedding_app/widgets/widget_key.dart';
+import 'file:///C:/Users/ADMIN/Documents/Git/Capston-Project/wedding_app/lib/const/widget_key.dart';
 import 'package:flutter/scheduler.dart';
 
 class LoginPage extends StatefulWidget {

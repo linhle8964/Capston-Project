@@ -5,7 +5,7 @@ import 'package:wedding_app/model/user_wedding.dart';
 import 'package:wedding_app/repository/invite_email_repository.dart';
 import 'package:wedding_app/repository/user_repository.dart';
 import 'package:wedding_app/repository/user_wedding_repository.dart';
-import 'package:wedding_app/utils/message_const.dart';
+import 'file:///C:/Users/ADMIN/Documents/Git/Capston-Project/wedding_app/lib/const/message_const.dart';
 import 'package:wedding_app/utils/random_string.dart';
 import 'package:wedding_app/utils/validations.dart';
 import 'bloc.dart';

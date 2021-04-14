@@ -6,12 +6,12 @@ import 'package:wedding_app/firebase_repository/firebase_task_repository.dart';
 import 'package:wedding_app/firebase_repository/guest_firebase_repository.dart';
 import 'package:wedding_app/firebase_repository/notification_firebase_repository.dart';
 import 'package:wedding_app/model/notification.dart';
-import 'package:wedding_app/notification/list_notifications.dart';
 import 'package:wedding_app/utils/get_data.dart';
 import 'package:wedding_app/utils/hex_color.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wedding_app/utils/show_snackbar.dart';
 import 'package:wedding_app/widgets/confirm_dialog.dart';
+import 'package:wedding_app/screens/notification/list_notifications.dart';
 
 class NotificationPage extends StatefulWidget {
   String weddingID;

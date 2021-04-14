@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:wedding_app/bloc/notification/bloc.dart';
 import 'package:wedding_app/model/notification.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:wedding_app/notification/guest_update_details.dart';
-import 'package:wedding_app/notification/task_time.dart';
+import 'package:wedding_app/screens/notification/guest_update_details.dart';
+import 'package:wedding_app/screens/notification/task_time.dart';
 
 
 class NotificationDetailsDialog extends StatefulWidget {

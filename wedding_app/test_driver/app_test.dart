@@ -1,6 +1,6 @@
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
-import 'package:wedding_app/widgets/widget_key.dart';
+import 'file:///C:/Users/ADMIN/Documents/Git/Capston-Project/wedding_app/lib/const/widget_key.dart';
 
 void main() {
   group('Wedding App', () {

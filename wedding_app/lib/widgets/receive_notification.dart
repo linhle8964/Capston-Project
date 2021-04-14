@@ -4,19 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:wedding_app/entity/notification_entity.dart';
-import 'package:wedding_app/entity/task_entity.dart';
 import 'package:wedding_app/model/notification.dart';
-import 'package:wedding_app/model/task_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class NotificationManagement {
   static final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-  FlutterLocalNotificationsPlugin(); //Nang
+      FlutterLocalNotificationsPlugin(); //Nang
 
   NotificationManagement() {
     WidgetsFlutterBinding.ensureInitialized();
     var initializationSettingsAndroid =
-    AndroidInitializationSettings('@mipmap/ic_launcher');
+        AndroidInitializationSettings('@mipmap/ic_launcher');
     var initializationSettingsIOS = IOSInitializationSettings();
     var initializationSettings = InitializationSettings(
         android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
@@ -33,10 +31,14 @@ class NotificationManagement {
     var platformChannelSpecifics = NotificationDetails(
         android: androidPlatformChannelSpecifics,
         iOS: iOSPlatformChannelSpecifics);
-    if (notificationModel.type != 0 && notificationModel.date.isAfter(DateTime.now())) {
-      await flutterLocalNotificationsPlugin.schedule(notificationModel.number, 'Thông báo', notificationModel.content,
-          notificationModel.date, platformChannelSpecifics);
-      print("zzz");
+    if (notificationModel.type != 0 &&
+        notificationModel.date.isAfter(DateTime.now())) {
+      await flutterLocalNotificationsPlugin.schedule(
+          notificationModel.number,
+          'Thông báo',
+          notificationModel.content,
+          notificationModel.date,
+          platformChannelSpecifics);
     }
   }
 
@@ -49,26 +51,30 @@ class NotificationManagement {
     NotificationManagement();
     flutterLocalNotificationsPlugin.cancel(key);
   }
+
   /// code for alarm
   static CollectionReference reference;
   static StreamSubscription<QuerySnapshot> streamSub;
-  static void  executeAlarm(String weddingID) async {
-    if(reference == null){
-      reference = FirebaseFirestore.instance.collection('wedding')
-          .doc(weddingID).collection("notification");
+  static void executeAlarm(String weddingID) async {
+    if (reference == null) {
+      reference = FirebaseFirestore.instance
+          .collection('wedding')
+          .doc(weddingID)
+          .collection("notification");
     }
 
     streamSub?.cancel();
     streamSub = reference.snapshots().listen((querySnapshot) {
       //set each states (add/ update/delete)
       querySnapshot.docs.forEach((element) {
-        NotificationModel notificationModel = NotificationModel.fromEntity(NotificationEntity.fromSnapshot(element));
+        NotificationModel notificationModel = NotificationModel.fromEntity(
+            NotificationEntity.fromSnapshot(element));
         addNotification(notificationModel);
       });
     });
   }
 
-  static void cancelAlarm()  {
+  static void cancelAlarm() {
     streamSub?.cancel();
   }
 }

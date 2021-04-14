@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wedding_app/bloc/authentication/bloc.dart';
 import 'package:wedding_app/bloc/user_wedding/bloc.dart';
 import 'package:wedding_app/bloc/wedding/bloc.dart';
+import 'package:wedding_app/const/route_name.dart';
 import 'package:wedding_app/model/user_wedding.dart';
 import 'package:wedding_app/screens/create_wedding/create_wedding_argument.dart';
 import 'package:wedding_app/screens/privacy_term/pdfview_page.dart';
@@ -18,7 +19,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wedding_app/widgets/confirm_dialog.dart';
 import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:wedding_app/widgets/receive_notification.dart';
-import 'package:wedding_app/widgets/widget_key.dart';
+import 'file:///C:/Users/ADMIN/Documents/Git/Capston-Project/wedding_app/lib/const/widget_key.dart';
 
 class SettingPage extends StatefulWidget {
   final UserWedding userWedding;
@@ -133,25 +134,25 @@ class _SettingPageState extends State<SettingPage> {
                   children: <Widget>[
                     SettingItem(
                         () async => Navigator.pushNamed(
-                            context, "/create_wedding",
+                            context, RouteName.createWedding,
                             arguments: CreateWeddingArguments(
                                 isEditing: true,
                                 wedding:
                                     await getWeddingFromSharePreferences())),
                         "Thông tin đám cưới"),
                     SettingItem(() {
-                      Navigator.pushNamed(context, "/list_collaborator");
+                      Navigator.pushNamed(context, RouteName.listCollaborator);
                     }, "Danh sách cộng tác viên"),
                     isAdmin(userWedding.role)
                         ? SettingItem(() {
                             Navigator.pushNamed(
-                                context, "/invite_collaborator");
+                                context, RouteName.inviteCollaborator);
                           }, "Chia sẻ quyền quản lý")
                         : Container(),
                     SettingItem(
-                        () => Navigator.pushNamed(context, "/privacy_policy"),
+                        () => Navigator.pushNamed(context, RouteName.privacy),
                         "Chính sách bảo mật"),
-                    SettingItem(() => Navigator.pushNamed(context, "/term"),
+                    SettingItem(() => Navigator.pushNamed(context, RouteName.term),
                         "Điều khoản"),
                     SettingItem(null, "Hỗ trợ"),
                     SettingItem(null, "Đánh giá ứng dụng"),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:wedding_app/bloc/invitation_card/bloc.dart';
 import 'package:wedding_app/bloc/vendor/bloc.dart';
+import 'package:wedding_app/const/route_name.dart';
 import 'package:wedding_app/firebase_repository/inviattion_card_firebase_repository.dart';
 import 'package:wedding_app/firebase_repository/vendor_firebase_repository.dart';
 import 'package:wedding_app/screens/budget/budget_page.dart';
@@ -40,11 +41,8 @@ import 'bloc/invite_email/bloc.dart';
 import 'bloc/validate_wedding/bloc.dart';
 import 'bloc/user_wedding/bloc.dart';
 import 'bloc/simple_bloc_observer.dart';
-
 import 'firebase_repository/template_card_firebase_repository.dart';
-
 import 'firebase_repository/category_firebase_repository.dart';
-
 import 'firebase_repository/user_firebase_repository.dart';
 import 'package:android_alarm_manager/android_alarm_manager.dart';
 
@@ -101,7 +99,7 @@ class MyApp extends StatelessWidget {
         child: MaterialApp(
           initialRoute: '/',
           onGenerateRoute: (settings) {
-            if (settings.name == "/create_wedding") {
+            if (settings.name == RouteName.createWedding) {
               final CreateWeddingArguments args = settings.arguments;
               return MaterialPageRoute(
                 builder: (context) {
@@ -129,7 +127,7 @@ class MyApp extends StatelessWidget {
             }
           },
           routes: {
-            '/register': (context) {
+            RouteName.register: (context) {
               return BlocProvider(
                 create: (BuildContext context) => RegisterBloc(
                     userRepository: FirebaseUserRepository(),
@@ -137,7 +135,7 @@ class MyApp extends StatelessWidget {
                 child: RegisterPage(),
               );
             },
-            '/template_card': (context) {
+            RouteName.templateCard: (context) {
               return BlocProvider(
                 create: (BuildContext context) => TemplateCardBloc(
                     templateCardRepository: FirebaseTemplateCardRepository()),
@@ -165,7 +163,7 @@ class MyApp extends StatelessWidget {
                 return LoadingIndicator();
               });
             },
-            '/invite_collaborator': (context) {
+            RouteName.inviteCollaborator: (context) {
               return MultiBlocProvider(
                 providers: [
                   BlocProvider<UserWeddingBloc>(create: (context) {
@@ -184,7 +182,7 @@ class MyApp extends StatelessWidget {
                 child: InviteCollaboratorPage(),
               );
             },
-            '/list_collaborator': (context) {
+            RouteName.listCollaborator: (context) {
               return MultiBlocProvider(
                 providers: [
                   BlocProvider<UserWeddingBloc>(create: (context) {
@@ -196,7 +194,7 @@ class MyApp extends StatelessWidget {
                 child: ListCollaborator(),
               );
             },
-            "/wedding_code": (context) {
+            RouteName.weddingCode: (context) {
               return MultiBlocProvider(
                 providers: [
                   BlocProvider<UserWeddingBloc>(
@@ -214,14 +212,14 @@ class MyApp extends StatelessWidget {
                 child: WeddingCodePage(),
               );
             },
-            "/reset_password": (context) {
+            RouteName.resetPassword: (context) {
               return BlocProvider(
                 create: (BuildContext context) =>
                     ResetPasswordBloc(userRepository: FirebaseUserRepository()),
                 child: ResetPasswordPage(),
               );
             },
-            "/budget_list": (context) {
+            RouteName.budgetList: (context) {
               return MultiBlocProvider(
                 providers: [
                   BlocProvider<BudgetBloc>(
@@ -243,14 +241,14 @@ class MyApp extends StatelessWidget {
                 child: BudgetList(),
               );
             },
-            "/privacy_policy": (context) {
+            RouteName.privacy: (context) {
               return PDFViewPage(name: "privacy");
             },
-            "/term": (context) {
+            RouteName.term: (context) {
               return PDFViewPage(name: "term");
             }
           },
-          title: 'Wedding App',
+          title: 'VWED',
           theme: ThemeData(
             primarySwatch: Colors.red,
             visualDensity: VisualDensity.adaptivePlatformDensity,
