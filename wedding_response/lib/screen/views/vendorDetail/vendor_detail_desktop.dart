@@ -1,4 +1,3 @@
-
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -17,15 +16,18 @@ import 'package:intl/intl.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:image_picker/image_picker.dart';
+
 class VendorDetailDesktopPage extends StatefulWidget {
   final bool isEditing;
   final Vendor vendor;
 
-  const VendorDetailDesktopPage({Key key, @required this.isEditing, this.vendor})
+  const VendorDetailDesktopPage(
+      {Key key, @required this.isEditing, this.vendor})
       : super(key: key);
 
   @override
-  _VendorDetailDesktopPageState createState() => _VendorDetailDesktopPageState();
+  _VendorDetailDesktopPageState createState() =>
+      _VendorDetailDesktopPageState();
 }
 
 // Future<String> loadData() async {
@@ -94,10 +96,9 @@ class _VendorDetailDesktopPageState extends State<VendorDetailDesktopPage> {
     queryData = MediaQuery.of(context);
     int maxLines = 3;
 
-    return  BlocBuilder(
+    return BlocBuilder(
         cubit: BlocProvider.of<VendorBloc>(context),
         builder: (context, state) {
-          
           return Scaffold(
               appBar: AppBar(
                 leading: Icon(
@@ -177,7 +178,11 @@ class _VendorDetailDesktopPageState extends State<VendorDetailDesktopPage> {
                 ],
               ),
               body: Padding(
-                padding:  EdgeInsets.fromLTRB(queryData.size.width*5 / 20, queryData.size.height/40, queryData.size.width*5 / 20, 0),
+                padding: EdgeInsets.fromLTRB(
+                    queryData.size.width * 5 / 20,
+                    queryData.size.height / 40,
+                    queryData.size.width * 5 / 20,
+                    0),
                 child: SingleChildScrollView(
                     child: SizedBox(
                   height: queryData.size.height,
@@ -195,6 +200,10 @@ class _VendorDetailDesktopPageState extends State<VendorDetailDesktopPage> {
                                   showFailedSnackbar(
                                       context, "Xin Vui Lòng Nhập Tên Dịch Vụ");
                                   return "Tên Dịch Vụ không được để trống";
+                                } else if (val.length > 20) {
+                                  showFailedSnackbar(context,
+                                      "Xin Vui Lòng Nhập Tên Dịch Vụ Dưới 20 Kí Tự");
+                                  return "Tên Dịch Vụ chỉ được dưới 20 kí tự";
                                 }
                                 return null;
                               },
@@ -216,7 +225,7 @@ class _VendorDetailDesktopPageState extends State<VendorDetailDesktopPage> {
                               Container(
                                   padding: EdgeInsets.only(
                                       left: 20, right: 20, bottom: 20),
-                                  width: queryData.size.width /4 ,
+                                  width: queryData.size.width / 4,
                                   child: TextFormField(
                                       controller: labelController,
                                       validator: (val) {
@@ -224,6 +233,10 @@ class _VendorDetailDesktopPageState extends State<VendorDetailDesktopPage> {
                                           showFailedSnackbar(context,
                                               "Xin Vui Lòng Nhập Nhãn Hiệu ");
                                           return "Nhãn Hiệu không được để trống";
+                                        } else if (val.length > 20) {
+                                          showFailedSnackbar(context,
+                                              "Xin Vui Lòng Nhập Nhãn Hiệu Dưới 20 Kí Tự");
+                                          return "Nhãn hiệu chỉ được dưới 20 kí tự";
                                         }
                                         return null;
                                       },
@@ -254,7 +267,7 @@ class _VendorDetailDesktopPageState extends State<VendorDetailDesktopPage> {
                                           showFailedSnackbar(context,
                                               "Xin vui lòng nhập số điện thoại chỉ gồm các chữ số");
                                           return "Số điện thoại chỉ được phép có số";
-                                        }else if(val.length!=10){
+                                        } else if (val.length != 10) {
                                           showFailedSnackbar(context,
                                               "Xin vui lòng nhập số điện thoại gồm 10 chữ số");
                                           return "Số điện thoại chỉ được phép có 10 chữ số";
@@ -290,6 +303,10 @@ class _VendorDetailDesktopPageState extends State<VendorDetailDesktopPage> {
                                   showFailedSnackbar(
                                       context, "Email không hợp lệ");
                                   return "Email không hợp lệ";
+                                } else if (val.length > 36) {
+                                  showFailedSnackbar(context,
+                                      "Xin Vui Lòng Nhập Email Dưới 36 Kí Tự");
+                                  return "Email chỉ được dưới 36 kí tự";
                                 }
                                 return null;
                               },
@@ -317,11 +334,15 @@ class _VendorDetailDesktopPageState extends State<VendorDetailDesktopPage> {
                               builder: (context, state) {
                                 if (state is TodosLoaded) {
                                   _values2 = state.cates;
-                                  
-                                  if (isEditing == true && state is TodosLoaded) {
-                                    for (int i = 0; i < state.cates.length; i++) {
+
+                                  if (isEditing == true &&
+                                      state is TodosLoaded) {
+                                    for (int i = 0;
+                                        i < state.cates.length;
+                                        i++) {
                                       String id = state.cates[i].id;
-                                      String cateID = widget.vendor.cateID.trim();
+                                      String cateID =
+                                          widget.vendor.cateID.trim();
                                       bool adc;
                                       adc = id == cateID ? true : false;
                                       if (id == cateID) {
@@ -330,7 +351,8 @@ class _VendorDetailDesktopPageState extends State<VendorDetailDesktopPage> {
                                     }
                                   }
                                   return DropdownButtonFormField(
-                                    value: isEditing ? initialCate : selectedCate,
+                                    value:
+                                        isEditing ? initialCate : selectedCate,
                                     icon: Icon(Icons.arrow_downward),
                                     iconSize: 24,
                                     elevation: 16,
@@ -355,7 +377,8 @@ class _VendorDetailDesktopPageState extends State<VendorDetailDesktopPage> {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(left: 20, right: 20, top: 20),
+                          padding:
+                              EdgeInsets.only(left: 20, right: 20, top: 20),
                           child: TextFormField(
                               controller: locationController,
                               validator: (val) {
@@ -363,6 +386,10 @@ class _VendorDetailDesktopPageState extends State<VendorDetailDesktopPage> {
                                   showFailedSnackbar(
                                       context, "Xin Vui Lòng Nhập Địa Chỉ");
                                   return "Địa chỉ không được để trống";
+                                } else if (val.length > 50) {
+                                  showFailedSnackbar(context,
+                                      "Xin Vui Lòng Nhập Địa Chỉ Dưới 50 Kí Tự");
+                                  return "Địa chỉ chỉ được dưới 50 kí tự";
                                 }
                                 return null;
                               },
@@ -379,17 +406,19 @@ class _VendorDetailDesktopPageState extends State<VendorDetailDesktopPage> {
                                   hintText: 'Địa chỉ')),
                         ),
                         Container(
-                          
-                          padding:
-                              const EdgeInsets.only(left: 20, right: 20, top: 20),
+                          padding: const EdgeInsets.only(
+                              left: 20, right: 20, top: 20),
                           child: TextFormField(
-                              
                               controller: descriptionController,
                               validator: (val) {
                                 if (val == "") {
                                   showFailedSnackbar(
                                       context, "Xin Vui Lòng Nhập Miêu Tả ");
                                   return "Miêu Tả  không được để trống";
+                                } else if (val.length > 100) {
+                                  showFailedSnackbar(context,
+                                      "Xin Vui Lòng Nhập Miêu Tả Dưới 100 Kí Tự");
+                                  return "Miêu tả chỉ được dưới 100 kí tự";
                                 }
                                 return null;
                               },
@@ -414,11 +443,12 @@ class _VendorDetailDesktopPageState extends State<VendorDetailDesktopPage> {
                                       child: Row(
                                       children: <Widget>[
                                         Container(
-                                             padding: const EdgeInsets.all(10.0),
+                                            padding: const EdgeInsets.all(10.0),
                                             width: queryData.size.width / 5,
                                             child: TextFormField(
                                                 enabled: false,
-                                                controller: frontImageController,
+                                                controller:
+                                                    frontImageController,
                                                 decoration: new InputDecoration(
                                                   focusedBorder:
                                                       OutlineInputBorder(
@@ -453,21 +483,23 @@ class _VendorDetailDesktopPageState extends State<VendorDetailDesktopPage> {
                                       child: Row(
                                         children: [
                                           Container(
-                                              padding: const EdgeInsets.all(1.0),
+                                              padding:
+                                                  const EdgeInsets.all(1.0),
                                               width: queryData.size.width / 5,
                                               child: TextFormField(
                                                   enabled: false,
                                                   controller:
                                                       frontImageController,
-                                                  decoration: new InputDecoration(
-                                                    labelText:
-                                                        _frontImageName.length ==
-                                                                0
-                                                            ? ""
-                                                            : _frontImageName[
-                                                                _frontImageName
-                                                                        .length -
-                                                                    1],
+                                                  decoration:
+                                                      new InputDecoration(
+                                                    labelText: _frontImageName
+                                                                .length ==
+                                                            0
+                                                        ? ""
+                                                        : _frontImageName[
+                                                            _frontImageName
+                                                                    .length -
+                                                                1],
                                                     focusedBorder:
                                                         OutlineInputBorder(
                                                       borderSide: BorderSide(
@@ -512,7 +544,8 @@ class _VendorDetailDesktopPageState extends State<VendorDetailDesktopPage> {
                                             width: queryData.size.width / 5,
                                             child: TextFormField(
                                                 enabled: false,
-                                                controller: ownerImageController,
+                                                controller:
+                                                    ownerImageController,
                                                 decoration: new InputDecoration(
                                                   focusedBorder:
                                                       OutlineInputBorder(
@@ -545,21 +578,23 @@ class _VendorDetailDesktopPageState extends State<VendorDetailDesktopPage> {
                                       child: Row(
                                         children: [
                                           Container(
-                                              padding: const EdgeInsets.all(1.0),
+                                              padding:
+                                                  const EdgeInsets.all(1.0),
                                               width: queryData.size.width / 5,
                                               child: TextFormField(
                                                   enabled: false,
                                                   controller:
                                                       ownerImageController,
-                                                  decoration: new InputDecoration(
-                                                    labelText:
-                                                        _ownerImageName.length ==
-                                                                0
-                                                            ? ""
-                                                            : _ownerImageName[
-                                                                _ownerImageName
-                                                                        .length -
-                                                                    1],
+                                                  decoration:
+                                                      new InputDecoration(
+                                                    labelText: _ownerImageName
+                                                                .length ==
+                                                            0
+                                                        ? ""
+                                                        : _ownerImageName[
+                                                            _ownerImageName
+                                                                    .length -
+                                                                1],
                                                     focusedBorder:
                                                         OutlineInputBorder(
                                                       borderSide: BorderSide(
@@ -679,7 +714,7 @@ class _VendorDetailDesktopPageState extends State<VendorDetailDesktopPage> {
           phoneController.text,
           id: widget.vendor.id,
         );
-        
+
         if (vendor != null && vendorNameController.text.trim().isNotEmpty) {
           BlocProvider.of<VendorBloc>(context)..add(UpdateVendor(vendor));
           Navigator.pop(context);
@@ -690,7 +725,7 @@ class _VendorDetailDesktopPageState extends State<VendorDetailDesktopPage> {
             ),
           );
         }
-      } 
+      }
     }
   }
 }

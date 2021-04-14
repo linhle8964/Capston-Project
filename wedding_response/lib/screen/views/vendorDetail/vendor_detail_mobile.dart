@@ -1,4 +1,3 @@
-
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -72,7 +71,7 @@ class _VendorDetailMobilePageState extends State<VendorDetailMobilePage> {
   void initState() {
     super.initState();
     _cateBloc = BlocProvider.of<CateBloc>(context);
-    
+
     SharedPreferences.getInstance().then((prefs) {
       setState(() => sharedPrefs = prefs);
       vendorId = isEditing ? widget.vendor.id : "";
@@ -97,7 +96,6 @@ class _VendorDetailMobilePageState extends State<VendorDetailMobilePage> {
     return BlocBuilder(
         cubit: BlocProvider.of<VendorBloc>(context),
         builder: (context, state) {
-          
           return Scaffold(
               appBar: AppBar(
                 leading: Icon(
@@ -193,6 +191,10 @@ class _VendorDetailMobilePageState extends State<VendorDetailMobilePage> {
                                 showFailedSnackbar(
                                     context, "Xin Vui Lòng Nhập Tên Dịch Vụ");
                                 return "Tên Dịch Vụ không được để trống";
+                              } else if (val.length > 20) {
+                                showFailedSnackbar(context,
+                                    "Xin Vui Lòng Nhập Tên Dịch Vụ Dưới 20 Kí Tự");
+                                return "Tên Dịch Vụ chỉ được dưới 20 kí tự";
                               }
                               return null;
                             },
@@ -222,6 +224,10 @@ class _VendorDetailMobilePageState extends State<VendorDetailMobilePage> {
                                         showFailedSnackbar(context,
                                             "Xin Vui Lòng Nhập Nhãn Hiệu ");
                                         return "Nhãn Hiệu không được để trống";
+                                      } else if (val.length > 20) {
+                                        showFailedSnackbar(context,
+                                            "Xin Vui Lòng Nhập Nhãn Hiệu Dưới 20 Kí Tự");
+                                        return "Nhãn hiệu chỉ được dưới 20 kí tự";
                                       }
                                       return null;
                                     },
@@ -252,7 +258,7 @@ class _VendorDetailMobilePageState extends State<VendorDetailMobilePage> {
                                         showFailedSnackbar(context,
                                             "Xin vui lòng nhập số điện thoại chỉ gồm các chữ số");
                                         return "Số điện thoại chỉ được phép có số";
-                                      }else if(val.length!=10){
+                                      } else if (val.length != 10) {
                                         showFailedSnackbar(context,
                                             "Xin vui lòng nhập số điện thoại gồm 10 chữ số");
                                         return "Số điện thoại chỉ được phép có 10 chữ số";
@@ -288,6 +294,10 @@ class _VendorDetailMobilePageState extends State<VendorDetailMobilePage> {
                                 showFailedSnackbar(
                                     context, "Email không hợp lệ");
                                 return "Email không hợp lệ";
+                              } else if (val.length > 36) {
+                                showFailedSnackbar(context,
+                                    "Xin Vui Lòng Nhập Email Dưới 36 Kí Tự");
+                                return "Email chỉ được dưới 36 kí tự";
                               }
                               return null;
                             },
@@ -315,7 +325,7 @@ class _VendorDetailMobilePageState extends State<VendorDetailMobilePage> {
                             builder: (context, state) {
                               if (state is TodosLoaded) {
                                 _values2 = state.cates;
-                                
+
                                 if (isEditing == true && state is TodosLoaded) {
                                   for (int i = 0; i < state.cates.length; i++) {
                                     String id = state.cates[i].id;
@@ -361,6 +371,10 @@ class _VendorDetailMobilePageState extends State<VendorDetailMobilePage> {
                                 showFailedSnackbar(
                                     context, "Xin Vui Lòng Nhập Địa Chỉ");
                                 return "Địa chỉ không được để trống";
+                              } else if (val.length > 50) {
+                                showFailedSnackbar(context,
+                                    "Xin Vui Lòng Nhập Địa Chỉ Dưới 50 Kí Tự");
+                                return "Địa chỉ chỉ được dưới 50 kí tự";
                               }
                               return null;
                             },
@@ -377,17 +391,19 @@ class _VendorDetailMobilePageState extends State<VendorDetailMobilePage> {
                                 hintText: 'Địa chỉ')),
                       ),
                       Container(
-                        
                         padding:
                             const EdgeInsets.only(left: 20, right: 20, top: 20),
                         child: TextFormField(
-                            
                             controller: descriptionController,
                             validator: (val) {
                               if (val == "") {
                                 showFailedSnackbar(
                                     context, "Xin Vui Lòng Nhập Miêu Tả ");
                                 return "Miêu Tả  không được để trống";
+                              } else if (val.length > 100) {
+                                showFailedSnackbar(context,
+                                    "Xin Vui Lòng Nhập Miêu Tả Dưới 100 Kí Tự");
+                                return "Miêu tả chỉ được dưới 100 kí tự";
                               }
                               return null;
                             },
@@ -684,7 +700,7 @@ class _VendorDetailMobilePageState extends State<VendorDetailMobilePage> {
           phoneController.text,
           id: widget.vendor.id,
         );
-        
+
         if (vendor != null && vendorNameController.text.trim().isNotEmpty) {
           BlocProvider.of<VendorBloc>(context)..add(UpdateVendor(vendor));
           Navigator.pop(context);
@@ -695,7 +711,7 @@ class _VendorDetailMobilePageState extends State<VendorDetailMobilePage> {
             ),
           );
         }
-      } 
+      }
     }
   }
 }
