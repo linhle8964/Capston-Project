@@ -199,15 +199,20 @@ class _HomePageState extends State<HomePage> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceEvenly,
                                       children: [
-                                        buildButtonColumn(Key(WidgetKey.vendorButtonKey) ,Colors.blue,
-                                            Icons.search, 'Dịch vụ', () {
+                                        buildButtonColumn(
+                                            Key(WidgetKey.vendorButtonKey),
+                                            Colors.blue,
+                                            Icons.search,
+                                            'Dịch vụ', () {
                                           Navigator.push(
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) => Search()),
                                           );
                                         }),
-                                        buildButtonColumn(Key(WidgetKey.invitationCardButtonKey) ,
+                                        buildButtonColumn(
+                                          Key(WidgetKey
+                                              .invitationCardButtonKey),
                                           Colors.pink[400],
                                           Icons.assignment_ind_outlined,
                                           'THIỆP MỜI',

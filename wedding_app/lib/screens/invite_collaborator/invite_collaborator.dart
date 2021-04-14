@@ -50,8 +50,10 @@ class InviteCollaboratorPage extends StatelessWidget {
               return Container(
                 padding: EdgeInsets.all(20.0),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
+                    /*      Text(
                       "Danh sách người quản lí",
                       style: TextStyle(
                           fontSize: 20.0, fontWeight: FontWeight.bold),
@@ -104,7 +106,7 @@ class InviteCollaboratorPage extends StatelessWidget {
                     ),
                     SizedBox(
                       height: 20.0,
-                    ),
+                    ),*/
                     Text(
                       "Hãy nhập Email người mà bạn muốn mời cùng chỉnh sửa",
                       style: TextStyle(
