@@ -1,3 +1,4 @@
+import 'package:wedding_app/const/message_const.dart';
 import 'package:wedding_app/repository/user_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -136,14 +137,46 @@ class FirebaseUserRepository extends UserRepository {
     try {
       await _firebaseAuth.sendPasswordResetEmail(email: email);
     } on FirebaseAuthException catch (e) {
-      // print(e.code.toString());
       if (e.code == 'user-not-found') {
-        print("throw");
         throw EmailNotFoundException();
       }
     } catch (e) {
       print("Error: $e");
-      throw Exception("Có lỗi xảy ra");
+      throw Exception(MessageConst.commonError);
     }
+  }
+
+  @override
+  Future<bool> validateCurrentPassword(String password) async {
+    try {
+      var firebaseUser = _firebaseAuth.currentUser;
+
+      var authCredentials = EmailAuthProvider.credential(
+          email: firebaseUser.email, password: password);
+
+      var authResult =
+          await firebaseUser.reauthenticateWithCredential(authCredentials);
+
+      return authResult.user != null;
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'wrong-password') {
+        throw WrongPasswordException();
+      }
+    }
+    return false;
+  }
+
+  @override
+  Future<void> updatePassword(String password) async {
+    //Create an instance of the current user.
+    var user = _firebaseAuth.currentUser;
+
+    //Pass in the password to updatePassword.
+    user.updatePassword(password).then((_) {
+      print("Successfully changed password");
+    }).catchError((error) {
+      print("Password can't be changed" + error.toString());
+      //This might happen, when the wrong password is in, the user isn't found, or if the user hasn't logged in recently.
+    });
   }
 }

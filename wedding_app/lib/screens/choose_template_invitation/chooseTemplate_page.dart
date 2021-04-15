@@ -16,7 +16,7 @@ import 'package:wedding_app/screens/choose_template_invitation/fill_info_page.da
 import 'package:permission_handler/permission_handler.dart';
 import 'package:dio/dio.dart';
 import 'package:wedding_app/utils/hex_color.dart';
-import 'file:///C:/Users/ADMIN/Documents/Git/Capston-Project/wedding_app/lib/const/widget_key.dart';
+import 'package:wedding_app/const/widget_key.dart';
 import '../../bloc/invitation_card/bloc.dart';
 import '../../widgets/loading_indicator.dart';
 import 'package:path_provider/path_provider.dart';
@@ -152,7 +152,8 @@ class _ChooseTemplatePageState extends State<ChooseTemplatePage> {
                                 width: double.infinity,
                                 height: 40,
                                 child: TextButton(
-                                  style: TextButton.styleFrom(backgroundColor: hexToColor("#d86a77")),
+                                  style: TextButton.styleFrom(
+                                      backgroundColor: hexToColor("#d86a77")),
                                   onPressed: _image.length > 0
                                       ? () {
                                           setState(() {
@@ -264,7 +265,10 @@ class _ChooseTemplatePageState extends State<ChooseTemplatePage> {
       actions: [
         TextButton(
             style: TextButton.styleFrom(backgroundColor: hexToColor("#d86a77")),
-            child: Text("Đóng",style: TextStyle(color: Colors.white),),
+            child: Text(
+              "Đóng",
+              style: TextStyle(color: Colors.white),
+            ),
             onPressed: () {
               uploading = false;
               Navigator.of(_containerKey.currentContext).pop();
@@ -290,7 +294,10 @@ class _ChooseTemplatePageState extends State<ChooseTemplatePage> {
       actions: [
         TextButton(
             style: TextButton.styleFrom(backgroundColor: hexToColor("#d86a77")),
-            child: Text("Đóng",style: TextStyle(color: Colors.white),),
+            child: Text(
+              "Đóng",
+              style: TextStyle(color: Colors.white),
+            ),
             onPressed: () {
               uploading = false;
               Navigator.of(_containerKey.currentContext).pop();
@@ -316,7 +323,10 @@ class _ChooseTemplatePageState extends State<ChooseTemplatePage> {
       actions: [
         TextButton(
             style: TextButton.styleFrom(backgroundColor: hexToColor("#d86a77")),
-            child: Text("Hoàn thành",style: TextStyle(color: Colors.white),),
+            child: Text(
+              "Hoàn thành",
+              style: TextStyle(color: Colors.white),
+            ),
             onPressed: () {
               uploading = false;
 
@@ -444,7 +454,10 @@ class MyCardState extends State<MyCard> {
             style: TextButton.styleFrom(
               backgroundColor: hexToColor("#d86a77"),
             ),
-            child: Text("Đóng",style: TextStyle(color: Colors.white),),
+            child: Text(
+              "Đóng",
+              style: TextStyle(color: Colors.white),
+            ),
             onPressed: () {
               Navigator.of(_containerKey.currentContext).pop();
             }),
@@ -469,7 +482,10 @@ class MyCardState extends State<MyCard> {
       actions: [
         TextButton(
             style: TextButton.styleFrom(backgroundColor: hexToColor("#d86a77")),
-            child: Text("Hoàn thành",style: TextStyle(color: Colors.white),),
+            child: Text(
+              "Hoàn thành",
+              style: TextStyle(color: Colors.white),
+            ),
             onPressed: () {
               Navigator.of(_containerKey.currentContext).pop();
             }),

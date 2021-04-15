@@ -5,7 +5,7 @@ import 'package:integration_test/integration_test.dart';
 import 'package:wedding_app/main.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:wedding_app/screens/navigator/navigator.dart';
-import 'file:///C:/Users/ADMIN/Documents/Git/Capston-Project/wedding_app/lib/const/widget_key.dart';
+import 'package:wedding_app/const/widget_key.dart';
 
 void main() {
   const loginButtonKey = Key(WidgetKey.loginButtonKey);
