@@ -200,10 +200,10 @@ class _VendorDetailDesktopPageState extends State<VendorDetailDesktopPage> {
                                   showFailedSnackbar(
                                       context, "Xin Vui Lòng Nhập Tên Dịch Vụ");
                                   return "Tên Dịch Vụ không được để trống";
-                                } else if (val.length > 20) {
+                                } else if (val.length > 40) {
                                   showFailedSnackbar(context,
-                                      "Xin Vui Lòng Nhập Tên Dịch Vụ Dưới 20 Kí Tự");
-                                  return "Tên Dịch Vụ chỉ được dưới 20 kí tự";
+                                      "Xin Vui Lòng Nhập Tên Dịch Vụ Dưới 40 Kí Tự");
+                                  return "Tên Dịch Vụ chỉ được dưới 40 kí tự";
                                 }
                                 return null;
                               },
@@ -233,10 +233,10 @@ class _VendorDetailDesktopPageState extends State<VendorDetailDesktopPage> {
                                           showFailedSnackbar(context,
                                               "Xin Vui Lòng Nhập Nhãn Hiệu ");
                                           return "Nhãn Hiệu không được để trống";
-                                        } else if (val.length > 20) {
+                                        } else if (val.length > 40) {
                                           showFailedSnackbar(context,
-                                              "Xin Vui Lòng Nhập Nhãn Hiệu Dưới 20 Kí Tự");
-                                          return "Nhãn hiệu chỉ được dưới 20 kí tự";
+                                              "Xin Vui Lòng Nhập Nhãn Hiệu Dưới 40 Kí Tự");
+                                          return "Nhãn hiệu chỉ được dưới 40 kí tự";
                                         }
                                         return null;
                                       },
@@ -386,10 +386,10 @@ class _VendorDetailDesktopPageState extends State<VendorDetailDesktopPage> {
                                   showFailedSnackbar(
                                       context, "Xin Vui Lòng Nhập Địa Chỉ");
                                   return "Địa chỉ không được để trống";
-                                } else if (val.length > 50) {
+                                } else if (val.length > 100) {
                                   showFailedSnackbar(context,
-                                      "Xin Vui Lòng Nhập Địa Chỉ Dưới 50 Kí Tự");
-                                  return "Địa chỉ chỉ được dưới 50 kí tự";
+                                      "Xin Vui Lòng Nhập Địa Chỉ Dưới 100 Kí Tự");
+                                  return "Địa chỉ chỉ được dưới 100 kí tự";
                                 }
                                 return null;
                               },
@@ -415,10 +415,10 @@ class _VendorDetailDesktopPageState extends State<VendorDetailDesktopPage> {
                                   showFailedSnackbar(
                                       context, "Xin Vui Lòng Nhập Miêu Tả ");
                                   return "Miêu Tả  không được để trống";
-                                } else if (val.length > 100) {
+                                } else if (val.length > 200) {
                                   showFailedSnackbar(context,
-                                      "Xin Vui Lòng Nhập Miêu Tả Dưới 100 Kí Tự");
-                                  return "Miêu tả chỉ được dưới 100 kí tự";
+                                      "Xin Vui Lòng Nhập Miêu Tả Dưới 200 Kí Tự");
+                                  return "Miêu tả chỉ được dưới 200 kí tự";
                                 }
                                 return null;
                               },
