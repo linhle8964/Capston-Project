@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wedding_app/bloc/register/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wedding_app/const/message_const.dart';
 import 'package:wedding_app/utils/alert_dialog.dart';
 import 'package:wedding_app/utils/show_snackbar.dart';
 
@@ -54,8 +55,8 @@ class _RegisterPageState extends State<RegisterPage> {
               });
             }
             if (state.isFailure) {
-              FocusScope.of(context).unfocus();
-              showSuccessAlertDialog(context, "Có lỗi", state.message, () {
+              ScaffoldMessenger.of(context)..hideCurrentSnackBar();
+              showErrorAlertDialog(context, "Có lỗi", state.message, () {
                 Navigator.pop(context);
               });
             }
@@ -90,7 +91,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             decoration: InputDecoration(
                                 labelText: 'E-mail',
                                 errorText: !state.isEmailValid
-                                    ? "Email không hợp lệ "
+                                    ? MessageConst.invalidEmail
                                     : null,
                                 labelStyle: TextStyle(
                                     color: Colors.grey, fontSize: 15)),
@@ -108,7 +109,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   decoration: InputDecoration(
                                       labelText: 'Mật khẩu',
                                       errorText: !state.isPasswordValid
-                                          ? "Mật khẩu không hợp lệ"
+                                          ? MessageConst.invalidPassword
                                           : null,
                                       labelStyle: TextStyle(
                                           color: Colors.grey, fontSize: 15)),

@@ -19,7 +19,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wedding_app/widgets/confirm_dialog.dart';
 import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:wedding_app/widgets/receive_notification.dart';
-import 'file:///C:/Users/ADMIN/Documents/Git/Capston-Project/wedding_app/lib/const/widget_key.dart';
+import 'package:wedding_app/const/widget_key.dart';
 
 class SettingPage extends StatefulWidget {
   final UserWedding userWedding;
@@ -132,6 +132,9 @@ class _SettingPageState extends State<SettingPage> {
               child: IntrinsicHeight(
                 child: Column(
                   children: <Widget>[
+                    SettingItem(() {
+                      Navigator.pushNamed(context, RouteName.changePassword);
+                    }, "Đổi mật khẩu"),
                     SettingItem(
                         () async => Navigator.pushNamed(
                             context, RouteName.createWedding,
@@ -152,7 +155,8 @@ class _SettingPageState extends State<SettingPage> {
                     SettingItem(
                         () => Navigator.pushNamed(context, RouteName.privacy),
                         "Chính sách bảo mật"),
-                    SettingItem(() => Navigator.pushNamed(context, RouteName.term),
+                    SettingItem(
+                        () => Navigator.pushNamed(context, RouteName.term),
                         "Điều khoản"),
                     SettingItem(null, "Hỗ trợ"),
                     SettingItem(null, "Đánh giá ứng dụng"),

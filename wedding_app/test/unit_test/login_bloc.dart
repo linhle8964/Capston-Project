@@ -20,6 +20,7 @@ void main() {
 
   group("LoginBloc", () {
     MockUserRepository mockUserRepository;
+    // ignore: close_sinks
     LoginBloc loginBloc;
     setUp(() {
       mockUserRepository = MockUserRepository();

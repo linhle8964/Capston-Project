@@ -18,4 +18,8 @@ abstract class UserRepository {
   Future<bool> isEmailVerified();
 
   Future<void> resetPassword(String email);
+
+  Future<bool> validateCurrentPassword(String password);
+
+  Future<void> updatePassword(String password);
 }

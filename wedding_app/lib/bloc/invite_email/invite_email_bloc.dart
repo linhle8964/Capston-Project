@@ -5,7 +5,7 @@ import 'package:wedding_app/model/user_wedding.dart';
 import 'package:wedding_app/repository/invite_email_repository.dart';
 import 'package:wedding_app/repository/user_repository.dart';
 import 'package:wedding_app/repository/user_wedding_repository.dart';
-import 'file:///C:/Users/ADMIN/Documents/Git/Capston-Project/wedding_app/lib/const/message_const.dart';
+import 'package:wedding_app/const/message_const.dart';
 import 'package:wedding_app/utils/random_string.dart';
 import 'package:wedding_app/utils/validations.dart';
 import 'bloc.dart';
@@ -22,7 +22,7 @@ class InviteEmailBloc extends Bloc<InviteEmailEvent, InviteEmailState> {
 
   InviteEmailBloc(
       {@required InviteEmailRepository inviteEmailRepository,
-        @required UserRepository userRepository,
+      @required UserRepository userRepository,
       @required UserWeddingRepository userWeddingRepository})
       : assert(inviteEmailRepository != null),
         assert(userRepository != null),
