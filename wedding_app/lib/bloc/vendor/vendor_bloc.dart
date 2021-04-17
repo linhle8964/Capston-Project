@@ -1,10 +1,8 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:wedding_app/bloc/category/bloc.dart';
 import 'package:wedding_app/bloc/vendor/vendor_bloc_event.dart';
 import 'package:wedding_app/bloc/vendor/vendor_bloc_state.dart';
-import 'package:wedding_app/repository/category_repository.dart';
 import 'package:wedding_app/repository/vendor_repository.dart';
 
 class VendorBloc extends Bloc<VendorEvent, VendorState> {

@@ -57,15 +57,26 @@ class _CreateWeddingPageState extends State<CreateWeddingPage> {
       initialDate: _selectedDate != 'Chọn ngày: '
           ? new DateFormat("dd-MM-yyyy").parse(_selectedDate)
           : DateTime.now(),
-      firstDate: !widget.isEditing
-          ? DateTime.now()
-          : DateTime.now().subtract(Duration(days: 100)),
+      firstDate: firstDate(),
       lastDate: DateTime(DateTime.now().year + 3),
     );
     if (d != null)
       setState(() {
         _selectedDate = new DateFormat('dd-MM-yyyy').format(d);
       });
+  }
+
+  DateTime firstDate() {
+    if (widget.isEditing) {
+      if (widget.wedding.weddingDate
+          .isBefore(new DateFormat("dd-MM-yyyy").parse(_selectedDate))) {
+        return new DateFormat("dd-MM-yyyy").parse(_selectedDate);
+      } else {
+        return DateTime.now();
+      }
+    } else {
+      return DateTime.now();
+    }
   }
 
   Future<void> _selectTime(BuildContext context) async {

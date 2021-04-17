@@ -13,13 +13,9 @@ void main() {
   const passwordTextFieldKey = Key(WidgetKey.loginPasswordTextFieldKey);
   const loadingSnackbarkey = Key(WidgetKey.loadingSnackbarKey);
   const successSnackbarKey = Key(WidgetKey.successSnackbarKey);
-  const alertDialogKey = Key(WidgetKey.alertDialogKey);
-  const alertOkButton = Key(WidgetKey.alertDialogOkButtonKey);
   const showPasswordButtonKey = Key(WidgetKey.loginShowPasswordButtonKey);
-  const bottomNavigationBarKey = Key(WidgetKey.bottomNavigationBarKey);
   const navigateHomeButtomKey = Key(WidgetKey.navigateHomeButtonKey);
   const navigateTaskButtonKey = Key(WidgetKey.navigateTaskButtonKey);
-  const navigateBudgetButtonKey = Key(WidgetKey.navigateBudgetButtonKey);
   const navigateGuestButtonKey = Key(WidgetKey.navigateGuestButtonKey);
   const navigateSettingButtonKey = Key(WidgetKey.navigateSettingButtonKey);
 
