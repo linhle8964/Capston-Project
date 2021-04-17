@@ -12,28 +12,18 @@ class Vendor {
   String email;
   String phone;
 
-  Vendor(this.id,
-      {String label,
-        String name,
-        String cateID,
-        String location,
-        String description,
-        String frontImage,
-        String ownerImage,
-        String email,
-        String phone,
-      })
-      : this.label = label,
-        this.name = name,
-        this.cateID = cateID,
-        this.location = location,
-        this.description = description,
-        this.frontImage = frontImage,
-        this.ownerImage = ownerImage,
-        this.email = email,
-        this.phone = phone;
-
-
+  Vendor(
+    this.label, 
+    this.name, 
+    this.cateID, 
+    this.location,
+    this.description, 
+    this.frontImage,
+    this.ownerImage,
+    this.email,
+    this.phone,
+    {String id})
+      : this.id = id;
 
   Vendor.fromMap(Map<dynamic, dynamic> map)
       : this.id = map['id'],
@@ -74,17 +64,18 @@ class Vendor {
         String email,
         String phone
       }) {
-    return Vendor(id ?? this.id,
-        label:label ?? this.label,
-        name:name?? this.name,
-        cateID:cateID ?? this.cateID,
-        location: location?? this.location,
-        description:description ?? this.description,
-        frontImage: frontImage?? this.frontImage,
-        ownerImage: ownerImage?? this.ownerImage,
-        email: email?? this.email,
-        phone: phone?? this.phone,
-        );
+    return Vendor(
+        label ?? this.label,
+        name?? this.name,
+        cateID ?? this.cateID,
+         location?? this.location,
+        description ?? this.description,
+         frontImage?? this.frontImage,
+         ownerImage?? this.ownerImage,
+         email?? this.email,
+         phone?? this.phone,
+         id: id ?? this.id,);
+        
   }
 
 
@@ -107,16 +98,18 @@ class Vendor {
           o.phone == phone;
 
   static Vendor fromEntity(VendorEntity entity) {
-    return Vendor(entity.id,
-        label:entity.label,
-        name:entity.name,
-        cateID:entity.cateID,
-        location:entity.location,
-        description:entity.description,
-        frontImage:entity.frontImage,
-        ownerImage:entity.ownerImage,
-        email:entity.email,
-        phone:entity.phone)
+    return Vendor(
+        entity.label,
+        entity.name,
+        entity.cateID,
+        entity.location,
+        entity.description,
+        entity.frontImage,
+        entity.ownerImage,
+        entity.email,
+        entity.phone,
+        id: entity.id,
+        )
     ;
   }
 
