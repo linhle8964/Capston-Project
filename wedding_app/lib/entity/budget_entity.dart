@@ -9,13 +9,14 @@ class BudgetEntity extends Equatable {
   final double payMoney;
   final bool isComplete;
   final int status;
+  final String note;
 
   BudgetEntity(this.id, this.budgetName, this.cateID, this.isComplete,
-      this.money, this.payMoney, this.status);
+      this.money, this.payMoney, this.status, this.note);
 
   @override
   List<Object> get props =>
-      [id, budgetName, cateID, money, payMoney, isComplete, status];
+      [id, budgetName, cateID, money, payMoney, isComplete, status, note];
 
   Map<String, Object> toJson() {
     return {
@@ -26,19 +27,20 @@ class BudgetEntity extends Equatable {
       "money": money,
       "payMoney": payMoney,
       "status": status,
+      "note": note
     };
   }
 
   static BudgetEntity fromJson(Map<String, Object> json) {
     return BudgetEntity(
-      json["id"] as String,
-      json["budgetName"] as String,
-      json["cateID"] as String,
-      json["Complete"] as bool,
-      json["money"] as double,
-      json["payMoney"] as double,
-      json["status"] as int,
-    );
+        json["id"] as String,
+        json["budgetName"] as String,
+        json["cateID"] as String,
+        json["Complete"] as bool,
+        json["money"] as double,
+        json["payMoney"] as double,
+        json["status"] as int,
+        json["note"] as String);
   }
 
   static BudgetEntity fromSnapshot(DocumentSnapshot snapshot) {
@@ -49,12 +51,13 @@ class BudgetEntity extends Equatable {
         snapshot.get("Complete"),
         snapshot.get("money"),
         snapshot.get("payMoney"),
-        snapshot.get("status"));
+        snapshot.get("status"),
+        snapshot.get("note"));
   }
 
   @override
   String toString() {
-    return 'BudgetEntity{id: $id, budgetName: $budgetName, cateID: $cateID, money: $money, payMoney: $payMoney, isComplete: $isComplete, status: $status}';
+    return 'BudgetEntity{id: $id, budgetName: $budgetName, cateID: $cateID, money: $money, payMoney: $payMoney, isComplete: $isComplete, status: $status,note: $note}';
   }
 
   Map<String, Object> toDocument() {
@@ -65,6 +68,7 @@ class BudgetEntity extends Equatable {
       "money": money,
       "payMoney": payMoney,
       "status": status,
+      "note":note
     };
   }
 }

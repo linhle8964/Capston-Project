@@ -4,13 +4,15 @@ class Budget {
   final String id;
   final String budgetName;
   final String cateID;
+
   final double money;
   final double payMoney;
   final int status;
   final bool isComplete;
+  final String note;
 
   Budget(this.budgetName, this.cateID, this.isComplete, this.money,
-      this.payMoney, this.status,
+      this.payMoney, this.status, this.note,
       {String id})
       : this.id = id;
 
@@ -21,7 +23,8 @@ class Budget {
         this.money = map['money'],
         this.payMoney = map['payMoney'],
         this.isComplete = map['Complete'],
-        this.status = map['status'];
+        this.status = map['status'],
+        this.note = map['note'];
 
   Map toMap() {
     return {
@@ -32,6 +35,7 @@ class Budget {
       'payMoney': this.payMoney,
       'Complete': this.isComplete,
       'status': this.status,
+      'note':this.note,
     };
   }
 
@@ -42,7 +46,8 @@ class Budget {
       double money,
       double payMoney,
       bool isComplete,
-      int status}) {
+      int status,
+      String note}) {
     return Budget(
         budgetName ?? this.budgetName,
         cateID ?? this.cateID,
@@ -50,17 +55,19 @@ class Budget {
         money ?? this.money,
         payMoney ?? this.payMoney,
         status ?? this.status,
+        note?? this.note,
         id: id ?? this.id);
   }
 
+
   @override
   String toString() {
-    return 'Budget{id: $id, budgetName: $budgetName, cateID: $cateID, money: $money, payMoney: $payMoney, status: $status}\n';
+    return 'Budget{id: $id, budgetName: $budgetName, cateID: $cateID, money: $money, payMoney: $payMoney, status: $status, isComplete: $isComplete, note: $note}';
   }
 
   BudgetEntity toEntity() {
     return BudgetEntity(
-        id, budgetName, cateID, isComplete, money, payMoney, status);
+        id, budgetName, cateID, isComplete, money, payMoney, status,note);
   }
 
   bool operator ==(o) =>
@@ -71,11 +78,12 @@ class Budget {
       o.money == money &&
       o.payMoney == payMoney &&
       o.isComplete == isComplete &&
-      o.status == status;
+      o.status == status
+  &&o.note==note;
 
   static Budget fromEntity(BudgetEntity entity) {
     return Budget(entity.budgetName, entity.cateID, entity.isComplete,
-        entity.money, entity.payMoney, entity.status,
+        entity.money, entity.payMoney, entity.status,entity.note,
         id: entity.id);
   }
 }

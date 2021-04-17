@@ -19,7 +19,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wedding_app/widgets/confirm_dialog.dart';
 import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:wedding_app/widgets/receive_notification.dart';
-import 'file:///C:/Users/ADMIN/Documents/Git/Capston-Project/wedding_app/lib/const/widget_key.dart';
+import 'file:///F:/Code Tool/Capston-Project/wedding_app/lib/const/widget_key.dart';
 
 class SettingPage extends StatefulWidget {
   final UserWedding userWedding;
