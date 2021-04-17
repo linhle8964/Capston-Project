@@ -1,8 +1,9 @@
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
+import 'package:wedding_app/const/message_const.dart';
 
 @immutable
-class LoginState extends Equatable{
+class LoginState extends Equatable {
   final bool isEmailValid;
   final bool isPasswordValid;
   final bool isSubmitting;
@@ -39,7 +40,7 @@ class LoginState extends Equatable{
       isSubmitting: true,
       isSuccess: false,
       isFailure: false,
-      message: "Đang xử lý dữ liệu",
+      message: MessageConst.commonLoading,
     );
   }
 

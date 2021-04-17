@@ -22,12 +22,10 @@ void main() {
   MockUserRepository mockUserRepository;
   MockUserWeddingRepository mockUserWeddingRepository;
   MockUser mockUser;
-  MockFirebaseAuth mockFirebaseAuth;
   MockWeddingRepository mockWeddingRepository;
   setUpAll(() async {
     mockUserRepository = MockUserRepository();
     mockUserWeddingRepository = MockUserWeddingRepository();
-    mockFirebaseAuth = FirebaseAuth.instance;
     mockWeddingRepository = MockWeddingRepository();
     mockUser = await mockUserRepository.getUser();
   });

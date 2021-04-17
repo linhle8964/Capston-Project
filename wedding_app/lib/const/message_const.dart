@@ -17,4 +17,6 @@ class MessageConst {
   static const String changePasswordSuccess = "Thay đổi mật khẩu thành công";
   static const String changePasswordConfirm = "Bạn có muốn thay đổi mật khẩu?";
   static const String passwordDiffError = "Mật khẩu mới phải khác mật khẩu cũ";
+
+  // log in
 }
