@@ -5,7 +5,7 @@ import 'package:integration_test/integration_test.dart';
 import 'package:wedding_app/main.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:wedding_app/screens/navigator/navigator.dart';
-import 'file:///F:/Code Tool/Capston-Project/wedding_app/lib/const/widget_key.dart';
+import 'package:wedding_app/const/widget_key.dart';
 
 void main() {
   const loginButtonKey = Key(WidgetKey.loginButtonKey);
@@ -13,13 +13,9 @@ void main() {
   const passwordTextFieldKey = Key(WidgetKey.loginPasswordTextFieldKey);
   const loadingSnackbarkey = Key(WidgetKey.loadingSnackbarKey);
   const successSnackbarKey = Key(WidgetKey.successSnackbarKey);
-  const alertDialogKey = Key(WidgetKey.alertDialogKey);
-  const alertOkButton = Key(WidgetKey.alertDialogOkButtonKey);
   const showPasswordButtonKey = Key(WidgetKey.loginShowPasswordButtonKey);
-  const bottomNavigationBarKey = Key(WidgetKey.bottomNavigationBarKey);
   const navigateHomeButtomKey = Key(WidgetKey.navigateHomeButtonKey);
   const navigateTaskButtonKey = Key(WidgetKey.navigateTaskButtonKey);
-  const navigateBudgetButtonKey = Key(WidgetKey.navigateBudgetButtonKey);
   const navigateGuestButtonKey = Key(WidgetKey.navigateGuestButtonKey);
   const navigateSettingButtonKey = Key(WidgetKey.navigateSettingButtonKey);
 

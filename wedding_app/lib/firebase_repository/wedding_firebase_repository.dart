@@ -51,6 +51,7 @@ class FirebaseWeddingRepository extends WeddingRepository {
       deleteNestedCollection(weddingId, "task");
       deleteNestedCollection(weddingId, "guest");
       deleteNestedCollection(weddingId, "invitation_card");
+      deleteNestedCollection(weddingId, "notification");
     });
   }
 

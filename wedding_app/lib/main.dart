@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wedding_app/bloc/change_password/bloc.dart';
 
 import 'package:wedding_app/bloc/invitation_card/bloc.dart';
 import 'package:wedding_app/bloc/vendor/bloc.dart';
@@ -28,6 +29,7 @@ import 'package:wedding_app/screens/pick_wedding/pick_wedding_screen.dart';
 import 'package:wedding_app/screens/pick_wedding/wedding_code.dart';
 import 'package:wedding_app/screens/privacy_term/pdfview_page.dart';
 import 'package:wedding_app/screens/register/register_page.dart';
+import 'package:wedding_app/screens/reset_password/change_password.dart';
 import 'package:wedding_app/screens/reset_password/reset_password.dart';
 import 'package:wedding_app/screens/splash_page.dart';
 import 'package:wedding_app/widgets/loading_indicator.dart';
@@ -86,9 +88,8 @@ class MyApp extends StatelessWidget {
             ),
           ),
           BlocProvider<VendorBloc>(
-            create: (BuildContext context) => VendorBloc(
-             todosRepository: FirebaseVendorRepository()
-            ),
+            create: (BuildContext context) =>
+                VendorBloc(todosRepository: FirebaseVendorRepository()),
           ),
           BlocProvider<CateBloc>(
             create: (BuildContext context) => CateBloc(
@@ -228,9 +229,8 @@ class MyApp extends StatelessWidget {
                     ),
                   ),
                   BlocProvider<VendorBloc>(
-                    create: (BuildContext context) => VendorBloc(
-                        todosRepository: FirebaseVendorRepository()
-                    ),
+                    create: (BuildContext context) =>
+                        VendorBloc(todosRepository: FirebaseVendorRepository()),
                   ),
                   BlocProvider<CateBloc>(
                     create: (BuildContext context) => CateBloc(
@@ -246,7 +246,14 @@ class MyApp extends StatelessWidget {
             },
             RouteName.term: (context) {
               return PDFViewPage(name: "term");
-            }
+            },
+            RouteName.changePassword: (context) {
+              return BlocProvider(
+                create: (BuildContext context) => ChangePasswordBloc(
+                    userRepository: FirebaseUserRepository()),
+                child: ChangePasswordScreen(),
+              );
+            },
           },
           title: 'VWED',
           theme: ThemeData(

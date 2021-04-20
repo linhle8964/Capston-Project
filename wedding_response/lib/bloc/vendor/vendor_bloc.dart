@@ -1,11 +1,10 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:flutter_web_diary/bloc/category/bloc.dart';
 import 'package:flutter_web_diary/bloc/vendor/vendor_bloc_event.dart';
 import 'package:flutter_web_diary/bloc/vendor/vendor_bloc_state.dart';
-import 'package:flutter_web_diary/repository/category_repository.dart';
 import 'package:flutter_web_diary/repository/vendor_repository.dart';
+import 'bloc.dart';
 
 class VendorBloc extends Bloc<VendorEvent, VendorState> {
   final VendorRepository _vendorRepository;
@@ -22,6 +21,14 @@ class VendorBloc extends Bloc<VendorEvent, VendorState> {
       yield* _mapLoadVendorToState();
     } else if (event is VendorUpdated) {
       yield* _mapVendorUpdateToState(event);
+    } else if (event is AddVendor) {
+      yield* _mapAddVendorToState(event);
+    } else if( event is UpdateVendor){
+      yield* _mapUpdateVendorToState(event);
+    }else if (event is DeleteVendor) {
+      yield* _mapDeleteVendorToState(event);
+    }else if (event is GetAllVendor) {
+      yield* _mapGetAllVendorToState(event);
     }
   }
 
@@ -34,6 +41,32 @@ class VendorBloc extends Bloc<VendorEvent, VendorState> {
 
   Stream<VendorState> _mapVendorUpdateToState(VendorUpdated event) async* {
     yield VendorLoaded(event.vendors);
+  }
+
+  Stream<VendorState> _mapAddVendorToState(AddVendor event) async* {
+    yield Loading("Đang xử lý dữ liệu");
+    try {
+      await _vendorRepository.createVendor(event.vendor);
+      yield Success("Tạo thành công");
+    } catch (_) {
+      yield Failed("Có lỗi xảy ra");
+    }
+  }
+
+  Stream<VendorState> _mapUpdateVendorToState(UpdateVendor event) async* {
+    _vendorRepository.updateVendor(event.updatedVendor);
+    yield VendorUpdate();
+  }
+
+  Stream<VendorState> _mapDeleteVendorToState(DeleteVendor event) async* {
+    _vendorRepository.deleteVendor(event.vendorId);
+  }
+
+  Stream<VendorState> _mapGetAllVendorToState(GetAllVendor event) async* {
+    _vendorSubscription =
+        _vendorRepository.getallVendor().listen(
+              (budgets) => add(VendorUpdated(budgets)),
+            );
   }
 
   @override

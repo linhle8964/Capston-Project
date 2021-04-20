@@ -9,4 +9,5 @@ class RouteName {
   static const String budgetList = "/budget_list";
   static const String privacy = "/privacy_policy";
   static const String term = "/term";
+  static const String changePassword = "/change_password";
 }

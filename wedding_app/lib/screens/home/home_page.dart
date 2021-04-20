@@ -25,7 +25,7 @@ import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wedding_app/widgets/receive_notification.dart';
-import 'file:///F:/Code Tool/Capston-Project/wedding_app/lib/const/widget_key.dart';
+import 'package:wedding_app/const/widget_key.dart';
 import 'button_column.dart';
 import 'info_column.dart';
 

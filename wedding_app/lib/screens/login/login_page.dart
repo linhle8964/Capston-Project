@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wedding_app/bloc/login/bloc.dart';
 import 'package:wedding_app/bloc/authentication/bloc.dart';
+import 'package:wedding_app/const/message_const.dart';
+import 'package:wedding_app/const/route_name.dart';
 import 'package:wedding_app/utils/alert_dialog.dart';
 import 'package:wedding_app/utils/show_snackbar.dart';
-import 'file:///F:/Code Tool/Capston-Project/wedding_app/lib/const/widget_key.dart';
+import 'package:wedding_app/const/widget_key.dart';
 import 'package:flutter/scheduler.dart';
 
 class LoginPage extends StatefulWidget {
@@ -54,8 +56,9 @@ class _LoginPageState extends State<LoginPage> {
           });
         }
         if (state.isFailure) {
-          FocusScope.of(context).unfocus();
-          showSuccessAlertDialog(context, "Có lỗi", state.message, () {
+          ScaffoldMessenger.of(context)..hideCurrentSnackBar();
+          showErrorAlertDialog(
+              context, MessageConst.commonErrorTitle, state.message, () {
             Navigator.pop(context);
           });
         }
@@ -94,7 +97,7 @@ class _LoginPageState extends State<LoginPage> {
                             decoration: InputDecoration(
                                 labelText: 'E-mail',
                                 errorText: !state.isEmailValid
-                                    ? "Email không hợp lệ "
+                                    ? MessageConst.invalidEmail
                                     : null,
                                 labelStyle: TextStyle(
                                     color: Colors.grey, fontSize: 15)),
@@ -113,7 +116,7 @@ class _LoginPageState extends State<LoginPage> {
                               decoration: InputDecoration(
                                   labelText: 'Mật khẩu',
                                   errorText: !state.isPasswordValid
-                                      ? "Mật khẩu không hợp lệ"
+                                      ? MessageConst.invalidPassword
                                       : null,
                                   labelStyle: TextStyle(
                                       color: Colors.grey, fontSize: 15)),
@@ -158,7 +161,7 @@ class _LoginPageState extends State<LoginPage> {
                           child: new InkWell(
                             key: Key(WidgetKey.toRegisterPageButtonKey),
                             onTap: () {
-                              Navigator.pushNamed(context, '/register');
+                              Navigator.pushNamed(context, RouteName.register);
                             },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -179,8 +182,8 @@ class _LoginPageState extends State<LoginPage> {
                           height: 20,
                           width: double.infinity,
                           child: InkWell(
-                            onTap: () =>
-                                Navigator.pushNamed(context, "/reset_password"),
+                            onTap: () => Navigator.pushNamed(
+                                context, RouteName.resetPassword),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
@@ -235,12 +238,5 @@ class _LoginPageState extends State<LoginPage> {
     _emailController.dispose();
     _passController.dispose();
     super.dispose();
-  }
-
-  void onLogInFacebookClick() {}
-  void onLogInGoogleClick() {
-    _loginBloc.add(
-      LoginWithGooglePressed(),
-    );
   }
 }

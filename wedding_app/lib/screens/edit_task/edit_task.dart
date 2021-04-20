@@ -119,7 +119,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
                           filled: true,
                         ),
                         validator: (input) =>
-                            input == null ? 'Hãy điền công việc của bạn' : null,
+                        input.isEmpty ? 'Hãy điền công việc của bạn' : input.length > 20 ? "Tên công việc không quá 20 kí tự" : null,
                         onSaved: (input) => _task = input,
                       ),
                       SizedBox(
@@ -186,7 +186,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
                                 activeColor: Colors.blue,
                                 controlAffinity:
                                     ListTileControlAffinity.leading,
-                                title: Text('Hoàn thành'),
+                                title: _checkboxListTile? Text('Hoàn thành') :Text('Chưa Hoàn thành') ,
                                 value: _checkboxListTile,
                                 onChanged: (value) {
                                   setState(() {
@@ -275,6 +275,8 @@ class _EditTaskPageState extends State<EditTaskPage> {
                           filled: true,
                           alignLabelWithHint: true,
                         ),
+                        validator: (input) =>
+                        input.length > 100 ? "Ghi chú không quá 100 kí tự" : null,
                         onSaved: (input) => _note = input,
                       ),
                       SizedBox(
@@ -330,24 +332,29 @@ class _EditTaskPageState extends State<EditTaskPage> {
   }
 
   void updateTask(context) {
-    _formKey.currentState.save();
-    Task task = new Task(
-        id: widget.task.id,
-        name: _task,
-        dueDate: _dueDate,
-        status: _checkboxListTile,
-        note: _note,
-        category: _category);
-    if (_task != null && _task.trim().isNotEmpty) {
-      if (task == widget.task) {
-        showFailedSnackbar(context, "Bạn chưa thay đổi tên công việc!!!");
-        return;
+    final FormState form = _formKey.currentState;
+    form.save();
+    if(form.validate()) {
+      Task task = new Task(
+          id: widget.task.id,
+          name: _task,
+          dueDate: _dueDate,
+          status: _checkboxListTile,
+          note: _note,
+          category: _category);
+      if (_task != null && _task
+          .trim()
+          .isNotEmpty) {
+        if (task == widget.task) {
+          showFailedSnackbar(context, "Bạn chưa thay đổi tên công việc!!!");
+          return;
+        }
+        BlocProvider.of<ChecklistBloc>(context)
+          ..add(UpdateTask(task, widget.weddingID));
+        Navigator.pop(context);
+      } else {
+        showFailedSnackbar(context, "Có lỗi xảy ra");
       }
-      BlocProvider.of<ChecklistBloc>(context)
-        ..add(UpdateTask(task, widget.weddingID));
-      Navigator.pop(context);
-    } else {
-      showFailedSnackbar(context, "Có lỗi xảy ra");
     }
   }
 }

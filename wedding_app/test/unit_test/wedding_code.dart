@@ -8,7 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:wedding_app/repository/user_repository.dart';
 import 'package:wedding_app/repository/user_wedding_repository.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'file:///F:/Code Tool/Capston-Project/wedding_app/lib/const/message_const.dart';
+import 'package:wedding_app/const/message_const.dart';
 import '../mock.dart';
 import '../mock_user.dart' as mock_user;
 import 'package:cloud_firestore_mocks/cloud_firestore_mocks.dart';
@@ -34,8 +34,13 @@ void main() {
   final InviteEmail inviteEmail = new InviteEmail(
       id: "4Yj3S4Mz7cc5jQfZR2iT",
       code: code,
-      to: email,role: role, weddingId: weddingId, from: email, title: "",body: "",date: DateTime.now());
-
+      to: email,
+      role: role,
+      weddingId: weddingId,
+      from: email,
+      title: "",
+      body: "",
+      date: DateTime.now());
 
   final UserWedding userWedding = new UserWedding(email, id: "id");
   group("Invite Email Bloc", () {
@@ -45,7 +50,9 @@ void main() {
     setupFirebaseAuthMocks();
     setUpAll(() async {
       await Firebase.initializeApp();
-      await instance.collection("invite_email").add(inviteEmail.toEntity().toDocument());
+      await instance
+          .collection("invite_email")
+          .add(inviteEmail.toEntity().toDocument());
       mockInviteEmailRepository = MockInviteEmailRepository();
       mockUserWeddingRepository = MockUserWeddingRepository();
       mockUserRepository = MockUserRepository();
@@ -92,11 +99,14 @@ void main() {
         build: () {
           when(mockInviteEmailRepository.getInviteEmailByCode(code))
               .thenAnswer((_) async => inviteEmail);
-          when(mockUserRepository.getUser())
-              .thenAnswer((_) async => user);
-          when(mockUserWeddingRepository.getUserWeddingByEmail(email)).thenAnswer((realInvocation) async=> userWedding);
-          when(mockUserWeddingRepository.updateUserWedding(userWedding)).thenAnswer((_) async => Future.value());
-          when(mockInviteEmailRepository.deleteInviteEmailByEmail(email, weddingId)).thenAnswer((_) async => Future.value());
+          when(mockUserRepository.getUser()).thenAnswer((_) async => user);
+          when(mockUserWeddingRepository.getUserWeddingByEmail(email))
+              .thenAnswer((realInvocation) async => userWedding);
+          when(mockUserWeddingRepository.updateUserWedding(userWedding))
+              .thenAnswer((_) async => Future.value());
+          when(mockInviteEmailRepository.deleteInviteEmailByEmail(
+                  email, weddingId))
+              .thenAnswer((_) async => Future.value());
           return InviteEmailBloc(
               userWeddingRepository: mockUserWeddingRepository,
               inviteEmailRepository: mockInviteEmailRepository,

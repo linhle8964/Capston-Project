@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_web_diary/model/guest.dart';
 import 'package:flutter_web_diary/screen/widgets/details_input/details_input.dart';
-import 'package:flutter_web_diary/screen/widgets/image_show/image_show.dart';
-
 class InputDetailsMobileTablet extends StatelessWidget {
   Guest guest;
   String weddingID;

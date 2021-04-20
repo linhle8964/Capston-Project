@@ -18,7 +18,7 @@ import 'package:wedding_app/firebase_repository/wedding_firebase_repository.dart
 import 'package:wedding_app/screens/setting/setting.dart';
 import 'package:wedding_app/screens/splash_page.dart';
 import 'package:wedding_app/utils/get_share_preferences.dart';
-import 'file:///F:/Code Tool/Capston-Project/wedding_app/lib/const/widget_key.dart';
+import 'package:wedding_app/const/widget_key.dart';
 
 class NavigatorPage extends StatefulWidget {
   @override

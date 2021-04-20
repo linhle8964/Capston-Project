@@ -2,18 +2,21 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_web_diary/firebase_repository/user_firebase_repository.dart';
+import 'package:flutter_web_diary/model/user_wedding.dart';
 import 'package:flutter_web_diary/repository/user_repository.dart';
+import 'package:flutter_web_diary/repository/user_wedding_repository.dart';
 import 'bloc.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:flutter_web_diary/util/validations.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final UserRepository _userRepository;
-
+  final UserWeddingRepository _userWeddingRepository;
   LoginBloc({
-    @required UserRepository userRepository,
-  })  : assert(userRepository != null),
+    @required UserRepository userRepository,@required UserWeddingRepository userWeddingRepository,
+  })  : assert(userRepository != null), assert(userWeddingRepository != null),
         _userRepository = userRepository,
+        _userWeddingRepository = userWeddingRepository,
         super(LoginState.empty());
 
   @override
@@ -71,12 +74,19 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     yield LoginState.loading();
     try {
       final user = await _userRepository.signInWithCredentials(email, password);
+      final user1 = await _userRepository.getUser();
+      final UserWedding userWedding =
+     await _userWeddingRepository.getUserWeddingByUser(user1);
+
       if (user == null) {
         yield LoginState.failure(message: "Có lỗi xảy ra");
       } else {
         if (!user.emailVerified) {
           yield LoginState.failure(message: "Bạn chưa xác nhận email");
-        } else {
+        } else if(userWedding.role!='admin'){
+          yield LoginState.failure(message: "Bạn không được cấp quyền truy cập");
+        }
+        else {
           yield LoginState.success();
         }
       }
