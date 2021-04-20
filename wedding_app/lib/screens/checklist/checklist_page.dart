@@ -3,6 +3,7 @@ import 'package:wedding_app/bloc/category/bloc.dart';
 import 'package:wedding_app/bloc/checklist/bloc.dart';
 import 'package:wedding_app/bloc/checklist/checklist_bloc.dart';
 import 'package:wedding_app/bloc/show_task/bloc.dart';
+import 'package:wedding_app/const/widget_key.dart';
 import 'package:wedding_app/firebase_repository/notification_firebase_repository.dart';
 import 'package:wedding_app/model/user_wedding.dart';
 import 'package:wedding_app/screens/checklist/download_excel.dart';
@@ -264,6 +265,7 @@ class _ChecklistPageState extends State<ChecklistPage>
             ),
             body: _body(weddingID),
             floatingActionButton: FloatingActionButton(
+              key: Key(WidgetKey.addTaskKey),
               onPressed: () {
                 Navigator.push(
                   context,

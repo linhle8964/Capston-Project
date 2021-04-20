@@ -4,6 +4,7 @@ import 'package:wedding_app/bloc/category/bloc.dart';
 import 'package:wedding_app/bloc/category/category_bloc.dart';
 import 'package:wedding_app/bloc/checklist/bloc.dart';
 import 'package:wedding_app/bloc/checklist/checklist_bloc.dart';
+import 'package:wedding_app/const/widget_key.dart';
 import 'package:wedding_app/model/category.dart';
 import 'package:wedding_app/model/task_model.dart';
 import 'package:wedding_app/utils/border.dart';
@@ -69,6 +70,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
         actions: [
           Builder(
             builder: (ctx) => IconButton(
+              key: Key(WidgetKey.addTaskSubmit),
               icon: Icon(
                 Icons.check,
                 size: 40,
@@ -98,6 +100,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     TextFormField(
+                      key: Key(WidgetKey.addTaskNameKey),
                       decoration: InputDecoration(
                         labelText: "Công Việc",
                         focusedBorder: focusedBorder,
@@ -145,6 +148,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                                       ),
                                     ),
                                     IconButton(
+                                      key: Key(WidgetKey.addTaskOpenDateTimePicker),
                                       icon: Icon(Icons.calendar_today),
                                       tooltip: 'Tap to open date picker',
                                       onPressed: () {
@@ -220,6 +224,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                             } else if (state is TodosLoading) {
                             } else if (state is TodosNotLoaded) {}
                             return DropdownButton<String>(
+                              key: Key(WidgetKey.addTaskDropDownButton),
                               isExpanded: true,
                               value: _category,
                               icon: Icon(Icons.keyboard_arrow_down_outlined),
@@ -276,7 +281,6 @@ class _AddTaskPageState extends State<AddTaskPage> {
         status: _checkboxListTile,
         note: _note,
         category: _category);
-    print(task.toString());
     if (_task != null && _category != null && _task.trim().isNotEmpty) {
       BlocProvider.of<ChecklistBloc>(context)
         ..add(AddTask(task, widget.weddingID));

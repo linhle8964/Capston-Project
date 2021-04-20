@@ -188,7 +188,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         builder: (BuildContext ctx) => PersonDetailsDialog(
               message: MessageConst.changePasswordConfirm,
               onPressedFunction: () async {
-                _changePasswordBloc.add(Submitted(
+                _changePasswordBloc.add(ChangePasswordSubmitted(
                     oldPassword: _oldPasswordController.text,
                     newPassword: _newPasswordController.text,
                     repeatPassword: _repeatPasswordController.text));

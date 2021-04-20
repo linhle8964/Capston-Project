@@ -32,12 +32,12 @@ class RepeatPasswordChanged extends ChangePasswordEvent {
   List<Object> get props => [repeatPassword];
 }
 
-class Submitted extends ChangePasswordEvent {
+class ChangePasswordSubmitted extends ChangePasswordEvent {
   final String oldPassword;
   final String newPassword;
   final String repeatPassword;
 
-  Submitted(
+  ChangePasswordSubmitted(
       {@required this.oldPassword,
       @required this.newPassword,
       @required this.repeatPassword});

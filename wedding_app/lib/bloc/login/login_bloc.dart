@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:wedding_app/const/message_const.dart';
 import 'package:wedding_app/firebase_repository/user_firebase_repository.dart';
 import 'package:wedding_app/repository/user_repository.dart';
 import 'bloc.dart';
@@ -47,11 +48,20 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   }
 
   Stream<LoginState> _mapEmailChangedToState(String email) async* {
-    yield state.update(isEmailValid: Validation.isEmailValid(email));
+    if(email != null){
+      yield state.update(isEmailValid: Validation.isEmailValid(email));
+    }else{
+      yield state.update(isEmailValid: false);
+    }
+
   }
 
   Stream<LoginState> _mapPasswordChangedToState(String password) async* {
-    yield state.update(isPasswordValid: Validation.isPasswordValid(password));
+    if(password != null){
+      yield state.update(isPasswordValid: Validation.isPasswordValid(password));
+    }else{
+      yield state.update(isPasswordValid: false);
+    }
   }
 
   Stream<LoginState> _mapLoginWithGooglePressedToState() async* {
@@ -60,7 +70,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       yield LoginState.success();
     } catch (e) {
       print("[ERROR] : $e");
-      yield LoginState.failure(message: "Có lỗi xảy ra");
+      yield LoginState.failure(message: MessageConst.commonError);
     }
   }
 
@@ -72,27 +82,27 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     try {
       final user = await _userRepository.signInWithCredentials(email, password);
       if (user == null) {
-        yield LoginState.failure(message: "Có lỗi xảy ra");
+        yield LoginState.failure(message: MessageConst.commonError);
       } else {
         if (!user.emailVerified) {
-          yield LoginState.failure(message: "Bạn chưa xác nhận email");
+          yield LoginState.failure(message: MessageConst.emailNotVerified);
         } else {
           yield LoginState.success();
         }
       }
     } on EmailNotFoundException {
-      yield LoginState.failure(message: "Tài khoản không tồn tại");
+      yield LoginState.failure(message: MessageConst.emailNotFoundError);
     } on WrongPasswordException {
-      yield LoginState.failure(message: "Sai mật khẩu");
+      yield LoginState.failure(message: MessageConst.wrongPasswordError);
     } on TooManyRequestException {
       yield LoginState.failure(
           message:
-              "Bạn đã đăng nhập quá nhiều lần. Hãy thử lại trong giây lát");
+              MessageConst.tooManyRequestError);
     } on FirebaseException {
-      yield LoginState.failure(message: "Có lỗi xảy ra");
+      yield LoginState.failure(message: MessageConst.commonError);
     } catch (e) {
       print("[ERROR] : $e");
-      yield LoginState.failure(message: "Có lỗi xảy ra");
+      yield LoginState.failure(message: MessageConst.commonError);
     }
   }
 }

@@ -10,7 +10,8 @@ class MockUserRepository extends Mock implements FirebaseUserRepository {}
 
 void main() {
   const invalidEmailString = "invalid";
-  const invalidPasswordString = "invalid";
+  const passwordLengthShorter = "inv";
+  const passwordLengthGreater = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
   const validEmailString = "linhle8964@gmail.com";
   const validPasswordString = "linhle8964";
 
@@ -51,6 +52,70 @@ void main() {
                 isFailure: false,
                 message: ""),
           ]);
+
+      blocTest("emit [invalid] when email is without @ symbol",
+          build: () => loginBloc,
+          act: (bloc) => bloc.add(EmailChanged(email: "testAtgmail.com")),
+          wait: const Duration(milliseconds: 300),
+          expect: [
+            LoginState(
+                isEmailValid: false,
+                isPasswordValid: true,
+                isSubmitting: false,
+                isSuccess: false,
+                isFailure: false,
+                message: ""),
+          ]);
+
+      blocTest("emit [invalid] when email has a missing dot in the email address",
+          build: () => loginBloc,
+          act: (bloc) => bloc.add(EmailChanged(email: "test@gmailcom")),
+          wait: const Duration(milliseconds: 300),
+          expect: [
+            LoginState(
+                isEmailValid: false,
+                isPasswordValid: true,
+                isSubmitting: false,
+                isSuccess: false,
+                isFailure: false,
+                message: ""),
+          ]);
+
+      blocTest("emit [invalid] when email is invalid",
+          build: () => loginBloc,
+          act: (bloc) => bloc.add(EmailChanged(email: "@gmail")),
+          wait: const Duration(milliseconds: 300),
+          expect: [
+            LoginState(
+                isEmailValid: false,
+                isPasswordValid: true,
+                isSubmitting: false,
+                isSuccess: false,
+                isFailure: false,
+                message: ""),
+          ]);
+
+      blocTest("emit [invalid] when email is null",
+          build: () => loginBloc,
+          act: (bloc) => bloc.add(EmailChanged(email: null)),
+          wait: const Duration(milliseconds: 300),
+          seed: LoginState(
+              isEmailValid: true,
+              isPasswordValid: true,
+              isSubmitting: false,
+              isSuccess: false,
+              isFailure: false,
+              message: ""),
+          expect: [
+            LoginState(
+                isEmailValid: false,
+                isPasswordValid: true,
+                isSubmitting: false,
+                isSuccess: false,
+                isFailure: false,
+                message: ""),
+          ]);
+
       blocTest("emit [valid] when email is valid",
           build: () => loginBloc,
           act: (bloc) => bloc.add(EmailChanged(email: validEmailString)),
@@ -67,10 +132,10 @@ void main() {
     });
 
     group(' Password Changed,', () {
-      blocTest("emit [invalid] when password is invalid",
+      blocTest("emit [invalid] when password is null",
           build: () => loginBloc,
           act: (bloc) =>
-              bloc.add(PasswordChanged(password: invalidPasswordString)),
+              bloc.add(PasswordChanged(password: null)),
           wait: const Duration(milliseconds: 500),
           expect: [
             LoginState(
@@ -81,6 +146,37 @@ void main() {
                 isFailure: false,
                 message: ""),
           ]);
+
+      blocTest("emit [invalid] when password length is < 8",
+          build: () => loginBloc,
+          act: (bloc) =>
+              bloc.add(PasswordChanged(password: passwordLengthShorter)),
+          wait: const Duration(milliseconds: 500),
+          expect: [
+            LoginState(
+                isEmailValid: true,
+                isPasswordValid: false,
+                isSubmitting: false,
+                isSuccess: false,
+                isFailure: false,
+                message: ""),
+          ]);
+
+      blocTest("emit [invalid] when password length is > 8",
+          build: () => loginBloc,
+          act: (bloc) =>
+              bloc.add(PasswordChanged(password: passwordLengthGreater)),
+          wait: const Duration(milliseconds: 500),
+          expect: [
+            LoginState(
+                isEmailValid: true,
+                isPasswordValid: false,
+                isSubmitting: false,
+                isSuccess: false,
+                isFailure: false,
+                message: ""),
+          ]);
+
       blocTest("emit [valid] when password is valid",
           build: () => loginBloc,
           act: (bloc) =>
@@ -121,14 +217,14 @@ void main() {
                 isSubmitting: true,
                 isSuccess: false,
                 isFailure: false,
-                message: "Đang xử lý dữ liệu"),
+                message: MessageConst.commonLoading),
             LoginState(
                 isEmailValid: true,
                 isPasswordValid: true,
                 isSubmitting: false,
                 isSuccess: false,
                 isFailure: true,
-                message: "Bạn chưa xác nhận email"),
+                message: MessageConst.emailNotVerified),
           ]);
 
       blocTest("emit [invalid] when email not found",
@@ -154,14 +250,14 @@ void main() {
                 isSubmitting: true,
                 isSuccess: false,
                 isFailure: false,
-                message: "Đang xử lý dữ liệu"),
+                message: MessageConst.commonLoading),
             LoginState(
                 isEmailValid: true,
                 isPasswordValid: true,
                 isSubmitting: false,
                 isSuccess: false,
                 isFailure: true,
-                message: "Tài khoản không tồn tại"),
+                message: MessageConst.emailNotFoundError),
           ]);
 
       blocTest("emit [invalid] when wrong password",
@@ -187,48 +283,14 @@ void main() {
                 isSubmitting: true,
                 isSuccess: false,
                 isFailure: false,
-                message: "Đang xử lý dữ liệu"),
+                message: MessageConst.commonLoading),
             LoginState(
                 isEmailValid: true,
                 isPasswordValid: true,
                 isSubmitting: false,
                 isSuccess: false,
                 isFailure: true,
-                message: "Sai mật khẩu"),
-          ]);
-
-      blocTest("emit [invalid] when too many request",
-          build: () {
-            when(mockUserRepository.signInWithCredentials(
-                    validEmailString, validPasswordString))
-                .thenThrow(TooManyRequestException());
-            return LoginBloc(userRepository: mockUserRepository);
-          },
-          act: (bloc) => bloc.add(LoginWithCredentialsPressed(
-              email: validEmailString, password: validPasswordString)),
-          seed: LoginState(
-              isEmailValid: true,
-              isPasswordValid: true,
-              isSubmitting: true,
-              isSuccess: false,
-              isFailure: false,
-              message: ""),
-          expect: [
-            LoginState(
-                isEmailValid: true,
-                isPasswordValid: true,
-                isSubmitting: true,
-                isSuccess: false,
-                isFailure: false,
-                message: "Đang xử lý dữ liệu"),
-            LoginState(
-                isEmailValid: true,
-                isPasswordValid: true,
-                isSubmitting: false,
-                isSuccess: false,
-                isFailure: true,
-                message:
-                    "Bạn đã đăng nhập quá nhiều lần. Hãy thử lại trong giây lát"),
+                message: MessageConst.wrongPasswordError),
           ]);
 
       blocTest("emit [invalid] when too many request",
@@ -262,7 +324,7 @@ void main() {
                 isSuccess: false,
                 isFailure: true,
                 message:
-                    "Bạn đã đăng nhập quá nhiều lần. Hãy thử lại trong giây lát"),
+                    MessageConst.tooManyRequestError),
           ]);
     });
   });

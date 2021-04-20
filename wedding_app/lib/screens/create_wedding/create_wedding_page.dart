@@ -226,7 +226,7 @@ class _CreateWeddingPageState extends State<CreateWeddingPage> {
                                 ),
                                 hintText: 'TÊN CHÚ RỂ',
                                 errorText: !state.isGroomNameValid
-                                    ? "Tên không được  chứa số hoặc ký tự đặc biệt"
+                                    ? state.groomNameErrorMessage
                                     : null,
                               ),
                             ),
@@ -241,7 +241,7 @@ class _CreateWeddingPageState extends State<CreateWeddingPage> {
                                       new BorderSide(color: Colors.black),
                                 ),
                                 errorText: !state.isBrideNameValid
-                                    ? "Tên không được chứa số hoặc ký tự đặc biệt"
+                                    ? state.brideNameErrorMessage
                                     : null,
                                 hintText: 'TÊN CÔ DÂU',
                               ),
@@ -291,7 +291,7 @@ class _CreateWeddingPageState extends State<CreateWeddingPage> {
                                       new BorderSide(color: Colors.black),
                                 ),
                                 errorText: !state.isAddressValid
-                                    ? "Địa chỉ không được chứa ký tự đặc biệt"
+                                    ? state.addressErrorMessage
                                     : null,
                                 hintText: 'ĐỊA CHỈ',
                               ),
@@ -309,7 +309,7 @@ class _CreateWeddingPageState extends State<CreateWeddingPage> {
                                   hintText: 'SỐ TIỀN',
                                   suffixText: 'VND',
                                   errorText: !state.isBudgetValid
-                                      ? "Số tiền phải lớn hơn 100.000đ và là bội số của 1000"
+                                      ? state.budgetErrorMessage
                                       : null,
                                   suffixStyle:
                                       const TextStyle(color: Colors.black)),

@@ -44,18 +44,13 @@ class AuthenticationBloc
     try {
       final isAuthenticated = await _userRepository.isAuthenticated();
       if (isAuthenticated) {
-        final isEmailVerified = await _userRepository.isEmailVerified();
-        if (isEmailVerified) {
-          final user = await _userRepository.getUser();
-          final UserWedding userWedding =
-          await _userWeddingRepository.getUserWeddingByUser(user);
-          if (userWedding.weddingId == null) {
-            yield Unauthenticated();
-          } else {
-            yield Authenticated(user);
-          }
-        } else {
+        final user = await _userRepository.getUser();
+        final UserWedding userWedding =
+            await _userWeddingRepository.getUserWeddingByUser(user);
+        if (userWedding.weddingId == null) {
           yield Unauthenticated();
+        } else {
+          yield Authenticated(user);
         }
       } else {
         yield Unauthenticated();
@@ -69,16 +64,16 @@ class AuthenticationBloc
   Stream<AuthenticationState> _mapLoggedInToState() async* {
     final user = await _userRepository.getUser();
     final UserWedding userWedding =
-    await _userWeddingRepository.getUserWeddingByUser(user);
+        await _userWeddingRepository.getUserWeddingByUser(user);
     if (userWedding.weddingId == null) {
       yield WeddingNull(user);
     } else {
-      Wedding wedding = await _weddingRepository.getWeddingById(userWedding.weddingId);
+      Wedding wedding =
+          await _weddingRepository.getWeddingById(userWedding.weddingId);
       SharedPreferences preferences = await SharedPreferences.getInstance();
       await preferences.setString("wedding_id", userWedding.weddingId);
       await preferences.setString(
           "user_wedding", jsonEncode(userWedding.toEntity().toJson()));
-      print(jsonEncode(userWedding.toEntity().toJson()));
       await preferences.setString(
           "wedding", jsonEncode(wedding.toEntity().toJson()));
       yield Authenticated(user);

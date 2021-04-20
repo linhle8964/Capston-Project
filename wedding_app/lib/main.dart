@@ -80,6 +80,7 @@ class MyApp extends StatelessWidget {
               userWeddingRepository: FirebaseUserWeddingRepository(),
               weddingRepository: FirebaseWeddingRepository(),
               inviteEmailRepository: FirebaseInviteEmailRepository(),
+              userRepository: FirebaseUserRepository(),
             );
           }),
           BlocProvider<BudgetBloc>(
@@ -112,7 +113,8 @@ class MyApp extends StatelessWidget {
                             userWeddingRepository:
                                 FirebaseUserWeddingRepository(),
                             inviteEmailRepository:
-                                FirebaseInviteEmailRepository()),
+                                FirebaseInviteEmailRepository(),
+                        userRepository: FirebaseUserRepository()),
                       ),
                       BlocProvider<ValidateWeddingBloc>(
                         create: (context) => ValidateWeddingBloc(),

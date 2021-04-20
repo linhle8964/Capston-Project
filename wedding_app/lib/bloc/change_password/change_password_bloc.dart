@@ -45,7 +45,7 @@ class ChangePasswordBloc
       yield* _mapNewPasswordChangedToState(event.newPassword);
     } else if (event is RepeatPasswordChanged) {
       yield* _mapRepeatPasswordChangedToState(event.repeatPassword);
-    } else if (event is Submitted) {
+    } else if (event is ChangePasswordSubmitted) {
       yield* _mapSubmittedToState(
           oldPassword: event.oldPassword,
           newPassword: event.newPassword,
