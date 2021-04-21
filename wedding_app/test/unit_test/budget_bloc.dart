@@ -103,7 +103,7 @@ void main() {
         expect: [
 
         ]);
-    blocTest("delete wedding",
+    blocTest("delete budget",
         build: () {
           //when(mockFirebaseAuth.currentUser).thenAnswer((_) => user);
           return BudgetBloc(

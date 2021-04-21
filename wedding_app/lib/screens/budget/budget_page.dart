@@ -319,8 +319,8 @@ class _BudgetListState extends State<BudgetList> {
                                             wedBudget1 = sum;
                                             return Visibility(
                                                 visible: _iSDone,
-                                                child: Text(
-                                                    _formatNumber("Tổng kinh phí:"+
+                                                child: Text("Tổng kinh phí:"+
+                                                    _formatNumber(
                                                             sum.toString()) +
                                                         "₫",  overflow:
                                                 TextOverflow

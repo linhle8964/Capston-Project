@@ -29,4 +29,7 @@ void main(){
   test('Money Null',(){
     expect(BudgetNameValidate.moneyValidate(_mockContext, ''), "số tiền không thể chống");
   });
+  test("Note Valid",(){
+    expect(BudgetNameValidate.noteValidate(_mockContext,"chungtoidangtesttenchodu1000kitutrongphannotevadangkhongbietvietgoiasdandsngoaigolinh tinh cac thusadasdlkasd rat dai va ton thoi gian"),"Ghi chú không được quá 100 kí tự");
+  });
 }
