@@ -36,7 +36,6 @@ void main() {
       mockUserWeddingRepository = MockUserWeddingRepository();
       mockFirebaseAuth = MockFirebaseAuth();
     });
-
     test("initial state is empty", () {
       expect(
           BudgetBloc(
@@ -118,4 +117,5 @@ void main() {
           //  Success("Tạo thành công")
         ]);
   });
+
 }

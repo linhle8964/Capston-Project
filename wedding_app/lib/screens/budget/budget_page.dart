@@ -320,7 +320,7 @@ class _BudgetListState extends State<BudgetList> {
                                             return Visibility(
                                                 visible: _iSDone,
                                                 child: Text(
-                                                    _formatNumber(
+                                                    _formatNumber("Tổng kinh phí:"+
                                                             sum.toString()) +
                                                         "₫",  overflow:
                                                 TextOverflow
@@ -383,7 +383,7 @@ class _BudgetListState extends State<BudgetList> {
                                                     return Visibility(
                                                         visible: _iSDone,
                                                         child: Flexible(
-                                                          child: Text(
+                                                          child: Text("Số tiền còn lại:"+
                                                               _formatNumber(pay
                                                                       .toString()) +
                                                                   "₫",
@@ -476,7 +476,7 @@ class _BudgetListState extends State<BudgetList> {
                                                               .toString()) +
                                                           " ₫"),
                                                     ),
-                                                    visible: true,
+                                                    visible: _cateSum==0?false:true,
                                                   )
 
                                                 ),
