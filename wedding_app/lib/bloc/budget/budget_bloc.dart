@@ -52,6 +52,7 @@ class BudgetBloc extends Bloc<BudgetEvent, BudgetState> {
 
   Stream<BudgetState> _mapGetBudgetByCateIdToState(
       LoadBudgetbyCateId event) async* {
+
     _streamSubscription = _budgetRepository
         .getBudgetByCateId(event.weddingId, event.cateId)
         .listen(
@@ -68,12 +69,27 @@ class BudgetBloc extends Bloc<BudgetEvent, BudgetState> {
   }
 
   Stream<BudgetState> _mapUpdateWeddingToState(UpdateBudget event) async* {
-    _budgetRepository.updateBudget(event.weddingId, event.updatedBudget);
-    yield BudgetUpdate();
+    yield Loading("Đang xử lý dữ liệu");
+    try {
+      await _budgetRepository.updateBudget(event.weddingId, event.updatedBudget);
+      yield Success("update thành công");
+      yield BudgetUpdate();
+    } catch (_) {
+      yield Failed("Có lỗi xảy ra");
+    }
+
+
   }
 
   Stream<BudgetState> _mapDeleteWeddingToState(DeleteBudget event) async* {
-    _budgetRepository.deleteBudget(event.weddingId, event.budgetId);
+    yield Loading("Đang xử lý dữ liệu");
+    try {
+      await _budgetRepository.deleteBudget(event.weddingId, event.budgetId);
+      yield Success("Delete thành công");
+    } catch (_) {
+      yield Failed("Có lỗi xảy ra");
+    }
+
   }
 
   Stream<BudgetState> _mapWeddingUpdatedToState(UpadatedBudget event) async* {
