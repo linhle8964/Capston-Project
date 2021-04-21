@@ -62,8 +62,12 @@ class WeddingBloc extends Bloc<WeddingEvent, WeddingState> {
     yield Loading(MessageConst.commonLoading);
     try {
       final user = await _userRepository.getUser();
-      await _weddingRepository.createWedding(event.wedding, user);
-      yield Success("Tạo thành công");
+      if(user == null || event.wedding == null){
+        yield Failed(MessageConst.commonError);
+      }else{
+        await _weddingRepository.createWedding(event.wedding, user);
+        yield Success(MessageConst.createSuccess);
+      }
     } catch (e) {
       print("[ERROR]" + e);
       yield Failed(MessageConst.commonError);
@@ -89,7 +93,7 @@ class WeddingBloc extends Bloc<WeddingEvent, WeddingState> {
       _weddingRepository.updateWedding(event.wedding).then((value) async =>
           preferences.setString(
               "wedding", jsonEncode(event.wedding.toEntity().toJson())));
-      yield Success("Chỉnh sửa thành công");
+      yield Success(MessageConst.updateSuccess);
     } catch (e) {
       print("[ERROR]" + e);
       yield Failed(MessageConst.commonError);
@@ -105,7 +109,7 @@ class WeddingBloc extends Bloc<WeddingEvent, WeddingState> {
         await _inviteEmailRepository
             .deleteInviteEmailByWedding(event.weddingId);
       });
-      yield Success("Xoá thành công");
+      yield Success(MessageConst.deleteSuccess);
     } catch (e) {
       print("[ERROR]" + e);
       yield Failed(MessageConst.commonError);
@@ -119,7 +123,7 @@ class WeddingBloc extends Bloc<WeddingEvent, WeddingState> {
   Stream<WeddingState> _mapLoadWeddingByIdToState(
       LoadWeddingById event) async* {
     String weddingId = event.weddingId;
-    if (weddingId == null || weddingId == "") {
+    if (weddingId == null || weddingId.isEmpty) {
       yield Failed(MessageConst.commonError);
     } else {
       _streamSubscription?.cancel();

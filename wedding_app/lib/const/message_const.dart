@@ -36,4 +36,9 @@ class MessageConst {
   static const String budgetMin = "Kinh phí phải lớn hơn 100.000đ";
   static const String budgetTripleZero = "Kinh phí phải là bội số của 1000";
   static const String budgetMax = 'Kinh phí không thể lên đến trăm tỷ';
+
+  // crud
+  static const String createSuccess = "Tạo thành công";
+  static const String updateSuccess = "Chỉnh sửa thành công";
+  static const String deleteSuccess = "Xoá thành công";
 }

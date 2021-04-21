@@ -68,60 +68,73 @@ class _NavigatorPageState extends State<NavigatorPage> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             UserWedding userWedding = snapshot.data;
-            List<Widget> _children = [
-              HomePage(),
-              ChecklistPage(
-                userWedding: userWedding,
-              ),
-              BudgetList(),
-              ViewGuestPage(
-                userWedding: userWedding,
-              ),
-              SettingPage(userWedding: userWedding),
-            ];
+            BlocProvider.of<WeddingBloc>(context).add(LoadWeddingById(userWedding.weddingId));
             return Scaffold(
-              body: _children[_selectedIndex],
-              bottomNavigationBar: BottomNavigationBar(
-                  key: Key(WidgetKey.bottomNavigationBarKey),
-                  items: [
-                    BottomNavigationBarItem(
-                        icon: Icon(
-                          Icons.home,
-                          key: Key(WidgetKey.navigateHomeButtonKey),
-                        ),
-                        label: "Trang chủ"),
-                    BottomNavigationBarItem(
-                        icon: Icon(
-                          Icons.check_box,
-                          key: Key(WidgetKey.navigateTaskButtonKey),
-                        ),
-                        label: "Công việc"),
-                    BottomNavigationBarItem(
-                        icon: Icon(
-                          Icons.account_balance_wallet_outlined,
-                          key: Key(WidgetKey.navigateBudgetButtonKey),
-                        ),
-                        label: "Kinh phí"),
-                    BottomNavigationBarItem(
-                        icon: Icon(
-                          Icons.people,
-                          key: Key(WidgetKey.navigateGuestButtonKey),
-                        ),
-                        label: "Khách mời"),
-                    BottomNavigationBarItem(
-                        icon: Icon(
-                          Icons.settings,
-                          key: Key(WidgetKey.navigateSettingButtonKey),
-                        ),
-                        label: "Cài đặt"),
-                  ],
-                  currentIndex: _selectedIndex,
-                  selectedItemColor: Colors.red,
-                  unselectedItemColor: Colors.grey.shade600,
-                  selectedLabelStyle: TextStyle(fontWeight: FontWeight.w600),
-                  unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w600),
-                  type: BottomNavigationBarType.fixed,
-                  onTap: onTabTapped),
+              body: BlocBuilder(
+                cubit: BlocProvider.of<WeddingBloc>(context),
+                builder: (context, state) {
+                  if(state is WeddingLoaded){
+                    List<Widget> _children = [
+                      HomePage(userWedding: userWedding, wedding: state.wedding,),
+                      ChecklistPage(
+                        userWedding: userWedding,
+                      ),
+                      BudgetList(),
+                      ViewGuestPage(
+                        userWedding: userWedding,
+                      ),
+                      SettingPage(userWedding: userWedding, wedding: state.wedding,),
+                    ];
+                    return Scaffold(
+                      body: _children[_selectedIndex],
+                      bottomNavigationBar: BottomNavigationBar(
+                          key: Key(WidgetKey.bottomNavigationBarKey),
+                          items: [
+                            BottomNavigationBarItem(
+                                icon: Icon(
+                                  Icons.home,
+                                  key: Key(WidgetKey.navigateHomeButtonKey),
+                                ),
+                                label: "Trang chủ"),
+                            BottomNavigationBarItem(
+                                icon: Icon(
+                                  Icons.check_box,
+                                  key: Key(WidgetKey.navigateTaskButtonKey),
+                                ),
+                                label: "Công việc"),
+                            BottomNavigationBarItem(
+                                icon: Icon(
+                                  Icons.account_balance_wallet_outlined,
+                                  key: Key(WidgetKey.navigateBudgetButtonKey),
+                                ),
+                                label: "Kinh phí"),
+                            BottomNavigationBarItem(
+                                icon: Icon(
+                                  Icons.people,
+                                  key: Key(WidgetKey.navigateGuestButtonKey),
+                                ),
+                                label: "Khách mời"),
+                            BottomNavigationBarItem(
+                                icon: Icon(
+                                  Icons.settings,
+                                  key: Key(WidgetKey.navigateSettingButtonKey),
+                                ),
+                                label: "Cài đặt"),
+                          ],
+                          currentIndex: _selectedIndex,
+                          selectedItemColor: Colors.red,
+                          unselectedItemColor: Colors.grey.shade600,
+                          selectedLabelStyle: TextStyle(fontWeight: FontWeight.w600),
+                          unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w600),
+                          type: BottomNavigationBarType.fixed,
+                          onTap: onTabTapped),
+                    );
+                  }else if(state is WeddingLoading){
+                    return CircularProgressIndicator();
+                  }
+                  return CircularProgressIndicator();
+                },
+              ),
             );
           } else {
             return SplashPage();

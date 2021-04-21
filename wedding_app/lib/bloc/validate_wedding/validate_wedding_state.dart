@@ -98,11 +98,15 @@ class ValidateWeddingState extends Equatable{
 
   @override
   String toString() {
-    return '''CreateWeddingState {
+    return '''ValidateWeddingState {
       isGroomNameValid: $isGroomNameValid,
       isBrideNameValid: $isBrideNameValid,
       isAddressValid : $isAddressValid,
       isBudgetValid : $isBudgetValid,
+      groomNameErrorMessage: $groomNameErrorMessage,
+      brideNameErrorMessage: $brideNameErrorMessage,
+      addressErrorMessage: $addressErrorMessage,
+      budgetErrorMessage: $budgetErrorMessage,
     }''';
   }
 

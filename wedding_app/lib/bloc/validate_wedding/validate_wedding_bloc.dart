@@ -110,7 +110,6 @@ class ValidateWeddingBloc
   }
 
   Stream<ValidateWeddingState> _mapBudgetChangedToState(String budget) async* {
-    yield state.update(isBudgetValid: Validation.isBudgetValid(budget));
     if(budget != null){
       bool isValid = Validation.isBudgetValid(budget);
       String message = "";
@@ -118,10 +117,10 @@ class ValidateWeddingBloc
       if(isValid == false){
         if(budgetDouble <= 100000){
           message = MessageConst.budgetMin;
-        }else if(budgetDouble % 1000 != 0){
-          message = MessageConst.budgetTripleZero;
         }else if(budgetDouble > 10000000000){
           message = MessageConst.budgetMax;
+        }else if(budgetDouble % 1000 != 0){
+          message = MessageConst.budgetTripleZero;
         }
       }
       yield state.update(
