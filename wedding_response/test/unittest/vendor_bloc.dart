@@ -20,8 +20,6 @@ class MockFirebaseAuth extends Mock implements FirebaseAuth {}
 void main() {
   const validName = "linh le";
   final Category category= new Category("asd","test");
-  
-
   final Vendor vendor = new Vendor("label", "name", 'cateID','location', 'description', 'frontImage', "ownerImage",'email','phone');
   
   group("crud vendor", () {
@@ -92,8 +90,6 @@ void main() {
           return bloc.add(UpdateVendor(vendor));
         },
         expect: [
-          Loading("Đang xử lý dữ liệu"),
-          Success("update thành công"),
          VendorUpdate()
         ]);
    
@@ -106,9 +102,6 @@ void main() {
         },
         act: (bloc) => bloc.add(DeleteVendor(vendor.id)),
         expect: [
-          Loading("Đang xử lý dữ liệu"),
-          Success("Delete thành công")
-          //  Success("Tạo thành công")
         ]);
   });
 }
