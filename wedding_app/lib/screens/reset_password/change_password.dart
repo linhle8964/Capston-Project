@@ -9,6 +9,7 @@ import 'package:wedding_app/widgets/confirm_dialog.dart';
 import 'package:wedding_app/widgets/input_field.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wedding_app/widgets/navigator_pop.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
   @override
@@ -85,10 +86,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             ScaffoldMessenger.of(context)..hideCurrentSnackBar();
             showSuccessAlertDialog(
                 context, MessageConst.dialogTitle, state.message, () {
-              int count = 0;
-              Navigator.popUntil(context, (route) {
-                return count++ == 2;
-              });
+              navigatorPop(2, context);
             });
           }
           if (state.isFailure) {

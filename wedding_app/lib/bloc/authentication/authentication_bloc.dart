@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:wedding_app/bloc/authentication/bloc.dart';
+import 'package:wedding_app/const/share_prefs_key.dart';
 import 'package:wedding_app/model/user_wedding.dart';
 import 'package:wedding_app/model/wedding.dart';
 import 'package:wedding_app/repository/user_repository.dart';
@@ -76,6 +77,8 @@ class AuthenticationBloc
           "user_wedding", jsonEncode(userWedding.toEntity().toJson()));
       await preferences.setString(
           "wedding", jsonEncode(wedding.toEntity().toJson()));
+      await preferences.setBool(SharedPreferenceKey.taskNotification, true);
+      await preferences.setBool(SharedPreferenceKey.guestResponseNotification, true);
       yield Authenticated(user);
     }
   }
@@ -85,6 +88,8 @@ class AuthenticationBloc
     preferences.remove("wedding_id");
     preferences.remove("user_wedding");
     preferences.remove('wedding');
+    preferences.remove(SharedPreferenceKey.guestResponseNotification);
+    preferences.remove(SharedPreferenceKey.taskNotification);
     yield Unauthenticated();
     _userRepository.signOut();
   }

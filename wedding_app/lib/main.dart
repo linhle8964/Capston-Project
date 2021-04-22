@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wedding_app/bloc/change_password/bloc.dart';
 
 import 'package:wedding_app/bloc/invitation_card/bloc.dart';
+import 'package:wedding_app/bloc/notification_setting/bloc.dart';
 import 'package:wedding_app/bloc/vendor/bloc.dart';
 import 'package:wedding_app/const/route_name.dart';
 import 'package:wedding_app/firebase_repository/inviattion_card_firebase_repository.dart';
@@ -25,6 +26,7 @@ import 'package:wedding_app/screens/navigator/navigator.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:wedding_app/screens/notification_setting/notification_setting.dart';
 import 'package:wedding_app/screens/pick_wedding/pick_wedding_screen.dart';
 import 'package:wedding_app/screens/pick_wedding/wedding_code.dart';
 import 'package:wedding_app/screens/privacy_term/pdfview_page.dart';
@@ -255,6 +257,17 @@ class MyApp extends StatelessWidget {
                 create: (BuildContext context) => ChangePasswordBloc(
                     userRepository: FirebaseUserRepository()),
                 child: ChangePasswordScreen(),
+              );
+            },
+            RouteName.notificationSetting: (context) {
+              return MultiBlocProvider(
+                providers: [
+                  BlocProvider<NotificationSettingBloc>(create: (context) {
+                    return NotificationSettingBloc(
+                    )..add(LoadNotificationSettings());
+                  }),
+                ],
+                child: NotificationSettingScreen(),
               );
             },
           },

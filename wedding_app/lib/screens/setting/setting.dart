@@ -48,7 +48,7 @@ class _SettingPageState extends State<SettingPage> {
         ),
         centerTitle: true,
       ),
-      bottomSheet: Wrap(
+      bottomNavigationBar: Wrap(
         children: [
           Center(
             child: Text('App version 1.0.00'),
@@ -130,6 +130,9 @@ class _SettingPageState extends State<SettingPage> {
                     SettingItem(() {
                       Navigator.pushNamed(context, RouteName.changePassword);
                     }, "Thay đổi mật khẩu"),
+                    SettingItem(() {
+                      Navigator.pushNamed(context, RouteName.notificationSetting);
+                    }, "Cài đặt thông báo"),
                     SettingItem(
                         () => Navigator.pushNamed(
                             context, RouteName.createWedding,
