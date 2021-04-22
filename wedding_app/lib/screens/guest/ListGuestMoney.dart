@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:wedding_app/bloc/guests/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wedding_app/firebase_repository/guest_firebase_repository.dart';
 import 'package:wedding_app/model/guest.dart';
+import 'package:wedding_app/utils/get_information.dart';
 
 import '../../model/guest.dart';
 
@@ -18,15 +20,6 @@ class ListGuestMoney extends StatefulWidget {
 
 class _ListGuestMoneyState extends State<ListGuestMoney> {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  String getType(int type) {
-    if (type == 0)
-      return "Chưa sắp xếp";
-    else if (type == 1)
-      return "Nhà trai";
-    else
-      return "Nhà gái";
-  }
 
   Widget _moneyPart(Guest guest) {
     return Builder(builder: (context) {
@@ -188,8 +181,11 @@ class _ListGuestMoneyState extends State<ListGuestMoney> {
                           child: Row(
                             children: <Widget>[
                               Expanded(
-                                flex: 2,
+                                flex: 1,
                                 child: TextFormField(
+                                  inputFormatters: [
+                                    LengthLimitingTextInputFormatter(7),
+                                  ],
                                   textAlign: TextAlign.end,
                                   initialValue: _money.toString(),
                                   keyboardType: TextInputType.number,
