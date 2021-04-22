@@ -13,7 +13,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wedding_app/screens/add_budget/addbudget.dart';
 import 'package:search_page/search_page.dart';
-import 'package:wedding_app/utils/get_share_preferences.dart';
+
 import 'package:wedding_app/utils/hex_color.dart';
 
 import 'download_excel.dart';
@@ -91,6 +91,7 @@ class _BudgetListState extends State<BudgetList> {
       weddingID = prefs.getString("wedding_id");
     });
     BlocProvider.of<CateBloc>(context).add(LoadTodos());
+
     wedBudget1 = 0;
     sum = 0;
     _list = [];
@@ -248,8 +249,10 @@ class _BudgetListState extends State<BudgetList> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder(
+
       cubit: BlocProvider.of<WeddingBloc>(context),
       builder: (context, state) {
+
         if (state is WeddingLoaded) {
           wedBudget = state.wedding.budget;
 
@@ -476,7 +479,7 @@ class _BudgetListState extends State<BudgetList> {
                                                               .toString()) +
                                                           " ₫"),
                                                     ),
-                                                    visible: _cateSum==0?false:true,
+                                                    visible:_cateSum==0?false:true,
                                                   )
 
                                                 ),
