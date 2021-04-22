@@ -12,6 +12,66 @@ import 'package:wedding_app/widgets/confirm_dialog.dart';
 import 'package:wedding_app/widgets/loading_indicator.dart';
 import 'package:intl/intl.dart';
 
+String paymoney = "0";
+bool isCheck = false;
+CateBloc _cateBloc;
+Category holder;
+Category selectedCate;
+List<Category> _values2 = [];
+String budgetId = "";
+String weddingId = "";
+String id = "";
+bool _checkboxListTile = false;
+Category initialCate = new Category("", "");
+TextEditingController budgetNameController = new TextEditingController();
+TextEditingController moneyController = new TextEditingController();
+TextEditingController payMoneyController = new TextEditingController();
+TextEditingController budgetController = new TextEditingController();
+
+class BudgetNameValidate {
+  static String budgetNameValidate(BuildContext context, String val) {
+    if (val.length > 20) {
+      return "tên quỹ không thể quá 20 kí tự";
+    }
+    if (val == "") {
+      return "tên quy không thể chống";
+    }
+    return null;
+  }
+
+  static String moneyValidate(BuildContext context, String val) {
+    if (val == "") {
+
+      return "số tiền không thể chống";
+    } else {
+      if (double.parse(val.replaceAll(",", "")) < 1000) {
+        return "Tiền phải lớn hơn 1000 đồng";
+      }
+    }
+
+    return null;
+  }
+
+  static String payMoneyValidate(BuildContext context, String val) {
+    if (val == "") {
+      payMoneyController.text = "0";
+    } else if (double.parse(val.replaceAll(",", "")) >
+        double.parse(moneyController.value.text.replaceAll(",", ""))) {
+      showFailedSnackbar(context, "Xin Vui Lòng nhập lại quỹ");
+      return "Tiền đã trả phải nhỏ hơn hoặc bằng kinh phí ban đầu";
+    }
+
+    return null;
+  }
+
+  static String noteValidate(BuildContext context, String val) {
+    if (val.length > 100) {
+      return "Ghi chú không được quá 100 kí tự";
+    }
+    return null;
+  }
+}
+
 class AddBudget extends StatefulWidget {
   final bool isEditing;
   final Budget budget;
@@ -35,21 +95,6 @@ class _AddBudgetState extends State<AddBudget> {
     return preferences.getString("wedding_id");
   }
 
-  String paymoney = "0";
-  bool isCheck = false;
-  CateBloc _cateBloc;
-  Category holder;
-  Category selectedCate;
-  List<Category> _values2 = [];
-  String budgetId = "";
-  String weddingId = "";
-  String id = "";
-  bool _checkboxListTile = false;
-  Category initialCate = new Category("", "");
-  TextEditingController budgetNameController = new TextEditingController();
-  TextEditingController moneyController = new TextEditingController();
-  TextEditingController payMoneyController = new TextEditingController();
-  TextEditingController budgetController = new TextEditingController();
   SharedPreferences sharedPrefs;
   final _formkey = GlobalKey<FormState>();
   static const _locale = 'en';
@@ -73,6 +118,7 @@ class _AddBudgetState extends State<AddBudget> {
       moneyController.text =
           isEditing ? _formatNumber(widget.budget.money.toString()) : "";
       _checkboxListTile = isEditing ? widget.budget.isComplete : false;
+      budgetController.text = isEditing ? widget.budget.note : "";
     });
   }
 
@@ -157,12 +203,8 @@ class _AddBudgetState extends State<AddBudget> {
                         child: TextFormField(
                             controller: budgetNameController,
                             validator: (val) {
-                              if (val == "") {
-                                showFailedSnackbar(
-                                    context, "Tên quỹ không thể chống");
-                                return "tên quy không thể chống";
-                              }
-                              return null;
+                              return BudgetNameValidate.budgetNameValidate(
+                                  context, val);
                             },
                             decoration: new InputDecoration(
                                 labelText: 'Tên Quỹ',
@@ -199,28 +241,8 @@ class _AddBudgetState extends State<AddBudget> {
                                       );
                                     },
                                     validator: (val) {
-                                      if (val == "") {
-                                        showFailedSnackbar(
-                                            context, "số tiền không thể chống");
-                                        return "số tiền không thể chống";
-                                      } else {
-                                        if (double.parse(
-                                                val.replaceAll(",", "")) <
-                                            1000) {
-                                          showFailedSnackbar(context,
-                                              "Xin Vui Lòng nhập lại quỹ");
-                                          print(double.parse(
-                                                  val.replaceAll(",", "")) <
-                                              1000);
-                                          print("test val" +
-                                              double.parse(
-                                                      val.replaceAll(",", ""))
-                                                  .toString());
-                                          return "Tiền phải lớn hơn 1000 đồng";
-                                        }
-                                      }
-
-                                      return null;
+                                      return BudgetNameValidate.moneyValidate(
+                                          context, val);
                                     },
                                     decoration: new InputDecoration(
                                       labelText: 'Số tiền',
@@ -296,22 +318,8 @@ class _AddBudgetState extends State<AddBudget> {
                               );
                             },
                             validator: (val) {
-                              if (val == "") {
-                               payMoneyController.text="0";
-                              } else if (double.parse(val.replaceAll(",", "")) >
-                                  double.parse(moneyController.value.text
-                                      .replaceAll(",", ""))) {
-                                showFailedSnackbar(
-                                    context, "Xin Vui Lòng nhập lại quỹ");
-                                print(double.parse(val.replaceAll(",", "")) <
-                                    1000);
-                                print("test val" +
-                                    double.parse(val.replaceAll(",", ""))
-                                        .toString());
-                                return "Tiền đã trả phải nhỏ hơn hoặc bằng kinh phí ban đầu";
-                              }
-
-                              return null;
+                              return BudgetNameValidate.payMoneyValidate(
+                                  context, val);
                             },
                             decoration: new InputDecoration(
                                 focusedBorder: OutlineInputBorder(
@@ -376,6 +384,10 @@ class _AddBudgetState extends State<AddBudget> {
                         child: TextFormField(
                             maxLines: maxLines,
                             controller: budgetController,
+                            validator: (val) {
+                              return BudgetNameValidate.noteValidate(
+                                  context, val);
+                            },
                             decoration: new InputDecoration(
                                 focusedBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
@@ -404,10 +416,20 @@ class _AddBudgetState extends State<AddBudget> {
                                   color: Colors.white,
                                   iconSize: 40,
                                   onPressed: () {
-                                    BlocProvider.of<BudgetBloc>(context)
-                                      ..add(DeleteBudget(id, widget.budget.id));
-
-                                    Navigator.pop(context);
+                                    showDialog(
+                                        context: context,
+                                        barrierDismissible: false,
+                                        builder: (BuildContext context) =>
+                                            PersonDetailsDialog(
+                                              message: "Bạn đang xóa",
+                                              onPressedFunction: () {
+                                                BlocProvider.of<BudgetBloc>(
+                                                    context)
+                                                  ..add(DeleteBudget(
+                                                      id, widget.budget.id));
+                                                Navigator.pop(context);
+                                              },
+                                            ));
                                   },
                                 ),
                               ),
@@ -430,16 +452,17 @@ class _AddBudgetState extends State<AddBudget> {
             selectedCate == null ? initialCate.id : selectedCate.id,
             _checkboxListTile,
             double.parse(moneyController.text.replaceAll(',', '')),
-
-            payMoneyController.text==null?double.parse("0"):double.parse(payMoneyController.text.replaceAll(',', '')),
+            payMoneyController.text == null
+                ? double.parse("0")
+                : double.parse(payMoneyController.text.replaceAll(',', '')),
             1,
+            budgetController.text,
             id: widget.budget.id);
         print(budget.toString());
         if (budget != null && budgetNameController.text.trim().isNotEmpty) {
           BlocProvider.of<BudgetBloc>(context)..add(UpdateBudget(budget, id));
           showSuccessSnackbar(context, "Sửa kinh phí thành công");
           Navigator.pop(context);
-
         } else if (selectedCate == null) {
           showFailedSnackbar(context, "Thư mục không thể trống");
         } else if (budget.budgetName == null) {
@@ -456,8 +479,11 @@ class _AddBudgetState extends State<AddBudget> {
               selectedCate.id,
               _checkboxListTile,
               double.parse(moneyController.text.replaceAll(',', '')),
-              payMoneyController.text==null?double.parse("0"):double.parse(payMoneyController.text.replaceAll(',', '')),
-              1);
+              payMoneyController.text == null
+                  ? double.parse("0")
+                  : double.parse(payMoneyController.text.replaceAll(',', '')),
+              1,
+              budgetController.text);
           BlocProvider.of<BudgetBloc>(context).add(CreateBudget(id, budget));
           showSuccessSnackbar(context, "Thêm kinh phí thành công");
           Navigator.pop(context);

@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wedding_app/bloc/budget/bloc.dart';
 import 'package:wedding_app/bloc/category/bloc.dart';
@@ -10,6 +13,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wedding_app/screens/add_budget/addbudget.dart';
 import 'package:search_page/search_page.dart';
+import 'package:wedding_app/utils/get_share_preferences.dart';
 import 'package:wedding_app/utils/hex_color.dart';
 
 import 'download_excel.dart';
@@ -198,6 +202,7 @@ class _BudgetListState extends State<BudgetList> {
                           children: [
                             Container(
                               child: Text(budget.budgetName,
+                                  overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold)),
@@ -222,6 +227,7 @@ class _BudgetListState extends State<BudgetList> {
                                 )),
                             Text(
                               (budget.money - budget.payMoney).toString() + "₫",
+                              overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                   fontSize: 20, fontWeight: FontWeight.bold),
                             )
@@ -288,7 +294,8 @@ class _BudgetListState extends State<BudgetList> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: <Widget>[
-                                Column(
+                                Flexible(
+                                    child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: <Widget>[
                                     Icon(
@@ -312,13 +319,17 @@ class _BudgetListState extends State<BudgetList> {
                                             wedBudget1 = sum;
                                             return Visibility(
                                                 visible: _iSDone,
-                                                child: Text(
+                                                child: Text("Tổng kinh phí:"+
                                                     _formatNumber(
                                                             sum.toString()) +
-                                                        "₫",
+                                                        "₫",  overflow:
+                                                TextOverflow
+                                                    .ellipsis,
+                                                    maxLines: 2,
                                                     style: TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold)));
+
                                           }
                                           if (state is BudgetLoading) {
                                             return Column(
@@ -334,7 +345,7 @@ class _BudgetListState extends State<BudgetList> {
                                           return Container();
                                         })
                                   ],
-                                ),
+                                )),
                                 Container(
                                   height: 100,
                                   width: 2,
@@ -345,9 +356,9 @@ class _BudgetListState extends State<BudgetList> {
                                     builder: (context, state) {
                                       if (state is BudgetLoaded) {
                                         pay = 0;
-
                                         pay = wedBudget;
-                                        return Column(
+                                        return Flexible(
+                                            child: Column(
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           children: <Widget>[
@@ -370,20 +381,26 @@ class _BudgetListState extends State<BudgetList> {
                                                           _budgets[i].payMoney;
                                                     }
                                                     return Visibility(
-                                                      visible: _iSDone,
-                                                      child: Text(
-                                                          _formatNumber(pay
-                                                                  .toString()) +
-                                                              "₫",
-                                                          style: TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              color: pay < 0
-                                                                  ? Colors.red
-                                                                  : Colors
-                                                                      .black)),
-                                                    );
+                                                        visible: _iSDone,
+                                                        child: Flexible(
+                                                          child: Text("Số tiền còn lại:"+
+                                                              _formatNumber(pay
+                                                                      .toString()) +
+                                                                  "₫",
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                              maxLines: 2,
+                                                              style: TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  color: pay < 0
+                                                                      ? Colors
+                                                                          .red
+                                                                      : Colors
+                                                                          .black)),
+                                                        ));
                                                   } else if (state
                                                       is BudgetLoading) {
                                                     return Column(
@@ -398,7 +415,7 @@ class _BudgetListState extends State<BudgetList> {
                                                   return Container();
                                                 })
                                           ],
-                                        );
+                                        ));
                                       }
                                       if (state is WeddingLoading) {
                                         return Column(
@@ -450,13 +467,18 @@ class _BudgetListState extends State<BudgetList> {
                                             return Column(
                                               children: <Widget>[
                                                 Container(
-                                                  child: ListTile(
-                                                    title: Text(item.cateName +
-                                                        " | " +
-                                                        _formatNumber(_cateSum
-                                                            .toString()) +
-                                                        " ₫"),
-                                                  ),
+                                                  child: Visibility(
+
+                                                    child:  ListTile(
+                                                      title: Text(item.cateName +
+                                                          " | " +
+                                                          _formatNumber(_cateSum
+                                                              .toString()) +
+                                                          " ₫"),
+                                                    ),
+                                                    visible: _cateSum==0?false:true,
+                                                  )
+
                                                 ),
                                                 BlocBuilder(
                                                     cubit: BlocProvider.of<
@@ -479,7 +501,7 @@ class _BudgetListState extends State<BudgetList> {
                                                                       false,
                                                                       1,
                                                                       1,
-                                                                      1);
+                                                                      1,"");
                                                               if (item.id ==
                                                                   _budgets[i]
                                                                       .cateID) {
@@ -521,10 +543,11 @@ class _BudgetListState extends State<BudgetList> {
                                                                           child:
                                                                               Row(
                                                                             children: [
-                                                                              Container(
-                                                                                child: Text(low.budgetName, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                                                                              Expanded(
+                                                                                child: Container(
+                                                                                  child: Text(low.budgetName, overflow: TextOverflow.ellipsis, maxLines: 1, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                                                                                ),
                                                                               ),
-                                                                              Flexible(fit: FlexFit.tight, child: SizedBox()),
                                                                               Visibility(
                                                                                   visible: low.payMoney != 0 && low.isComplete == false,
                                                                                   child: SizedBox(
@@ -549,10 +572,13 @@ class _BudgetListState extends State<BudgetList> {
                                                                                       child: Text(" Hoàn Thành ", style: TextStyle(color: Colors.black, fontSize: 15, fontWeight: FontWeight.normal)),
                                                                                     ),
                                                                                   )),
-                                                                              Text(
+                                                                              Flexible(
+                                                                                  child: Text(
                                                                                 _formatNumber((low.money - low.payMoney).toString()) + "₫",
+                                                                                overflow: TextOverflow.ellipsis,
+                                                                                maxLines: 1,
                                                                                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                                                                              )
+                                                                              ))
                                                                             ],
                                                                           ),
                                                                         ),
@@ -674,6 +700,7 @@ class _BudgetListState extends State<BudgetList> {
                                                     style: TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold)));
+                                            ;
                                           }
                                           if (state is BudgetLoading) {
                                             return Column(
@@ -834,7 +861,7 @@ class _BudgetListState extends State<BudgetList> {
                                                                       false,
                                                                       1,
                                                                       1,
-                                                                      1);
+                                                                      1,"");
                                                               if (item.id ==
                                                                   _budgets[i]
                                                                       .cateID) {
@@ -876,8 +903,10 @@ class _BudgetListState extends State<BudgetList> {
                                                                           child:
                                                                               Row(
                                                                             children: [
-                                                                              Container(
-                                                                                child: Text(low.budgetName, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                                                                              Expanded(
+                                                                                child: Container(
+                                                                                  child: Text(low.budgetName, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                                                                                ),
                                                                               ),
                                                                               Flexible(fit: FlexFit.tight, child: SizedBox()),
                                                                               Visibility(
@@ -906,6 +935,7 @@ class _BudgetListState extends State<BudgetList> {
                                                                                   )),
                                                                               Text(
                                                                                 _formatNumber((low.money - low.payMoney).toString()) + "₫",
+                                                                                overflow: TextOverflow.ellipsis,
                                                                                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                                                                               )
                                                                             ],
