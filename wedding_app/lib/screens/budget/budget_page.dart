@@ -8,6 +8,7 @@ import 'package:wedding_app/bloc/wedding/bloc.dart';
 import 'package:wedding_app/model/budget.dart';
 import 'package:wedding_app/model/category.dart';
 import 'package:intl/intl.dart';
+import 'package:wedding_app/model/user_wedding.dart';
 import 'package:wedding_app/screens/Budget/curveshape.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -19,6 +20,10 @@ import 'package:wedding_app/utils/hex_color.dart';
 import 'download_excel.dart';
 
 class BudgetList extends StatefulWidget {
+  final UserWedding userWedding;
+
+  const BudgetList({Key key, this.userWedding}) : super(key: key);
+
   @override
   _BudgetListState createState() => _BudgetListState();
 }
@@ -86,10 +91,7 @@ class _BudgetListState extends State<BudgetList> {
 
   @override
   void initState() {
-    SharedPreferences.getInstance().then((prefs) {
-      setState(() => sharedPrefs = prefs);
-      weddingID = prefs.getString("wedding_id");
-    });
+   weddingID=widget.userWedding.weddingId;
     BlocProvider.of<CateBloc>(context).add(LoadTodos());
     wedBudget1 = 0;
     sum = 0;
@@ -248,8 +250,9 @@ class _BudgetListState extends State<BudgetList> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder(
+
       cubit: BlocProvider.of<WeddingBloc>(context),
-      builder: (context, state) {
+      builder: (context, state) {print('test' + weddingID);
         if (state is WeddingLoaded) {
           wedBudget = state.wedding.budget;
 

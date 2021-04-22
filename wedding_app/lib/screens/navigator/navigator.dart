@@ -71,7 +71,9 @@ class _NavigatorPageState extends State<NavigatorPage> {
               ChecklistPage(
                 userWedding: userWedding,
               ),
-              BudgetList(),
+              BudgetList(
+                userWedding: userWedding,
+              ),
               ViewGuestPage(
                 userWedding: userWedding,
               ),
