@@ -12,8 +12,9 @@
     <meta name="apple-mobile-web-app-title" content="flutter_to_do" />
     <link rel="apple-touch-icon" href="/icons/Icon-192.png" />
 
-    <title>flutter_to_do</title>
+    <title>Wedding Invitation</title>
     <link rel="manifest" href="/manifest.json" />
+    <base href="/">
   </head>
   <body>
     <!-- This script installs service_worker.js to provide PWA functionality to
@@ -21,7 +22,7 @@
       https://developers.google.com/web/fundamentals/primers/service-workers -->
     <script>
       if ("serviceWorker" in navigator) {
-        window.addEventListener("load", function () {
+        window.addEventListener("flutter-first-frame", function () {
           navigator.serviceWorker.register("/flutter_service_worker.js");
         });
       }
@@ -31,6 +32,7 @@
     <!-- The core Firebase JS SDK is always required and must be listed first -->
     <script src="https://www.gstatic.com/firebasejs/7.22.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.22.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.4/firebase-storage.js"></script>
     <!-- TODO: Add SDKs for Firebase products that you want to use
          https://firebase.google.com/docs/web/setup#available-libraries -->
     <script defer src="/__/firebase/8.2.7/firebase-app.js"></script>

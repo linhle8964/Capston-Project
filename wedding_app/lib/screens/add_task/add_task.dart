@@ -108,8 +108,11 @@ class _AddTaskPageState extends State<AddTaskPage> {
                         fillColor: Colors.white,
                         filled: true,
                       ),
-                      validator: (input) =>
-                          input == null ? 'Hãy điền công việc của bạn' : null,
+                      validator: (input) => input.isEmpty
+                          ? 'Hãy điền công việc của bạn'
+                          : input.length > 20
+                              ? "Tên công việc không quá 20 kí tự"
+                              : null,
                       onSaved: (input) => _task = input,
                     ),
                     SizedBox(
@@ -148,7 +151,8 @@ class _AddTaskPageState extends State<AddTaskPage> {
                                       ),
                                     ),
                                     IconButton(
-                                      key: Key(WidgetKey.addTaskOpenDateTimePicker),
+                                      key: Key(
+                                          WidgetKey.addTaskOpenDateTimePicker),
                                       icon: Icon(Icons.calendar_today),
                                       tooltip: 'Tap to open date picker',
                                       onPressed: () {
@@ -176,7 +180,9 @@ class _AddTaskPageState extends State<AddTaskPage> {
                               contentPadding: EdgeInsets.all(0),
                               activeColor: Colors.blue,
                               controlAffinity: ListTileControlAffinity.leading,
-                              title: Text('Hoàn thành'),
+                              title: _checkboxListTile
+                                  ? Text('Hoàn thành')
+                                  : Text('Chưa Hoàn thành'),
                               value: _checkboxListTile,
                               onChanged: (value) {
                                 setState(() {
@@ -265,6 +271,9 @@ class _AddTaskPageState extends State<AddTaskPage> {
                         filled: true,
                         alignLabelWithHint: true,
                       ),
+                      validator: (input) => input.length > 100
+                          ? "Ghi chú không quá 100 kí tự"
+                          : null,
                       onSaved: (input) => _note = input,
                     ),
                   ])),
@@ -274,19 +283,23 @@ class _AddTaskPageState extends State<AddTaskPage> {
   }
 
   void addNewTask(context) {
-    _formKey.currentState.save();
-    Task task = new Task(
-        name: _task,
-        dueDate: _dueDate,
-        status: _checkboxListTile,
-        note: _note,
-        category: _category);
-    if (_task != null && _category != null && _task.trim().isNotEmpty) {
-      BlocProvider.of<ChecklistBloc>(context)
-        ..add(AddTask(task, widget.weddingID));
-      Navigator.pop(context);
-    } else {
-      showFailedSnackbar(context, "Tên, loại công việc phải có dữ liệu");
+    final FormState form = _formKey.currentState;
+    form.save();
+    if (form.validate()) {
+      Task task = new Task(
+          name: _task,
+          dueDate: _dueDate,
+          status: _checkboxListTile,
+          note: _note,
+          category: _category);
+      print(task.toString());
+      if (_task != null && _category != null && _task.trim().isNotEmpty) {
+        BlocProvider.of<ChecklistBloc>(context)
+          ..add(AddTask(task, widget.weddingID));
+        Navigator.pop(context);
+      } else {
+        showFailedSnackbar(context, "Loại công việc phải có dữ liệu");
+      }
     }
   }
 }
