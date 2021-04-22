@@ -12,9 +12,6 @@ void main() {
       const passwordTextFieldKey = WidgetKey.loginPasswordTextFieldKey;
       const showPasswordButtonKey = WidgetKey.loginShowPasswordButtonKey;
       const navigateTaskButtonKey = WidgetKey.navigateTaskButtonKey;
-      const navigateBudgetButtonKey = WidgetKey.navigateBudgetButtonKey;
-      const navigateGuestButtonKey = WidgetKey.navigateGuestButtonKey;
-      const navigateSettingButtonKey = WidgetKey.navigateSettingButtonKey;
 
       FlutterDriver driver;
 
@@ -45,7 +42,7 @@ void main() {
           await driver.tap(find.byValueKey(passwordTextFieldKey));
           await driver.enterText("4");
           expect(
-              await isPresent(find.text(MessageConst.invalidPassword), driver),
+              await isPresent(find.text(MessageConst.passwordLengthMin), driver),
               isTrue);
         });
 
@@ -54,7 +51,25 @@ void main() {
           await driver.tap(find.byValueKey(passwordTextFieldKey));
           await driver.enterText("1234567891011121314151617181920");
           expect(
-              await isPresent(find.text(MessageConst.invalidPassword), driver),
+              await isPresent(find.text(MessageConst.passwordLengthMax), driver),
+              isTrue);
+        });
+
+        // invalid password only character
+        await driver.runUnsynchronized(() async {
+          await driver.tap(find.byValueKey(passwordTextFieldKey));
+          await driver.enterText("abcdefghi");
+          expect(
+              await isPresent(find.text(MessageConst.passwordAtLeastOneNumber), driver),
+              isTrue);
+        });
+
+        // invalid password only number
+        await driver.runUnsynchronized(() async {
+          await driver.tap(find.byValueKey(passwordTextFieldKey));
+          await driver.enterText("12345678");
+          expect(
+              await isPresent(find.text(MessageConst.passwordAtLeastOneCharacter), driver),
               isTrue);
         });
 

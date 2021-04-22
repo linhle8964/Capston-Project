@@ -53,14 +53,27 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     }else{
       yield state.update(isEmailValid: false);
     }
-
   }
 
   Stream<LoginState> _mapPasswordChangedToState(String password) async* {
     if(password != null){
-      yield state.update(isPasswordValid: Validation.isPasswordValid(password));
+      password = password.trim();
+      bool isValid = Validation.isPasswordValid(password);
+      String message = "";
+      if(isValid == false){
+        if(password.length < 8){
+          message = MessageConst.passwordLengthMin;
+        }else if(password.length > 20){
+          message = MessageConst.passwordLengthMax;
+        }else if(!password.contains(new RegExp(r'[0-9]'))){
+          message = MessageConst.passwordAtLeastOneNumber;
+        }else if(!password.contains(new RegExp(r'[A-Za-z]'))){
+          message = MessageConst.passwordAtLeastOneCharacter;
+        }
+      }
+      yield state.update(isPasswordValid: isValid, passwordErrorMessage: message);
     }else{
-      yield state.update(isPasswordValid: false);
+      yield state.update(isPasswordValid: false, passwordErrorMessage: null);
     }
   }
 

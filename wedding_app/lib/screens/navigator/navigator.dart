@@ -20,8 +20,12 @@ import 'package:wedding_app/screens/setting/setting.dart';
 import 'package:wedding_app/screens/splash_page.dart';
 import 'package:wedding_app/utils/get_share_preferences.dart';
 import 'package:wedding_app/const/widget_key.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class NavigatorPage extends StatefulWidget {
+  final User user;
+
+  NavigatorPage({Key key, @required this.user}) : super(key : key);
   @override
   _NavigatorPageState createState() => _NavigatorPageState();
 }
@@ -44,7 +48,7 @@ class _NavigatorPageState extends State<NavigatorPage> {
               userWeddingRepository: FirebaseUserWeddingRepository(),
               weddingRepository: FirebaseWeddingRepository(),
               inviteEmailRepository: FirebaseInviteEmailRepository(),
-          userRepository: FirebaseUserRepository()),
+          userRepository: FirebaseUserRepository())..add(LoadWeddingByUser(widget.user)),
         ),
         BlocProvider<UserWeddingBloc>(
           create: (BuildContext context) => UserWeddingBloc(
@@ -68,7 +72,6 @@ class _NavigatorPageState extends State<NavigatorPage> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             UserWedding userWedding = snapshot.data;
-            BlocProvider.of<WeddingBloc>(context).add(LoadWeddingById(userWedding.weddingId));
             return Scaffold(
               body: BlocBuilder(
                 cubit: BlocProvider.of<WeddingBloc>(context),
@@ -86,7 +89,9 @@ class _NavigatorPageState extends State<NavigatorPage> {
                       SettingPage(userWedding: userWedding, wedding: state.wedding,),
                     ];
                     return Scaffold(
-                      body: _children[_selectedIndex],
+                      body: Container(
+                        child: _children[_selectedIndex],
+                      ),
                       bottomNavigationBar: BottomNavigationBar(
                           key: Key(WidgetKey.bottomNavigationBarKey),
                           items: [
@@ -130,11 +135,12 @@ class _NavigatorPageState extends State<NavigatorPage> {
                           onTap: onTabTapped),
                     );
                   }else if(state is WeddingLoading){
-                    return CircularProgressIndicator();
+                    return Center(child: CircularProgressIndicator());
                   }
-                  return CircularProgressIndicator();
+                  return SplashPage();
                 },
               ),
+
             );
           } else {
             return SplashPage();

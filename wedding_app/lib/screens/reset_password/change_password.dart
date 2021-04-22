@@ -65,6 +65,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: hexToColor("#d86a77"),
         title: Text(
@@ -98,84 +99,86 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             });
           }
         },
-        child: BlocBuilder(
-          cubit: _changePasswordBloc,
-          builder: (context, state) {
-            return Container(
-              padding: EdgeInsets.all(20.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    padding: EdgeInsets.symmetric(vertical: 5),
-                    height: height / 8,
-                    child: InputFieldArea(
-                      controller: _oldPasswordController,
-                      labelText: "Mật khẩu cũ",
-                      icon: Icon(Icons.remove_red_eye),
-                      obscure: true,
-                      errorText: !state.isOldPasswordValid
-                          ? MessageConst.invalidPassword
-                          : null,
-                      isPassword: true,
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.symmetric(vertical: 5),
-                    height: height / 8,
-                    child: InputFieldArea(
-                      controller: _newPasswordController,
-                      labelText: "Mật khẩu mới",
-                      icon: Icon(Icons.remove_red_eye),
-                      obscure: true,
-                      errorText: !state.isNewPasswordValid
-                          ? MessageConst.invalidPassword
-                          : null,
-                      isPassword: true,
-                    ),
-                  ),
-                  Container(
-                    padding: EdgeInsets.symmetric(vertical: 5),
-                    height: height / 8,
-                    child: InputFieldArea(
-                      controller: _repeatPasswordController,
-                      labelText: "Nhập lại mật khẩu",
-                      icon: Icon(Icons.remove_red_eye_sharp),
-                      obscure: true,
-                      errorText: !state.isRepeatPasswordValid
-                          ? MessageConst.invalidPassword
-                          : null,
-                      isPassword: true,
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.center,
-                    child: SizedBox(
-                      width: MediaQuery.of(context).size.width / 2,
-                      child: ElevatedButton(
-                        child: Text("Thay đổi"),
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                              isChangePasswordButtonEnabled(state)
-                                  ? hexToColor("#d86a77")
-                                  : Colors.grey),
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(18.0),
-                                      side: BorderSide(color: Colors.red))),
-                        ),
-                        onPressed: () => isChangePasswordButtonEnabled(state)
-                            ? _onSubmitted()
+        child: SingleChildScrollView(
+          child: BlocBuilder(
+            cubit: _changePasswordBloc,
+            builder: (context, state) {
+              return Container(
+                padding: EdgeInsets.all(20.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.symmetric(vertical: 5),
+                      height: height / 8,
+                      child: InputFieldArea(
+                        controller: _oldPasswordController,
+                        labelText: "Mật khẩu cũ",
+                        icon: Icon(Icons.remove_red_eye),
+                        obscure: true,
+                        errorText: !state.isOldPasswordValid
+                            ? state.oldPasswordErrorMessage
                             : null,
+                        isPassword: true,
                       ),
                     ),
-                  )
-                ],
-              ),
-            );
-          },
+                    Container(
+                      padding: EdgeInsets.symmetric(vertical: 5),
+                      height: height / 8,
+                      child: InputFieldArea(
+                        controller: _newPasswordController,
+                        labelText: "Mật khẩu mới",
+                        icon: Icon(Icons.remove_red_eye),
+                        obscure: true,
+                        errorText: !state.isNewPasswordValid
+                            ? state.newPasswordErrorMessage
+                            : null,
+                        isPassword: true,
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.symmetric(vertical: 5),
+                      height: height / 8,
+                      child: InputFieldArea(
+                        controller: _repeatPasswordController,
+                        labelText: "Nhập lại mật khẩu",
+                        icon: Icon(Icons.remove_red_eye_sharp),
+                        obscure: true,
+                        errorText: !state.isRepeatPasswordValid
+                            ? state.repeatPasswordErrorMessage
+                            : null,
+                        isPassword: true,
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width / 2,
+                        child: ElevatedButton(
+                          child: Text("Thay đổi"),
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                                isChangePasswordButtonEnabled(state)
+                                    ? hexToColor("#d86a77")
+                                    : Colors.grey),
+                            shape:
+                                MaterialStateProperty.all<RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(18.0),
+                                        side: BorderSide(color: Colors.grey))),
+                          ),
+                          onPressed: () => isChangePasswordButtonEnabled(state)
+                              ? _onSubmitted()
+                              : null,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              );
+            },
+          ),
         ),
       ),
     );

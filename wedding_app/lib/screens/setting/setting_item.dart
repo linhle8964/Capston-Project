@@ -31,7 +31,7 @@ class SettingItem extends StatelessWidget {
           Expanded(
             flex: 1,
             child: Container(
-                child: Icon(Icons.arrow_forward_ios_sharp)),
+                child: IconButton(icon: Icon(Icons.arrow_forward_ios_sharp), onPressed: () => function.call(),),),
           )
         ],
       )

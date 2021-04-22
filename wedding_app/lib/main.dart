@@ -150,7 +150,8 @@ class MyApp extends StatelessWidget {
               return BlocBuilder<AuthenticationBloc, AuthenticationState>(
                   builder: (context, state) {
                 if (state is Authenticated) {
-                  return NavigatorPage();
+                  ScaffoldMessenger.of(context)..hideCurrentSnackBar();
+                  return NavigatorPage(user: state.user,);
                 } else if (state is Unauthenticated) {
                   return BlocProvider<LoginBloc>(
                     create: (context) => LoginBloc(

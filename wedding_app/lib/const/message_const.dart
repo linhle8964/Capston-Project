@@ -5,7 +5,13 @@ class MessageConst {
   static const String commonLoading = "Đang xử lý dữ liệu";
   static const String commonSuccess = "Thành công";
   static const String invalidEmail = "Email không hợp lệ";
-  static const String invalidPassword = "Mật khẩu phải chứa từ 6 đến 20 ký tự";
+  static const String invalidPassword = "Mật khẩu phải chứa từ 8 đến 20 ký tự và chứa cả số lẫn chữ cái";
+
+  //password
+  static const String passwordLengthMin = "Mật khẩu phải có ít nhất 8 ký tự";
+  static const String passwordLengthMax = "Mật khẩu không được quá 20 ký tự";
+  static const String passwordAtLeastOneCharacter = "Mật khẩu phải chứa chữ cái";
+  static const String passwordAtLeastOneNumber = "Mật khẩu phải chứa số";
   // invite email
   static const String userAlreadyInWeddingError =
       "Người dùng này đã có trong đám cưới";
@@ -23,8 +29,11 @@ class MessageConst {
   static const String wrongPasswordError = "Sai mật khẩu";
   static const String tooManyRequestError = "Bạn đã đăng nhập quá nhiều lần. Hãy thử lại trong giây lát";
   static const String emailNotVerified = "Bạn chưa xác nhận email";
+  static const String loginSuccess = "Đăng nhập thành công";
 
   // register
+  static const String emailAlreadyRegistered = "Email đã tồn tại";
+  static const String registerSuccess = "Đăng ký thành công";
 
   // validate wedding input
   static const String nameTooLong = "Tên không thể quá 20 ký tự";

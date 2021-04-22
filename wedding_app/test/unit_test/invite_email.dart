@@ -31,6 +31,12 @@ void main() {
     emailVerified: true,
   );
 
+  final wrongEmailUser = mock_user.MockUser(
+    email: "email",
+    uid: "id",
+    emailVerified: true,
+  );
+
   final InviteEmail inviteEmail = new InviteEmail(
       id: "4Yj3S4Mz7cc5jQfZR2iT",
       code: code,
@@ -95,18 +101,67 @@ void main() {
           throwsA(isA<AssertionError>()));
     });
 
-    blocTest("demo",
+    blocTest("join wedding success",
         build: () {
           when(mockInviteEmailRepository.getInviteEmailByCode(code))
               .thenAnswer((_) async => inviteEmail);
           when(mockUserRepository.getUser()).thenAnswer((_) async => user);
           when(mockUserWeddingRepository.getUserWeddingByEmail(email))
               .thenAnswer((realInvocation) async => userWedding);
-          when(mockUserWeddingRepository.updateUserWedding(userWedding))
-              .thenAnswer((_) async => Future.value());
-          when(mockInviteEmailRepository.deleteInviteEmailByEmail(
-                  email, weddingId))
-              .thenAnswer((_) async => Future.value());
+          return InviteEmailBloc(
+              userWeddingRepository: mockUserWeddingRepository,
+              inviteEmailRepository: mockInviteEmailRepository,
+              userRepository: mockUserRepository);
+        },
+        act: (InviteEmailBloc bloc) async => bloc.add(SubmittedCode(code)),
+        expect: [
+          InviteEmailProcessing(),
+          InviteEmailSuccess(message: MessageConst.commonSuccess)
+        ]);
+
+    blocTest("join wedding emit [invalid] when wrong email",
+        build: () {
+          when(mockInviteEmailRepository.getInviteEmailByCode(code))
+              .thenAnswer((_) async => inviteEmail);
+          when(mockUserRepository.getUser()).thenAnswer((_) async => wrongEmailUser);
+          when(mockUserWeddingRepository.getUserWeddingByEmail(email))
+              .thenAnswer((realInvocation) async => userWedding);
+          return InviteEmailBloc(
+              userWeddingRepository: mockUserWeddingRepository,
+              inviteEmailRepository: mockInviteEmailRepository,
+              userRepository: mockUserRepository);
+        },
+        act: (InviteEmailBloc bloc) async => bloc.add(SubmittedCode(code)),
+        expect: [
+          InviteEmailProcessing(),
+          InviteEmailError(message: MessageConst.codeNotFound)
+        ]);
+
+    blocTest("join wedding emit [invalid] when wrong email",
+        build: () {
+          when(mockInviteEmailRepository.getInviteEmailByCode(code))
+              .thenAnswer((_) async => null);
+          when(mockUserRepository.getUser()).thenAnswer((_) async => user);
+          when(mockUserWeddingRepository.getUserWeddingByEmail(email))
+              .thenAnswer((realInvocation) async => userWedding);
+          return InviteEmailBloc(
+              userWeddingRepository: mockUserWeddingRepository,
+              inviteEmailRepository: mockInviteEmailRepository,
+              userRepository: mockUserRepository);
+        },
+        act: (InviteEmailBloc bloc) async => bloc.add(SubmittedCode(code)),
+        expect: [
+          InviteEmailProcessing(),
+          InviteEmailError(message: MessageConst.codeNotFound)
+        ]);
+
+    blocTest("join wedding emit [invalid] when wrong email",
+        build: () {
+          when(mockInviteEmailRepository.getInviteEmailByCode(code))
+              .thenAnswer((_) async => null);
+          when(mockUserRepository.getUser()).thenAnswer((_) async => user);
+          when(mockUserWeddingRepository.getUserWeddingByEmail(email))
+              .thenAnswer((realInvocation) async => userWedding);
           return InviteEmailBloc(
               userWeddingRepository: mockUserWeddingRepository,
               inviteEmailRepository: mockInviteEmailRepository,
@@ -118,4 +173,5 @@ void main() {
           InviteEmailError(message: MessageConst.commonError)
         ]);
   });
+
 }

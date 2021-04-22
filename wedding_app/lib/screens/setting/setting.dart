@@ -125,14 +125,13 @@ class _SettingPageState extends State<SettingPage> {
                 minHeight: constraints.maxHeight,
                 maxHeight: double.infinity,
               ),
-              child: IntrinsicHeight(
-                child: Column(
+              child: Column(
                   children: <Widget>[
                     SettingItem(() {
                       Navigator.pushNamed(context, RouteName.changePassword);
                     }, "Thay đổi mật khẩu"),
                     SettingItem(
-                        () async => Navigator.pushNamed(
+                        () => Navigator.pushNamed(
                             context, RouteName.createWedding,
                             arguments: CreateWeddingArguments(
                                 isEditing: true,
@@ -154,7 +153,7 @@ class _SettingPageState extends State<SettingPage> {
                         () => Navigator.pushNamed(context, RouteName.term),
                         "Điều khoản"),
                   ],
-                ),
+
               ),
             ),
           );

@@ -20,6 +20,11 @@ void main() {
     emailVerified: false,
   );
 
+  final verifiedUser = mock_user.MockUser(
+    email: validEmailString,
+    emailVerified: true,
+  );
+
   group("LoginBloc", () {
     MockUserRepository mockUserRepository;
     // ignore: close_sinks
@@ -50,7 +55,8 @@ void main() {
                 isSubmitting: false,
                 isSuccess: false,
                 isFailure: false,
-                message: ""),
+                message: "",
+                passwordErrorMessage: ""),
           ]);
 
       blocTest("emit [invalid] when email is without @ symbol",
@@ -64,7 +70,8 @@ void main() {
                 isSubmitting: false,
                 isSuccess: false,
                 isFailure: false,
-                message: ""),
+                message: "",
+                passwordErrorMessage: ""),
           ]);
 
       blocTest("emit [invalid] when email has a missing dot in the email address",
@@ -78,7 +85,8 @@ void main() {
                 isSubmitting: false,
                 isSuccess: false,
                 isFailure: false,
-                message: ""),
+                message: "",
+                passwordErrorMessage: ""),
           ]);
 
       blocTest("emit [invalid] when email is invalid",
@@ -92,7 +100,9 @@ void main() {
                 isSubmitting: false,
                 isSuccess: false,
                 isFailure: false,
-                message: ""),
+                message: "",
+                passwordErrorMessage: ""
+            ),
           ]);
 
       blocTest("emit [invalid] when email is null",
@@ -113,7 +123,8 @@ void main() {
                 isSubmitting: false,
                 isSuccess: false,
                 isFailure: false,
-                message: ""),
+                message: "",
+                passwordErrorMessage: null),
           ]);
 
       blocTest("emit [valid] when email is valid",
@@ -127,7 +138,8 @@ void main() {
                 isSubmitting: false,
                 isSuccess: false,
                 isFailure: false,
-                message: ""),
+                message: "",
+                passwordErrorMessage: ""),
           ]);
     });
 
@@ -144,7 +156,8 @@ void main() {
                 isSubmitting: false,
                 isSuccess: false,
                 isFailure: false,
-                message: ""),
+                message: "",
+                passwordErrorMessage: ""),
           ]);
 
       blocTest("emit [invalid] when password length is < 8",
@@ -159,10 +172,11 @@ void main() {
                 isSubmitting: false,
                 isSuccess: false,
                 isFailure: false,
-                message: ""),
+                message: "",
+                passwordErrorMessage: MessageConst.passwordLengthMin),
           ]);
 
-      blocTest("emit [invalid] when password length is > 8",
+      blocTest("emit [invalid] when password length is > 20",
           build: () => loginBloc,
           act: (bloc) =>
               bloc.add(PasswordChanged(password: passwordLengthGreater)),
@@ -174,7 +188,40 @@ void main() {
                 isSubmitting: false,
                 isSuccess: false,
                 isFailure: false,
-                message: ""),
+                message: "",
+                passwordErrorMessage: MessageConst.passwordLengthMax),
+          ]);
+
+      blocTest("emit [invalid] when password contain only character",
+          build: () => loginBloc,
+          act: (bloc) =>
+              bloc.add(PasswordChanged(password: "asdasddasdasdas")),
+          wait: const Duration(milliseconds: 500),
+          expect: [
+            LoginState(
+                isEmailValid: true,
+                isPasswordValid: false,
+                isSubmitting: false,
+                isSuccess: false,
+                isFailure: false,
+                message: "",
+                passwordErrorMessage: MessageConst.passwordAtLeastOneNumber),
+          ]);
+
+      blocTest("emit [invalid] when password contain only number",
+          build: () => loginBloc,
+          act: (bloc) =>
+              bloc.add(PasswordChanged(password: "1234567890")),
+          wait: const Duration(milliseconds: 500),
+          expect: [
+            LoginState(
+                isEmailValid: true,
+                isPasswordValid: false,
+                isSubmitting: false,
+                isSuccess: false,
+                isFailure: false,
+                message: "",
+                passwordErrorMessage: MessageConst.passwordAtLeastOneCharacter),
           ]);
 
       blocTest("emit [valid] when password is valid",
@@ -189,7 +236,8 @@ void main() {
                 isSubmitting: false,
                 isSuccess: false,
                 isFailure: false,
-                message: ""),
+                message: "",
+                passwordErrorMessage: ""),
           ]);
     });
 
@@ -209,22 +257,11 @@ void main() {
               isSubmitting: true,
               isSuccess: false,
               isFailure: false,
-              message: ""),
+              message: "",
+              passwordErrorMessage: ""),
           expect: [
-            LoginState(
-                isEmailValid: true,
-                isPasswordValid: true,
-                isSubmitting: true,
-                isSuccess: false,
-                isFailure: false,
-                message: MessageConst.commonLoading),
-            LoginState(
-                isEmailValid: true,
-                isPasswordValid: true,
-                isSubmitting: false,
-                isSuccess: false,
-                isFailure: true,
-                message: MessageConst.emailNotVerified),
+            LoginState.loading(),
+            LoginState.failure(message: MessageConst.emailNotVerified)
           ]);
 
       blocTest("emit [invalid] when email not found",
@@ -242,22 +279,11 @@ void main() {
               isSubmitting: true,
               isSuccess: false,
               isFailure: false,
-              message: ""),
+              message: "",
+              passwordErrorMessage: ""),
           expect: [
-            LoginState(
-                isEmailValid: true,
-                isPasswordValid: true,
-                isSubmitting: true,
-                isSuccess: false,
-                isFailure: false,
-                message: MessageConst.commonLoading),
-            LoginState(
-                isEmailValid: true,
-                isPasswordValid: true,
-                isSubmitting: false,
-                isSuccess: false,
-                isFailure: true,
-                message: MessageConst.emailNotFoundError),
+            LoginState.loading(),
+            LoginState.failure(message: MessageConst.emailNotFoundError)
           ]);
 
       blocTest("emit [invalid] when wrong password",
@@ -275,22 +301,11 @@ void main() {
               isSubmitting: true,
               isSuccess: false,
               isFailure: false,
-              message: ""),
+              message: "",
+              passwordErrorMessage: ""),
           expect: [
-            LoginState(
-                isEmailValid: true,
-                isPasswordValid: true,
-                isSubmitting: true,
-                isSuccess: false,
-                isFailure: false,
-                message: MessageConst.commonLoading),
-            LoginState(
-                isEmailValid: true,
-                isPasswordValid: true,
-                isSubmitting: false,
-                isSuccess: false,
-                isFailure: true,
-                message: MessageConst.wrongPasswordError),
+            LoginState.loading(),
+            LoginState.failure(message: MessageConst.wrongPasswordError),
           ]);
 
       blocTest("emit [invalid] when too many request",
@@ -308,23 +323,33 @@ void main() {
               isSubmitting: true,
               isSuccess: false,
               isFailure: false,
-              message: ""),
+              message: "",
+              passwordErrorMessage: ""),
           expect: [
-            LoginState(
-                isEmailValid: true,
-                isPasswordValid: true,
-                isSubmitting: true,
-                isSuccess: false,
-                isFailure: false,
-                message: MessageConst.commonLoading),
-            LoginState(
-                isEmailValid: true,
-                isPasswordValid: true,
-                isSubmitting: false,
-                isSuccess: false,
-                isFailure: true,
-                message:
-                    MessageConst.tooManyRequestError),
+            LoginState.loading(),
+            LoginState.failure(message: MessageConst.tooManyRequestError),
+          ]);
+
+      blocTest("emit [valid] when login success",
+          build: () {
+            when(mockUserRepository.signInWithCredentials(
+                validEmailString, validPasswordString))
+                .thenAnswer((_) async=> verifiedUser);
+            return LoginBloc(userRepository: mockUserRepository);
+          },
+          act: (bloc) => bloc.add(LoginWithCredentialsPressed(
+              email: validEmailString, password: validPasswordString)),
+          seed: LoginState(
+              isEmailValid: true,
+              isPasswordValid: true,
+              isSubmitting: true,
+              isSuccess: false,
+              isFailure: false,
+              message: "",
+              passwordErrorMessage: ""),
+          expect: [
+            LoginState.loading(),
+            LoginState.success(),
           ]);
     });
   });
