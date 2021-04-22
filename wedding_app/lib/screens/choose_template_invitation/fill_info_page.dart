@@ -297,8 +297,7 @@ class _FillInfoPageState extends State<FillInfoPage> {
       if (_placeController.text.length > 20) {
         _placeInvalid = true;
         _errorMess = 'Số lượng kí tự quá 20 kí tự';
-      } else if (_placeController.text.length < 2 &&
-          _placeController.text.length > 0) {
+      } else if (_placeController.text.length < 2 && _placeController.text.length > 0) {
         _placeInvalid = true;
         _errorMess = 'Số lượng kí tự ít hơn 2 kí tự';
       } else if (!alphanum.hasMatch(_placeController.text) &&
@@ -337,5 +336,57 @@ class _FillInfoPageState extends State<FillInfoPage> {
         );
       }
     });
+  }
+}
+class BrideNameValidator{
+  static String validate(String value){
+     final alpha = RegExp(r'^[^0-9\,!@#$%^&*()_+=-]+$');
+    if (value.length > 20) {
+        return 'Số lượng kí tự quá 20 kí tự';
+    } else if (value.length < 2 && value.length > 0) {
+        return  'Số lượng kí tự ít hơn 2 kí tự';
+      } else if (!alpha.hasMatch(value) && value.length != 0) {
+        return  'Tên người nhập không có số hay kí tự đặc biệt';
+      } else if (value.length == 0) {
+        return null;
+      } else {
+        return null;
+      }
+  }
+}
+class GroomNameValidator{
+  static String validate(String value){
+     final alpha = RegExp(r'^[^0-9\,!@#$%^&*()_+=-]+$');
+    if (value.length > 20) {
+        return 'Số lượng kí tự quá 20 kí tự';
+    } else if (value.length < 2 && value.length > 0) {
+        return  'Số lượng kí tự ít hơn 2 kí tự';
+      } else if (!alpha.hasMatch(value) && value.length != 0) {
+        return  'Tên người nhập không có số hay kí tự đặc biệt';
+      } else if (value.length == 0) {
+        return null;
+      } else {
+        return null;
+      }
+  }
+}
+
+class PlaceValidator{
+  static String validate(String value){
+     final alpha = RegExp(r'^[^0-9\,!@#$%^&*()_+=-]+$');
+     final alphanum = RegExp(r'^[^\,!@#$%^&*()_+=-]+$');
+    if (value.length > 20) {
+        return  'Số lượng kí tự quá 20 kí tự';
+      } else if (value.length < 2 && value.length > 0) {
+        
+        return  'Số lượng kí tự ít hơn 2 kí tự';
+      } else if (!alphanum.hasMatch(value) &&
+          value.length != 0) {
+        return  'Tên địa chỉ không có kí tự đặc biệt';
+      } else if (value.length == 0) {
+        return  null;
+      } else {
+        return null;
+      }
   }
 }
