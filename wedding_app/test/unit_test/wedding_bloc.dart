@@ -1,5 +1,4 @@
 import 'package:bloc_test/bloc_test.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:mockito/mockito.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wedding_app/bloc/validate_wedding/bloc.dart';
@@ -20,7 +19,8 @@ class MockUserWeddingRepository extends Mock
 class MockInviteEmailRepository extends Mock
     implements FirebaseInviteEmailRepository {}
 
-class MockUserRepository extends Mock implements FirebaseUserRepository{}
+class MockUserRepository extends Mock implements FirebaseUserRepository {}
+
 void main() {
   const emptyString = "";
   const validName = "linh le";
@@ -46,19 +46,22 @@ void main() {
           seed: ValidateWeddingState.empty(),
           expect: [
             ValidateWeddingState(
-                isGroomNameValid: false,
-                isBrideNameValid: true,
-                isAddressValid: true,
-                isBudgetValid: true,
-                groomNameErrorMessage: MessageConst.nameTooShort,
-                brideNameErrorMessage: "",
-                addressErrorMessage: "",
-                budgetErrorMessage: "",)
+              isGroomNameValid: false,
+              isBrideNameValid: true,
+              isAddressValid: true,
+              isBudgetValid: true,
+              groomNameErrorMessage: MessageConst.nameTooShort,
+              brideNameErrorMessage: "",
+              addressErrorMessage: "",
+              budgetErrorMessage: "",
+            )
           ]);
 
       blocTest("emit [invalid] when name too long",
           build: () => ValidateWeddingBloc(),
-          act: (bloc) => bloc.add(GroomNameChanged(groomName: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")),
+          act: (bloc) => bloc.add(GroomNameChanged(
+              groomName:
+                  "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")),
           wait: const Duration(milliseconds: 300),
           seed: ValidateWeddingState.empty(),
           expect: [
@@ -70,7 +73,8 @@ void main() {
               groomNameErrorMessage: MessageConst.nameTooLong,
               brideNameErrorMessage: "",
               addressErrorMessage: "",
-              budgetErrorMessage: "",)
+              budgetErrorMessage: "",
+            )
           ]);
 
       blocTest("emit [invalid] when name is null",
@@ -87,7 +91,8 @@ void main() {
               groomNameErrorMessage: "",
               brideNameErrorMessage: "",
               addressErrorMessage: "",
-              budgetErrorMessage: "",)
+              budgetErrorMessage: "",
+            )
           ]);
 
       blocTest("emit [invalid] when name contain number",
@@ -97,14 +102,15 @@ void main() {
           seed: ValidateWeddingState.empty(),
           expect: [
             ValidateWeddingState(
-                isGroomNameValid: false,
-                isBrideNameValid: true,
-                isAddressValid: true,
-                isBudgetValid: true,
-                groomNameErrorMessage: MessageConst.nameNotContainNumber,
-                brideNameErrorMessage: "",
-                addressErrorMessage: "",
-                budgetErrorMessage: "",)
+              isGroomNameValid: false,
+              isBrideNameValid: true,
+              isAddressValid: true,
+              isBudgetValid: true,
+              groomNameErrorMessage: MessageConst.nameNotContainNumber,
+              brideNameErrorMessage: "",
+              addressErrorMessage: "",
+              budgetErrorMessage: "",
+            )
           ]);
 
       blocTest("emit [invalid] when name contain special character",
@@ -118,10 +124,12 @@ void main() {
               isBrideNameValid: true,
               isAddressValid: true,
               isBudgetValid: true,
-              groomNameErrorMessage: MessageConst.nameNotContainSpecialCharacter,
+              groomNameErrorMessage:
+                  MessageConst.nameNotContainSpecialCharacter,
               brideNameErrorMessage: "",
               addressErrorMessage: "",
-              budgetErrorMessage: "",)
+              budgetErrorMessage: "",
+            )
           ]);
 
       blocTest("emit [valid] name",
@@ -129,24 +137,26 @@ void main() {
           act: (bloc) => bloc.add(GroomNameChanged(groomName: validName)),
           wait: const Duration(milliseconds: 300),
           seed: ValidateWeddingState(
-              isGroomNameValid: false,
-              isBrideNameValid: true,
-              isAddressValid: true,
-              isBudgetValid: true,
+            isGroomNameValid: false,
+            isBrideNameValid: true,
+            isAddressValid: true,
+            isBudgetValid: true,
             groomNameErrorMessage: "",
             brideNameErrorMessage: "",
             addressErrorMessage: "",
-            budgetErrorMessage: "",),
+            budgetErrorMessage: "",
+          ),
           expect: [
             ValidateWeddingState(
-                isGroomNameValid: true,
-                isBrideNameValid: true,
-                isAddressValid: true,
-                isBudgetValid: true,
+              isGroomNameValid: true,
+              isBrideNameValid: true,
+              isAddressValid: true,
+              isBudgetValid: true,
               groomNameErrorMessage: "",
               brideNameErrorMessage: "",
               addressErrorMessage: "",
-              budgetErrorMessage: "",)
+              budgetErrorMessage: "",
+            )
           ]);
 
       blocTest("emit [invalid] when address is empty",
@@ -156,14 +166,15 @@ void main() {
           seed: ValidateWeddingState.empty(),
           expect: [
             ValidateWeddingState(
-                isGroomNameValid: true,
-                isBrideNameValid: true,
-                isAddressValid: false,
-                isBudgetValid: true,
+              isGroomNameValid: true,
+              isBrideNameValid: true,
+              isAddressValid: false,
+              isBudgetValid: true,
               groomNameErrorMessage: "",
               brideNameErrorMessage: "",
               addressErrorMessage: MessageConst.addressTooShort,
-              budgetErrorMessage: "",)
+              budgetErrorMessage: "",
+            )
           ]);
 
       blocTest("emit [invalid] when address is null",
@@ -180,7 +191,8 @@ void main() {
               groomNameErrorMessage: "",
               brideNameErrorMessage: "",
               addressErrorMessage: "",
-              budgetErrorMessage: "",)
+              budgetErrorMessage: "",
+            )
           ]);
 
       blocTest("emit [invalid] when address length < 6",
@@ -197,12 +209,15 @@ void main() {
               groomNameErrorMessage: "",
               brideNameErrorMessage: "",
               addressErrorMessage: MessageConst.addressTooShort,
-              budgetErrorMessage: "",)
+              budgetErrorMessage: "",
+            )
           ]);
 
       blocTest("emit [invalid] when address is length > 20",
           build: () => ValidateWeddingBloc(),
-          act: (bloc) => bloc.add(AddressChanged(address: "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")),
+          act: (bloc) => bloc.add(AddressChanged(
+              address:
+                  "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")),
           wait: const Duration(milliseconds: 300),
           seed: ValidateWeddingState.empty(),
           expect: [
@@ -214,7 +229,8 @@ void main() {
               groomNameErrorMessage: "",
               brideNameErrorMessage: "",
               addressErrorMessage: MessageConst.addressTooLong,
-              budgetErrorMessage: "",)
+              budgetErrorMessage: "",
+            )
           ]);
 
       blocTest("emit [invalid] when budget is smaller than min value",
@@ -231,12 +247,14 @@ void main() {
               groomNameErrorMessage: "",
               brideNameErrorMessage: "",
               addressErrorMessage: "",
-              budgetErrorMessage: MessageConst.budgetMin,)
+              budgetErrorMessage: MessageConst.budgetMin,
+            )
           ]);
 
       blocTest("emit [invalid] when budget is bigger than max value",
           build: () => ValidateWeddingBloc(),
-          act: (bloc) => bloc.add(BudgetChanged(budget: "10000000000000000000000000000000000000000000")),
+          act: (bloc) => bloc.add(BudgetChanged(
+              budget: "10000000000000000000000000000000000000000000")),
           wait: const Duration(milliseconds: 300),
           seed: ValidateWeddingState.empty(),
           expect: [
@@ -248,7 +266,8 @@ void main() {
               groomNameErrorMessage: "",
               brideNameErrorMessage: "",
               addressErrorMessage: "",
-              budgetErrorMessage: MessageConst.budgetMax,)
+              budgetErrorMessage: MessageConst.budgetMax,
+            )
           ]);
 
       blocTest("emit [invalid] when budget % 1000 != 0",
@@ -265,7 +284,8 @@ void main() {
               groomNameErrorMessage: "",
               brideNameErrorMessage: "",
               addressErrorMessage: "",
-              budgetErrorMessage: MessageConst.budgetTripleZero,)
+              budgetErrorMessage: MessageConst.budgetTripleZero,
+            )
           ]);
 
       blocTest("emit [valid] budget",
@@ -273,8 +293,7 @@ void main() {
           act: (bloc) => bloc.add(BudgetChanged(budget: "10000000")),
           wait: const Duration(milliseconds: 300),
           seed: ValidateWeddingState.empty(),
-          expect: [
-          ]);
+          expect: []);
     });
   });
 
@@ -350,7 +369,7 @@ void main() {
 
     blocTest("create wedding when wedding is null",
         build: () {
-          when(mockUserRepository.getUser()).thenAnswer((_) async=> user);
+          when(mockUserRepository.getUser()).thenAnswer((_) async => user);
           return WeddingBloc(
               weddingRepository: mockWeddingRepository,
               userWeddingRepository: mockUserWeddingRepository,
@@ -401,9 +420,6 @@ void main() {
               userRepository: mockUserRepository);
         },
         act: (bloc) => bloc.add(DeleteWedding(wedding.id)),
-        expect: [
-          WeddingLoading(MessageConst.commonLoading),
-          DeleteSuccess()
-        ]);
+        expect: [WeddingLoading(MessageConst.commonLoading), DeleteSuccess()]);
   });
 }

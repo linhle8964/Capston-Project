@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:bloc/bloc.dart';
 import 'package:wedding_app/const/message_const.dart';
 import 'package:wedding_app/model/user_wedding.dart';
@@ -10,7 +8,6 @@ import 'package:wedding_app/repository/user_wedding_repository.dart';
 import 'package:wedding_app/repository/wedding_repository.dart';
 import 'bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class WeddingBloc extends Bloc<WeddingEvent, WeddingState> {
   final WeddingRepository _weddingRepository;
@@ -62,9 +59,9 @@ class WeddingBloc extends Bloc<WeddingEvent, WeddingState> {
     yield WeddingLoading(MessageConst.commonLoading);
     try {
       final user = await _userRepository.getUser();
-      if(user == null || event.wedding == null){
+      if (user == null || event.wedding == null) {
         yield Failed(MessageConst.commonError);
-      }else{
+      } else {
         await _weddingRepository.createWedding(event.wedding, user);
         yield WeddingLoaded(event.wedding, MessageConst.createSuccess);
       }
@@ -100,11 +97,10 @@ class WeddingBloc extends Bloc<WeddingEvent, WeddingState> {
   Stream<WeddingState> _mapDeleteWeddingToState(DeleteWedding event) async* {
     yield WeddingLoading(MessageConst.commonLoading);
     try {
-    await _userWeddingRepository
+      await _userWeddingRepository
           .deleteAllUserWeddingByWedding(event.weddingId);
-      await _inviteEmailRepository
-          .deleteInviteEmailByWedding(event.weddingId);
-     await _weddingRepository.deleteWedding(event.weddingId);
+      await _inviteEmailRepository.deleteInviteEmailByWedding(event.weddingId);
+      await _weddingRepository.deleteWedding(event.weddingId);
       yield DeleteSuccess();
     } catch (e) {
       print("[ERROR]" + e);

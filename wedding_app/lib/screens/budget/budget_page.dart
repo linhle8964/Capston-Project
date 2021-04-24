@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wedding_app/bloc/budget/bloc.dart';
@@ -90,7 +88,7 @@ class _BudgetListState extends State<BudgetList> {
 
   @override
   void initState() {
-   weddingID=widget.userWedding.weddingId;
+    weddingID = widget.userWedding.weddingId;
     BlocProvider.of<CateBloc>(context).add(LoadTodos());
     wedBudget1 = 0;
     sum = 0;
@@ -249,9 +247,9 @@ class _BudgetListState extends State<BudgetList> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder(
-
       cubit: BlocProvider.of<WeddingBloc>(context),
-      builder: (context, state) {print('test' + weddingID);
+      builder: (context, state) {
+        print('test' + weddingID);
         if (state is WeddingLoaded) {
           wedBudget = state.wedding.budget;
 
@@ -321,17 +319,17 @@ class _BudgetListState extends State<BudgetList> {
                                             wedBudget1 = sum;
                                             return Visibility(
                                                 visible: _iSDone,
-                                                child: Text("Tổng kinh phí:"+
-                                                    _formatNumber(
+                                                child: Text(
+                                                    "Tổng kinh phí:" +
+                                                        _formatNumber(
                                                             sum.toString()) +
-                                                        "₫",  overflow:
-                                                TextOverflow
-                                                    .ellipsis,
+                                                        "₫",
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
                                                     maxLines: 2,
                                                     style: TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold)));
-
                                           }
                                           if (state is BudgetLoading) {
                                             return Column(
@@ -385,8 +383,9 @@ class _BudgetListState extends State<BudgetList> {
                                                     return Visibility(
                                                         visible: _iSDone,
                                                         child: Flexible(
-                                                          child: Text("Số tiền còn lại:"+
-                                                              _formatNumber(pay
+                                                          child: Text(
+                                                              "Số tiền còn lại:" +
+                                                                  _formatNumber(pay
                                                                       .toString()) +
                                                                   "₫",
                                                               overflow:
@@ -469,19 +468,18 @@ class _BudgetListState extends State<BudgetList> {
                                             return Column(
                                               children: <Widget>[
                                                 Container(
-                                                  child: Visibility(
-
-                                                    child:  ListTile(
-                                                      title: Text(item.cateName +
-                                                          " | " +
-                                                          _formatNumber(_cateSum
-                                                              .toString()) +
-                                                          " ₫"),
-                                                    ),
-                                                    visible: _cateSum==0?false:true,
-                                                  )
-
-                                                ),
+                                                    child: Visibility(
+                                                  child: ListTile(
+                                                    title: Text(item.cateName +
+                                                        " | " +
+                                                        _formatNumber(_cateSum
+                                                            .toString()) +
+                                                        " ₫"),
+                                                  ),
+                                                  visible: _cateSum == 0
+                                                      ? false
+                                                      : true,
+                                                )),
                                                 BlocBuilder(
                                                     cubit: BlocProvider.of<
                                                         BudgetBloc>(context),
@@ -503,7 +501,8 @@ class _BudgetListState extends State<BudgetList> {
                                                                       false,
                                                                       1,
                                                                       1,
-                                                                      1,"");
+                                                                      1,
+                                                                      "");
                                                               if (item.id ==
                                                                   _budgets[i]
                                                                       .cateID) {
@@ -702,7 +701,6 @@ class _BudgetListState extends State<BudgetList> {
                                                     style: TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold)));
-                                            ;
                                           }
                                           if (state is BudgetLoading) {
                                             return Column(
@@ -863,7 +861,8 @@ class _BudgetListState extends State<BudgetList> {
                                                                       false,
                                                                       1,
                                                                       1,
-                                                                      1,"");
+                                                                      1,
+                                                                      "");
                                                               if (item.id ==
                                                                   _budgets[i]
                                                                       .cateID) {
