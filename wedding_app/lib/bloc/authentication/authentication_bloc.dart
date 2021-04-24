@@ -75,8 +75,6 @@ class AuthenticationBloc
       await preferences.setString("wedding_id", userWedding.weddingId);
       await preferences.setString(
           "user_wedding", jsonEncode(userWedding.toEntity().toJson()));
-      await preferences.setString(
-          "wedding", jsonEncode(wedding.toEntity().toJson()));
       await preferences.setBool(SharedPreferenceKey.taskNotification, true);
       await preferences.setBool(SharedPreferenceKey.guestResponseNotification, true);
       yield Authenticated(user);
@@ -87,7 +85,6 @@ class AuthenticationBloc
     SharedPreferences preferences = await SharedPreferences.getInstance();
     preferences.remove("wedding_id");
     preferences.remove("user_wedding");
-    preferences.remove('wedding');
     preferences.remove(SharedPreferenceKey.guestResponseNotification);
     preferences.remove(SharedPreferenceKey.taskNotification);
     yield Unauthenticated();

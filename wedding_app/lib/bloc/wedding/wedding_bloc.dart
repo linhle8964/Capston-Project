@@ -32,7 +32,7 @@ class WeddingBloc extends Bloc<WeddingEvent, WeddingState> {
         _userWeddingRepository = userWeddingRepository,
         _inviteEmailRepository = inviteEmailRepository,
         _userRepository = userRepository,
-        super(WeddingLoading());
+        super(WeddingLoading(MessageConst.commonLoading));
 
   @override
   Stream<WeddingState> mapEventToState(WeddingEvent event) async* {
@@ -59,14 +59,14 @@ class WeddingBloc extends Bloc<WeddingEvent, WeddingState> {
   // }
 
   Stream<WeddingState> _mapCreateWeddingToState(CreateWedding event) async* {
-    yield Loading(MessageConst.commonLoading);
+    yield WeddingLoading(MessageConst.commonLoading);
     try {
       final user = await _userRepository.getUser();
       if(user == null || event.wedding == null){
         yield Failed(MessageConst.commonError);
       }else{
         await _weddingRepository.createWedding(event.wedding, user);
-        yield Success(MessageConst.createSuccess, wedding: event.wedding);
+        yield WeddingLoaded(event.wedding, MessageConst.createSuccess);
       }
     } catch (e) {
       print("[ERROR]" + e);
@@ -87,13 +87,10 @@ class WeddingBloc extends Bloc<WeddingEvent, WeddingState> {
   }
 
   Stream<WeddingState> _mapUpdateWeddingToState(UpdateWedding event) async* {
-    yield Loading(MessageConst.commonLoading);
+    yield WeddingLoading(MessageConst.commonLoading);
     try {
-      SharedPreferences preferences = await SharedPreferences.getInstance();
       await _weddingRepository.updateWedding(event.wedding);
-      preferences.setString(
-          "wedding", jsonEncode(event.wedding.toEntity().toJson()));
-      yield Success(MessageConst.updateSuccess, wedding: event.wedding);
+      yield WeddingLoaded(event.wedding, MessageConst.updateSuccess);
     } catch (e) {
       print("[ERROR]" + e);
       yield Failed(MessageConst.commonError);
@@ -101,14 +98,14 @@ class WeddingBloc extends Bloc<WeddingEvent, WeddingState> {
   }
 
   Stream<WeddingState> _mapDeleteWeddingToState(DeleteWedding event) async* {
-    yield Loading(MessageConst.commonLoading);
+    yield WeddingLoading(MessageConst.commonLoading);
     try {
-      await _weddingRepository.deleteWedding(event.weddingId);
-      await _userWeddingRepository
+    await _userWeddingRepository
           .deleteAllUserWeddingByWedding(event.weddingId);
       await _inviteEmailRepository
           .deleteInviteEmailByWedding(event.weddingId);
-      yield Success(MessageConst.deleteSuccess);
+     await _weddingRepository.deleteWedding(event.weddingId);
+      yield DeleteSuccess();
     } catch (e) {
       print("[ERROR]" + e);
       yield Failed(MessageConst.commonError);

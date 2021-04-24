@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wedding_app/bloc/authentication/authentication_bloc.dart';
+import 'package:wedding_app/bloc/authentication/bloc.dart';
 import 'package:wedding_app/bloc/checklist/bloc.dart';
 import 'package:wedding_app/bloc/guests/bloc.dart';
 import 'package:wedding_app/bloc/user_wedding/bloc.dart';
 import 'package:wedding_app/bloc/wedding/bloc.dart';
+import 'package:wedding_app/const/message_const.dart';
 import 'package:wedding_app/firebase_repository/firebase_task_repository.dart';
 import 'package:wedding_app/firebase_repository/guest_firebase_repository.dart';
 import 'package:wedding_app/firebase_repository/invite_email_firebase_repository.dart';
@@ -18,10 +21,13 @@ import 'package:wedding_app/firebase_repository/user_wedding_firebase_repository
 import 'package:wedding_app/firebase_repository/wedding_firebase_repository.dart';
 import 'package:wedding_app/screens/setting/setting.dart';
 import 'package:wedding_app/screens/splash_page.dart';
+import 'package:wedding_app/utils/alert_dialog.dart';
 import 'package:wedding_app/utils/get_share_preferences.dart';
 import 'package:wedding_app/const/widget_key.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
+import 'package:wedding_app/widgets/loading_indicator.dart';
+import 'package:wedding_app/widgets/receive_notification.dart';
+import 'package:android_alarm_manager/android_alarm_manager.dart';
 class NavigatorPage extends StatefulWidget {
   final User user;
 
@@ -41,6 +47,11 @@ class _NavigatorPageState extends State<NavigatorPage> {
 
   @override
   Widget build(BuildContext context) {
+    void _logOut() async {
+      BlocProvider.of<AuthenticationBloc>(context).add(LoggedOut());
+      NotificationManagement.ClearAllNotifications();
+      var cancel = await AndroidAlarmManager.cancel(0);
+    }
     return MultiBlocProvider(
       providers: [
         BlocProvider<WeddingBloc>(
@@ -72,8 +83,9 @@ class _NavigatorPageState extends State<NavigatorPage> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             UserWedding userWedding = snapshot.data;
-            return Scaffold(
-              body: BlocBuilder(
+            return Container(
+              color: Colors.white,
+              child: BlocBuilder(
                 cubit: BlocProvider.of<WeddingBloc>(context),
                 builder: (context, state) {
                   if(state is WeddingLoaded){
@@ -135,7 +147,12 @@ class _NavigatorPageState extends State<NavigatorPage> {
                           onTap: onTabTapped),
                     );
                   }else if(state is WeddingLoading){
-                    return Center(child: CircularProgressIndicator());
+                    return LoadingIndicator();
+                  }else if(state is DeleteSuccess){
+                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                    _logOut();
+                  }else if(state is Failed){
+                    return Center(child: Text(state.message, style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),),);
                   }
                   return SplashPage();
                 },

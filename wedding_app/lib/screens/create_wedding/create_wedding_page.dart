@@ -122,7 +122,7 @@ class _CreateWeddingPageState extends State<CreateWeddingPage> {
           listeners: [
             BlocListener<WeddingBloc, WeddingState>(
               listener: (context, state) {
-                if (state is Success) {
+                if (state is WeddingLoaded) {
                   ScaffoldMessenger.of(context).hideCurrentSnackBar();
                   setState(() {
                     _absorbing = false;
@@ -130,7 +130,7 @@ class _CreateWeddingPageState extends State<CreateWeddingPage> {
                   showSuccessAlertDialog(
                       context, MessageConst.dialogTitle, state.message, () {
                     widget.isEditing
-                        ? _redirectAfterUpdate(context, state.wedding)
+                        ? navigatorPop(2, context)
                         : BlocProvider.of<AuthenticationBloc>(context)
                         .add(LoggedIn());
                   });
@@ -139,7 +139,7 @@ class _CreateWeddingPageState extends State<CreateWeddingPage> {
                     _absorbing = false;
                   });
                   showFailedSnackbar(context, state.message);
-                } else if (state is Loading) {
+                } else if (state is WeddingLoading) {
                   setState(() {
                     _absorbing = true;
                   });
@@ -376,10 +376,5 @@ class _CreateWeddingPageState extends State<CreateWeddingPage> {
     widget.isEditing
         ? BlocProvider.of<WeddingBloc>(context).add(UpdateWedding(wedding))
         : BlocProvider.of<WeddingBloc>(context).add(CreateWedding(wedding));
-  }
-
-  void _redirectAfterUpdate(BuildContext context, Wedding wedding){
-    navigatorPop(2, context);
-    BlocProvider.of<WeddingBloc>(context).add(LoadWeddingById(wedding.id));
   }
 }

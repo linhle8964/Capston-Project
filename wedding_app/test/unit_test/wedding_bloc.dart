@@ -298,7 +298,7 @@ void main() {
                   inviteEmailRepository: mockInviteEmailRepository,
                   userRepository: mockUserRepository)
               .state,
-          WeddingLoading());
+          WeddingLoading(MessageConst.commonLoading));
     });
 
     test('throws AssertionError when weddingRepository is null', () {
@@ -344,7 +344,7 @@ void main() {
         },
         act: (bloc) => bloc.add(CreateWedding(wedding)),
         expect: <WeddingState>[
-          Loading(MessageConst.commonLoading),
+          WeddingLoading(MessageConst.commonLoading),
           Failed(MessageConst.commonError)
         ]);
 
@@ -359,7 +359,7 @@ void main() {
         },
         act: (bloc) => bloc.add(CreateWedding(null)),
         expect: <WeddingState>[
-          Loading(MessageConst.commonLoading),
+          WeddingLoading(MessageConst.commonLoading),
           Failed(MessageConst.commonError)
         ]);
 
@@ -374,8 +374,8 @@ void main() {
         },
         act: (bloc) => bloc.add(CreateWedding(wedding)),
         expect: <WeddingState>[
-          Loading(MessageConst.commonLoading),
-          Success(MessageConst.createSuccess)
+          WeddingLoading(MessageConst.commonLoading),
+          WeddingLoaded(wedding, MessageConst.createSuccess),
         ]);
 
     blocTest("update wedding",
@@ -388,8 +388,8 @@ void main() {
         },
         act: (bloc) => bloc.add(UpdateWedding(wedding)),
         expect: [
-          Loading(MessageConst.commonLoading),
-          //  Success("Tạo thành công")
+          WeddingLoading(MessageConst.commonLoading),
+          WeddingLoaded(wedding, MessageConst.updateSuccess)
         ]);
 
     blocTest("delete wedding",
@@ -402,8 +402,8 @@ void main() {
         },
         act: (bloc) => bloc.add(DeleteWedding(wedding.id)),
         expect: [
-          Loading("Đang xử lý dữ liệu"),
-          //  Success("Tạo thành công")
+          WeddingLoading(MessageConst.commonLoading),
+          DeleteSuccess()
         ]);
   });
 }

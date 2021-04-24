@@ -3,9 +3,7 @@ import 'dart:core';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wedding_app/const/share_prefs_key.dart';
 import 'package:wedding_app/entity/user_wedding_entity.dart';
-import 'package:wedding_app/entity/wedding_entity.dart';
 import 'package:wedding_app/model/user_wedding.dart';
-import 'package:wedding_app/model/wedding.dart';
 import 'dart:convert';
 
 Future<UserWedding> getUserWedding() async {

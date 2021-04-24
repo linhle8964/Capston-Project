@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wedding_app/bloc/authentication/bloc.dart';
 import 'package:wedding_app/bloc/user_wedding/bloc.dart';
 import 'package:wedding_app/bloc/wedding/bloc.dart';
+import 'package:wedding_app/const/message_const.dart';
 import 'package:wedding_app/const/route_name.dart';
 import 'package:wedding_app/model/user_wedding.dart';
 import 'package:wedding_app/model/wedding.dart';
@@ -104,11 +105,13 @@ class _SettingPageState extends State<SettingPage> {
           ),
           BlocListener<WeddingBloc, WeddingState>(
             listener: (context, state) {
-              if (state is Loading) {
+              if (state is WeddingLoading) {
+                showProcessingSnackbar(context, state.message);
               } else if (state is Failed) {
                 showFailedSnackbar(context, state.message);
-              } else if (state is Success) {
-                showSuccessAlertDialog(context, "Xóa đám cưới", state.message,
+              } else if (state is DeleteSuccess) {
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                showSuccessAlertDialog(context, "Xóa đám cưới", MessageConst.deleteSuccess,
                     () {
                   Navigator.pop(context);
                   _logOut();
@@ -130,9 +133,9 @@ class _SettingPageState extends State<SettingPage> {
                     SettingItem(() {
                       Navigator.pushNamed(context, RouteName.changePassword);
                     }, "Thay đổi mật khẩu"),
-                    SettingItem(() {
+                    /*SettingItem(() {
                       Navigator.pushNamed(context, RouteName.notificationSetting);
-                    }, "Cài đặt thông báo"),
+                    }, "Cài đặt thông báo"),*/
                     SettingItem(
                         () => Navigator.pushNamed(
                             context, RouteName.createWedding,

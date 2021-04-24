@@ -8,27 +8,29 @@ abstract class WeddingState extends Equatable {
   List<Object> get props => [];
 }
 
-class WeddingLoading extends WeddingState {}
+class WeddingLoading extends WeddingState {
+  final String message;
 
-class WeddingLoaded extends WeddingState {
-  final Wedding wedding;
-
-  const WeddingLoaded([this.wedding]);
+  const WeddingLoading(this.message);
 
   @override
-  List<Object> get props => [wedding];
+  List<Object> get props => [message];
+}
+
+class DeleteSuccess extends WeddingState{
+
+}
+class WeddingLoaded extends WeddingState {
+  final Wedding wedding;
+  final String message;
+
+  const WeddingLoaded([this.wedding, this.message]);
+
+  @override
+  List<Object> get props => [wedding, message];
 }
 
 class WeddingNotLoaded extends WeddingState {}
-
-class Success extends WeddingState {
-  final String message;
-  final Wedding wedding;
-  const Success(this.message, {this.wedding});
-
-  @override
-  List<Object> get props => [message, wedding];
-}
 
 class Failed extends WeddingState {
   final String message;
@@ -39,11 +41,3 @@ class Failed extends WeddingState {
   List<Object> get props => [message];
 }
 
-class Loading extends WeddingState {
-  final String message;
-
-  const Loading(this.message);
-
-  @override
-  List<Object> get props => [message];
-}
