@@ -38,7 +38,7 @@ class Detail extends StatelessWidget {
             ),
           ),
           Container(
-            height: (size.height * 0.35) + 25,
+            height: (size.height * 0.4),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -111,7 +111,7 @@ class Detail extends StatelessWidget {
                 ),
                 Padding(
                   padding:
-                      EdgeInsets.only(left: 24, right: 24, top: 8, bottom: 8),
+                      EdgeInsets.only(left: 24, right: 24),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -131,7 +131,7 @@ class Detail extends StatelessWidget {
                                 property.location,
                                 overflow: TextOverflow.ellipsis,
                                 softWrap: true,
-                                maxLines: 2,
+                                maxLines: 3,
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 16,
@@ -139,17 +139,7 @@ class Detail extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            SizedBox(
-                              width: 8,
-                            ),
-                            Icon(
-                              Icons.zoom_out_map,
-                              color: Colors.white,
-                              size: 16,
-                            ),
-                            SizedBox(
-                              width: 4,
-                            ),
+
                           ],
                         ),
                       )
@@ -187,9 +177,9 @@ crossAxisAlignment: CrossAxisAlignment.start,
                               child: Row(
                                 children: [
                                   Container(
-                                    padding: EdgeInsets.only(right: 12,bottom: 30),
-                                    height: 65,
-                                    width: 65,
+                                    padding: EdgeInsets.only(right: 12,bottom: size.height*0.04),
+                                    height: size.height*0.1,
+                                    width: size.height*0.1,
                                     decoration: BoxDecoration(
                                       image: DecorationImage(
                                         image:
@@ -206,7 +196,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                                     child:Column(
                                     children: [
                                       SizedBox(
-                                        height: 8,
+                                        height: 14,
                                       ),
                                       Flexible(
                                         child: Text(
@@ -243,10 +233,10 @@ crossAxisAlignment: CrossAxisAlignment.start,
                     ),
                     Container(
                       padding: EdgeInsets.only(
-                      top: 24,
+                      top: 20,
                         right: 24,
                         left: 24,
-                        bottom:100 ,
+                        bottom:size.height*0.1 ,
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -260,7 +250,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                       padding: EdgeInsets.only(
                         right: 24,
                         left: 24,
-                        bottom: 24,
+                        bottom: 10,
                       ),
                       child: Text(
                         "Giới Thiệu",

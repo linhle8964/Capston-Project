@@ -157,7 +157,61 @@ class _NavigatorPageState extends State<NavigatorPage> {
                   return SplashPage();
                 },
               ),
+<<<<<<< HEAD
 
+=======
+              BudgetList(
+                userWedding: userWedding,
+              ),
+              ViewGuestPage(
+                userWedding: userWedding,
+              ),
+              SettingPage(userWedding: userWedding),
+            ];
+            return Scaffold(
+              body: _children[_selectedIndex],
+              bottomNavigationBar: BottomNavigationBar(
+                  key: Key(WidgetKey.bottomNavigationBarKey),
+                  items: [
+                    BottomNavigationBarItem(
+                        icon: Icon(
+                          Icons.home,
+                          key: Key(WidgetKey.navigateHomeButtonKey),
+                        ),
+                        label: "Trang chủ"),
+                    BottomNavigationBarItem(
+                        icon: Icon(
+                          Icons.check_box,
+                          key: Key(WidgetKey.navigateTaskButtonKey),
+                        ),
+                        label: "Công việc"),
+                    BottomNavigationBarItem(
+                        icon: Icon(
+                          Icons.account_balance_wallet_outlined,
+                          key: Key(WidgetKey.navigateBudgetButtonKey),
+                        ),
+                        label: "Kinh phí"),
+                    BottomNavigationBarItem(
+                        icon: Icon(
+                          Icons.people,
+                          key: Key(WidgetKey.navigateGuestButtonKey),
+                        ),
+                        label: "Khách mời"),
+                    BottomNavigationBarItem(
+                        icon: Icon(
+                          Icons.settings,
+                          key: Key(WidgetKey.navigateSettingButtonKey),
+                        ),
+                        label: "Cài đặt"),
+                  ],
+                  currentIndex: _selectedIndex,
+                  selectedItemColor: Colors.red,
+                  unselectedItemColor: Colors.grey.shade600,
+                  selectedLabelStyle: TextStyle(fontWeight: FontWeight.w600),
+                  unselectedLabelStyle: TextStyle(fontWeight: FontWeight.w600),
+                  type: BottomNavigationBarType.fixed,
+                  onTap: onTabTapped),
+>>>>>>> main
             );
           } else {
             return SplashPage();
