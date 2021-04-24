@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:wedding_app/bloc/guests/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wedding_app/firebase_repository/guest_firebase_repository.dart';
 import 'package:wedding_app/model/guest.dart';
 import 'package:wedding_app/model/user_wedding.dart';
+import 'package:wedding_app/utils/check_existed_phone.dart';
+import 'package:wedding_app/utils/get_information.dart';
 import 'package:wedding_app/utils/get_share_preferences.dart';
 import 'package:wedding_app/utils/hex_color.dart';
 
@@ -22,32 +25,6 @@ class ListGuest extends StatefulWidget {
 class _ListGuestState extends State<ListGuest> {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  String getStatus(int stt) {
-    if (stt == 0)
-      return "Chưa trả lời";
-    else if (stt == 1)
-      return "Sẽ tới";
-    else
-      return "Không tới";
-  }
-
-  String getType(int type) {
-    if (type == 0)
-      return "Chưa sắp xếp";
-    else if (type == 1)
-      return "Nhà trai";
-    else
-      return "Nhà gái";
-  }
-
-  String getColor(int stt) {
-    if (stt == 0)
-      return "#6eb5ff";
-    else if (stt == 1)
-      return "#85e3ff";
-    else
-      return "#ff9cee";
-  }
 
   Widget _companionPart(Guest guest) {
     return Builder(builder: (context) {
@@ -187,13 +164,6 @@ class _ListGuestState extends State<ListGuest> {
     );
   }
 
-  bool isChecked(List<Guest> guests, String phone, int index) {
-    for (int i = 0; i < guests.length; i++) {
-      if (guests[i].phone == phone && i != index) return true;
-    }
-    return false;
-  }
-
   Future<void> showGuestInfoDialog(
       BuildContext context, int index, String weddingId) async {
     return await showDialog(
@@ -228,6 +198,9 @@ class _ListGuestState extends State<ListGuest> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       TextFormField(
+                        inputFormatters: [
+                          LengthLimitingTextInputFormatter(20),
+                        ],
                         initialValue: _name,
                         decoration: InputDecoration(
                           labelText: "Tên",
@@ -240,6 +213,9 @@ class _ListGuestState extends State<ListGuest> {
                         onSaved: (input) => _name = input,
                       ),
                       TextFormField(
+                        inputFormatters: [
+                          LengthLimitingTextInputFormatter(30),
+                        ],
                         initialValue: _description,
                         decoration: InputDecoration(
                           labelText: "Chú thích",
@@ -302,6 +278,9 @@ class _ListGuestState extends State<ListGuest> {
                           return Column(
                             children: [
                               TextFormField(
+                                inputFormatters: [
+                                  LengthLimitingTextInputFormatter(2),
+                                ],
                                 initialValue: _companion.toString(),
                                 keyboardType: TextInputType.number,
                                 decoration: InputDecoration(
@@ -380,6 +359,9 @@ class _ListGuestState extends State<ListGuest> {
                         },
                       ),
                       TextFormField(
+                        inputFormatters: [
+                          LengthLimitingTextInputFormatter(10),
+                        ],
                         initialValue: _phone,
                         keyboardType: TextInputType.number,
                         decoration: InputDecoration(
@@ -389,12 +371,12 @@ class _ListGuestState extends State<ListGuest> {
                         ),
                         validator: (input) {
                           RegExp regex = new RegExp(
-                            r'(^(?:[+0]9)?[0-9]{9,10}$)',
+                            r'(^(?:[+0]9)?[0-9]{10}$)',
                             caseSensitive: false,
                             multiLine: false,
                           );
                           if (input.isNotEmpty &&
-                              isChecked(widget.guests, input, index)) {
+                              checkExistedPhoneToUpdate(widget.guests, input, index)) {
                             return "Số điện thoại đã tồn tại";
                           } else if (!regex.hasMatch(input)) {
                             return "Số điện thoại không hợp lệ";
@@ -517,8 +499,11 @@ class _ListGuestState extends State<ListGuest> {
                           child: Row(
                             children: <Widget>[
                               Expanded(
-                                flex: 2,
+                                flex: 1,
                                 child: TextFormField(
+                                  inputFormatters: [
+                                    LengthLimitingTextInputFormatter(7),
+                                  ],
                                   textAlign: TextAlign.end,
                                   initialValue: _money.toString(),
                                   keyboardType: TextInputType.number,
