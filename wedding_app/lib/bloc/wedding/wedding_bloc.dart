@@ -66,7 +66,7 @@ class WeddingBloc extends Bloc<WeddingEvent, WeddingState> {
         yield Failed(MessageConst.commonError);
       }else{
         await _weddingRepository.createWedding(event.wedding, user);
-        yield Success(MessageConst.createSuccess);
+        yield Success(MessageConst.createSuccess, wedding: event.wedding);
       }
     } catch (e) {
       print("[ERROR]" + e);
@@ -90,10 +90,10 @@ class WeddingBloc extends Bloc<WeddingEvent, WeddingState> {
     yield Loading(MessageConst.commonLoading);
     try {
       SharedPreferences preferences = await SharedPreferences.getInstance();
-      _weddingRepository.updateWedding(event.wedding).then((value) async =>
-          preferences.setString(
-              "wedding", jsonEncode(event.wedding.toEntity().toJson())));
-      yield Success(MessageConst.updateSuccess);
+      await _weddingRepository.updateWedding(event.wedding);
+      preferences.setString(
+          "wedding", jsonEncode(event.wedding.toEntity().toJson()));
+      yield Success(MessageConst.updateSuccess, wedding: event.wedding);
     } catch (e) {
       print("[ERROR]" + e);
       yield Failed(MessageConst.commonError);
@@ -103,12 +103,11 @@ class WeddingBloc extends Bloc<WeddingEvent, WeddingState> {
   Stream<WeddingState> _mapDeleteWeddingToState(DeleteWedding event) async* {
     yield Loading(MessageConst.commonLoading);
     try {
-      _weddingRepository.deleteWedding(event.weddingId).then((value) async {
-        await _userWeddingRepository
-            .deleteAllUserWeddingByWedding(event.weddingId);
-        await _inviteEmailRepository
-            .deleteInviteEmailByWedding(event.weddingId);
-      });
+      await _weddingRepository.deleteWedding(event.weddingId);
+      await _userWeddingRepository
+          .deleteAllUserWeddingByWedding(event.weddingId);
+      await _inviteEmailRepository
+          .deleteInviteEmailByWedding(event.weddingId);
       yield Success(MessageConst.deleteSuccess);
     } catch (e) {
       print("[ERROR]" + e);

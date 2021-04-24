@@ -23,11 +23,11 @@ class WeddingNotLoaded extends WeddingState {}
 
 class Success extends WeddingState {
   final String message;
-
-  const Success(this.message);
+  final Wedding wedding;
+  const Success(this.message, {this.wedding});
 
   @override
-  List<Object> get props => [message];
+  List<Object> get props => [message, wedding];
 }
 
 class Failed extends WeddingState {

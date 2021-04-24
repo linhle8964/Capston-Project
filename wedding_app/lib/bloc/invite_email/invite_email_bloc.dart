@@ -139,7 +139,7 @@ class InviteEmailBloc extends Bloc<InviteEmailEvent, InviteEmailState> {
       final User user = await _userRepository.getUser();
       InviteEmail inviteEmail =
           await _inviteEmailRepository.getInviteEmailByCode(event.code);
-      if (inviteEmail == null) {
+      if (inviteEmail != null) {
         if (inviteEmail.to == user.email) {
           UserWedding userWedding = await _userWeddingRepository
               .getUserWeddingByEmail(inviteEmail.to);
