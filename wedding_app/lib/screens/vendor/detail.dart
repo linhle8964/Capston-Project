@@ -98,7 +98,7 @@ class Detail extends StatelessWidget {
                           property.name,
                           overflow: TextOverflow.ellipsis,
                           maxLines: 2,
-                          softWrap: true,
+
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 32,
@@ -130,7 +130,7 @@ class Detail extends StatelessWidget {
                               child: Text(
                                 property.location,
                                 overflow: TextOverflow.ellipsis,
-                                softWrap: true,
+
                                 maxLines: 3,
                                 style: TextStyle(
                                   color: Colors.white,
@@ -196,7 +196,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                                     child:Column(
                                     children: [
                                       SizedBox(
-                                        height: 14,
+                                        height:7,
                                       ),
                                       Flexible(
                                         child: Text(
@@ -233,7 +233,6 @@ crossAxisAlignment: CrossAxisAlignment.start,
                     ),
                     Container(
                       padding: EdgeInsets.only(
-                      top: 20,
                         right: 24,
                         left: 24,
                         bottom:size.height*0.1 ,
@@ -261,7 +260,7 @@ crossAxisAlignment: CrossAxisAlignment.start,
                       ),
                     ),
                     Container(
-                      height: 130,
+                      height: 100,
                       padding: EdgeInsets.only(
                         right: 24,
                         left: 24,
