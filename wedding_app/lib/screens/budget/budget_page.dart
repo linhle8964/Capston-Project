@@ -599,12 +599,16 @@ class _BudgetListState extends State<BudgetList> {
                                                                                     ),
                                                                                   )),
                                                                               Flexible(
-                                                                                  child: Text(
-                                                                                _formatNumber((low.money - low.payMoney).toString()) + "₫",
-                                                                                overflow: TextOverflow.ellipsis,
-                                                                                maxLines: 1,
-                                                                                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                                                                              ))
+                                                                                  child:Align(
+                                                                                    alignment: Alignment.centerRight,
+                                                                                    child: Text(
+                                                                                      _formatNumber((low.money - low.payMoney).toString()) + "₫",
+                                                                                      overflow: TextOverflow.ellipsis,
+                                                                                      maxLines: 1,
+                                                                                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                                                                                    ),
+                                                                                  )
+                                                                                  )
                                                                             ],
                                                                           ),
                                                                         ),
