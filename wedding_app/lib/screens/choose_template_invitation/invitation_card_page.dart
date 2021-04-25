@@ -101,7 +101,7 @@ class _InvitationCardPageState extends State<InvitationCardPage> {
                       image: template.backgroundUrl),
                 ),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(20.0.w, 24.0.h, 20.0.w, 0),
+                  padding: EdgeInsets.fromLTRB(20.0.w, 26.0.h, 20.0.w, 0),
                   child: Visibility(
                       visible: template.name == 'template4' ? true : false,
                       child: Center(
@@ -163,13 +163,13 @@ class _InvitationCardPageState extends State<InvitationCardPage> {
                       )),
                 ),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(20.0.w, 29.0.h, 20.0.w, 0),
+                  padding: EdgeInsets.fromLTRB(20.0.w, 31.0.h, 20.0.w, 0),
                   child: Visibility(
                       visible: template.name == 'template1' ? true : false,
                       child: Center(
                         child: Column(
                           children: <Widget>[
-                            Text('Trận trong mời bạn đến',
+                            Text('Trân trong mời bạn đến',
                                 style: TextStyle(
                                     fontSize: 10.0.sp, color: Colors.white),
                                 textAlign: TextAlign.center),
