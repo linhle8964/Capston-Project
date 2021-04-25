@@ -32,6 +32,7 @@ class _BudgetListState extends State<BudgetList> {
   bool isSearching = false;
   bool _isShow = false;
   bool _iSDone = false;
+  int _isCheck = 0;
   List<Category> _categorys = [];
   static List<Budget> _list = [];
   List<Budget> _budgets = [];
@@ -91,7 +92,7 @@ class _BudgetListState extends State<BudgetList> {
 
   @override
   void initState() {
-   weddingID=widget.userWedding.weddingId;
+    weddingID = widget.userWedding.weddingId;
     BlocProvider.of<CateBloc>(context).add(LoadTodos());
     wedBudget1 = 0;
     sum = 0;
@@ -250,9 +251,9 @@ class _BudgetListState extends State<BudgetList> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder(
-
       cubit: BlocProvider.of<WeddingBloc>(context),
-      builder: (context, state) {print('test' + weddingID);
+      builder: (context, state) {
+        print('test' + weddingID);
         if (state is WeddingLoaded) {
           wedBudget = state.wedding.budget;
 
@@ -301,11 +302,16 @@ class _BudgetListState extends State<BudgetList> {
                                     child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: <Widget>[
-                                    Icon(
-                                      Icons.account_balance,
-                                      color: Colors.deepPurple,
-                                      size: 45,
+                                    Center(
+                                      child: Icon(
+                                        Icons.account_balance,
+                                        color: Colors.deepPurple,
+                                        size: 45,
+                                      ),
                                     ),
+                                    Text("TỔNG KINH PHÍ",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold)),
                                     BlocBuilder(
                                         cubit: BlocProvider.of<BudgetBloc>(
                                             context),
@@ -322,17 +328,16 @@ class _BudgetListState extends State<BudgetList> {
                                             wedBudget1 = sum;
                                             return Visibility(
                                                 visible: _iSDone,
-                                                child: Text("Tổng kinh phí:"+
+                                                child: Text(
                                                     _formatNumber(
                                                             sum.toString()) +
-                                                        "₫",  overflow:
-                                                TextOverflow
-                                                    .ellipsis,
+                                                        "₫",
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
                                                     maxLines: 2,
                                                     style: TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold)));
-
                                           }
                                           if (state is BudgetLoading) {
                                             return Column(
@@ -365,11 +370,17 @@ class _BudgetListState extends State<BudgetList> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           children: <Widget>[
-                                            Icon(
-                                              Icons.account_balance_wallet,
-                                              color: Colors.deepPurple,
-                                              size: 45,
+                                            Center(
+                                              child: Icon(
+                                                Icons.account_balance_wallet,
+                                                color: Colors.deepPurple,
+                                                size: 45,
+                                              ),
                                             ),
+                                            Text("SỐ TIỀN CÒN LẠI",
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold)),
                                             BlocBuilder(
                                                 cubit:
                                                     BlocProvider.of<BudgetBloc>(
@@ -386,7 +397,7 @@ class _BudgetListState extends State<BudgetList> {
                                                     return Visibility(
                                                         visible: _iSDone,
                                                         child: Flexible(
-                                                          child: Text("Số tiền còn lại:"+
+                                                          child: Text(
                                                               _formatNumber(pay
                                                                       .toString()) +
                                                                   "₫",
@@ -457,6 +468,7 @@ class _BudgetListState extends State<BudgetList> {
                                           itemBuilder: (context, index) {
                                             Category item = _categorys[index];
                                             _cateSum = 0;
+                                            _isCheck = 0;
                                             for (int i = 0;
                                                 i < _budgets.length;
                                                 i++) {
@@ -464,25 +476,25 @@ class _BudgetListState extends State<BudgetList> {
                                                   _budgets[i].cateID) {
                                                 _cateSum += _budgets[i].money -
                                                     _budgets[i].payMoney;
+                                                _isCheck++;
                                               }
                                             }
 
                                             return Column(
                                               children: <Widget>[
                                                 Container(
-                                                  child: Visibility(
-
-                                                    child:  ListTile(
-                                                      title: Text(item.cateName +
-                                                          " | " +
-                                                          _formatNumber(_cateSum
-                                                              .toString()) +
-                                                          " ₫"),
-                                                    ),
-                                                    visible: _cateSum==0?false:true,
-                                                  )
-
-                                                ),
+                                                    child: Visibility(
+                                                  child: ListTile(
+                                                    title: Text(item.cateName +
+                                                        " | " +
+                                                        _formatNumber(_cateSum
+                                                            .toString()) +
+                                                        " ₫"),
+                                                  ),
+                                                  visible: _isCheck != 0
+                                                      ? true
+                                                      : false,
+                                                )),
                                                 BlocBuilder(
                                                     cubit: BlocProvider.of<
                                                         BudgetBloc>(context),
@@ -504,7 +516,8 @@ class _BudgetListState extends State<BudgetList> {
                                                                       false,
                                                                       1,
                                                                       1,
-                                                                      1,"");
+                                                                      1,
+                                                                      "");
                                                               if (item.id ==
                                                                   _budgets[i]
                                                                       .cateID) {
@@ -560,7 +573,7 @@ class _BudgetListState extends State<BudgetList> {
                                                                                         color: Colors.redAccent,
                                                                                         borderRadius: BorderRadius.circular(16),
                                                                                       ),
-                                                                                      child: Text("Đã trả một phần", style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.normal)),
+                                                                                      child: Text(" Đã trả trước ", style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.normal)),
                                                                                     ),
                                                                                   )),
                                                                               Visibility(
@@ -864,7 +877,8 @@ class _BudgetListState extends State<BudgetList> {
                                                                       false,
                                                                       1,
                                                                       1,
-                                                                      1,"");
+                                                                      1,
+                                                                      "");
                                                               if (item.id ==
                                                                   _budgets[i]
                                                                       .cateID) {
@@ -921,7 +935,7 @@ class _BudgetListState extends State<BudgetList> {
                                                                                         color: Colors.redAccent,
                                                                                         borderRadius: BorderRadius.circular(16),
                                                                                       ),
-                                                                                      child: Text("Đã trả một phần", style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.normal)),
+                                                                                      child: Text(" Đã trả trước ", style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.normal)),
                                                                                     ),
                                                                                   )),
                                                                               Visibility(

@@ -260,19 +260,22 @@ crossAxisAlignment: CrossAxisAlignment.start,
                         ),
                       ),
                     ),
-                    Padding(
+                    Container(
+                      height: 130,
                       padding: EdgeInsets.only(
                         right: 24,
                         left: 24,
                         bottom: 24,
                       ),
-                      child: Text(
-                        property.description,
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.grey[500],
-                        ),
-                      ),
+                      child:SingleChildScrollView(
+                        child: Text(
+                          property.description,
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.grey[500],
+                          ),
+                        )
+                      ) ,
                     ),
                   ],
                 ),

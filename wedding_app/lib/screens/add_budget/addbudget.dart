@@ -41,9 +41,11 @@ class BudgetNameValidate {
 
   static String moneyValidate(BuildContext context, String val) {
     if (val == "") {
-
       return "số tiền không thể chống";
-    } else {
+    }if(val.length>15){
+      return"số tiền không thể quá 999 tỷ đông";
+    }
+    else {
       if (double.parse(val.replaceAll(",", "")) < 1000) {
         return "Tiền phải lớn hơn 1000 đồng";
       }
@@ -108,6 +110,7 @@ class _AddBudgetState extends State<AddBudget> {
     _cateBloc = BlocProvider.of<CateBloc>(context);
     SharedPreferences.getInstance().then((prefs) {
       setState(() => sharedPrefs = prefs);
+      selectedCate=null;
       String weddingId = prefs.getString("wedding_id");
       print("test shared " + weddingId);
       id = weddingId;
