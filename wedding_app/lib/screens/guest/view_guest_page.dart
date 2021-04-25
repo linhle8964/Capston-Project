@@ -603,7 +603,7 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .height -
-                                                            190,
+                                                            180,
                                                     width: 2000,
                                                     child: Column(
                                                         mainAxisSize:
@@ -1252,7 +1252,7 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .height -
-                                                            190,
+                                                            180,
                                                     width: 2000,
                                                     child: Column(
                                                         mainAxisSize:

@@ -95,7 +95,7 @@ class _HomePageState extends State<HomePage> {
           child: Builder(
             builder: (context) => Scaffold(
               appBar: AppBar(
-                title: const Text('Cung hỉ'),
+                title: const Text('TRANG CHỦ'),
                 centerTitle: true,
                 backgroundColor: hexToColor("#d86a77"),
               ),
