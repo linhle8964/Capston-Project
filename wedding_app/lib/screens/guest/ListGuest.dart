@@ -49,9 +49,10 @@ class _ListGuestState extends State<ListGuest> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: isAdmin(widget.userWedding.role)
-          ? MediaQuery.of(context).size.height - 250
-          : MediaQuery.of(context).size.height - 200,
+      // height: isAdmin(widget.userWedding.role)
+      //     ? MediaQuery.of(context).size.height - 250
+      //     : MediaQuery.of(context).size.height - 200,
+      height: MediaQuery.of(context).size.height - 250,
       child: ListView.builder(
         itemCount: widget.guests.length,
         itemBuilder: (context, index) {
