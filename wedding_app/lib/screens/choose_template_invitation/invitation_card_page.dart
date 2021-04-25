@@ -101,7 +101,7 @@ class _InvitationCardPageState extends State<InvitationCardPage> {
                       image: template.backgroundUrl),
                 ),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(20.0.w, 26.0.h, 20.0.w, 0),
+                  padding: EdgeInsets.fromLTRB(18.0.w, 26.0.h, 18.0.w, 0),
                   child: Visibility(
                       visible: template.name == 'template4' ? true : false,
                       child: Center(
@@ -114,7 +114,7 @@ class _InvitationCardPageState extends State<InvitationCardPage> {
                                 style: TextStyle(fontSize: 11.0.sp),
                                 textAlign: TextAlign.center),
                             Padding(
-                              padding: EdgeInsets.fromLTRB(0, 1.0.h, 0, 1.0.h),
+                              padding: EdgeInsets.fromLTRB(0, 0.8.h, 0, 0.8.h),
                               child: Text(
                                 brideName,
                                 style: TextStyle(
@@ -126,7 +126,7 @@ class _InvitationCardPageState extends State<InvitationCardPage> {
                             ),
                             Text('Và'),
                             Padding(
-                              padding: EdgeInsets.fromLTRB(0, 1.0.h, 0, 1.0.h),
+                              padding: EdgeInsets.fromLTRB(0, 0.8.h, 0, 0.8.h),
                               child: Text(groomName,
                                   style: TextStyle(
                                       fontSize: (groomName.length > 15)
@@ -137,7 +137,7 @@ class _InvitationCardPageState extends State<InvitationCardPage> {
                             Padding(
                               padding: EdgeInsets.fromLTRB(0, 0.5.h, 0, 1.0.h),
                               child: Text('Hôn lễ được cử hành vào lúc',
-                                  style: TextStyle(fontSize: 13.0.sp),
+                                  style: TextStyle(fontSize: 12.0.sp),
                                   textAlign: TextAlign.center),
                             ),
                             Text(dateTime,
@@ -163,7 +163,7 @@ class _InvitationCardPageState extends State<InvitationCardPage> {
                       )),
                 ),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(20.0.w, 30.0.h, 20.0.w, 0),
+                  padding: EdgeInsets.fromLTRB(20.0.w, 31.0.h, 20.0.w, 0),
                   child: Visibility(
                       visible: template.name == 'template1' ? true : false,
                       child: Center(
@@ -171,11 +171,11 @@ class _InvitationCardPageState extends State<InvitationCardPage> {
                           children: <Widget>[
                             Text('Trân trọng mời bạn đến',
                                 style: TextStyle(
-                                    fontSize: 10.0.sp, color: Colors.white),
+                                    fontSize: 9.0.sp, color: Colors.white),
                                 textAlign: TextAlign.center),
                             Text('dự tiệc cưới của chúng tôi',
                                 style: TextStyle(
-                                    fontSize: 10.0.sp, color: Colors.white),
+                                    fontSize: 9.0.sp, color: Colors.white),
                                 textAlign: TextAlign.center),
                             Padding(
                               padding: EdgeInsets.fromLTRB(0, 0.8.h, 0, 0.8.h),
@@ -183,8 +183,8 @@ class _InvitationCardPageState extends State<InvitationCardPage> {
                                 brideName,
                                 style: TextStyle(
                                     fontSize: (brideName.length > 15)
-                                        ? 15.0.sp
-                                        : 17.0.sp,
+                                        ? 14.0.sp
+                                        : 16.0.sp,
                                     color: Colors.white),
                                 textAlign: TextAlign.center,
                               ),
@@ -198,8 +198,8 @@ class _InvitationCardPageState extends State<InvitationCardPage> {
                               child: Text(groomName,
                                   style: TextStyle(
                                       fontSize: (groomName.length > 15)
-                                          ? 15.0.sp
-                                          : 17.0.sp,
+                                          ? 14.0.sp
+                                          : 16.0.sp,
                                       color: Colors.white),
                                   textAlign: TextAlign.center),
                             ),
@@ -219,11 +219,11 @@ class _InvitationCardPageState extends State<InvitationCardPage> {
                             ),
                             Text('Sự hiện diện của bạn',
                                 style: TextStyle(
-                                    fontSize: 10.0.sp, color: Colors.white),
+                                    fontSize: 9.0.sp, color: Colors.white),
                                 textAlign: TextAlign.center),
                             Text('là vinh hạnh của chúng tôi',
                                 style: TextStyle(
-                                    fontSize: 10.0.sp, color: Colors.white),
+                                    fontSize: 9.0.sp, color: Colors.white),
                                 textAlign: TextAlign.center)
                           ],
                         ),
