@@ -1,32 +1,35 @@
 import 'dart:async';
-import 'dart:convert';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:bloc/bloc.dart';
+import 'package:wedding_app/const/message_const.dart';
 import 'package:wedding_app/model/user_wedding.dart';
 import 'package:wedding_app/repository/invite_email_repository.dart';
+import 'package:wedding_app/repository/user_repository.dart';
 import 'package:wedding_app/repository/user_wedding_repository.dart';
 import 'package:wedding_app/repository/wedding_repository.dart';
 import 'bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class WeddingBloc extends Bloc<WeddingEvent, WeddingState> {
   final WeddingRepository _weddingRepository;
   final UserWeddingRepository _userWeddingRepository;
   final InviteEmailRepository _inviteEmailRepository;
+  final UserRepository _userRepository;
   StreamSubscription _streamSubscription;
 
-  WeddingBloc(
-      {@required WeddingRepository weddingRepository,
-      @required UserWeddingRepository userWeddingRepository,
-      @required InviteEmailRepository inviteEmailRepository})
-      : assert(weddingRepository != null),
+  WeddingBloc({
+    @required WeddingRepository weddingRepository,
+    @required UserWeddingRepository userWeddingRepository,
+    @required InviteEmailRepository inviteEmailRepository,
+    @required UserRepository userRepository,
+  })  : assert(weddingRepository != null),
         assert(userWeddingRepository != null),
         assert(inviteEmailRepository != null),
+        assert(userRepository != null),
         _weddingRepository = weddingRepository,
         _userWeddingRepository = userWeddingRepository,
         _inviteEmailRepository = inviteEmailRepository,
-        super(WeddingLoading());
+        _userRepository = userRepository,
+        super(WeddingLoading(MessageConst.commonLoading));
 
   @override
   Stream<WeddingState> mapEventToState(WeddingEvent event) async* {
@@ -53,14 +56,18 @@ class WeddingBloc extends Bloc<WeddingEvent, WeddingState> {
   // }
 
   Stream<WeddingState> _mapCreateWeddingToState(CreateWedding event) async* {
-    yield Loading("Đang xử lý dữ liệu");
+    yield WeddingLoading(MessageConst.commonLoading);
     try {
-      final user = FirebaseAuth.instance.currentUser;
-      await _weddingRepository.createWedding(event.wedding, user);
-      yield Success("Tạo thành công");
+      final user = await _userRepository.getUser();
+      if (user == null || event.wedding == null) {
+        yield Failed(MessageConst.commonError);
+      } else {
+        await _weddingRepository.createWedding(event.wedding, user);
+        yield WeddingLoaded(event.wedding, MessageConst.createSuccess);
+      }
     } catch (e) {
       print("[ERROR]" + e);
-      yield Failed("Có lỗi xảy ra");
+      yield Failed(MessageConst.commonError);
     }
   }
 
@@ -77,30 +84,27 @@ class WeddingBloc extends Bloc<WeddingEvent, WeddingState> {
   }
 
   Stream<WeddingState> _mapUpdateWeddingToState(UpdateWedding event) async* {
-    yield Loading("Đang xử lý dữ liệu");
+    yield WeddingLoading(MessageConst.commonLoading);
     try {
-      SharedPreferences preferences = await SharedPreferences.getInstance();
-      _weddingRepository.updateWedding(event.wedding).then((value) async =>
-          preferences.setString(
-              "wedding", jsonEncode(event.wedding.toEntity().toJson())));
-      yield Success("Chỉnh sửa thành công");
+      await _weddingRepository.updateWedding(event.wedding);
+      yield WeddingLoaded(event.wedding, MessageConst.updateSuccess);
     } catch (e) {
       print("[ERROR]" + e);
-      yield Failed("Có lỗi xảy ra");
+      yield Failed(MessageConst.commonError);
     }
   }
 
   Stream<WeddingState> _mapDeleteWeddingToState(DeleteWedding event) async* {
-    yield Loading("Đang xử lý dữ liệu");
+    yield WeddingLoading(MessageConst.commonLoading);
     try {
-      _weddingRepository.deleteWedding(event.weddingId).then((value) async {
-        _userWeddingRepository.deleteAllUserWeddingByWedding(event.weddingId);
-        _inviteEmailRepository.deleteInviteEmailByWedding(event.weddingId);
-      });
-      yield Success("Xoá thành công");
+      await _userWeddingRepository
+          .deleteAllUserWeddingByWedding(event.weddingId);
+      await _inviteEmailRepository.deleteInviteEmailByWedding(event.weddingId);
+      await _weddingRepository.deleteWedding(event.weddingId);
+      yield DeleteSuccess();
     } catch (e) {
       print("[ERROR]" + e);
-      yield Failed("Có lỗi xảy ra");
+      yield Failed(MessageConst.commonError);
     }
   }
 
@@ -111,8 +115,8 @@ class WeddingBloc extends Bloc<WeddingEvent, WeddingState> {
   Stream<WeddingState> _mapLoadWeddingByIdToState(
       LoadWeddingById event) async* {
     String weddingId = event.weddingId;
-    if (weddingId == null || weddingId == "") {
-      yield Failed("Có lỗi xảy ra");
+    if (weddingId == null || weddingId.isEmpty) {
+      yield Failed(MessageConst.commonError);
     } else {
       _streamSubscription?.cancel();
       _streamSubscription = _weddingRepository

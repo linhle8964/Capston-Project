@@ -1,3 +1,4 @@
+import 'package:wedding_app/const/message_const.dart';
 import 'package:wedding_app/firebase_repository/user_firebase_repository.dart';
 import 'package:wedding_app/repository/user_repository.dart';
 import 'package:wedding_app/repository/user_wedding_repository.dart';
@@ -48,15 +49,38 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   }
 
   Stream<RegisterState> _mapEmailChangedToState(String email) async* {
-    yield state.update(
-      isEmailValid: Validation.isEmailValid(email),
-    );
+    if(email == null){
+      yield state.update(
+        isEmailValid: false,
+      );
+    }else{
+      yield state.update(
+        isEmailValid: Validation.isEmailValid(email),
+      );
+    }
+
   }
 
   Stream<RegisterState> _mapPasswordChangedToState(String password) async* {
-    yield state.update(
-      isPasswordValid: Validation.isPasswordValid(password),
-    );
+    if(password != null){
+      password = password.trim();
+      bool isValid = Validation.isPasswordValid(password);
+      String message = "";
+      if(isValid == false){
+        if(password.length < 8){
+          message = MessageConst.passwordLengthMin;
+        }else if(password.length > 20){
+          message = MessageConst.passwordLengthMax;
+        }else if(!password.contains(new RegExp(r'[0-9]'))){
+          message = MessageConst.passwordAtLeastOneNumber;
+        }else if(!password.contains(new RegExp(r'[A-Za-z]'))){
+          message = MessageConst.passwordAtLeastOneCharacter;
+        }
+      }
+      yield state.update(isPasswordValid: isValid, passwordErrorMessage: message);
+    }else{
+      yield state.update(isPasswordValid: false);
+    }
   }
 
   Stream<RegisterState> _mapFormSubmittedToState(
@@ -74,16 +98,16 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       });
 
     } on EmailAlreadyInUseException{
-      yield RegisterState.failure("Email đã tồn tại");
+      yield RegisterState.failure(MessageConst.emailAlreadyRegistered);
     } on FirebaseException{
-      yield RegisterState.failure("Có lỗi xảy ra");
+      yield RegisterState.failure(MessageConst.commonError);
     }catch (e) {
       print("[ERROR] $e");
-      yield RegisterState.failure("Có lỗi xảy ra");
+      yield RegisterState.failure(MessageConst.commonError);
     }
   }
 
   Stream<RegisterState> _mapShowSuccessMessageToState() async*{
-    yield RegisterState.success("Đăng ký thành công");
+    yield RegisterState.success(MessageConst.registerSuccess);
   }
 }

@@ -8,6 +8,7 @@ import 'package:wedding_app/repository/user_wedding_repository.dart';
 import 'package:wedding_app/const/message_const.dart';
 import 'package:wedding_app/utils/random_string.dart';
 import 'package:wedding_app/utils/validations.dart';
+import 'package:wedding_app/const/email_password.dart';
 import 'bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -51,9 +52,8 @@ class InviteEmailBloc extends Bloc<InviteEmailEvent, InviteEmailState> {
     User user = await _userRepository.getUser();
     String from = user.email;
     String to = event.email;
-    String title = "Bạn nhận được lời mời tham dự chỉnh sửa đám cưới";
-    String body =
-        "<h1>$code</h1>\n<p>Tải app và nhập code trên để tham dự chỉnh sửa đám cưới. Nếu không phải là bạn xin hãy bỏ qua mail này</p> ";
+    String title = SenderEmailPassword.title;
+    String body = "<h1>$code</h1>\n" + SenderEmailPassword.body;
     String role = event.role;
     try {
       yield InviteEmailProcessing();
@@ -85,20 +85,20 @@ class InviteEmailBloc extends Bloc<InviteEmailEvent, InviteEmailState> {
         if (userWedding != null) {
           // người dùng đã có tài khoản
           if (userWedding.weddingId == weddingId) {
-            // đã có đám cưới
+            // đã có ở trong đám cưới
             yield InviteEmailError(
                 message: MessageConst.userAlreadyInWeddingError);
           } else {
             // chưa có đám cưới
-            await _sendEmail(inviteEmail).then((value) =>
-                _inviteEmailRepository.createInviteEmail(inviteEmail));
+            await _sendEmail(inviteEmail);
+            await _inviteEmailRepository.createInviteEmail(inviteEmail);
 
             yield InviteEmailSuccess(message: MessageConst.commonSuccess);
           }
         } else {
           // người dùng chưa có tài khoản
-          await _sendEmail(inviteEmail).then(
-              (value) => _inviteEmailRepository.createInviteEmail(inviteEmail));
+          await _sendEmail(inviteEmail);
+          await _inviteEmailRepository.createInviteEmail(inviteEmail);
 
           yield InviteEmailSuccess(message: MessageConst.commonSuccess);
         }
@@ -110,16 +110,16 @@ class InviteEmailBloc extends Bloc<InviteEmailEvent, InviteEmailState> {
   }
 
   Future<void> _sendEmail(InviteEmail inviteEmail) async {
-    String username = 'linhlche130970@fpt.edu.vn';
-    String password = 'Linh4698,';
+    String username = SenderEmailPassword.email;
+    String password = SenderEmailPassword.password;
 
     final smtpServer = gmail(username, password);
 
     final message = Message()
-      ..from = Address(username, 'VWED')
+      ..from = Address(username, SenderEmailPassword.appName)
       ..recipients.add(inviteEmail.to)
       ..subject = inviteEmail.title
-      ..text = "Xin chào\nVWED xin kính chào"
+      ..text = SenderEmailPassword.text
       ..html = inviteEmail.body;
     //final sendReport = await send(message, smtpServer);
     //print('Message sent: ' + sendReport.toString());
@@ -139,27 +139,28 @@ class InviteEmailBloc extends Bloc<InviteEmailEvent, InviteEmailState> {
       final User user = await _userRepository.getUser();
       InviteEmail inviteEmail =
           await _inviteEmailRepository.getInviteEmailByCode(event.code);
-      if (inviteEmail.to == user.email) {
-        UserWedding userWedding =
-            await _userWeddingRepository.getUserWeddingByEmail(inviteEmail.to);
-        UserWedding newUserWedding = new UserWedding(inviteEmail.to,
-            userId: user.uid,
-            joinDate: DateTime.now(),
-            role: inviteEmail.role,
-            weddingId: inviteEmail.weddingId,
-            id: userWedding.id);
-        _userWeddingRepository
-            .updateUserWedding(newUserWedding)
-            .then((_) async {
+      if (inviteEmail != null) {
+        if (inviteEmail.to == user.email) {
+          UserWedding userWedding = await _userWeddingRepository
+              .getUserWeddingByEmail(inviteEmail.to);
+          UserWedding newUserWedding = new UserWedding(inviteEmail.to,
+              userId: user.uid,
+              joinDate: DateTime.now(),
+              role: inviteEmail.role,
+              weddingId: inviteEmail.weddingId,
+              id: userWedding.id);
+          await _userWeddingRepository.updateUserWedding(newUserWedding);
           await _inviteEmailRepository.deleteInviteEmailByEmail(
               inviteEmail.to, inviteEmail.weddingId);
-        });
-        yield InviteEmailSuccess(message: MessageConst.commonSuccess);
+          yield InviteEmailSuccess(message: MessageConst.commonSuccess);
+        } else {
+          yield InviteEmailError(message: MessageConst.codeNotFound);
+        }
       } else {
         yield InviteEmailError(message: MessageConst.codeNotFound);
       }
     } catch (e) {
-      print(e.toString());
+      print("[ERROR]: " + e.toString());
       yield InviteEmailError(message: MessageConst.commonError);
     }
   }

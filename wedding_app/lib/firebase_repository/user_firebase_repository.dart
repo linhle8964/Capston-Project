@@ -112,6 +112,8 @@ class FirebaseUserRepository extends UserRepository {
       if (user != null) {
         user.sendEmailVerification();
         return user;
+      } else {
+        return null;
       }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'email-already-in-use') {

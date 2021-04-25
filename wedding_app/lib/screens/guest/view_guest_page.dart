@@ -1,5 +1,6 @@
 import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wedding_app/bloc/guests/bloc.dart';
 import 'package:wedding_app/firebase_repository/guest_firebase_repository.dart';
@@ -7,6 +8,8 @@ import 'package:wedding_app/model/guest.dart';
 import 'package:wedding_app/model/user_wedding.dart';
 import 'package:wedding_app/screens/guest/ListGuest.dart';
 import 'package:wedding_app/screens/guest/download_guest_excel.dart';
+import 'package:wedding_app/utils/check_existed_phone.dart';
+import 'package:wedding_app/utils/count_guest_item.dart';
 import 'package:wedding_app/utils/format_number.dart';
 import 'package:wedding_app/utils/get_share_preferences.dart';
 import 'package:wedding_app/utils/hex_color.dart';
@@ -57,39 +60,7 @@ class _ViewGuestPageState extends State<ViewGuestPage>
       });
     }
   }
-  showMyAlertDialog(BuildContext context) {
-    GlobalKey _containerKey = GlobalKey();
-    // Create AlertDialog
-    AlertDialog dialog = AlertDialog(
-      key: _containerKey,
-      title: Text("Lưu lại"),
-      content: Text("Bạn có muốn lưu lại danh sách khách dưới dạng file excel?"),
-      actions: [
-        TextButton(
-            style: TextButton.styleFrom(backgroundColor: hexToColor("#d86a77")),
-            child: Text("Có",style: TextStyle(color: Colors.white),),
-            onPressed: () {
-              Navigator.of(_containerKey.currentContext).pop();
-              downloadFile(_data, context, widget.userWedding.role);
-            }),
-        TextButton(
-            style: TextButton.styleFrom(
-              backgroundColor: hexToColor("#d86a77"),
-            ),
-            child: Text("Không",style: TextStyle(color: Colors.white),),
-            onPressed: () {
-              Navigator.of(_containerKey.currentContext).pop();
-            }),
-      ],
-    );
 
-    // Call showDialog function to show dialog.
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return dialog;
-        });
-  }
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
@@ -380,7 +351,7 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                                               child: Row(
                                                 children: <Widget>[
                                                   Text(
-                                                    countCompanion(),
+                                                    countCompanion(_tempguests),
                                                     style:
                                                         TextStyle(fontSize: 12),
                                                   ),
@@ -541,7 +512,7 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                                           MainAxisAlignment.center,
                                       children: [
                                         Text(
-                                          formatCurrency(countMoney()),
+                                          formatCurrency(countMoney(_tempguests)),
                                           style: TextStyle(
                                               fontSize: 20,
                                               fontWeight: FontWeight.bold,
@@ -558,27 +529,6 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                 return Center(child: LoadingIndicator());
               }
             }));
-  }
-
-  String countMoney() {
-    int count = 0;
-    for (int i = 0; i < _tempguests.length; i++) {
-      if (_tempguests[i].money > 0) {
-        count += _tempguests[i].money;
-      }
-    }
-    return count.toString() + "000";
-  }
-
-  String countCompanion() {
-    int count = 0;
-    for (int i = 0; i < _tempguests.length; i++) {
-      if (_tempguests[i].status == 1) {
-        count++;
-        count += _tempguests[i].companion;
-      }
-    }
-    return count.toString();
   }
 
   Future<void> addMoneyDialog(BuildContext context, String weddingId) async {
@@ -863,6 +813,9 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       TextFormField(
+                        inputFormatters: [
+                          LengthLimitingTextInputFormatter(20),
+                        ],
                         initialValue: _name,
                         decoration: InputDecoration(
                           labelText: "Tên",
@@ -875,6 +828,9 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                         onSaved: (input) => _name = input,
                       ),
                       TextFormField(
+                        inputFormatters: [
+                          LengthLimitingTextInputFormatter(30),
+                        ],
                         initialValue: _description,
                         decoration: InputDecoration(
                           labelText: "Chú thích",
@@ -937,6 +893,9 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                           return Column(
                             children: [
                               TextFormField(
+                                inputFormatters: [
+                                  LengthLimitingTextInputFormatter(2),
+                                ],
                                 initialValue: _companion.toString(),
                                 keyboardType: TextInputType.number,
                                 decoration: InputDecoration(
@@ -1015,7 +974,11 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                         },
                       ),
                       TextFormField(
+                        inputFormatters: [
+                          LengthLimitingTextInputFormatter(10),
+                        ],
                         initialValue: _phone,
+                        keyboardType: TextInputType.number,
                         decoration: InputDecoration(
                           labelText: "Điện thoại",
                           fillColor: Colors.white,
@@ -1023,12 +986,12 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                         ),
                         validator: (input) {
                           RegExp regex = new RegExp(
-                            r'(^(?:[+0]9)?[0-9]{9,10}$)',
+                            r'(^(?:[+0]9)?[0-9]{10}$)',
                             caseSensitive: false,
                             multiLine: false,
                           );
                           if (input.isNotEmpty &&
-                              isChecked(_tempguests, input)) {
+                              checkExistedPhoneToAdd(_tempguests, input)) {
                             return "Số điện thoại đã tồn tại";
                           } else if (!regex.hasMatch(input)) {
                             return "Số điện thoại không hợp lệ";
@@ -1086,7 +1049,6 @@ class _ViewGuestPageState extends State<ViewGuestPage>
     return listContacts;
   }
 
-  //Check contacts permission
   Future<PermissionStatus> _getPermission() async {
     final PermissionStatus permission = await Permission.contacts.status;
     if (permission != PermissionStatus.granted) {
@@ -1096,13 +1058,6 @@ class _ViewGuestPageState extends State<ViewGuestPage>
     } else {
       return permission;
     }
-  }
-
-  bool isChecked(List<Guest> guests, String phone) {
-    for (int i = 0; i < guests.length; i++) {
-      if (guests[i].phone == phone) return true;
-    }
-    return false;
   }
 
   Future<void> AddGuestFromContact(
@@ -1126,8 +1081,8 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                 } else {
                   for (int i = 0; i < listContacts.length; i++) {
                     if (listContacts[i].phones.isNotEmpty) {
-                      if (!isChecked(
-                          guests, listContacts[i].phones.elementAt(0).value)) {
+                      if (!checkExistedPhoneToAdd(
+                          guests, listContacts[i].phones.elementAt(0).value.replaceAll(new RegExp(r"\s+"), ""))) {
                         listAvaiContacts.add(listContacts[i]);
                       }
                     }
@@ -1156,7 +1111,7 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                                 itemBuilder: (context, index) {
                                   Contact contact = listAvaiContacts[index];
                                   String phone =
-                                      contact.phones.elementAt(0).value;
+                                      contact.phones.elementAt(0).value.replaceAll(new RegExp(r"\s+"), "");
                                   return Card(
                                     child: ListTile(
                                       title: Text("${contact.displayName}"),
@@ -1164,7 +1119,7 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                                           ? "${phone}"
                                           : "No contact"),
                                       trailing: Checkbox(
-                                        value: isChecked(listAddGuests, phone),
+                                        value: checkExistedPhoneToAdd(listAddGuests, phone),
                                         onChanged: (checked) {
                                           setState(() {
                                             Guest guest = new Guest(
@@ -1176,7 +1131,7 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                                                 0,
                                                 "",
                                                 0);
-                                            if (!isChecked(
+                                            if (!checkExistedPhoneToAdd(
                                                 listAddGuests, phone)) {
                                               listAddGuests.add(guest);
                                             } else {
@@ -1377,6 +1332,40 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                               })),
                     )),
           );
+        });
+  }
+
+  showMyAlertDialog(BuildContext context) {
+    GlobalKey _containerKey = GlobalKey();
+    // Create AlertDialog
+    AlertDialog dialog = AlertDialog(
+      key: _containerKey,
+      title: Text("Lưu lại"),
+      content: Text("Bạn có muốn lưu lại danh sách khách dưới dạng file excel?"),
+      actions: [
+        TextButton(
+            style: TextButton.styleFrom(backgroundColor: hexToColor("#d86a77")),
+            child: Text("Có",style: TextStyle(color: Colors.white),),
+            onPressed: () {
+              Navigator.of(_containerKey.currentContext).pop();
+              downloadFile(_data, context, widget.userWedding.role);
+            }),
+        TextButton(
+            style: TextButton.styleFrom(
+              backgroundColor: hexToColor("#d86a77"),
+            ),
+            child: Text("Không",style: TextStyle(color: Colors.white),),
+            onPressed: () {
+              Navigator.of(_containerKey.currentContext).pop();
+            }),
+      ],
+    );
+
+    // Call showDialog function to show dialog.
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return dialog;
         });
   }
 

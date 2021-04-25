@@ -40,5 +40,13 @@ class WidgetKey{
   static const String myInvitationCardTabKey = "my_invitation_card_tab";
   static const String createInvitationCardTabKey = "create_invitation_card_tab";
   static const String uploadInvitationCardTabkey = "upload_invitation_card_tab";
+
+  //task
+  static const String taskItemKey = "task_item_";
+  static const String addTaskKey = "add_task";
+  static const String addTaskNameKey = "add_task_name";
+  static const String addTaskOpenDateTimePicker = 'add_task_datetime_picker';
+  static const String addTaskDropDownButton = "add_task_drop_down";
+  static const String addTaskSubmit = "add_task_submit";
 }
 

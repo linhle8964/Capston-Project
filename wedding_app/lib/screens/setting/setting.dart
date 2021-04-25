@@ -4,10 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wedding_app/bloc/authentication/bloc.dart';
 import 'package:wedding_app/bloc/user_wedding/bloc.dart';
 import 'package:wedding_app/bloc/wedding/bloc.dart';
+import 'package:wedding_app/const/message_const.dart';
 import 'package:wedding_app/const/route_name.dart';
 import 'package:wedding_app/model/user_wedding.dart';
+import 'package:wedding_app/model/wedding.dart';
 import 'package:wedding_app/screens/create_wedding/create_wedding_argument.dart';
-import 'package:wedding_app/screens/privacy_term/pdfview_page.dart';
 import 'package:wedding_app/screens/setting/custom_button.dart';
 import 'package:wedding_app/screens/setting/setting_item.dart';
 import 'package:wedding_app/utils/alert_dialog.dart';
@@ -15,7 +16,6 @@ import 'package:wedding_app/utils/get_share_preferences.dart';
 import 'package:wedding_app/utils/hex_color.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:wedding_app/utils/show_snackbar.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wedding_app/widgets/confirm_dialog.dart';
 import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:wedding_app/widgets/receive_notification.dart';
@@ -23,8 +23,9 @@ import 'package:wedding_app/const/widget_key.dart';
 
 class SettingPage extends StatefulWidget {
   final UserWedding userWedding;
+  final Wedding wedding;
 
-  SettingPage({Key key, @required this.userWedding}) : super(key: key);
+  SettingPage({Key key, @required this.userWedding, @required this.wedding}) : super(key: key);
   @override
   _SettingPageState createState() => _SettingPageState();
 }
@@ -48,7 +49,7 @@ class _SettingPageState extends State<SettingPage> {
         ),
         centerTitle: true,
       ),
-      bottomSheet: Wrap(
+      bottomNavigationBar: Wrap(
         children: [
           Center(
             child: Text('App version 1.0.00'),
@@ -95,12 +96,8 @@ class _SettingPageState extends State<SettingPage> {
                           message:
                               "Bạn là Admin còn lại duy nhất trong đám cưới. Nếu bạn rời thì đám cưới sẽ bị xóa. Bạn có muốn rời?",
                           onPressedFunction: () async {
-                            SharedPreferences preferences =
-                                await SharedPreferences.getInstance();
-                            String weddingId =
-                                preferences.getString("wedding_id");
                             BlocProvider.of<WeddingBloc>(context)
-                                .add(DeleteWedding(weddingId));
+                                .add(DeleteWedding(widget.wedding.id));
                           },
                         ));
               }
@@ -108,11 +105,13 @@ class _SettingPageState extends State<SettingPage> {
           ),
           BlocListener<WeddingBloc, WeddingState>(
             listener: (context, state) {
-              if (state is Loading) {
+              if (state is WeddingLoading) {
+                showProcessingSnackbar(context, state.message);
               } else if (state is Failed) {
                 showFailedSnackbar(context, state.message);
-              } else if (state is Success) {
-                showSuccessAlertDialog(context, "Xóa đám cưới", state.message,
+              } else if (state is DeleteSuccess) {
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                showSuccessAlertDialog(context, "Xóa đám cưới", MessageConst.deleteSuccess,
                     () {
                   Navigator.pop(context);
                   _logOut();
@@ -129,19 +128,20 @@ class _SettingPageState extends State<SettingPage> {
                 minHeight: constraints.maxHeight,
                 maxHeight: double.infinity,
               ),
-              child: IntrinsicHeight(
-                child: Column(
+              child: Column(
                   children: <Widget>[
                     SettingItem(() {
                       Navigator.pushNamed(context, RouteName.changePassword);
-                    }, "Đổi mật khẩu"),
+                    }, "Thay đổi mật khẩu"),
+                    /*SettingItem(() {
+                      Navigator.pushNamed(context, RouteName.notificationSetting);
+                    }, "Cài đặt thông báo"),*/
                     SettingItem(
-                        () async => Navigator.pushNamed(
+                        () => Navigator.pushNamed(
                             context, RouteName.createWedding,
                             arguments: CreateWeddingArguments(
                                 isEditing: true,
-                                wedding:
-                                    await getWeddingFromSharePreferences())),
+                                wedding: widget.wedding)),
                         "Thông tin đám cưới"),
                     SettingItem(() {
                       Navigator.pushNamed(context, RouteName.listCollaborator);
@@ -158,10 +158,8 @@ class _SettingPageState extends State<SettingPage> {
                     SettingItem(
                         () => Navigator.pushNamed(context, RouteName.term),
                         "Điều khoản"),
-                    SettingItem(null, "Hỗ trợ"),
-                    SettingItem(null, "Đánh giá ứng dụng"),
                   ],
-                ),
+
               ),
             ),
           );
@@ -191,11 +189,8 @@ class _SettingPageState extends State<SettingPage> {
         builder: (ctx) => PersonDetailsDialog(
               message: "Bạn có muốn xóa đám cưới?",
               onPressedFunction: () async {
-                SharedPreferences preferences =
-                    await SharedPreferences.getInstance();
-                String weddingId = preferences.getString("wedding_id");
                 BlocProvider.of<WeddingBloc>(context)
-                    .add(DeleteWedding(weddingId));
+                    .add(DeleteWedding(widget.wedding.id));
               },
             ));
   }

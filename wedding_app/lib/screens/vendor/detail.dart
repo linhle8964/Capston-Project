@@ -38,7 +38,7 @@ class Detail extends StatelessWidget {
             ),
           ),
           Container(
-            height: (size.height * 0.35) + 25,
+            height: (size.height * 0.4),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -93,55 +93,56 @@ class Detail extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        property.name,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
+                      Expanded(
+                        child: Text(
+                          property.name,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
+                          softWrap: true,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 32,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-
+                      )
                     ],
                   ),
                 ),
                 Padding(
                   padding:
-                      EdgeInsets.only(left: 24, right: 24, top: 8, bottom: 16),
+                      EdgeInsets.only(left: 24, right: 24),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.location_on,
-                            color: Colors.white,
-                            size: 16,
-                          ),
-                          SizedBox(
-                            width: 4,
-                          ),
-                          Text(
-                            property.location,
-                            style: TextStyle(
+                      Flexible(
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.location_on,
                               color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
+                              size: 16,
                             ),
-                          ),
-                          SizedBox(
-                            width: 8,
-                          ),
-                          Icon(
-                            Icons.zoom_out_map,
-                            color: Colors.white,
-                            size: 16,
-                          ),
-                          SizedBox(
-                            width: 4,
-                          ),
-                        ],
-                      ),
+                            SizedBox(
+                              width: 4,
+                            ),
+                            Expanded(
+                              child: Text(
+                                property.location,
+                                overflow: TextOverflow.ellipsis,
+                                softWrap: true,
+                                maxLines: 3,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+
+                          ],
+                        ),
+                      )
                     ],
                   ),
                 ),
@@ -161,62 +162,81 @@ class Detail extends StatelessWidget {
               ),
               child: Center(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
+
+crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Padding(
-                      padding: EdgeInsets.all(24),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Container(
-                                height: 65,
-                                width: 65,
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image: NetworkImage(property.ownerImage),
-                                    fit: BoxFit.cover,
-                                  ),
-                                  shape: BoxShape.circle,
-                                ),
-                              ),
-                              SizedBox(
-                                width: 16,
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                    Flexible(
+                      child:
+                      Padding(
+                        padding: EdgeInsets.only(top: 24,bottom: 24,left: 24,right: 24),
+                        child: Row(
+
+                          children: [
+
+                            Flexible(
+                              child: Row(
                                 children: [
-                                  Text(
-                                    property.name,
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
+                                  Container(
+                                    padding: EdgeInsets.only(right: 12,bottom: size.height*0.04),
+                                    height: size.height*0.1,
+                                    width: size.height*0.1,
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        image:
+                                        NetworkImage(property.ownerImage),
+                                        fit: BoxFit.cover,
+                                      ),
+                                      shape: BoxShape.circle,
                                     ),
                                   ),
-                                  SizedBox(
-                                    height: 4,
-                                  ),
-                                  Text(
-                                    property.location,
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      color: Colors.grey[500],
-                                    ),
-                                  ),
+                                 SizedBox(
+                                   width: 14,
+                                 ),
+                                  Flexible(
+                                    child:Column(
+                                    children: [
+                                      SizedBox(
+                                        height: 14,
+                                      ),
+                                      Flexible(
+                                        child: Text(
+                                          property.name,
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 2,
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+
+                                      Flexible(
+                                        child: Text(
+                                          property.location,
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 2,
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            color: Colors.grey[500],
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ), )
+
                                 ],
                               ),
-                            ],
-                          ),
-                        ],
+                            )
+                          ],
+                        ),
                       ),
                     ),
-                    Padding(
+                    Container(
                       padding: EdgeInsets.only(
+                      top: 20,
                         right: 24,
                         left: 24,
-                        bottom: 24,
+                        bottom:size.height*0.1 ,
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -230,7 +250,7 @@ class Detail extends StatelessWidget {
                       padding: EdgeInsets.only(
                         right: 24,
                         left: 24,
-                        bottom: 16,
+                        bottom: 10,
                       ),
                       child: Text(
                         "Giới Thiệu",
@@ -254,7 +274,6 @@ class Detail extends StatelessWidget {
                         ),
                       ),
                     ),
-
                   ],
                 ),
               ),
@@ -268,7 +287,6 @@ class Detail extends StatelessWidget {
   Widget buildFeature(IconData iconData, String text) {
     return Row(
       children: [
-
         Icon(
           iconData,
           color: Colors.yellow[700],

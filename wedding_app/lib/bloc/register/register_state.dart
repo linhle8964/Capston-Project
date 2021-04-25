@@ -1,5 +1,6 @@
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
+import 'package:wedding_app/const/message_const.dart';
 
 @immutable
 class RegisterState extends Equatable{
@@ -9,6 +10,7 @@ class RegisterState extends Equatable{
   final bool isSuccess;
   final bool isFailure;
   final String message;
+  final String passwordErrorMessage;
 
   bool get isFormValid => isEmailValid && isPasswordValid;
 
@@ -19,6 +21,7 @@ class RegisterState extends Equatable{
     @required this.isSuccess,
     @required this.isFailure,
     @required this.message,
+    @required this.passwordErrorMessage
   });
 
   factory RegisterState.empty() {
@@ -29,6 +32,7 @@ class RegisterState extends Equatable{
       isSuccess: false,
       isFailure: false,
       message: "",
+      passwordErrorMessage: "",
     );
   }
 
@@ -39,7 +43,8 @@ class RegisterState extends Equatable{
         isSubmitting: true,
         isSuccess: false,
         isFailure: false,
-        message: "Đang xử lý dữ liệu");
+        message: MessageConst.commonLoading,
+        passwordErrorMessage: "");
   }
 
   factory RegisterState.failure(String message) {
@@ -50,6 +55,7 @@ class RegisterState extends Equatable{
       isSuccess: false,
       isFailure: true,
       message: message,
+      passwordErrorMessage: "",
     );
   }
 
@@ -61,12 +67,14 @@ class RegisterState extends Equatable{
       isSuccess: true,
       isFailure: false,
       message: message,
+      passwordErrorMessage: "",
     );
   }
 
   RegisterState update({
     bool isEmailValid,
     bool isPasswordValid,
+    String passwordErrorMessage,
   }) {
     return copyWith(
       isEmailValid: isEmailValid,
@@ -75,6 +83,7 @@ class RegisterState extends Equatable{
       isSuccess: false,
       isFailure: false,
       message: "",
+      passwordErrorMessage: passwordErrorMessage
     );
   }
 
@@ -86,6 +95,7 @@ class RegisterState extends Equatable{
     bool isSuccess,
     bool isFailure,
     String message,
+    String passwordErrorMessage,
   }) {
     return RegisterState(
       isEmailValid: isEmailValid ?? this.isEmailValid,
@@ -94,6 +104,7 @@ class RegisterState extends Equatable{
       isSuccess: isSuccess ?? this.isSuccess,
       isFailure: isFailure ?? this.isFailure,
       message: message ?? this.message,
+      passwordErrorMessage: passwordErrorMessage ?? this.passwordErrorMessage
     );
   }
 
@@ -106,9 +117,10 @@ class RegisterState extends Equatable{
       isSuccess: $isSuccess,
       isFailure: $isFailure,
       message: $message,
+      passwordErrorMessage: $passwordErrorMessage
     }''';
   }
 
   @override
-  List<Object> get props => [isEmailValid, isPasswordValid, isSubmitting, isSuccess, isFailure, message];
+  List<Object> get props => [isEmailValid, isPasswordValid, isSubmitting, isSuccess, isFailure, message, passwordErrorMessage];
 }
