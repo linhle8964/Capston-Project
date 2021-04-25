@@ -22,10 +22,10 @@ class EmailChanged extends ResetPasswordEvent {
   }
 }
 
-class Submitted extends ResetPasswordEvent {
+class SubmittedRequestChangePasswrord extends ResetPasswordEvent {
   final String email;
 
-  Submitted({@required this.email});
+  SubmittedRequestChangePasswrord({@required this.email});
 
   @override
   String toString() {

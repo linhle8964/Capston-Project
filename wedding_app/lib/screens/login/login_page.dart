@@ -51,8 +51,8 @@ class _LoginPageState extends State<LoginPage> {
         }
         if (state.isSuccess) {
           SchedulerBinding.instance.addPostFrameCallback((_) {
-            BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
             showSuccessSnackbar(context, state.message);
+            BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
           });
         }
         if (state.isFailure) {
@@ -116,7 +116,7 @@ class _LoginPageState extends State<LoginPage> {
                               decoration: InputDecoration(
                                   labelText: 'Mật khẩu',
                                   errorText: !state.isPasswordValid
-                                      ? MessageConst.invalidPassword
+                                      ? state.passwordErrorMessage
                                       : null,
                                   labelStyle: TextStyle(
                                       color: Colors.grey, fontSize: 15)),

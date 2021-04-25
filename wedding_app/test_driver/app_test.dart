@@ -1,5 +1,6 @@
 import 'package:flutter_driver/flutter_driver.dart';
 import 'package:test/test.dart';
+import 'package:wedding_app/const/message_const.dart';
 import 'package:wedding_app/const/widget_key.dart';
 
 void main() {
@@ -11,9 +12,6 @@ void main() {
       const passwordTextFieldKey = WidgetKey.loginPasswordTextFieldKey;
       const showPasswordButtonKey = WidgetKey.loginShowPasswordButtonKey;
       const navigateTaskButtonKey = WidgetKey.navigateTaskButtonKey;
-      const navigateBudgetButtonKey = WidgetKey.navigateBudgetButtonKey;
-      const navigateGuestButtonKey = WidgetKey.navigateGuestButtonKey;
-      const navigateSettingButtonKey = WidgetKey.navigateSettingButtonKey;
 
       FlutterDriver driver;
 
@@ -31,6 +29,50 @@ void main() {
       });
 
       test('log in', () async {
+        // email invalid
+        await driver.runUnsynchronized(() async {
+          await driver.tap(find.byValueKey(emailTextFieldKey));
+          await driver.enterText("linhlche13097");
+          expect(await isPresent(find.text(MessageConst.invalidEmail), driver),
+              isTrue);
+        });
+
+        // invalid password length < 6
+        await driver.runUnsynchronized(() async {
+          await driver.tap(find.byValueKey(passwordTextFieldKey));
+          await driver.enterText("4");
+          expect(
+              await isPresent(find.text(MessageConst.passwordLengthMin), driver),
+              isTrue);
+        });
+
+        // invalid password length > 20
+        await driver.runUnsynchronized(() async {
+          await driver.tap(find.byValueKey(passwordTextFieldKey));
+          await driver.enterText("1234567891011121314151617181920");
+          expect(
+              await isPresent(find.text(MessageConst.passwordLengthMax), driver),
+              isTrue);
+        });
+
+        // invalid password only character
+        await driver.runUnsynchronized(() async {
+          await driver.tap(find.byValueKey(passwordTextFieldKey));
+          await driver.enterText("abcdefghi");
+          expect(
+              await isPresent(find.text(MessageConst.passwordAtLeastOneNumber), driver),
+              isTrue);
+        });
+
+        // invalid password only number
+        await driver.runUnsynchronized(() async {
+          await driver.tap(find.byValueKey(passwordTextFieldKey));
+          await driver.enterText("12345678");
+          expect(
+              await isPresent(find.text(MessageConst.passwordAtLeastOneCharacter), driver),
+              isTrue);
+        });
+
         // login with user who invalid email
         await driver.tap(find.byValueKey(emailTextFieldKey));
         await driver.enterText("linhlche13097@fpt.edu.vn");
@@ -65,6 +107,14 @@ void main() {
         await Future.delayed(Duration(seconds: 2));
 
         await driver.runUnsynchronized(() async {
+          expect(
+              await isPresent(
+                  find.text(MessageConst.invalidEmail), driver),
+              isFalse);
+          expect(
+              await isPresent(
+                  find.text(MessageConst.invalidPassword), driver),
+              isFalse);
           await driver.tap(find.byValueKey(loginButtonKey));
           expect(
               await isPresent(
@@ -102,7 +152,32 @@ void main() {
         });
         await driver.tap(find.byValueKey(navigateTaskButtonKey));
         await Future.delayed(Duration(seconds: 1));
-        await driver.tap(find.byValueKey(navigateBudgetButtonKey));
+
+        // add task success
+        await driver.tap(find.byValueKey(WidgetKey.addTaskKey));
+        await Future.delayed(Duration(seconds: 1));
+        await driver.tap(find.byValueKey(WidgetKey.addTaskOpenDateTimePicker));
+        await driver.tap(find.text('30'));
+        await driver.tap(find.text('OK'));
+        await driver.tap(find.byValueKey(WidgetKey.addTaskDropDownButton));
+        await driver.tap(find.text('Ảnh cưới'));
+        await driver.runUnsynchronized(() async {
+          await driver.tap(find.byValueKey(WidgetKey.addTaskSubmit));
+          await driver.tap(find.byValueKey(WidgetKey.yesConfirmButtonKey));
+          expect(
+              await isPresent(
+                  find.byValueKey(WidgetKey.failedSnackbarKey), driver),
+              isTrue);
+        });
+        await driver.tap(find.byValueKey(WidgetKey.addTaskNameKey));
+        await driver.enterText("Demo 5");
+        await driver.tap(find.byValueKey(WidgetKey.addTaskSubmit));
+        await driver.tap(find.byValueKey(WidgetKey.noConfirmButtonKey));
+        await driver.tap(find.byValueKey(WidgetKey.addTaskSubmit));
+        await driver.tap(find.byValueKey(WidgetKey.yesConfirmButtonKey));
+        await driver.tap(find.byValueKey(WidgetKey.taskItemKey + "0"));
+        //     await driver.tap(find.byValueKey(WidgetKey.taskItemKey + "0"));
+        /*await driver.tap(find.byValueKey(navigateBudgetButtonKey));
         await Future.delayed(Duration(seconds: 1));
         await driver.tap(find.byValueKey(navigateGuestButtonKey));
         await Future.delayed(Duration(seconds: 1));
@@ -114,16 +189,16 @@ void main() {
         await Future.delayed(Duration(seconds: 1));
         await driver.tap(find.byValueKey(WidgetKey.createInvitationCardTabKey));
         await Future.delayed(Duration(seconds: 1));
-        await driver.tap(find.byValueKey(WidgetKey.uploadInvitationCardTabkey));
+        await driver.tap(find.byValueKey(WidgetKey.uploadInvitationCardTabkey));*/
       });
     },
   );
 }
 
-Future<bool> isPresent(
-    SerializableFinder byValueKey, FlutterDriver driver) async {
+Future<bool> isPresent(SerializableFinder byValueKey, FlutterDriver driver,
+    {Duration timeout = const Duration(seconds: 3)}) async {
   try {
-    await driver.waitFor(byValueKey);
+    await driver.waitFor(byValueKey, timeout: timeout);
     return true;
   } catch (exception) {
     print(exception.toString());

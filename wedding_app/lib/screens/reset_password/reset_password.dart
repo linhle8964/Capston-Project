@@ -109,6 +109,6 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   }
 
   void _onFormSubmitted() {
-    _resetPasswordBloc.add(Submitted(email: _emailController.text));
+    _resetPasswordBloc.add(SubmittedRequestChangePasswrord(email: _emailController.text));
   }
 }

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:wedding_app/bloc/authentication/bloc.dart';
+import 'package:wedding_app/const/share_prefs_key.dart';
 import 'package:wedding_app/model/user_wedding.dart';
 import 'package:wedding_app/model/wedding.dart';
 import 'package:wedding_app/repository/user_repository.dart';
@@ -44,18 +45,13 @@ class AuthenticationBloc
     try {
       final isAuthenticated = await _userRepository.isAuthenticated();
       if (isAuthenticated) {
-        final isEmailVerified = await _userRepository.isEmailVerified();
-        if (isEmailVerified) {
-          final user = await _userRepository.getUser();
-          final UserWedding userWedding =
-          await _userWeddingRepository.getUserWeddingByUser(user);
-          if (userWedding.weddingId == null) {
-            yield Unauthenticated();
-          } else {
-            yield Authenticated(user);
-          }
-        } else {
+        final user = await _userRepository.getUser();
+        final UserWedding userWedding =
+            await _userWeddingRepository.getUserWeddingByUser(user);
+        if (userWedding.weddingId == null) {
           yield Unauthenticated();
+        } else {
+          yield Authenticated(user);
         }
       } else {
         yield Unauthenticated();
@@ -69,18 +65,18 @@ class AuthenticationBloc
   Stream<AuthenticationState> _mapLoggedInToState() async* {
     final user = await _userRepository.getUser();
     final UserWedding userWedding =
-    await _userWeddingRepository.getUserWeddingByUser(user);
+        await _userWeddingRepository.getUserWeddingByUser(user);
     if (userWedding.weddingId == null) {
       yield WeddingNull(user);
     } else {
-      Wedding wedding = await _weddingRepository.getWeddingById(userWedding.weddingId);
+      Wedding wedding =
+          await _weddingRepository.getWeddingById(userWedding.weddingId);
       SharedPreferences preferences = await SharedPreferences.getInstance();
       await preferences.setString("wedding_id", userWedding.weddingId);
       await preferences.setString(
           "user_wedding", jsonEncode(userWedding.toEntity().toJson()));
-      print(jsonEncode(userWedding.toEntity().toJson()));
-      await preferences.setString(
-          "wedding", jsonEncode(wedding.toEntity().toJson()));
+      await preferences.setBool(SharedPreferenceKey.taskNotification, true);
+      await preferences.setBool(SharedPreferenceKey.guestResponseNotification, true);
       yield Authenticated(user);
     }
   }
@@ -89,7 +85,8 @@ class AuthenticationBloc
     SharedPreferences preferences = await SharedPreferences.getInstance();
     preferences.remove("wedding_id");
     preferences.remove("user_wedding");
-    preferences.remove('wedding');
+    preferences.remove(SharedPreferenceKey.guestResponseNotification);
+    preferences.remove(SharedPreferenceKey.taskNotification);
     yield Unauthenticated();
     _userRepository.signOut();
   }

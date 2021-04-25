@@ -4,6 +4,7 @@ import 'package:wedding_app/bloc/category/bloc.dart';
 import 'package:wedding_app/bloc/category/category_bloc.dart';
 import 'package:wedding_app/bloc/checklist/bloc.dart';
 import 'package:wedding_app/bloc/checklist/checklist_bloc.dart';
+import 'package:wedding_app/const/widget_key.dart';
 import 'package:wedding_app/model/category.dart';
 import 'package:wedding_app/model/task_model.dart';
 import 'package:wedding_app/utils/border.dart';
@@ -69,6 +70,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
         actions: [
           Builder(
             builder: (ctx) => IconButton(
+              key: Key(WidgetKey.addTaskSubmit),
               icon: Icon(
                 Icons.check,
                 size: 40,
@@ -98,6 +100,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     TextFormField(
+                      key: Key(WidgetKey.addTaskNameKey),
                       decoration: InputDecoration(
                         labelText: "Công Việc",
                         focusedBorder: focusedBorder,
@@ -105,8 +108,11 @@ class _AddTaskPageState extends State<AddTaskPage> {
                         fillColor: Colors.white,
                         filled: true,
                       ),
-                      validator: (input) =>
-                          input.isEmpty ? 'Hãy điền công việc của bạn' : input.length > 20 ? "Tên công việc không quá 20 kí tự" : null,
+                      validator: (input) => input.isEmpty
+                          ? 'Hãy điền công việc của bạn'
+                          : input.length > 20
+                              ? "Tên công việc không quá 20 kí tự"
+                              : null,
                       onSaved: (input) => _task = input,
                     ),
                     SizedBox(
@@ -145,6 +151,8 @@ class _AddTaskPageState extends State<AddTaskPage> {
                                       ),
                                     ),
                                     IconButton(
+                                      key: Key(
+                                          WidgetKey.addTaskOpenDateTimePicker),
                                       icon: Icon(Icons.calendar_today),
                                       tooltip: 'Tap to open date picker',
                                       onPressed: () {
@@ -172,7 +180,9 @@ class _AddTaskPageState extends State<AddTaskPage> {
                               contentPadding: EdgeInsets.all(0),
                               activeColor: Colors.blue,
                               controlAffinity: ListTileControlAffinity.leading,
-                              title: _checkboxListTile? Text('Hoàn thành') :Text('Chưa Hoàn thành') ,
+                              title: _checkboxListTile
+                                  ? Text('Hoàn thành')
+                                  : Text('Chưa Hoàn thành'),
                               value: _checkboxListTile,
                               onChanged: (value) {
                                 setState(() {
@@ -220,6 +230,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
                             } else if (state is TodosLoading) {
                             } else if (state is TodosNotLoaded) {}
                             return DropdownButton<String>(
+                              key: Key(WidgetKey.addTaskDropDownButton),
                               isExpanded: true,
                               value: _category,
                               icon: Icon(Icons.keyboard_arrow_down_outlined),
@@ -260,8 +271,9 @@ class _AddTaskPageState extends State<AddTaskPage> {
                         filled: true,
                         alignLabelWithHint: true,
                       ),
-                      validator: (input) =>
-                      input.length > 100 ? "Ghi chú không quá 100 kí tự" : null,
+                      validator: (input) => input.length > 100
+                          ? "Ghi chú không quá 100 kí tự"
+                          : null,
                       onSaved: (input) => _note = input,
                     ),
                   ])),
@@ -273,7 +285,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
   void addNewTask(context) {
     final FormState form = _formKey.currentState;
     form.save();
-    if(form.validate()) {
+    if (form.validate()) {
       Task task = new Task(
           name: _task,
           dueDate: _dueDate,
@@ -281,9 +293,7 @@ class _AddTaskPageState extends State<AddTaskPage> {
           note: _note,
           category: _category);
       print(task.toString());
-      if (_task != null && _category != null && _task
-          .trim()
-          .isNotEmpty) {
+      if (_task != null && _category != null && _task.trim().isNotEmpty) {
         BlocProvider.of<ChecklistBloc>(context)
           ..add(AddTask(task, widget.weddingID));
         Navigator.pop(context);

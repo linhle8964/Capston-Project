@@ -109,7 +109,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   decoration: InputDecoration(
                                       labelText: 'Mật khẩu',
                                       errorText: !state.isPasswordValid
-                                          ? MessageConst.invalidPassword
+                                          ? state.passwordErrorMessage
                                           : null,
                                       labelStyle: TextStyle(
                                           color: Colors.grey, fontSize: 15)),

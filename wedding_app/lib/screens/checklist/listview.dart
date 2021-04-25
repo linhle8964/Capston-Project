@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wedding_app/bloc/category/bloc.dart';
 import 'package:wedding_app/bloc/checklist/bloc.dart';
 import 'package:wedding_app/bloc/checklist/checklist_bloc.dart';
+import 'package:wedding_app/const/widget_key.dart';
 import 'package:wedding_app/model/task_model.dart';
 import 'package:wedding_app/screens/edit_task/edit_task.dart';
 import 'package:wedding_app/widgets/confirm_dialog.dart';
@@ -26,7 +27,9 @@ class _ListViewWidgetState extends State<ListViewWidget> {
         shrinkWrap: true,
         itemCount: widget.tasks.length,
         itemBuilder: (context, index) {
+          String widgetKey = WidgetKey.taskItemKey + index.toString();
           return Card(
+            key: Key(widgetKey),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
             ),

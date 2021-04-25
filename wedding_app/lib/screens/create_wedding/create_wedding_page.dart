@@ -5,12 +5,14 @@ import "package:flutter/services.dart";
 import 'package:wedding_app/bloc/authentication/bloc.dart';
 import 'package:wedding_app/bloc/validate_wedding/bloc.dart';
 import 'package:wedding_app/bloc/wedding/bloc.dart';
+import 'package:wedding_app/const/message_const.dart';
 import 'package:wedding_app/model/wedding.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wedding_app/utils/alert_dialog.dart';
 import 'package:wedding_app/utils/hex_color.dart';
 import 'package:wedding_app/utils/show_snackbar.dart';
 import 'package:wedding_app/widgets/confirm_dialog.dart';
+import 'package:wedding_app/widgets/navigator_pop.dart';
 
 class CreateWeddingPage extends StatefulWidget {
   final bool isEditing;
@@ -120,21 +122,24 @@ class _CreateWeddingPageState extends State<CreateWeddingPage> {
           listeners: [
             BlocListener<WeddingBloc, WeddingState>(
               listener: (context, state) {
-                if (state is Success) {
+                if (state is WeddingLoaded) {
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
                   setState(() {
                     _absorbing = false;
                   });
-                  showSuccessSnackbar(context, state.message);
-                  widget.isEditing
-                      ? Navigator.pop(context)
-                      : BlocProvider.of<AuthenticationBloc>(context)
-                          .add(LoggedIn());
+                  showSuccessAlertDialog(
+                      context, MessageConst.dialogTitle, state.message, () {
+                    widget.isEditing
+                        ? navigatorPop(2, context)
+                        : BlocProvider.of<AuthenticationBloc>(context)
+                        .add(LoggedIn());
+                  });
                 } else if (state is Failed) {
                   setState(() {
                     _absorbing = false;
                   });
                   showFailedSnackbar(context, state.message);
-                } else if (state is Loading) {
+                } else if (state is WeddingLoading) {
                   setState(() {
                     _absorbing = true;
                   });
@@ -226,7 +231,7 @@ class _CreateWeddingPageState extends State<CreateWeddingPage> {
                                 ),
                                 hintText: 'TÊN CHÚ RỂ',
                                 errorText: !state.isGroomNameValid
-                                    ? "Tên không được  chứa số hoặc ký tự đặc biệt"
+                                    ? state.groomNameErrorMessage
                                     : null,
                               ),
                             ),
@@ -241,7 +246,7 @@ class _CreateWeddingPageState extends State<CreateWeddingPage> {
                                       new BorderSide(color: Colors.black),
                                 ),
                                 errorText: !state.isBrideNameValid
-                                    ? "Tên không được chứa số hoặc ký tự đặc biệt"
+                                    ? state.brideNameErrorMessage
                                     : null,
                                 hintText: 'TÊN CÔ DÂU',
                               ),
@@ -291,7 +296,7 @@ class _CreateWeddingPageState extends State<CreateWeddingPage> {
                                       new BorderSide(color: Colors.black),
                                 ),
                                 errorText: !state.isAddressValid
-                                    ? "Địa chỉ không được chứa ký tự đặc biệt"
+                                    ? state.addressErrorMessage
                                     : null,
                                 hintText: 'ĐỊA CHỈ',
                               ),
@@ -309,7 +314,7 @@ class _CreateWeddingPageState extends State<CreateWeddingPage> {
                                   hintText: 'SỐ TIỀN',
                                   suffixText: 'VND',
                                   errorText: !state.isBudgetValid
-                                      ? "Số tiền phải lớn hơn 100.000đ và là bội số của 1000"
+                                      ? state.budgetErrorMessage
                                       : null,
                                   suffixStyle:
                                       const TextStyle(color: Colors.black)),
