@@ -119,8 +119,8 @@ class _InvitationCardPageState extends State<InvitationCardPage> {
                                 brideName,
                                 style: TextStyle(
                                     fontSize: (brideName.length > 15)
-                                        ? 17.0.sp
-                                        : 19.0.sp),
+                                        ? 16.0.sp
+                                        : 18.0.sp),
                                 textAlign: TextAlign.center,
                               ),
                             ),
@@ -130,8 +130,8 @@ class _InvitationCardPageState extends State<InvitationCardPage> {
                               child: Text(groomName,
                                   style: TextStyle(
                                       fontSize: (groomName.length > 15)
-                                          ? 17.0.sp
-                                          : 19.0.sp),
+                                          ? 16.0.sp
+                                          : 18.0.sp),
                                   textAlign: TextAlign.center),
                             ),
                             Padding(
@@ -144,7 +144,7 @@ class _InvitationCardPageState extends State<InvitationCardPage> {
                                 style: TextStyle(fontSize: 14.0.sp),
                                 textAlign: TextAlign.center),
                             Padding(
-                              padding: EdgeInsets.fromLTRB(0, 1.0.h, 0, 1.0.h),
+                              padding: EdgeInsets.fromLTRB(0, 0.8.h, 0, 0.8.h),
                               child: Text('Tại ' + place,
                                   style: TextStyle(
                                       fontSize: (place.length > 15)
@@ -163,13 +163,13 @@ class _InvitationCardPageState extends State<InvitationCardPage> {
                       )),
                 ),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(20.0.w, 31.0.h, 20.0.w, 0),
+                  padding: EdgeInsets.fromLTRB(20.0.w, 30.0.h, 20.0.w, 0),
                   child: Visibility(
                       visible: template.name == 'template1' ? true : false,
                       child: Center(
                         child: Column(
                           children: <Widget>[
-                            Text('Trân trong mời bạn đến',
+                            Text('Trân trọng mời bạn đến',
                                 style: TextStyle(
                                     fontSize: 10.0.sp, color: Colors.white),
                                 textAlign: TextAlign.center),
