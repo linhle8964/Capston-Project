@@ -1,14 +1,16 @@
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
+import 'package:wedding_app/const/message_const.dart';
 
 @immutable
-class LoginState extends Equatable{
+class LoginState extends Equatable {
   final bool isEmailValid;
   final bool isPasswordValid;
   final bool isSubmitting;
   final bool isSuccess;
   final bool isFailure;
   final String message;
+  final String passwordErrorMessage;
 
   bool get isFormValid => isEmailValid && isPasswordValid;
 
@@ -19,6 +21,7 @@ class LoginState extends Equatable{
     @required this.isSuccess,
     @required this.isFailure,
     @required this.message,
+    @required this.passwordErrorMessage,
   });
 
   factory LoginState.empty() {
@@ -29,6 +32,7 @@ class LoginState extends Equatable{
       isSuccess: false,
       isFailure: false,
       message: "",
+      passwordErrorMessage: '',
     );
   }
 
@@ -39,7 +43,8 @@ class LoginState extends Equatable{
       isSubmitting: true,
       isSuccess: false,
       isFailure: false,
-      message: "Đang xử lý dữ liệu",
+      message: MessageConst.commonLoading,
+      passwordErrorMessage: "",
     );
   }
 
@@ -51,6 +56,7 @@ class LoginState extends Equatable{
       isSuccess: false,
       isFailure: true,
       message: message,
+      passwordErrorMessage: "",
     );
   }
 
@@ -61,13 +67,15 @@ class LoginState extends Equatable{
       isSubmitting: false,
       isSuccess: true,
       isFailure: false,
-      message: "Đăng nhập thành công",
+      message: MessageConst.loginSuccess,
+      passwordErrorMessage: "",
     );
   }
 
   LoginState update({
     bool isEmailValid,
     bool isPasswordValid,
+    String passwordErrorMessage,
   }) {
     return copyWith(
         isEmailValid: isEmailValid,
@@ -75,7 +83,8 @@ class LoginState extends Equatable{
         isSubmitting: false,
         isSuccess: false,
         isFailure: false,
-        message: "");
+        message: "",
+        passwordErrorMessage: passwordErrorMessage);
   }
 
   LoginState copyWith({
@@ -86,6 +95,7 @@ class LoginState extends Equatable{
     bool isSuccess,
     bool isFailure,
     String message,
+    String passwordErrorMessage,
   }) {
     return LoginState(
       isEmailValid: isEmailValid ?? this.isEmailValid,
@@ -94,6 +104,7 @@ class LoginState extends Equatable{
       isSuccess: isSuccess ?? this.isSuccess,
       isFailure: isFailure ?? this.isFailure,
       message: message ?? this.message,
+      passwordErrorMessage: passwordErrorMessage ?? this.passwordErrorMessage,
     );
   }
 
@@ -106,6 +117,7 @@ class LoginState extends Equatable{
       isSuccess: $isSuccess,
       isFailure: $isFailure,
       message: $message,
+      passwordErrorMessage: $passwordErrorMessage
     }''';
   }
 
@@ -116,6 +128,7 @@ class LoginState extends Equatable{
         isSubmitting,
         isSuccess,
         isFailure,
-        message
+        message,
+        passwordErrorMessage
       ];
 }

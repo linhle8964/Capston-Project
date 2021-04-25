@@ -32,7 +32,7 @@ class ListCollaborator extends StatelessWidget {
                       state.userWeddings[index].email,
                       style: TextStyle(fontSize: 15.0),
                     ),
-                    subtitle: Text(
+                    subtitle: Text("Ngày gia nhập: " +
                       convertDateTimeDDMMYYYY(
                           state.userWeddings[index].joinDate),
                       style: TextStyle(fontSize: 15.0),

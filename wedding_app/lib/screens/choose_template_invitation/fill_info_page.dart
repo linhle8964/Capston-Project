@@ -230,7 +230,7 @@ class _FillInfoPageState extends State<FillInfoPage> {
                             ),
                           ],
                         );
-                      } else if (state is Loading) {
+                      } else if (state is WeddingLoading) {
                         return LoadingIndicator();
                       } else if (state is Failed) {}
                       return LoadingIndicator();

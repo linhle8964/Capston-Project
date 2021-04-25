@@ -41,7 +41,9 @@ class FirebaseWeddingRepository extends WeddingRepository {
   @override
   Stream<Wedding> getWedding(String weddingId) {
     return weddingCollection.doc(weddingId).snapshots().map(
-        (snapshot) => Wedding.fromEntity(WeddingEntity.fromSnapshot(snapshot)));
+        (snapshot) {
+          return Wedding.fromEntity(WeddingEntity.fromSnapshot(snapshot));
+        });
   }
 
   @override

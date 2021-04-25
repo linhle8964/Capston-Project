@@ -11,6 +11,9 @@ class ChangePasswordState extends Equatable {
   final bool isSuccess;
   final bool isFailure;
   final String message;
+  final String oldPasswordErrorMessage;
+  final String newPasswordErrorMessage;
+  final String repeatPasswordErrorMessage;
 
   bool get isFormValid =>
       isOldPasswordValid && isNewPasswordValid && isRepeatPasswordValid;
@@ -21,7 +24,10 @@ class ChangePasswordState extends Equatable {
       @required this.isSubmitting,
       @required this.isSuccess,
       @required this.isFailure,
-      @required this.message});
+      @required this.message,
+      @required this.oldPasswordErrorMessage,
+      @required this.newPasswordErrorMessage,
+      @required this.repeatPasswordErrorMessage});
 
   @override
   List<Object> get props => [
@@ -31,7 +37,10 @@ class ChangePasswordState extends Equatable {
         isSubmitting,
         isSuccess,
         isFailure,
-        message
+        message,
+        oldPasswordErrorMessage,
+        newPasswordErrorMessage,
+        repeatPasswordErrorMessage
       ];
 
   factory ChangePasswordState.empty() {
@@ -42,7 +51,10 @@ class ChangePasswordState extends Equatable {
         isSubmitting: false,
         isSuccess: false,
         isFailure: false,
-        message: "");
+        message: "",
+        oldPasswordErrorMessage: "",
+        newPasswordErrorMessage: "",
+        repeatPasswordErrorMessage: "");
   }
 
   factory ChangePasswordState.loading() {
@@ -53,7 +65,10 @@ class ChangePasswordState extends Equatable {
         isSubmitting: true,
         isSuccess: false,
         isFailure: false,
-        message: MessageConst.commonLoading);
+        message: MessageConst.commonLoading,
+        oldPasswordErrorMessage: "",
+        newPasswordErrorMessage: "",
+        repeatPasswordErrorMessage: "");
   }
 
   factory ChangePasswordState.success({String message}) {
@@ -64,7 +79,10 @@ class ChangePasswordState extends Equatable {
         isSubmitting: false,
         isSuccess: true,
         isFailure: false,
-        message: message);
+        message: message,
+        oldPasswordErrorMessage: "",
+        newPasswordErrorMessage: "",
+        repeatPasswordErrorMessage: "");
   }
 
   factory ChangePasswordState.failure({String message}) {
@@ -75,13 +93,19 @@ class ChangePasswordState extends Equatable {
         isSubmitting: false,
         isSuccess: false,
         isFailure: true,
-        message: message);
+        message: message,
+        oldPasswordErrorMessage: "",
+        newPasswordErrorMessage: "",
+        repeatPasswordErrorMessage: "");
   }
 
   ChangePasswordState update(
       {bool isOldPasswordValid,
       bool isNewPasswordValid,
-      bool isRepeatPasswordValid}) {
+      bool isRepeatPasswordValid,
+      String oldPasswordErrorMessage,
+      String newPasswordErrorMessage,
+      String repeatPasswordErrorMessage}) {
     return copyWith(
         isOldPasswordValid: isOldPasswordValid,
         isNewPasswordValid: isNewPasswordValid,
@@ -89,29 +113,39 @@ class ChangePasswordState extends Equatable {
         isSubmitting: false,
         isSuccess: false,
         isFailure: false,
-        message: "");
+        message: "",
+        oldPasswordErrorMessage: oldPasswordErrorMessage,
+        newPasswordErrorMessage: newPasswordErrorMessage,
+        repeatPasswordErrorMessage: repeatPasswordErrorMessage);
   }
 
-  ChangePasswordState copyWith({
-    bool isOldPasswordValid,
-    bool isNewPasswordValid,
-    bool isRepeatPasswordValid,
-    bool isSubmitEnabled,
-    bool isSubmitting,
-    bool isSuccess,
-    bool isFailure,
-    String message,
-  }) {
+  ChangePasswordState copyWith(
+      {bool isOldPasswordValid,
+      bool isNewPasswordValid,
+      bool isRepeatPasswordValid,
+      bool isSubmitEnabled,
+      bool isSubmitting,
+      bool isSuccess,
+      bool isFailure,
+      String message,
+      String oldPasswordErrorMessage,
+      String newPasswordErrorMessage,
+      String repeatPasswordErrorMessage}) {
     return ChangePasswordState(
-      isOldPasswordValid: isOldPasswordValid ?? this.isOldPasswordValid,
-      isNewPasswordValid: isNewPasswordValid ?? this.isNewPasswordValid,
-      isRepeatPasswordValid:
-          isRepeatPasswordValid ?? this.isRepeatPasswordValid,
-      isSubmitting: isSubmitting ?? this.isSubmitting,
-      isSuccess: isSuccess ?? this.isSuccess,
-      isFailure: isFailure ?? this.isFailure,
-      message: message ?? this.message,
-    );
+        isOldPasswordValid: isOldPasswordValid ?? this.isOldPasswordValid,
+        isNewPasswordValid: isNewPasswordValid ?? this.isNewPasswordValid,
+        isRepeatPasswordValid:
+            isRepeatPasswordValid ?? this.isRepeatPasswordValid,
+        isSubmitting: isSubmitting ?? this.isSubmitting,
+        isSuccess: isSuccess ?? this.isSuccess,
+        isFailure: isFailure ?? this.isFailure,
+        message: message ?? this.message,
+        oldPasswordErrorMessage:
+            oldPasswordErrorMessage ?? this.oldPasswordErrorMessage,
+        newPasswordErrorMessage:
+            newPasswordErrorMessage ?? this.newPasswordErrorMessage,
+        repeatPasswordErrorMessage:
+            repeatPasswordErrorMessage ?? this.repeatPasswordErrorMessage);
   }
 
   @override
@@ -124,6 +158,9 @@ class ChangePasswordState extends Equatable {
       isSuccess: $isSuccess,
       isFailure: $isFailure,
       message: $message,
+      oldPasswordErrorMessage: $oldPasswordErrorMessage,
+      newPasswordErrorMessage: $newPasswordErrorMessage,
+      repeatPasswordErrorMessage: $repeatPasswordErrorMessage
     }''';
   }
 }

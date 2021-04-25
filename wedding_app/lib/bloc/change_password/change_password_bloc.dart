@@ -45,7 +45,7 @@ class ChangePasswordBloc
       yield* _mapNewPasswordChangedToState(event.newPassword);
     } else if (event is RepeatPasswordChanged) {
       yield* _mapRepeatPasswordChangedToState(event.repeatPassword);
-    } else if (event is Submitted) {
+    } else if (event is ChangePasswordSubmitted) {
       yield* _mapSubmittedToState(
           oldPassword: event.oldPassword,
           newPassword: event.newPassword,
@@ -55,20 +55,71 @@ class ChangePasswordBloc
 
   Stream<ChangePasswordState> _mapOldPasswordChangedToState(
       String oldPassword) async* {
-    yield state.update(
-        isOldPasswordValid: Validation.isPasswordValid(oldPassword));
+    if(oldPassword != null){
+      oldPassword = oldPassword.trim();
+      bool isValid = Validation.isPasswordValid(oldPassword);
+      String message = "";
+      if(isValid == false){
+        if(oldPassword.length < 8){
+          message = MessageConst.passwordLengthMin;
+        }else if(oldPassword.length > 20){
+          message = MessageConst.passwordLengthMax;
+        }else if(!oldPassword.contains(new RegExp(r'[0-9]'))){
+          message = MessageConst.passwordAtLeastOneNumber;
+        }else if(!oldPassword.contains(new RegExp(r'[A-Za-z]'))){
+          message = MessageConst.passwordAtLeastOneCharacter;
+        }
+      }
+      yield state.update(isOldPasswordValid: isValid, oldPasswordErrorMessage: message);
+    }else{
+      yield state.update(isOldPasswordValid: false);
+    }
   }
 
   Stream<ChangePasswordState> _mapNewPasswordChangedToState(
       String newPassword) async* {
-    yield state.update(
-        isNewPasswordValid: Validation.isPasswordValid(newPassword));
+    if(newPassword != null){
+      newPassword = newPassword.trim();
+      bool isValid = Validation.isPasswordValid(newPassword);
+      String message = "";
+      if(isValid == false){
+        if(newPassword.length < 8){
+          message = MessageConst.passwordLengthMin;
+        }else if(newPassword.length > 20){
+          message = MessageConst.passwordLengthMax;
+        }else if(!newPassword.contains(new RegExp(r'[0-9]'))){
+          message = MessageConst.passwordAtLeastOneNumber;
+        }else if(!newPassword.contains(new RegExp(r'[A-Za-z]'))){
+          message = MessageConst.passwordAtLeastOneCharacter;
+        }
+      }
+      yield state.update(isNewPasswordValid: isValid, newPasswordErrorMessage: message);
+    }else{
+      yield state.update(isNewPasswordValid: false);
+    }
   }
 
   Stream<ChangePasswordState> _mapRepeatPasswordChangedToState(
       String repeatPassword) async* {
-    yield state.update(
-        isRepeatPasswordValid: Validation.isPasswordValid(repeatPassword));
+    if(repeatPassword != null){
+      repeatPassword = repeatPassword.trim();
+      bool isValid = Validation.isPasswordValid(repeatPassword);
+      String message = "";
+      if(isValid == false){
+        if(repeatPassword.length < 8){
+          message = MessageConst.passwordLengthMin;
+        }else if(repeatPassword.length > 20){
+          message = MessageConst.passwordLengthMax;
+        }else if(!repeatPassword.contains(new RegExp(r'[0-9]'))){
+          message = MessageConst.passwordAtLeastOneNumber;
+        }else if(!repeatPassword.contains(new RegExp(r'[A-Za-z]'))){
+          message = MessageConst.passwordAtLeastOneCharacter;
+        }
+      }
+      yield state.update(isRepeatPasswordValid: isValid, repeatPasswordErrorMessage: message);
+    }else{
+      yield state.update(isRepeatPasswordValid: false);
+    }
   }
 
   Stream<ChangePasswordState> _mapSubmittedToState(

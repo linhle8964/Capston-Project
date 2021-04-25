@@ -7,7 +7,7 @@ Container buildInfoColumn(
   return Container(
       height: height / 20,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           Container(
@@ -18,7 +18,7 @@ Container buildInfoColumn(
               child: Text(
                 label,
                 style: TextStyle(
-                  fontWeight: FontWeight.w400,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),

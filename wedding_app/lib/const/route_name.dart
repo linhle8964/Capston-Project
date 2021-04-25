@@ -10,4 +10,5 @@ class RouteName {
   static const String privacy = "/privacy_policy";
   static const String term = "/term";
   static const String changePassword = "/change_password";
+  static const String notificationSetting = "/notification_setting";
 }
