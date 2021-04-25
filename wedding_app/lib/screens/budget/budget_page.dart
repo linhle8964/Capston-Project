@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:wedding_app/bloc/budget/bloc.dart';
@@ -12,6 +14,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wedding_app/screens/add_budget/addbudget.dart';
 import 'package:search_page/search_page.dart';
+import 'package:wedding_app/utils/get_share_preferences.dart';
 import 'package:wedding_app/utils/hex_color.dart';
 
 import 'download_excel.dart';
@@ -29,6 +32,7 @@ class _BudgetListState extends State<BudgetList> {
   bool isSearching = false;
   bool _isShow = false;
   bool _iSDone = false;
+  int _isCheck = 0;
   List<Category> _categorys = [];
   static List<Budget> _list = [];
   List<Budget> _budgets = [];
@@ -194,42 +198,52 @@ class _BudgetListState extends State<BudgetList> {
                       );
                     },
                     child: Card(
-                      child: Container(
-                        height: 60,
-                        padding: EdgeInsets.only(left: 15, right: 15),
-                        child: Row(
+                      child:
+                      Container(
+                        height:
+                        60,
+                        padding: EdgeInsets.only(
+                            left: 15,
+                            right: 15),
+                        child:
+                        Row(
                           children: [
-                            Container(
-                              child: Text(budget.budgetName,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold)),
+                            Expanded(
+                              child: Container(
+                                child: Text(budget.budgetName, overflow: TextOverflow.ellipsis, maxLines: 1, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                              ),
                             ),
-                            Flexible(fit: FlexFit.tight, child: SizedBox()),
+                            Visibility(
+                                visible: budget.payMoney != 0 && budget.isComplete == false,
+                                child: SizedBox(
+                                  child: Container(
+                                    padding: EdgeInsets.only(left: 5, right: 5, top: 3, bottom: 3),
+                                    decoration: new BoxDecoration(
+                                      color: Colors.redAccent,
+                                      borderRadius: BorderRadius.circular(16),
+                                    ),
+                                    child: Text(" Đã trả trước ", style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.normal)),
+                                  ),
+                                )),
                             Visibility(
                                 visible: budget.isComplete,
                                 child: SizedBox(
                                   child: Container(
-                                    padding: EdgeInsets.only(
-                                        left: 5, right: 5, top: 3, bottom: 3),
+                                    padding: EdgeInsets.only(left: 5, right: 5, top: 3, bottom: 3),
                                     decoration: new BoxDecoration(
                                       color: Colors.greenAccent,
                                       borderRadius: BorderRadius.circular(16),
                                     ),
-                                    child: Text(" Hoàn Thành ",
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.normal)),
+                                    child: Text(" Hoàn Thành ", style: TextStyle(color: Colors.black, fontSize: 15, fontWeight: FontWeight.normal)),
                                   ),
                                 )),
-                            Text(
-                              (budget.money - budget.payMoney).toString() + "₫",
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
-                            )
+                            Flexible(
+                                child: Text(
+                                  _formatNumber((budget.money - budget.payMoney).toString()) + "₫",
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                                ))
                           ],
                         ),
                       ),
@@ -298,11 +312,16 @@ class _BudgetListState extends State<BudgetList> {
                                     child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: <Widget>[
-                                    Icon(
-                                      Icons.account_balance,
-                                      color: Colors.deepPurple,
-                                      size: 45,
+                                    Center(
+                                      child: Icon(
+                                        Icons.account_balance,
+                                        color: Colors.deepPurple,
+                                        size: 45,
+                                      ),
                                     ),
+                                    Text("TỔNG KINH PHÍ",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold)),
                                     BlocBuilder(
                                         cubit: BlocProvider.of<BudgetBloc>(
                                             context),
@@ -320,8 +339,7 @@ class _BudgetListState extends State<BudgetList> {
                                             return Visibility(
                                                 visible: _iSDone,
                                                 child: Text(
-                                                    "Tổng kinh phí:" +
-                                                        _formatNumber(
+                                                    _formatNumber(
                                                             sum.toString()) +
                                                         "₫",
                                                     overflow:
@@ -362,11 +380,17 @@ class _BudgetListState extends State<BudgetList> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           children: <Widget>[
-                                            Icon(
-                                              Icons.account_balance_wallet,
-                                              color: Colors.deepPurple,
-                                              size: 45,
+                                            Center(
+                                              child: Icon(
+                                                Icons.account_balance_wallet,
+                                                color: Colors.deepPurple,
+                                                size: 45,
+                                              ),
                                             ),
+                                            Text("SỐ TIỀN CÒN LẠI",
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold)),
                                             BlocBuilder(
                                                 cubit:
                                                     BlocProvider.of<BudgetBloc>(
@@ -384,8 +408,7 @@ class _BudgetListState extends State<BudgetList> {
                                                         visible: _iSDone,
                                                         child: Flexible(
                                                           child: Text(
-                                                              "Số tiền còn lại:" +
-                                                                  _formatNumber(pay
+                                                              _formatNumber(pay
                                                                       .toString()) +
                                                                   "₫",
                                                               overflow:
@@ -455,6 +478,7 @@ class _BudgetListState extends State<BudgetList> {
                                           itemBuilder: (context, index) {
                                             Category item = _categorys[index];
                                             _cateSum = 0;
+                                            _isCheck = 0;
                                             for (int i = 0;
                                                 i < _budgets.length;
                                                 i++) {
@@ -462,6 +486,7 @@ class _BudgetListState extends State<BudgetList> {
                                                   _budgets[i].cateID) {
                                                 _cateSum += _budgets[i].money -
                                                     _budgets[i].payMoney;
+                                                _isCheck++;
                                               }
                                             }
 
@@ -476,9 +501,9 @@ class _BudgetListState extends State<BudgetList> {
                                                             .toString()) +
                                                         " ₫"),
                                                   ),
-                                                  visible: _cateSum == 0
-                                                      ? false
-                                                      : true,
+                                                  visible: _isCheck != 0
+                                                      ? true
+                                                      : false,
                                                 )),
                                                 BlocBuilder(
                                                     cubit: BlocProvider.of<
@@ -558,7 +583,7 @@ class _BudgetListState extends State<BudgetList> {
                                                                                         color: Colors.redAccent,
                                                                                         borderRadius: BorderRadius.circular(16),
                                                                                       ),
-                                                                                      child: Text("Đã trả một phần", style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.normal)),
+                                                                                      child: Text(" Đã trả trước ", style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.normal)),
                                                                                     ),
                                                                                   )),
                                                                               Visibility(
@@ -574,12 +599,16 @@ class _BudgetListState extends State<BudgetList> {
                                                                                     ),
                                                                                   )),
                                                                               Flexible(
-                                                                                  child: Text(
-                                                                                _formatNumber((low.money - low.payMoney).toString()) + "₫",
-                                                                                overflow: TextOverflow.ellipsis,
-                                                                                maxLines: 1,
-                                                                                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                                                                              ))
+                                                                                  child:Align(
+                                                                                    alignment: Alignment.centerRight,
+                                                                                    child: Text(
+                                                                                      _formatNumber((low.money - low.payMoney).toString()) + "₫",
+                                                                                      overflow: TextOverflow.ellipsis,
+                                                                                      maxLines: 1,
+                                                                                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                                                                                    ),
+                                                                                  )
+                                                                                  )
                                                                             ],
                                                                           ),
                                                                         ),
@@ -701,6 +730,7 @@ class _BudgetListState extends State<BudgetList> {
                                                     style: TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold)));
+                                            ;
                                           }
                                           if (state is BudgetLoading) {
                                             return Column(
@@ -919,7 +949,7 @@ class _BudgetListState extends State<BudgetList> {
                                                                                         color: Colors.redAccent,
                                                                                         borderRadius: BorderRadius.circular(16),
                                                                                       ),
-                                                                                      child: Text("Đã trả một phần", style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.normal)),
+                                                                                      child: Text(" Đã trả trước ", style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.normal)),
                                                                                     ),
                                                                                   )),
                                                                               Visibility(

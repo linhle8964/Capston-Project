@@ -34,16 +34,18 @@ class BudgetNameValidate {
       return "tên quỹ không thể quá 20 kí tự";
     }
     if (val == "") {
-      return "tên quy không thể chống";
+      return "tên quỹ không thể trống";
     }
     return null;
   }
 
   static String moneyValidate(BuildContext context, String val) {
     if (val == "") {
-
-      return "số tiền không thể chống";
-    } else {
+      return "số tiền không thể trống";
+    }if(val.length>15){
+      return"số tiền không thể quá 999 tỷ đông";
+    }
+    else {
       if (double.parse(val.replaceAll(",", "")) < 1000) {
         return "Tiền phải lớn hơn 1000 đồng";
       }
@@ -55,7 +57,10 @@ class BudgetNameValidate {
   static String payMoneyValidate(BuildContext context, String val) {
     if (val == "") {
       payMoneyController.text = "0";
-    } else if (double.parse(val.replaceAll(",", "")) >
+    }else if(double.parse(val.replaceAll(",", "")) < 1000) {
+      return "Tiền đã trả phải lớn hơn 1000 đồng";
+    }
+    else if (double.parse(val.replaceAll(",", "")) >
         double.parse(moneyController.value.text.replaceAll(",", ""))) {
       showFailedSnackbar(context, "Xin Vui Lòng nhập lại quỹ");
       return "Tiền đã trả phải nhỏ hơn hoặc bằng kinh phí ban đầu";
@@ -108,6 +113,7 @@ class _AddBudgetState extends State<AddBudget> {
     _cateBloc = BlocProvider.of<CateBloc>(context);
     SharedPreferences.getInstance().then((prefs) {
       setState(() => sharedPrefs = prefs);
+      selectedCate=null;
       String weddingId = prefs.getString("wedding_id");
       print("test shared " + weddingId);
       id = weddingId;
