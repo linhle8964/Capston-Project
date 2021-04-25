@@ -10,7 +10,7 @@ import 'package:wedding_app/utils/hex_color.dart';
 import 'package:wedding_app/widgets/loading_indicator.dart';
 import 'invitation_card_page.dart';
 import 'package:intl/intl.dart';
-
+import 'package:wedding_app/utils/vietnam_parser.dart';
 class FillInfoPage extends StatefulWidget {
   final TemplateCard template;
   const FillInfoPage({Key key, @required this.template}) : super(key: key);
@@ -24,7 +24,9 @@ class _FillInfoPageState extends State<FillInfoPage> {
   TextEditingController _groomNameController = TextEditingController();
   TextEditingController _dateTimeController = TextEditingController();
   TextEditingController _placeController = TextEditingController();
-  var _errorMess = '';
+  var _errorMessbride = '';
+  var _errorMessgroom = '';
+  var _errorMessplace = '';
   var _brideNameInvalid = false;
   var _groomNameInvalid = false;
   var _placeInvalid = false;
@@ -147,29 +149,31 @@ class _FillInfoPageState extends State<FillInfoPage> {
                           children: [
                             Padding(
                                 padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                child: TextField(
+                                child: TextFormField(
                                   style: TextStyle(
                                       fontSize: 18, color: Colors.black),
                                   controller: _brideNameController,
+                                  validator: BrideNameValidator.validate,
                                   decoration: InputDecoration(
                                       labelText: 'Tên Cô Dâu',
                                       hintText: state.wedding.brideName,
-                                      errorText:
-                                          _brideNameInvalid ? _errorMess : null,
+                                       errorText:
+                                          _brideNameInvalid ? _errorMessbride : null,
                                       labelStyle: TextStyle(
                                           color: Colors.grey, fontSize: 15)),
                                 )),
                             Padding(
                                 padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                child: TextField(
+                                child: TextFormField(
                                   style: TextStyle(
                                       fontSize: 18, color: Colors.black),
                                   controller: _groomNameController,
+                                  validator: GroomNameValidator.validate,
                                   decoration: InputDecoration(
                                       labelText: 'Tên Chú Rể',
                                       hintText: state.wedding.groomName,
                                       errorText:
-                                          _groomNameInvalid ? _errorMess : null,
+                                          _groomNameInvalid ? _errorMessgroom : null,
                                       labelStyle: TextStyle(
                                           color: Colors.grey, fontSize: 15)),
                                 )),
@@ -207,15 +211,16 @@ class _FillInfoPageState extends State<FillInfoPage> {
                             ),
                             Padding(
                                 padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                child: TextField(
+                                child: TextFormField(
                                   style: TextStyle(
                                       fontSize: 18, color: Colors.black),
                                   controller: _placeController,
+                                  validator: PlaceValidator.validate,
                                   decoration: InputDecoration(
                                       labelText: 'Địa điểm',
                                       hintText: state.wedding.address,
                                       errorText:
-                                          _placeInvalid ? _errorMess : null,
+                                          _placeInvalid ? _errorMessplace : null,
                                       labelStyle: TextStyle(
                                           color: Colors.grey, fontSize: 15)),
                                 )),
@@ -248,64 +253,56 @@ class _FillInfoPageState extends State<FillInfoPage> {
     setState(() {
       final alpha = RegExp(r'^[^0-9\,!@#$%^&*()_+=-]+$');
       final alphanum = RegExp(r'^[^\,!@#$%^&*()_+=-]+$');
-      final date = RegExp(r'^[^\,!@#$%^&*()_+=]+$');
-      DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
-      if (_brideNameController.text.length > 20) {
+      String brideName=VietnameseParserEngine.unsigned(_brideNameController.text);
+      String groomName=VietnameseParserEngine.unsigned(_groomNameController.text);
+       String place=VietnameseParserEngine.unsigned(_placeController.text);
+      if (brideName.length > 20) {
         _brideNameInvalid = true;
-        _errorMess = 'Số lượng kí tự quá 20 kí tự';
-      } else if (_brideNameController.text.length < 2 &&
-          _brideNameController.text.length > 0) {
+        _errorMessbride= 'Giới hạn tên cô dâu là từ 2 đến 20 kí tự';
+      } else if (brideName.length < 2 &&
+          brideName.length > 0) {
         _brideNameInvalid = true;
-        _errorMess = 'Số lượng kí tự ít hơn 2 kí tự';
-      } else if (!alpha.hasMatch(_brideNameController.text) &&
-          _brideNameController.text.length != 0) {
+        _errorMessbride= 'Giới hạn tên cô dâu là từ 2 đến 20 kí tự';
+      } else if (!alpha.hasMatch(brideName) &&
+          brideName.length != 0) {
         _brideNameInvalid = true;
-        _errorMess = 'Tên người nhập không có số hay kí tự đặc biệt';
-      } else if (template.name.endsWith('3') &&
-          _brideNameController.text.length > 15) {
-        _brideNameInvalid = true;
-        _errorMess = 'Mẫu thiệp mời không phù hợp với độ dài của tên';
-      } else if (_brideNameController.text.length == 0) {
+        _errorMessbride= 'Tên cô dâu không được chứa số hay kí tự đặc biệt';
+      } else if (brideName.length == 0) {
         _brideNameController.text = _noInputBrideName;
         _brideNameInvalid = false;
       } else {
         _brideNameInvalid = false;
       }
 
-      if (_groomNameController.text.length > 20) {
+      if (groomName.length > 20) {
         _groomNameInvalid = true;
-        _errorMess = 'Số lượng kí tự quá 20 kí tự';
-      } else if (_groomNameController.text.length < 2 &&
-          _groomNameController.text.length > 0) {
+        _errorMessgroom= 'Giới hạn tên chú rể là từ 2 đến 20 kí tự';
+      } else if (groomName.length < 2 &&
+          groomName.length > 0) {
         _groomNameInvalid = true;
-        _errorMess = 'Số lượng kí tự ít hơn 2 kí tự';
-      } else if (!alpha.hasMatch(_groomNameController.text) &&
-          _groomNameController.text.length != 0) {
+        _errorMessgroom= 'Giới hạn tên chú rể là từ 2 đến 20 kí tự';
+      } else if (!alpha.hasMatch(groomName) &&
+          groomName.length != 0) {
         _groomNameInvalid = true;
-        _errorMess = 'Tên người nhập không có số hay kí tự đặc biệt';
-      } else if (template.name.endsWith('3') &&
-          _groomNameController.text.length > 15) {
-        _groomNameInvalid = true;
-        _errorMess = 'Mẫu thiệp mời không phù hợp với độ dài của tên';
-      } else if (_groomNameController.text.length == 0) {
+        _errorMessgroom= 'Tên chú rể không được chứa số hay kí tự đặc biệt';
+      } else if (groomName.length == 0) {
         _groomNameController.text = _noInputGroomName;
         _groomNameInvalid = false;
       } else {
         _groomNameInvalid = false;
       }
 
-      if (_placeController.text.length > 20) {
+      if (place.length > 20) {
         _placeInvalid = true;
-        _errorMess = 'Số lượng kí tự quá 20 kí tự';
-      } else if (_placeController.text.length < 2 &&
-          _placeController.text.length > 0) {
+        _errorMessplace= 'Giới hạn địa điểm là từ 2 đến 20 kí tự';
+      } else if (place.length < 2 && place.length > 0) {
         _placeInvalid = true;
-        _errorMess = 'Số lượng kí tự ít hơn 2 kí tự';
-      } else if (!alphanum.hasMatch(_placeController.text) &&
-          _placeController.text.length != 0) {
+        _errorMessplace= 'Giới hạn địa điểm là từ 2 đến 20 kí tự';
+      } else if (!alphanum.hasMatch(place) &&
+          place.length != 0) {
         _placeInvalid = true;
-        _errorMess = 'Tên địa chỉ không có kí tự đặc biệt';
-      } else if (_placeController.text.length == 0) {
+        _errorMessplace= 'Tên địa điểm không được chứa số hay kí tự đặc biệt';
+      } else if (place.length == 0) {
         _placeController.text = _noInputPlace;
         _placeInvalid = false;
       } else {
@@ -337,5 +334,59 @@ class _FillInfoPageState extends State<FillInfoPage> {
         );
       }
     });
+  }
+}
+class BrideNameValidator{
+  static String validate(String value){
+    String brideName=VietnameseParserEngine.unsigned(value);
+     final alpha = RegExp(r'^[^0-9\,!@#$%^&*()_+=-]+$');
+    if (brideName.length > 20) {
+        return 'Số lượng kí tự quá 20 kí tự';
+    } else if (brideName.length < 2 && brideName.length > 0) {
+        return  'Số lượng kí tự ít hơn 2 kí tự';
+      } else if (!alpha.hasMatch(brideName) && brideName.length != 0) {
+        return  'Tên người nhập không có số hay kí tự đặc biệt';
+      } else if (brideName.length == 0) {
+        return null;
+      } else {
+        return null;
+      }
+  }
+}
+class GroomNameValidator{
+  static String validate(String value){
+     final alpha = RegExp(r'^[^0-9\,!@#$%^&*()_+=-]+$');
+     String groomName=VietnameseParserEngine.unsigned(value);
+    if (groomName.length > 20) {
+        return 'Số lượng kí tự quá 20 kí tự';
+    } else if (groomName.length < 2 && groomName.length > 0) {
+        return  'Số lượng kí tự ít hơn 2 kí tự';
+      } else if (!alpha.hasMatch(groomName) && groomName.length != 0) {
+        return  'Tên người nhập không có số hay kí tự đặc biệt';
+      } else if (groomName.length == 0) {
+        return null;
+      } else {
+        return null;
+      }
+  }
+}
+
+class PlaceValidator{
+  static String validate(String value){
+    String place=VietnameseParserEngine.unsigned(value);
+     final alphanum = RegExp(r'^[^\,!@#$%^&*()_+=-]+$');
+    if (place.length > 20) {
+        return  'Số lượng kí tự quá 20 kí tự';
+      } else if (place.length < 2 && place.length > 0) {
+        
+        return  'Số lượng kí tự ít hơn 2 kí tự';
+      } else if (!alphanum.hasMatch(place) &&
+          place.length != 0) {
+        return  'Tên địa chỉ không có kí tự đặc biệt';
+      } else if (place.length == 0) {
+        return  null;
+      } else {
+        return null;
+      }
   }
 }
