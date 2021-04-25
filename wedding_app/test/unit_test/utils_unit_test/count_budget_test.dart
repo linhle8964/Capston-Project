@@ -4,10 +4,10 @@ import 'package:wedding_app/utils/count_home_item.dart';
 
 void main() {
 
-  Budget budget1 = new Budget("", "", false, 0, 0, 0);
-  Budget budget2 = new Budget("", "", false, 200, 0, 0);
-  Budget budget3 = new Budget("", "", false, 1000, 0, 0);
-  Budget budget4 = new Budget("", "", false, -100, 0, 0);
+  Budget budget1 = new Budget("", "", false, 0, 0, 0, "");
+  Budget budget2 = new Budget("", "", false, 200, 0, 0, "");
+  Budget budget3 = new Budget("", "", false, 1000, 0, 0, "");
+  Budget budget4 = new Budget("", "", false, -100, 0, 0, "");
 
   test('UTCID01', (){
     List<Budget> budgets = [];
