@@ -198,42 +198,52 @@ class _BudgetListState extends State<BudgetList> {
                       );
                     },
                     child: Card(
-                      child: Container(
-                        height: 60,
-                        padding: EdgeInsets.only(left: 15, right: 15),
-                        child: Row(
+                      child:
+                      Container(
+                        height:
+                        60,
+                        padding: EdgeInsets.only(
+                            left: 15,
+                            right: 15),
+                        child:
+                        Row(
                           children: [
-                            Container(
-                              child: Text(budget.budgetName,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold)),
+                            Expanded(
+                              child: Container(
+                                child: Text(budget.budgetName, overflow: TextOverflow.ellipsis, maxLines: 1, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                              ),
                             ),
-                            Flexible(fit: FlexFit.tight, child: SizedBox()),
+                            Visibility(
+                                visible: budget.payMoney != 0 && budget.isComplete == false,
+                                child: SizedBox(
+                                  child: Container(
+                                    padding: EdgeInsets.only(left: 5, right: 5, top: 3, bottom: 3),
+                                    decoration: new BoxDecoration(
+                                      color: Colors.redAccent,
+                                      borderRadius: BorderRadius.circular(16),
+                                    ),
+                                    child: Text(" Đã trả trước ", style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.normal)),
+                                  ),
+                                )),
                             Visibility(
                                 visible: budget.isComplete,
                                 child: SizedBox(
                                   child: Container(
-                                    padding: EdgeInsets.only(
-                                        left: 5, right: 5, top: 3, bottom: 3),
+                                    padding: EdgeInsets.only(left: 5, right: 5, top: 3, bottom: 3),
                                     decoration: new BoxDecoration(
                                       color: Colors.greenAccent,
                                       borderRadius: BorderRadius.circular(16),
                                     ),
-                                    child: Text(" Hoàn Thành ",
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.normal)),
+                                    child: Text(" Hoàn Thành ", style: TextStyle(color: Colors.black, fontSize: 15, fontWeight: FontWeight.normal)),
                                   ),
                                 )),
-                            Text(
-                              (budget.money - budget.payMoney).toString() + "₫",
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.bold),
-                            )
+                            Flexible(
+                                child: Text(
+                                  _formatNumber((budget.money - budget.payMoney).toString()) + "₫",
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                                ))
                           ],
                         ),
                       ),
