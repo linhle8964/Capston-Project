@@ -342,46 +342,51 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                                   children: <Widget>[
                                     Expanded(
                                         child: FlatButton(
-                                      child: Column(children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.end,
-                                          children: <Widget>[
-                                            Container(
-                                              child: Row(
-                                                children: <Widget>[
-                                                  Text(
-                                                    countCompanion(_tempguests),
-                                                    style:
-                                                        TextStyle(fontSize: 12),
+                                          child: Column(children: [
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.end,
+                                              children: <Widget>[
+                                                Container(
+                                                  child: Row(
+                                                    children: <Widget>[
+                                                      Text(
+                                                        countCompanion(_tempguests),
+                                                        style:
+                                                            TextStyle(fontSize: 12),
+                                                      ),
+                                                      Icon(
+                                                        Icons.accessibility,
+                                                        size: 12,
+                                                      ),
+                                                    ],
                                                   ),
-                                                  Icon(
-                                                    Icons.accessibility,
-                                                    size: 12,
-                                                  ),
-                                                ],
-                                              ),
+                                                ),
+                                              ],
                                             ),
-                                          ],
-                                        ),
-                                        Text(
-                                          '$c1',
-                                          style: TextStyle(fontSize: 20),
-                                        ),
-                                        Text(
-                                          'Sẽ tới',
-                                          style: TextStyle(fontSize: 10),
-                                        ),
-                                      ]),
-                                      color: hexToColor("#85e3ff"),
-                                      height: 60,
-                                      onPressed: () {
-                                        print('coming');
-                                        statusPage = 1;
-                                        BlocProvider.of<GuestsBloc>(context)
+                                            Text(
+                                              '$c1',
+                                              style: TextStyle(fontSize: 20),
+                                            ),
+                                            Text(
+                                              'Sẽ tới',
+                                              style: TextStyle(fontSize: 10),
+                                            ),
+                                          ]),
+                                          color: (statusPage == 1)?hexToColor("#85e3ff"):Colors.transparent,
+                                          textColor: (statusPage == 1)?Colors.white:hexToColor("#85e3ff"),
+                                          height: 60,
+                                          onPressed: () {
+                                            print('coming');
+                                            statusPage = 1;
+                                            BlocProvider.of<GuestsBloc>(context)
                                             .add(LoadGuests(weddingId));
-                                      },
-                                    )),
+                                            },
+                                          shape: RoundedRectangleBorder(
+                                              side: BorderSide(color: hexToColor("#85e3ff"))
+                                          ),
+                                        )
+                                    ),
                                     Expanded(
                                         child: FlatButton(
                                       child: Column(
@@ -397,7 +402,8 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                                               style: TextStyle(fontSize: 10),
                                             ),
                                           ]),
-                                      color: hexToColor("#ff9cee"),
+                                      color: (statusPage == 2)?hexToColor("#ff9cee"):Colors.transparent,
+                                          textColor: (statusPage == 2)?Colors.white:hexToColor("#ff9cee"),
                                       height: 60,
                                       onPressed: () {
                                         print('not coming');
@@ -405,7 +411,11 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                                         BlocProvider.of<GuestsBloc>(context)
                                             .add(LoadGuests(weddingId));
                                       },
-                                    )),
+                                          shape: RoundedRectangleBorder(
+                                              side: BorderSide(color: hexToColor("#ff9cee"))
+                                          ),
+                                    )
+                                    ),
                                     Expanded(
                                         child: FlatButton(
                                       child: Column(
@@ -421,15 +431,20 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                                               style: TextStyle(fontSize: 10),
                                             ),
                                           ]),
-                                      color: hexToColor("#6eb5ff"),
-                                      height: 60,
+                                      color: (statusPage == 0)?hexToColor("#6eb5ff"):Colors.transparent,
+                                          textColor: (statusPage == 0)?Colors.white:hexToColor("#6eb5ff"),
+                                          height: 60,
                                       onPressed: () {
                                         print('waiting');
                                         statusPage = 0;
                                         BlocProvider.of<GuestsBloc>(context)
                                             .add(LoadGuests(weddingId));
                                       },
-                                    )),
+                                          shape: RoundedRectangleBorder(
+                                              side: BorderSide(color: hexToColor("#6eb5ff"))
+                                          ),
+                                    )
+                                    ),
                                     Expanded(
                                         child: FlatButton(
                                       child: Column(
@@ -445,7 +460,8 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                                               style: TextStyle(fontSize: 10),
                                             ),
                                           ]),
-                                      color: hexToColor("#ffc9de"),
+                                          color: (statusPage == -1)?hexToColor("#d86a77"):Colors.transparent,
+                                          textColor: (statusPage == -1)?Colors.white:hexToColor("#d86a77"),
                                       height: 60,
                                       onPressed: () {
                                         print('total');
@@ -453,7 +469,11 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                                         BlocProvider.of<GuestsBloc>(context)
                                             .add(LoadGuests(weddingId));
                                       },
-                                    )),
+                                          shape: RoundedRectangleBorder(
+                                              side: BorderSide(color: hexToColor("#d86a77"))
+                                          ),
+                                    )
+                                    ),
                                   ],
                                 ),
                                 ListGuest(_data, widget.userWedding)
@@ -1252,7 +1272,7 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                                                         MediaQuery.of(context)
                                                                 .size
                                                                 .height -
-                                                            190,
+                                                            180,
                                                     width: 2000,
                                                     child: Column(
                                                         mainAxisSize:
