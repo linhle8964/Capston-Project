@@ -14,7 +14,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wedding_app/screens/add_budget/addbudget.dart';
 import 'package:search_page/search_page.dart';
-import 'package:wedding_app/utils/get_share_preferences.dart';
 import 'package:wedding_app/utils/hex_color.dart';
 
 import 'download_excel.dart';
@@ -319,7 +318,7 @@ class _BudgetListState extends State<BudgetList> {
                                         size: 45,
                                       ),
                                     ),
-                                    Text("TỔNG KINH PHÍ",
+                                    Text("SỐ TIỀN PHẢI TRẢ",
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold)),
                                     BlocBuilder(
@@ -387,7 +386,7 @@ class _BudgetListState extends State<BudgetList> {
                                                 size: 45,
                                               ),
                                             ),
-                                            Text("SỐ TIỀN CÒN LẠI",
+                                            Text("NGÂN SÁCH CÒN LẠI",
                                                 style: TextStyle(
                                                     fontWeight:
                                                         FontWeight.bold)),
