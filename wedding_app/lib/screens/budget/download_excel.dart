@@ -203,11 +203,11 @@ showCompleteDialog(BuildContext context) {
   );
 
   // Call showDialog function to show dialog.
-  // Future<String> futureValue = showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return dialog;
-  //     });
+   Future<String> futureValue = showDialog(
+       context: context,
+       builder: (BuildContext context) {
+         return dialog;
+       });
 }
 
 showErrorEmtyDialog(BuildContext context) {
