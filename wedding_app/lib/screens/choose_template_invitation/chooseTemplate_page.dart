@@ -526,7 +526,7 @@ class MyCardState extends State<MyCard> {
             }
             if (state is InvitationCardLoading) {
               return Padding(
-                padding: const EdgeInsets.fromLTRB(140, 200, 50, 0),
+                padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                 child: Container(child: LoadingIndicator()),
               );
             } else if (state is InvitationCardLoaded) {
@@ -554,7 +554,7 @@ class MyCardState extends State<MyCard> {
                 );
               } else if (_invitationCard.length == 0 && isCreate == true) {
                 return Padding(
-                  padding: const EdgeInsets.fromLTRB(140, 200, 50, 0),
+                  padding: const EdgeInsets.fromLTRB(0,0, 0, 0),
                   child: Container(child: LoadingIndicator()),
                 );
               } else {
