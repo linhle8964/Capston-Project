@@ -5,7 +5,7 @@ import 'package:wedding_app/bloc/invitation_card/bloc.dart';
 import 'package:wedding_app/bloc/notification_setting/bloc.dart';
 import 'package:wedding_app/bloc/vendor/bloc.dart';
 import 'package:wedding_app/const/route_name.dart';
-import 'package:wedding_app/firebase_repository/inviattion_card_firebase_repository.dart';
+import 'package:wedding_app/firebase_repository/invitation_card_firebase_repository.dart';
 import 'package:wedding_app/firebase_repository/vendor_firebase_repository.dart';
 import 'package:wedding_app/screens/budget/budget_page.dart';
 import 'package:wedding_app/screens/choose_template_invitation/chooseTemplate_page.dart';

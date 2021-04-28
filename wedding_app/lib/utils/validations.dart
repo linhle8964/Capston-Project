@@ -9,7 +9,7 @@ class Validation {
 
   static bool isAddressValid(String address) {
     return address != null &&
-        RegExp(r'^[1-9a-zA-Z\s]{6,20}$').hasMatch(address);
+        address.length >=6 && address.length <= 20;
   }
 
   static bool isEmailValid(String email) {

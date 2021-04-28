@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:wedding_app/model/Invitation_card.dart';
+import 'package:wedding_app/model/invitation_card.dart';
 
 abstract class InvitationCardState extends Equatable{
   const InvitationCardState();

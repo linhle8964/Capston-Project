@@ -377,4 +377,13 @@ class _CreateWeddingPageState extends State<CreateWeddingPage> {
         ? BlocProvider.of<WeddingBloc>(context).add(UpdateWedding(wedding))
         : BlocProvider.of<WeddingBloc>(context).add(CreateWedding(wedding));
   }
+
+  @override
+  void dispose() {
+    groomNameController.dispose();
+    brideNameController.dispose();
+    budgetController.dispose();
+    addressController.dispose();
+    super.dispose();
+  }
 }

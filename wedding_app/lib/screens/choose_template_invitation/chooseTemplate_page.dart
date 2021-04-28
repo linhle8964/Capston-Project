@@ -7,7 +7,7 @@ import 'package:wedding_app/bloc/invitation_card/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:wedding_app/bloc/template_card/bloc.dart';
-import 'package:wedding_app/model/Invitation_card.dart';
+import 'package:wedding_app/model/invitation_card.dart';
 import 'package:wedding_app/model/template_card.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';

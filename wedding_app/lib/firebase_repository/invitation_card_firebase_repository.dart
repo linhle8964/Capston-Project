@@ -1,5 +1,5 @@
 import 'package:wedding_app/repository/invitation_card_repository.dart';
-import 'package:wedding_app/model/Invitation_card.dart';
+import 'package:wedding_app/model/invitation_card.dart';
 import 'package:wedding_app/entity/invitation_card_entity.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 

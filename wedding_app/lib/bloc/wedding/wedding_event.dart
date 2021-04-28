@@ -10,8 +10,6 @@ abstract class WeddingEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class LoadWeddings extends WeddingEvent {}
-
 class LoadWeddingByUser extends WeddingEvent {
   final User user;
 

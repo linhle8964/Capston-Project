@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-import 'package:wedding_app/model/Invitation_card.dart';
+import 'package:wedding_app/model/invitation_card.dart';
 
 @immutable
 abstract class InvitationCardEvent extends Equatable {

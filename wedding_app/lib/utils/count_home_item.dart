@@ -6,8 +6,8 @@ int countBudget(List<Budget> listBudget){
   int count = 0;
   if(listBudget != null){
     for(Budget budget in listBudget){
-      if(budget.money > 0){
-        count += budget.money.toInt();
+      if(budget.payMoney > 0){
+        count += budget.payMoney.toInt();
       }
     }
   }
