@@ -70,7 +70,6 @@ class WeddingEntity extends Equatable {
   }
 
   static WeddingEntity fromSnapshot(DocumentSnapshot snapshot) {
-    snapshot == null ? print("null") : print("not null");
     return WeddingEntity(
       snapshot.id,
       snapshot.get("bride_name"),

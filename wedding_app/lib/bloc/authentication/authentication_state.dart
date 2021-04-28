@@ -12,11 +12,12 @@ class Uninitialized extends AuthenticationState {}
 
 class Authenticated extends AuthenticationState {
   final User user;
+  final String weddingId;
 
-  const Authenticated(this.user);
+  const Authenticated(this.user, this.weddingId);
 
   @override
-  List<Object> get props => [user];
+  List<Object> get props => [user, weddingId];
 
   @override
   String toString() {

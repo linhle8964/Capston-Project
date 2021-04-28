@@ -51,7 +51,7 @@ class AuthenticationBloc
         if (userWedding.weddingId == null) {
           yield Unauthenticated();
         } else {
-          yield Authenticated(user);
+          yield Authenticated(user, userWedding.weddingId);
         }
       } else {
         yield Unauthenticated();
@@ -77,7 +77,7 @@ class AuthenticationBloc
           "user_wedding", jsonEncode(userWedding.toEntity().toJson()));
       await preferences.setBool(SharedPreferenceKey.taskNotification, true);
       await preferences.setBool(SharedPreferenceKey.guestResponseNotification, true);
-      yield Authenticated(user);
+      yield Authenticated(user, userWedding.weddingId);
     }
   }
 

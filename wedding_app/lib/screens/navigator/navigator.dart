@@ -29,8 +29,8 @@ import 'package:android_alarm_manager/android_alarm_manager.dart';
 
 class NavigatorPage extends StatefulWidget {
   final User user;
-
-  NavigatorPage({Key key, @required this.user}) : super(key: key);
+  final String weddingId;
+  NavigatorPage({Key key, @required this.user, @required this.weddingId}) : super(key: key);
   @override
   _NavigatorPageState createState() => _NavigatorPageState();
 }
@@ -59,7 +59,7 @@ class _NavigatorPageState extends State<NavigatorPage> {
               userWeddingRepository: FirebaseUserWeddingRepository(),
               weddingRepository: FirebaseWeddingRepository(),
               inviteEmailRepository: FirebaseInviteEmailRepository(),
-              userRepository: FirebaseUserRepository()),
+              userRepository: FirebaseUserRepository())..add(LoadWeddingById(widget.weddingId)),
         ),
         BlocProvider<UserWeddingBloc>(
           create: (BuildContext context) => UserWeddingBloc(
@@ -83,7 +83,6 @@ class _NavigatorPageState extends State<NavigatorPage> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             UserWedding userWedding = snapshot.data;
-            BlocProvider.of<WeddingBloc>(context).add(LoadWeddingById(userWedding.weddingId));
             return Container(
               color: Colors.white,
               child: BlocBuilder(

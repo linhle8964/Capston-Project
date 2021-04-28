@@ -240,7 +240,6 @@ class _ChecklistPageState extends State<ChecklistPage>
           cubit: BlocProvider.of<ChecklistBloc>(context),
           listener: (context, state) {
             if (state is TaskDeleted) {
-              print("delete");
               BlocProvider.of<ShowTaskBloc>(context)..add(DeleteMonth());
               BlocProvider.of<ChecklistBloc>(context)
                 ..add(LoadSuccess(weddingID));

@@ -129,9 +129,7 @@ class _CreateWeddingPageState extends State<CreateWeddingPage> {
                   });
                   showSuccessAlertDialog(
                       context, MessageConst.dialogTitle, state.message, () {
-                    widget.isEditing
-                        ? navigatorPop(2, context)
-                        : BlocProvider.of<AuthenticationBloc>(context)
+                    BlocProvider.of<AuthenticationBloc>(context)
                         .add(LoggedIn());
                   });
                 } else if (state is Failed) {

@@ -109,7 +109,7 @@ void main() {
         },
         act: (bloc) => bloc.add(LoggedIn()),
         expect: [
-          Authenticated(user),
+          Authenticated(user, wedding.id),
         ]);
 
     blocTest("Log out",
