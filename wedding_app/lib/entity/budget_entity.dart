@@ -49,8 +49,8 @@ class BudgetEntity extends Equatable {
         snapshot.get("budgetName"),
         snapshot.get("cateID"),
         snapshot.get("Complete"),
-        snapshot.get("money"),
-        snapshot.get("payMoney"),
+        snapshot.get("money").toDouble(),
+        snapshot.get("payMoney").toDouble(),
         snapshot.get("status"),
         snapshot.get("note"));
   }

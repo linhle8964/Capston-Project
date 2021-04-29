@@ -70,6 +70,7 @@ class WeddingEntity extends Equatable {
   }
 
   static WeddingEntity fromSnapshot(DocumentSnapshot snapshot) {
+    double budget = snapshot.get("budget").toDouble();
     return WeddingEntity(
       snapshot.id,
       snapshot.get("bride_name"),
@@ -77,7 +78,7 @@ class WeddingEntity extends Equatable {
       snapshot.get("wedding_date") == null
           ? null
           : (snapshot.get("wedding_date") as Timestamp).toDate(),
-      snapshot.get("budget"),
+      budget,
       snapshot.get("image"),
       snapshot.get("date_created") == null
           ? null
