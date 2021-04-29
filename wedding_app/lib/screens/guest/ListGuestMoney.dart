@@ -4,6 +4,7 @@ import 'package:wedding_app/bloc/guests/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wedding_app/firebase_repository/guest_firebase_repository.dart';
 import 'package:wedding_app/model/guest.dart';
+import 'package:wedding_app/utils/format_number.dart';
 import 'package:wedding_app/utils/get_information.dart';
 
 import '../../model/guest.dart';
@@ -27,7 +28,7 @@ class _ListGuestMoneyState extends State<ListGuestMoney> {
         children: <Widget>[
           Padding(padding: EdgeInsets.only(right: 5)),
           Text(
-            guest.money.toString() + '000',
+            formatCurrency(guest.money.toString() + '000'),
           ),
           Icon(
             Icons.monetization_on_outlined,

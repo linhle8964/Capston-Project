@@ -1,6 +1,9 @@
 import 'package:contacts_service/contacts_service.dart';
+import 'package:draggable_floating_button/draggable_floating_button.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wedding_app/bloc/guests/bloc.dart';
 import 'package:wedding_app/firebase_repository/guest_firebase_repository.dart';
@@ -44,6 +47,7 @@ class _ViewGuestPageState extends State<ViewGuestPage>
   int _selectedTab = 0;
 
   var ctx;
+  Offset fabPosition = Offset(20.0, 20.0);
 
   @override
   void initState() {
@@ -75,6 +79,77 @@ class _ViewGuestPageState extends State<ViewGuestPage>
     } else if (state == AppLifecycleState.resumed) {}
   }
 
+  getAppBar(String weddingId) {
+    return AppBar(
+      backgroundColor: hexToColor("#d86a77"),
+      title: const Text("Khách mời"),
+      actions: <Widget>[
+        IconButton(
+          icon: const Icon(
+            Icons.download_outlined,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            showMyAlertDialog(context);
+          },
+        ),
+        IconButton(
+          icon: const Icon(
+            Icons.search,
+            color: Colors.white,
+          ),
+          onPressed: () {
+            SearchGuest(context, weddingId);
+          },
+        ),
+        _typePopup(_selectedTab, weddingId),
+      ],
+      bottom: TabBar(
+        controller: _tabController,
+        indicator: BoxDecoration(
+          borderRadius: BorderRadius.circular(50), // Creates border
+          color: Colors.greenAccent,
+        ),
+        tabs: [
+          Tab(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.assignment,
+                  color: Colors.white,
+                ),
+                Text(
+                  'Thông tin',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ],
+            ),
+          ),
+          Tab(
+            child: GestureDetector(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.monetization_on_outlined,
+                    color: Colors.white,
+                  ),
+                  Text(
+                    'Tiền mừng',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  AppBar appBar;
+
   @override
   Widget build(BuildContext context) {
     final UserWedding userWedding = widget.userWedding;
@@ -86,6 +161,7 @@ class _ViewGuestPageState extends State<ViewGuestPage>
         )..add(LoadGuests(weddingId));
       },
       child: Builder(builder: (context) {
+        appBar = getAppBar(weddingId);
         if (isAdmin(userWedding.role)) {
           return BlocListener(
             cubit: BlocProvider.of<GuestsBloc>(context),
@@ -94,72 +170,7 @@ class _ViewGuestPageState extends State<ViewGuestPage>
               length: 2,
               child: Scaffold(
                 key: scaffoldKey,
-                appBar: new AppBar(
-                  backgroundColor: hexToColor("#d86a77"),
-                  title: const Text("Khách mời"),
-                  actions: <Widget>[
-                    IconButton(
-                      icon: const Icon(
-                        Icons.download_outlined,
-                        color: Colors.white,
-                      ),
-                      onPressed: () {
-                        showMyAlertDialog(context);
-                      },
-                    ),
-                    IconButton(
-                      icon: const Icon(
-                        Icons.search,
-                        color: Colors.white,
-                      ),
-                      onPressed: () {
-                        SearchGuest(context, weddingId);
-                      },
-                    ),
-                    _typePopup(_selectedTab, weddingId),
-                  ],
-                  bottom: TabBar(
-                    controller: _tabController,
-                    indicator: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50), // Creates border
-                      color: Colors.greenAccent,
-                    ),
-                    tabs: [
-                      Tab(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.assignment,
-                              color: Colors.white,
-                            ),
-                            Text(
-                              'Thông tin',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Tab(
-                        child: GestureDetector(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.monetization_on_outlined,
-                                color: Colors.white,
-                              ),
-                              Text(
-                                'Tiền mừng',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                appBar: appBar,
                 body: TabBarView(
                     physics: NeverScrollableScrollPhysics(),
                     controller: _tabController,
@@ -192,10 +203,10 @@ class _ViewGuestPageState extends State<ViewGuestPage>
                   },
                 ),
                 floatingActionButtonLocation:
-                    FloatingActionButtonLocation.endFloat,
+                FloatingActionButtonLocation.endFloat,
+                ),
               ),
-            ),
-          );
+            );
         } else {
           return BlocListener(
             cubit: BlocProvider.of<GuestsBloc>(context),

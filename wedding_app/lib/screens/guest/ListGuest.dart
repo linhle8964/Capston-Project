@@ -161,6 +161,7 @@ class _ListGuestState extends State<ListGuest> {
             },
           );
         },
+        padding: EdgeInsets.only(bottom: 50),
       ),
     );
   }
@@ -317,6 +318,7 @@ class _ListGuestState extends State<ListGuest> {
                                                 groupType = T;
                                               });
                                             }),
+                                        Text("Chưa xếp"),
                                         Text("Chưa xếp"),
                                       ],
                                     )),
