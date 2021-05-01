@@ -237,12 +237,16 @@ class _BudgetListState extends State<BudgetList> {
                                   ),
                                 )),
                             Flexible(
-                                child: Text(
-                                  _formatNumber((budget.money - budget.payMoney).toString()) + "₫",
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 1,
-                                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                                ))
+                                child:Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Text(
+                                    _formatNumber((budget.money - budget.payMoney).toString()) + "₫",
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 1,
+                                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                                  ) ,
+                                )
+                               )
                           ],
                         ),
                       ),
@@ -514,6 +518,7 @@ class _BudgetListState extends State<BudgetList> {
                                                             state.budgets;
                                                         return ListView.builder(
                                                             shrinkWrap: true,
+                                                            physics: const NeverScrollableScrollPhysics(),
                                                             itemCount:
                                                                 _budgets.length,
                                                             itemBuilder:
