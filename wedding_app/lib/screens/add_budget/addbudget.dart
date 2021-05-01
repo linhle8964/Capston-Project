@@ -27,6 +27,8 @@ TextEditingController budgetNameController = new TextEditingController();
 TextEditingController moneyController = new TextEditingController();
 TextEditingController payMoneyController = new TextEditingController();
 TextEditingController budgetController = new TextEditingController();
+final GlobalKey<ScaffoldState> scaffoldKey =
+new GlobalKey<ScaffoldState>();
 
 class BudgetNameValidate {
   static String budgetNameValidate(BuildContext context, String val) {
@@ -57,7 +59,7 @@ class BudgetNameValidate {
   static String payMoneyValidate(BuildContext context, String val) {
     if (val == "") {
       payMoneyController.text = "0";
-    }else if(double.parse(val.replaceAll(",", "")) < 1000) {
+    }else if(double.parse(val.replaceAll(",", "")) < 1000&&(double.parse(val.replaceAll(",", "")) > 0)) {
       return "Tiền đã trả phải lớn hơn 1000 đồng";
     }
     else if (double.parse(val.replaceAll(",", "")) >
@@ -143,9 +145,11 @@ class _AddBudgetState extends State<AddBudget> {
                 backgroundColor: hexToColor("#d86a77"),
                 bottomOpacity: 0.0,
                 elevation: 0.0,
-                title: Padding(
-                    padding: const EdgeInsets.only(left: 70),
-                    child: Text(isEditing ? 'Sửa Quỹ' : "Thêm Quỹ")),
+                title: Text(
+                  isEditing?"Sửa Quỹ":"Thêm Quỹ",
+                  style: TextStyle(color: Colors.white),
+                ),
+                centerTitle: true,
                 actions: [
                   Builder(
                     builder: (ctx) => IconButton(
