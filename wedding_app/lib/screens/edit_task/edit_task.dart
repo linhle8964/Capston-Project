@@ -5,6 +5,7 @@ import 'package:wedding_app/bloc/checklist/bloc.dart';
 import 'package:wedding_app/model/category.dart';
 import 'package:wedding_app/model/task_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:wedding_app/screens/checklist/checklist_page.dart';
 import 'package:wedding_app/utils/hex_color.dart';
 import 'package:wedding_app/utils/border.dart';
 import 'package:intl/intl.dart';
@@ -349,6 +350,7 @@ class _EditTaskPageState extends State<EditTaskPage> {
           showFailedSnackbar(context, "Bạn chưa thay đổi tên công việc!!!");
           return;
         }
+        //BlocProvider.of<ShowTaskBloc>(context)..add(DeleteMonth());
         BlocProvider.of<ChecklistBloc>(context)
           ..add(UpdateTask(task, widget.weddingID));
         Navigator.pop(context);
