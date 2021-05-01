@@ -347,7 +347,6 @@ class _ChecklistPageState extends State<ChecklistPage>
                         int month;
                         int year;
                         if(state is MonthLoading || state is MonthDeleted){
-                          print("2222");
                           state.number =0;
                           ShowTaskBloc.number =0;
                           month = months[0].month;
