@@ -40,10 +40,20 @@ class _ListViewWidgetState extends State<ListViewWidget> {
                 widget.tasks[index].name,
                 key: UniqueKey(),
                 style: TextStyle(
-                  fontSize: 17,
+                  fontSize: 18,
                   color: widget.tasks[index].dueDate.isBefore(DateTime.now())
                       ? Colors.red
                       : Colors.black,
+                ),
+              ),
+              subtitle: Padding(
+                padding: const EdgeInsets.only(top: 7.0),
+                child: Text(widget.tasks[index].getDate(),
+                  style: TextStyle(
+                  color: widget.tasks[index].dueDate.isBefore(DateTime.now())
+                      ? Colors.red
+                      : Colors.black,
+                ),
                 ),
               ),
               trailing: Theme(

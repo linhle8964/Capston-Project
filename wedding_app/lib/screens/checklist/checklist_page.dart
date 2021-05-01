@@ -26,6 +26,7 @@ class ChecklistPage extends StatefulWidget {
   _ChecklistPageState createState() => _ChecklistPageState();
 }
 
+bool deletingTask = false;
 class _ChecklistPageState extends State<ChecklistPage>
     with SingleTickerProviderStateMixin {
   static final GlobalKey<ScaffoldState> scaffoldKey =
@@ -343,8 +344,43 @@ class _ChecklistPageState extends State<ChecklistPage>
                           state is MonthMovedPreviously ||
                           state is MonthMovedToNext ||
                           state is MonthDeleted) {
-                        int month = months[state.number].month;
-                        int year = months[state.number].year;
+                        int month;
+                        int year;
+                        if(state is MonthLoading || state is MonthDeleted){
+                          state.number =0;
+                          ShowTaskBloc.number =0;
+                          month = months[0].month;
+                          year = months[0].year;
+                          for(int i =0; i< months.length; i++){
+                            if((months[i].year - DateTime.now().year).abs() < (year - DateTime.now().year).abs()){
+                              year = months[i].year;
+                              month = months[i].month;
+                            }
+                          }
+                          for(int i =0; i< months.length; i++){
+                            if(months[i].year == year &&
+                                (months[i].month - DateTime.now().month).abs() < (month - DateTime.now().month).abs()){
+                              month = months[i].month;
+                            }
+                          }
+                          for(int i =0; i< months.length; i++){
+                            if(months[i].year == year &&
+                                months[i].month == month){
+                              ShowTaskBloc.number =i;
+                              state.number=i;
+                            }
+                          }
+                        }else{
+                          if((state is MonthMovedPreviously || state is MonthMovedToNext)){
+                            try{
+                              month = months[state.number].month;
+                              year = months[state.number].year;
+                            }catch(e){
+                              month = months[0].month;
+                              year = months[0].year;
+                            }
+                          }
+                        }
                         //add tasks to list by month
                         valuess.clear();
                         for (int i = 0; i < tasks.length; i++) {

@@ -4,11 +4,10 @@ import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 
 class ShowTaskBloc extends Bloc<ShowMonth, Month> {
-  int _number;
+  static int number;
 
   ShowTaskBloc({@required int number1})
-      : _number = number1,
-        super(MonthLoading(number: number1));
+      :super(MonthLoading(number: number1));
 
   @override
   Stream<Month> mapEventToState(
@@ -24,21 +23,19 @@ class ShowTaskBloc extends Bloc<ShowMonth, Month> {
   }
 
   Stream<Month> _mapShowNextToState(ShowNext event) async* {
-    if ((event.number - 1) > _number) {
-      print(_number);
-      yield MonthMovedToNext(++_number);
+    if ((event.number - 1) > number) {
+      yield MonthMovedToNext(++number);
     }
   }
 
   Stream<Month> _mapShowPreviousToState(ShowPrevious event) async* {
-    if (_number > 0) {
-      print(_number);
-      yield MonthMovedPreviously(--_number);
+    if (number > 0) {
+      yield MonthMovedPreviously(--number);
     }
   }
 
   Stream<Month> _mapDeleteMonthToState() async* {
-   _number=0;
+   number=0;
    yield MonthDeleted();
   }
 }
