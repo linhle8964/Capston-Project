@@ -222,6 +222,14 @@ class AdminVendorRouterDelegate extends RouterDelegate<AdminVendorRoutePath>
             _login = false;
             notifyListeners();
             return true;
+          } else if(route.toString().contains('AddVendor')){
+            _selectedVendor = null;
+            _selectedUser = UserWedding('admin');
+            show404 = false;
+            add = false;
+            _login = false;
+            notifyListeners();
+            return true;
           }
           _selectedWedding = null;
           _selectedGuestID = null;
@@ -237,7 +245,7 @@ class AdminVendorRouterDelegate extends RouterDelegate<AdminVendorRoutePath>
   _setPath(AdminVendorRoutePath path) {
     _selectedUser = null;
     _selectedVendor = null;
-
+    _login=false;
     if (path.isAllVendorPage && _login==false) {
       _selectedUser = UserWedding(path.adminID);
       add = false;
@@ -311,7 +319,7 @@ class AdminVendorRouterDelegate extends RouterDelegate<AdminVendorRoutePath>
 
     
     show404 = false;
-    add = false;
+    //add = false;
     showDone = false;
   }
 
