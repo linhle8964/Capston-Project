@@ -292,17 +292,13 @@ class _FillInfoPageState extends State<FillInfoPage> {
         _groomNameInvalid = false;
       }
 
-      if (place.length > 20) {
+      if (place.length > 40) {
         _placeInvalid = true;
-        _errorMessplace= 'Giới hạn địa điểm là từ 2 đến 20 kí tự';
-      } else if (place.length < 2 && place.length > 0) {
+        _errorMessplace= 'Giới hạn địa điểm là từ 6 đến 40 kí tự';
+      } else if (place.length < 6 && place.length > 0) {
         _placeInvalid = true;
-        _errorMessplace= 'Giới hạn địa điểm là từ 2 đến 20 kí tự';
-      } else if (!alphanum.hasMatch(place) &&
-          place.length != 0) {
-        _placeInvalid = true;
-        _errorMessplace= 'Tên địa điểm không được chứa số hay kí tự đặc biệt';
-      } else if (place.length == 0) {
+        _errorMessplace= 'Giới hạn địa điểm là từ 6 đến 40 kí tự';
+      }  else if (place.length == 0) {
         _placeController.text = _noInputPlace;
         _placeInvalid = false;
       } else {
@@ -375,14 +371,12 @@ class PlaceValidator{
   static String validate(String value){
     String place=VietnameseParserEngine.unsigned(value);
      final alphanum = RegExp(r'^[^\,!@#$%^&*()_+=-]+$');
-    if (place.length > 20) {
-        return  'Số lượng kí tự quá 20 kí tự';
-      } else if (place.length < 2 && place.length > 0) {
+    if (place.length > 40) {
+        return  'Số lượng kí tự quá 40 kí tự';
+      } else if (place.length < 6 && place.length > 0) {
         
-        return  'Số lượng kí tự ít hơn 2 kí tự';
-      } else if (!alphanum.hasMatch(place) &&
-          place.length != 0) {
-        return  'Tên địa chỉ không có kí tự đặc biệt';
+        return  'Số lượng kí tự ít hơn 6 kí tự';
+      
       } else if (place.length == 0) {
         return  null;
       } else {
