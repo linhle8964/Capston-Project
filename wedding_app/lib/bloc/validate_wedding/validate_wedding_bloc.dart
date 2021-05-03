@@ -44,88 +44,90 @@ class ValidateWeddingBloc
 
   Stream<ValidateWeddingState> _mapBrideNameChangedToState(
       String brideName) async* {
-    if(brideName != null){
-      bool isValid = Validation.isNameValid(VietnameseParserEngine.unsigned(brideName.trim()));
+    if (brideName != null) {
+      bool isValid = Validation.isNameValid(
+          VietnameseParserEngine.unsigned(brideName.trim()));
       String message = "";
-      if(isValid == false){
-        if(brideName.length > 20){
+      if (isValid == false) {
+        if (brideName.length > 20) {
           message = MessageConst.nameTooLong;
-        }else if(brideName.trim().length < 6){
+        } else if (brideName.trim().length < 6) {
           message = MessageConst.nameTooShort;
-        }else if(brideName.trim().contains(new RegExp(r'[0-9]'))){
+        } else if (brideName.trim().contains(new RegExp(r'[0-9]'))) {
           message = MessageConst.nameNotContainNumber;
-        }else if(brideName.contains(new RegExp(r'[!@#<>?":_`~;[\]\\|=+)(*&^%\s-]'))){
+        } else if (brideName
+            .contains(new RegExp(r'[!@#<>?":_`~;[\]\\|=+)(*&^%\s-]'))) {
           message = MessageConst.nameNotContainSpecialCharacter;
         }
       }
       yield state.update(
           isBrideNameValid: isValid, brideNameErrorMessage: message);
-    }else{
+    } else {
       yield state.update(isBrideNameValid: false);
     }
   }
 
   Stream<ValidateWeddingState> _mapGroomNameChangedToState(
       String groomName) async* {
-    if(groomName != null){
-      bool isValid = Validation.isNameValid(VietnameseParserEngine.unsigned(groomName.trim()));
+    if (groomName != null) {
+      bool isValid = Validation.isNameValid(
+          VietnameseParserEngine.unsigned(groomName.trim()));
       String message = "";
-      if(isValid == false){
-        if(groomName.trim().length > 20){
+      if (isValid == false) {
+        if (groomName.trim().length > 20) {
           message = MessageConst.nameTooLong;
-        }else if(groomName.trim().length < 4){
+        } else if (groomName.trim().length < 4) {
           message = MessageConst.nameTooShort;
-        }else if(groomName.contains(new RegExp(r'[0-9]'))){
+        } else if (groomName.contains(new RegExp(r'[0-9]'))) {
           message = MessageConst.nameNotContainNumber;
-        }else if(groomName.contains(new RegExp(r'[!@#<>?":_`~;[\]\\|=+)(*&^%\s-]'))){
+        } else if (groomName
+            .contains(new RegExp(r'[!@#<>?":_`~;[\]\\|=+)(*&^%\s-]'))) {
           message = MessageConst.nameNotContainSpecialCharacter;
         }
       }
       yield state.update(
           isGroomNameValid: isValid, groomNameErrorMessage: message);
-    }else{
+    } else {
       yield state.update(isGroomNameValid: false);
     }
   }
 
   Stream<ValidateWeddingState> _mapAddressChangedToState(
       String address) async* {
-    if(address != null){
+    if (address != null) {
       bool isValid = Validation.isAddressValid(address.trim());
       String message = "";
-      if(isValid == false){
-        if(address.trim().length > 20){
+      if (isValid == false) {
+        if (address.trim().length > 40) {
           message = MessageConst.addressTooLong;
-        }else if(address.trim().length < 6){
+        } else if (address.trim().length < 6) {
           message = MessageConst.addressTooShort;
-        }else{
+        } else {
           message = "Địa chỉ không hợp lệ";
         }
       }
-      yield state.update(
-          isAddressValid: isValid, addressErrorMessage: message);
-    }else{
+      yield state.update(isAddressValid: isValid, addressErrorMessage: message);
+    } else {
       yield state.update(isAddressValid: false);
     }
   }
 
   Stream<ValidateWeddingState> _mapBudgetChangedToState(String budget) async* {
-    if(budget != null){
+    if (budget != null) {
       bool isValid = Validation.isBudgetValid(budget);
       String message = "";
       double budgetDouble = double.parse(budget.replaceAll(",", ""));
-      if(isValid == false){
-        if(budgetDouble <= 100000){
+      if (isValid == false) {
+        if (budgetDouble <= 100000) {
           message = MessageConst.budgetMin;
-        }else if(budgetDouble > 10000000000){
+        } else if (budgetDouble > 10000000000) {
           message = MessageConst.budgetMax;
-        }else if(budgetDouble % 1000 != 0){
+        } else if (budgetDouble % 1000 != 0) {
           message = MessageConst.budgetTripleZero;
         }
       }
-      yield state.update(
-          isBudgetValid: isValid, budgetErrorMessage: message);
-    }else{
+      yield state.update(isBudgetValid: isValid, budgetErrorMessage: message);
+    } else {
       yield state.update(isBudgetValid: false);
     }
   }

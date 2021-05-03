@@ -8,8 +8,7 @@ class Validation {
   }
 
   static bool isAddressValid(String address) {
-    return address != null &&
-        address.length >=6 && address.length <= 20;
+    return address != null && address.length >= 6 && address.length <= 40;
   }
 
   static bool isEmailValid(String email) {
