@@ -144,7 +144,7 @@ class _InvitationCardPageState extends State<InvitationCardPage> {
                                 style: TextStyle(fontSize: 14.0.sp),
                                 textAlign: TextAlign.center),
                             Padding(
-                              padding: EdgeInsets.fromLTRB(05.0.w, 0.8.h, 05.0.w, 0.8.h),
+                              padding: EdgeInsets.fromLTRB(05.0.w, 0.8.h, 05.0.w, 1.0.h),
                               child: Text( place,
                                   style: TextStyle(
                                       fontSize: (place.length > 20)
@@ -152,12 +152,10 @@ class _InvitationCardPageState extends State<InvitationCardPage> {
                                           : 14.0.sp),
                                   textAlign: TextAlign.center),
                             ),
-                            Text('Sự hiện diện của bạn',
-                                style: TextStyle(fontSize: 11.0.sp),
+                            Text('Rất hân hạnh được đón tiếp',
+                                style: TextStyle(fontSize: 12.0.sp),
                                 textAlign: TextAlign.center),
-                            Text('là vinh hạnh của chúng tôi',
-                                style: TextStyle(fontSize: 11.0.sp),
-                                textAlign: TextAlign.center)
+                            
                           ],
                         ),
                       )),
@@ -217,14 +215,11 @@ class _InvitationCardPageState extends State<InvitationCardPage> {
                                       color: Colors.white),
                                   textAlign: TextAlign.center),
                             ),
-                            Text('Sự hiện diện của bạn',
+                            Text('Rất hân hạnh được đón tiếp',
                                 style: TextStyle(
-                                    fontSize: 9.0.sp, color: Colors.white),
+                                    fontSize: 12.0.sp, color: Colors.white),
                                 textAlign: TextAlign.center),
-                            Text('là vinh hạnh của chúng tôi',
-                                style: TextStyle(
-                                    fontSize: 9.0.sp, color: Colors.white),
-                                textAlign: TextAlign.center)
+                            
                           ],
                         ),
                       )),
