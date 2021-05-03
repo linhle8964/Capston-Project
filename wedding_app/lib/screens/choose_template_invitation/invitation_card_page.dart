@@ -207,7 +207,7 @@ class _InvitationCardPageState extends State<InvitationCardPage> {
                                 textAlign: TextAlign.center),
                             Padding(
                               padding: EdgeInsets.fromLTRB(0, 0.8.h, 0, 0.8.h),
-                              child: Text('Tại ' + place,
+                              child: Text( place,
                                   style: TextStyle(
                                       fontSize: (place.length > 15)
                                           ? 10.0.sp
