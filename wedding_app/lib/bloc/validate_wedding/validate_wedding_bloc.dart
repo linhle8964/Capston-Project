@@ -76,7 +76,7 @@ class ValidateWeddingBloc
       if (isValid == false) {
         if (groomName.trim().length > 20) {
           message = MessageConst.nameTooLong;
-        } else if (groomName.trim().length < 4) {
+        } else if (groomName.trim().length < 6) {
           message = MessageConst.nameTooShort;
         } else if (groomName.contains(new RegExp(r'[0-9]'))) {
           message = MessageConst.nameNotContainNumber;

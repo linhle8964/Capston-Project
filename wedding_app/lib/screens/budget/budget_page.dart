@@ -221,7 +221,7 @@ class _BudgetListState extends State<BudgetList> {
                                       color: Colors.redAccent,
                                       borderRadius: BorderRadius.circular(16),
                                     ),
-                                    child: Text(" Đã trả trước ", style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.normal)),
+                                    child: Text(" Đặt cọc ", style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.normal)),
                                   ),
                                 )),
                             Visibility(
@@ -233,7 +233,7 @@ class _BudgetListState extends State<BudgetList> {
                                       color: Colors.greenAccent,
                                       borderRadius: BorderRadius.circular(16),
                                     ),
-                                    child: Text(" Hoàn Thành ", style: TextStyle(color: Colors.black, fontSize: 15, fontWeight: FontWeight.normal)),
+                                    child: Text(" Hoàn thành ", style: TextStyle(color: Colors.black, fontSize: 15, fontWeight: FontWeight.normal)),
                                   ),
                                 )),
                             Flexible(
@@ -587,7 +587,7 @@ class _BudgetListState extends State<BudgetList> {
                                                                                         color: Colors.redAccent,
                                                                                         borderRadius: BorderRadius.circular(16),
                                                                                       ),
-                                                                                      child: Text(" Đã trả trước ", style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.normal)),
+                                                                                      child: Text(" Đặt cọc ", style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.normal)),
                                                                                     ),
                                                                                   )),
                                                                               Visibility(
@@ -599,7 +599,7 @@ class _BudgetListState extends State<BudgetList> {
                                                                                         color: Colors.greenAccent,
                                                                                         borderRadius: BorderRadius.circular(16),
                                                                                       ),
-                                                                                      child: Text(" Hoàn Thành ", style: TextStyle(color: Colors.black, fontSize: 15, fontWeight: FontWeight.normal)),
+                                                                                      child: Text(" Hoàn thành ", style: TextStyle(color: Colors.black, fontSize: 15, fontWeight: FontWeight.normal)),
                                                                                     ),
                                                                                   )),
                                                                               Flexible(
@@ -952,7 +952,7 @@ class _BudgetListState extends State<BudgetList> {
                                                                                         color: Colors.redAccent,
                                                                                         borderRadius: BorderRadius.circular(16),
                                                                                       ),
-                                                                                      child: Text(" Đã trả trước ", style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.normal)),
+                                                                                      child: Text(" Đặt cọc ", style: TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.normal)),
                                                                                     ),
                                                                                   )),
                                                                               Visibility(
@@ -964,7 +964,7 @@ class _BudgetListState extends State<BudgetList> {
                                                                                         color: Colors.greenAccent,
                                                                                         borderRadius: BorderRadius.circular(16),
                                                                                       ),
-                                                                                      child: Text(" Hoàn Thành ", style: TextStyle(color: Colors.black, fontSize: 15, fontWeight: FontWeight.normal)),
+                                                                                      child: Text(" Hoàn thành ", style: TextStyle(color: Colors.black, fontSize: 15, fontWeight: FontWeight.normal)),
                                                                                     ),
                                                                                   )),
                                                                               Text(
