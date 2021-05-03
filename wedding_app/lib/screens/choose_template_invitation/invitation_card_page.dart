@@ -153,7 +153,7 @@ class _InvitationCardPageState extends State<InvitationCardPage> {
                                   textAlign: TextAlign.center),
                             ),
                             Text('Rất hân hạnh được đón tiếp',
-                                style: TextStyle(fontSize: 12.0.sp),
+                                style: TextStyle(fontSize: 11.0.sp),
                                 textAlign: TextAlign.center),
                             
                           ],
@@ -217,7 +217,7 @@ class _InvitationCardPageState extends State<InvitationCardPage> {
                             ),
                             Text('Rất hân hạnh được đón tiếp',
                                 style: TextStyle(
-                                    fontSize: 12.0.sp, color: Colors.white),
+                                    fontSize: 0.9.sp, color: Colors.white),
                                 textAlign: TextAlign.center),
                             
                           ],
