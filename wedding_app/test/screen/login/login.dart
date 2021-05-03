@@ -60,7 +60,8 @@ void main() {
           isSubmitting: false,
           isSuccess: false,
           isFailure: false,
-          message: ""));
+          message: "",
+      passwordErrorMessage: ""));
       await tester.pumpWidget(MaterialApp(
         home: Scaffold(
           body: BlocProvider.value(
@@ -81,7 +82,8 @@ void main() {
           isSubmitting: false,
           isSuccess: false,
           isFailure: false,
-          message: ""));
+          message: "",
+          passwordErrorMessage: ""));
       await tester.pumpWidget(MaterialApp(
         home: Scaffold(
           body: BlocProvider.value(

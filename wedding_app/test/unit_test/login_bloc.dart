@@ -115,7 +115,8 @@ void main() {
               isSubmitting: false,
               isSuccess: false,
               isFailure: false,
-              message: ""),
+              message: "",
+              passwordErrorMessage: ""),
           expect: [
             LoginState(
                 isEmailValid: false,

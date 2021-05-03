@@ -1,6 +1,5 @@
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:wedding_app/bloc/budget/bloc.dart';
 import 'package:wedding_app/bloc/invitation_card/bloc.dart';
 import 'package:wedding_app/firebase_repository/invitation_card_firebase_repository.dart';
 import 'package:bloc_test/bloc_test.dart';
@@ -11,7 +10,6 @@ import 'package:wedding_app/model/invitation_card.dart';
 import 'package:wedding_app/model/category.dart';
 import 'package:wedding_app/model/wedding.dart';
 import 'package:wedding_app/screens/choose_template_invitation/fill_info_page.dart';
-import '../mock_user.dart' as mock_user;
 
 class MockInvitationCardRepository extends Mock implements FirebaseInvitationCardRepository {}
 

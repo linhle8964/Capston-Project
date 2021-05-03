@@ -12,7 +12,6 @@ import 'package:wedding_app/utils/alert_dialog.dart';
 import 'package:wedding_app/utils/hex_color.dart';
 import 'package:wedding_app/utils/show_snackbar.dart';
 import 'package:wedding_app/widgets/confirm_dialog.dart';
-import 'package:wedding_app/widgets/navigator_pop.dart';
 
 class CreateWeddingPage extends StatefulWidget {
   final bool isEditing;

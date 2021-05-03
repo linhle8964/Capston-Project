@@ -49,7 +49,7 @@ showprint() async {
 }
 
 class _HomePageState extends State<HomePage> {
-  final Color main_color = Colors.black;
+  final Color mainColor = Colors.black;
   int endTime = DateTime(2021, 3, 1, 7, 30, 00).millisecondsSinceEpoch;
 
   @override
@@ -101,7 +101,7 @@ class _HomePageState extends State<HomePage> {
               ),
               backgroundColor: Colors.white,
               body: SafeArea(
-                minimum: const EdgeInsets.only(top: 5, left: 10, right: 10),
+                minimum: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 5.0),
                 child: SingleChildScrollView(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -137,7 +137,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       Container(
-                        padding: const EdgeInsets.all(20),
+                       padding: const EdgeInsets.all(20),
                         child: Row(
                           children: [
                             Expanded(
@@ -158,7 +158,7 @@ class _HomePageState extends State<HomePage> {
                                             ),
                                             decoration: BoxDecoration(
                                                 border: Border.all(
-                                                    color: main_color,
+                                                    color: mainColor,
                                                     width: 2)),
                                           ),
                                           onPressed: () async {
@@ -246,21 +246,21 @@ class _HomePageState extends State<HomePage> {
                         builder: (context, state) {
                           if (state is TasksLoaded) {
                             return Container(
-                              padding: const EdgeInsets.all(20),
+                              padding: const EdgeInsets.symmetric(vertical: 20.0),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
                                   buildInfoColumn(
                                       context,
-                                      main_color,
+                                      mainColor,
                                       'Việc cần làm ',
                                       state.tasks.isEmpty
                                           ? "0"
                                           : state.tasks.length.toString()),
                                   buildInfoColumn(
                                       context,
-                                      main_color,
+                                      mainColor,
                                       'Việc đã xong ',
                                       state.tasks.isEmpty
                                           ? "0"
@@ -279,20 +279,20 @@ class _HomePageState extends State<HomePage> {
                         builder: (context, state) {
                           if (state is BudgetLoaded) {
                             return Container(
-                              padding: const EdgeInsets.all(20),
+                              padding: EdgeInsets.symmetric(vertical: 20.0),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
                                   buildInfoColumn(
                                       context,
-                                      main_color,
+                                      mainColor,
                                       'Tổng ngân sách ',
                                       formatNumber(
                                           wedding.budget.toInt().toString())),
                                   buildInfoColumn(
                                       context,
-                                      main_color,
+                                      mainColor,
                                       'Đã dùng ',
                                       state.budgets.length == 0
                                           ? "0"
@@ -312,21 +312,21 @@ class _HomePageState extends State<HomePage> {
                         builder: (context, state) {
                           if (state is GuestsLoaded) {
                             return Container(
-                              padding: const EdgeInsets.all(20.0),
+                              padding: EdgeInsets.symmetric(vertical: 20.0),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
                                   buildInfoColumn(
                                       context,
-                                      main_color,
+                                      mainColor,
                                       'Số khách dự kiến ',
                                       state.guests.isEmpty
                                           ? "0"
                                           : state.guests.length.toString()),
                                   buildInfoColumn(
                                       context,
-                                      main_color,
+                                      mainColor,
                                       'Khách đã xác nhận ',
                                       state.guests.isEmpty
                                           ? "0"

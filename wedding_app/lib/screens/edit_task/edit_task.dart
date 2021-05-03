@@ -5,7 +5,6 @@ import 'package:wedding_app/bloc/checklist/bloc.dart';
 import 'package:wedding_app/model/category.dart';
 import 'package:wedding_app/model/task_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:wedding_app/screens/checklist/checklist_page.dart';
 import 'package:wedding_app/utils/hex_color.dart';
 import 'package:wedding_app/utils/border.dart';
 import 'package:intl/intl.dart';

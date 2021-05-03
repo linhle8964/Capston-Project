@@ -734,7 +734,6 @@ class _BudgetListState extends State<BudgetList> {
                                                     style: TextStyle(
                                                         fontWeight:
                                                             FontWeight.bold)));
-                                            ;
                                           }
                                           if (state is BudgetLoading) {
                                             return Column(

@@ -1,9 +1,6 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
 import 'package:wedding_app/const/message_const.dart';
-import 'package:wedding_app/model/notification.dart';
-import 'package:wedding_app/repository/notification_repository.dart';
 import 'package:wedding_app/utils/get_share_preferences.dart';
 import 'bloc.dart';
 

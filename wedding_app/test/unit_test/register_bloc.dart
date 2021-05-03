@@ -113,7 +113,8 @@ void main(){
               isSubmitting: false,
               isSuccess: false,
               isFailure: false,
-              message: ""),
+              message: "",
+              passwordErrorMessage: ""),
           expect: [
             RegisterState(
                 isEmailValid: false,

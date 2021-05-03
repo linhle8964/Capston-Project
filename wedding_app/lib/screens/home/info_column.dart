@@ -14,7 +14,7 @@ Container buildInfoColumn(
             alignment: Alignment.center,
             width: width / 3,
             child: FittedBox(
-              fit: BoxFit.fitWidth,
+              fit: BoxFit.fill,
               child: Text(
                 label,
                 style: TextStyle(
@@ -27,7 +27,7 @@ Container buildInfoColumn(
             width: width / 3,
             alignment: Alignment.center,
             child: FittedBox(
-              fit: BoxFit.fitWidth,
+              fit: BoxFit.fill,
               child: Text(
                 amount,
                 style: TextStyle(
