@@ -319,7 +319,6 @@ class _ListGuestState extends State<ListGuest> {
                                               });
                                             }),
                                         Text("Chưa xếp"),
-                                        Text("Chưa xếp"),
                                       ],
                                     )),
                                     Expanded(
