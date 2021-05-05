@@ -33,7 +33,7 @@ void main() {
       joinDate: DateTime.now(),
       userId: "userId");
 
-  final Wedding wedding = Wedding("brideName", "groomName", DateTime.now(), "image", "address", id: "id", budget: 100000, dateCreated: DateTime.now(), modifiedDate: DateTime.now());
+  final Wedding wedding = Wedding("brideName", "groomName", DateTime.now(), "image", "address", id: "weddingId", budget: 100000, dateCreated: DateTime.now(), modifiedDate: DateTime.now());
   setUpAll(() async {
     mockUserRepository = MockUserRepository();
     mockUserWeddingRepository = MockUserWeddingRepository();

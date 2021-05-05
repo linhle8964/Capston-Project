@@ -123,7 +123,7 @@ void main(){
                 isSuccess: false,
                 isFailure: false,
                 message: "",
-                passwordErrorMessage: null),
+                passwordErrorMessage: ""),
           ]);
 
       blocTest("emit [valid] when email is valid",

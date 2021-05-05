@@ -1,6 +1,7 @@
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wedding_app/bloc/invitation_card/bloc.dart';
+import 'package:wedding_app/const/message_const.dart';
 import 'package:wedding_app/firebase_repository/invitation_card_firebase_repository.dart';
 import 'package:bloc_test/bloc_test.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -78,7 +79,7 @@ void main() {
   });
   test('Place has input has special character', (){
       var result = GroomNameValidator.validate('Nguyễn Thị Thu@');
-      expect(result, 'Tên địa chỉ không có kí tự đặc biệt');
+      expect(result, "Tên người nhập không có số hay kí tự đặc biệt");
   });
   test('Place has input has no input', (){
       var result = GroomNameValidator.validate('');

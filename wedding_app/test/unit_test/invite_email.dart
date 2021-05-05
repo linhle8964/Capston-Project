@@ -170,7 +170,7 @@ void main() {
         act: (InviteEmailBloc bloc) async => bloc.add(SubmittedCode(code)),
         expect: [
           InviteEmailProcessing(),
-          InviteEmailError(message: MessageConst.commonError)
+          InviteEmailError(message: MessageConst.codeNotFound)
         ]);
   });
 

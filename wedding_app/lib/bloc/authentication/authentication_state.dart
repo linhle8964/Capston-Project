@@ -21,7 +21,7 @@ class Authenticated extends AuthenticationState {
 
   @override
   String toString() {
-    return "Authenticated: { userId : $user}";
+    return "Authenticated: { user : $user, weddingId: $weddingId}";
   }
 }
 
