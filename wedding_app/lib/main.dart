@@ -50,7 +50,8 @@ import 'firebase_repository/category_firebase_repository.dart';
 import 'firebase_repository/user_firebase_repository.dart';
 import 'package:android_alarm_manager/android_alarm_manager.dart';
 
-void main() async {
+Future<void> main() async {
+
   WidgetsFlutterBinding.ensureInitialized();
   await AndroidAlarmManager.initialize();
   Bloc.observer = SimpleBlocObserver();

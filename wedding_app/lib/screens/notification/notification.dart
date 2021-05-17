@@ -12,6 +12,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:wedding_app/utils/show_snackbar.dart';
 import 'package:wedding_app/widgets/confirm_dialog.dart';
 import 'package:wedding_app/screens/notification/list_notifications.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:wedding_app/widgets/receive_notification.dart';
 
 class NotificationPage extends StatefulWidget {
   String weddingID;
@@ -34,11 +41,57 @@ class _NotificationPageState extends State<NotificationPage> {
     }
     return true;
   }
-
+void showNotification(){
+  NotificationManagement.flutterLocalNotificationsPlugin.show(0, "testing", "demo", NotificationDetails(
+    android: AndroidNotificationDetails(
+      NotificationManagement.channel.id,
+      NotificationManagement.channel.name,
+      NotificationManagement.channel.description,
+      importance: Importance.high,
+      color: Colors.blue,
+      playSound: true,
+      icon: "@mipmap/ic_launcher"
+    )
+  ));
+}
   @override
   void initState() {
     time1 = 1;
     time2 = 1;
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      RemoteNotification notification = message.notification;
+      AndroidNotification android= message.notification?.android;
+      if(notification !=null&& android!=null){
+        NotificationManagement.flutterLocalNotificationsPlugin.show(notification.hashCode, notification.title, notification.body,NotificationDetails(
+            android: AndroidNotificationDetails(
+              NotificationManagement.channel.id,
+              NotificationManagement.channel.name,
+              NotificationManagement.channel.description,
+              icon: "@mipmap/ic_launcher"
+            )
+        ));
+      }
+    });
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print("check");
+      RemoteNotification notification= message.notification;
+      AndroidNotification android= message.notification?.android;
+      if(notification !=null&& android!=null){
+        showDialog(context: context, builder: (_){
+          return AlertDialog(
+            title: Text(notification.title),
+            content: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(notification.body)
+                ],
+              ),
+            ),
+          );
+        });
+      }
+    });
     super.initState();
   }
 
@@ -100,7 +153,7 @@ class _NotificationPageState extends State<NotificationPage> {
                                     size: 27,
                                   ),
                                   onPressed: () {
-                                    _deleteAllNotifications(weddingID, ctx);
+                                   showNotification();
                                   },
                                 ),
                               ],

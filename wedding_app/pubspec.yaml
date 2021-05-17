@@ -78,8 +78,8 @@ dev_dependencies:
   number_inc_dec: ^0.6.6
   url_strategy: ^0.2.0
   cloud_firestore_mocks: 0.7.0
-
-
+  overlay_support: ^1.2.1
+  firebase_analytics: ^8.0.4
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 flutter_icons:

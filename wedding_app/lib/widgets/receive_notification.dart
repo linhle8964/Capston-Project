@@ -6,12 +6,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:wedding_app/entity/notification_entity.dart';
 import 'package:wedding_app/model/notification.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 class NotificationManagement {
   static final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin(); //Nang
 
   NotificationManagement() {
+
     WidgetsFlutterBinding.ensureInitialized();
     var initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -19,6 +25,12 @@ class NotificationManagement {
     var initializationSettings = InitializationSettings(
         android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
     flutterLocalNotificationsPlugin.initialize(initializationSettings);
+  }
+
+  Future<void> _firebaseMessagingBackgroundHandler(
+      RemoteMessage message) async {
+    await Firebase.initializeApp();
+    print('Handling a background message ${message.messageId}');
   }
 
   static void addNotification(NotificationModel notificationModel) async {
@@ -39,8 +51,25 @@ class NotificationManagement {
           notificationModel.content,
           notificationModel.date,
           platformChannelSpecifics);
+      await flutterLocalNotificationsPlugin
+          .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+          ?.createNotificationChannel(channel);
+      await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
     }
   }
+
+  static const AndroidNotificationChannel channel = AndroidNotificationChannel(
+    'high_importance_channel', // id
+    'High Importance Notifications', // title
+    'This channel is used for important notifications.', // description
+    importance: Importance.high,
+  );
+
 
   static void ClearAllNotifications() async {
     NotificationManagement();
@@ -55,6 +84,7 @@ class NotificationManagement {
   /// code for alarm
   static CollectionReference reference;
   static StreamSubscription<QuerySnapshot> streamSub;
+
   static void executeAlarm(String weddingID) async {
     if (reference == null) {
       reference = FirebaseFirestore.instance
